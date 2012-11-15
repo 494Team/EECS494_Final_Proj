@@ -6,6 +6,7 @@ game.app/
 jni/external/
 jni/launcher/
 lib/
+Resources/
 Doxyfile
 game_x32
 game_x64
@@ -14,3 +15,6 @@ multi-clean_sh.bat
 multi-premake_sh.bat
 *.exe
 *.lua
+*.plist
+*.txt
+*.bak
