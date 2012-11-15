@@ -1,0 +1,16 @@
+bin/
+build/
+dev/
+docs/
+game.app/
+jni/external/
+jni/launcher/
+lib/
+Doxyfile
+game_x32
+game_x64
+multi-build_sh.bat
+multi-clean_sh.bat
+multi-premake_sh.bat
+*.exe
+*.lua
