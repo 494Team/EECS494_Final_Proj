@@ -6,14 +6,14 @@
 
 namespace Flame {
 
-  class Agent: private Moving_object, public Sim_object {
+  class Agent: public Moving_object, public Sim_object {
   public:
     Agent(
-      const float &health_ = 0.0f, 
-      const float &speed_ = 0.0f, 
+      const float &health_ = 0.0f,
+      const float &speed_ = 0.0f,
+      const float &radius_ = 0.0f,
       const Zeni::Point2f &location_ = Zeni::Point2f())
-    : health(health_), alive(true) {
-      Moving_object(speed_, location_);
+    : health(health_), alive(true), Moving_object(speed_, location_), body(location_, radius_) {
     }
 
     Zeni::Point2f get_location() const {return Moving_object::get_current_location();}
@@ -31,6 +31,7 @@ namespace Flame {
   private:
     float health;
     bool alive;
+    Flame::Collision_circle body;
   };
 
 }
