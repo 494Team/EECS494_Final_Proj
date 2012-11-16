@@ -5,7 +5,7 @@
  */
 
 #include <zenilib.h>
-
+#include "Game_state_sample.h"
 #if defined(_DEBUG) && defined(_WINDOWS)
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
 #define new DEBUG_NEW
@@ -14,69 +14,39 @@
 using namespace std;
 using namespace Zeni;
 
-class Play_State : public Gamestate_Base {
-  Play_State(const Play_State &);
-  Play_State operator=(const Play_State &);
 
-public:
-  Play_State() {
-    set_pausable(true);
-  }
-
-private:
-  void on_push() {
-    //get_Window().mouse_grab(true);
-    get_Window().mouse_hide(true);
-    //get_Game().joy_mouse.enabled = false;
-  }
-
-  void on_pop() {
-    //get_Window().mouse_grab(false);
-    get_Window().mouse_hide(false);
-    //get_Game().joy_mouse.enabled = true;
-  }
-};
-
-class Instructions_State : public Widget_Gamestate {
-  Instructions_State(const Instructions_State &);
-  Instructions_State operator=(const Instructions_State &);
+class Instructions_State : public Gamestate_Base {
+  Text_Box tb;
 
 public:
   Instructions_State()
-    : Widget_Gamestate(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)))
+    : tb(Point2f(), Point2f(800.0f, 600.0f), "system_36_800x600",
+    "This game demonstrates Sprite functionality.", Color())
   {
+    tb.give_BG_Renderer(new Widget_Renderer_Color(get_Colors()["black"]));
   }
 
 private:
   void on_key(const SDL_KeyboardEvent &event) {
-    if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED)
-      get_Game().pop_state();
+    if(event.keysym.sym == SDLK_ESCAPE) {
+      if(event.state == SDL_PRESSED)
+        get_Game().pop_state();
+    }
+    
+        
   }
 
   void render() {
-    Widget_Gamestate::render();
+    get_Video().set_2d(make_pair(Point2f(), Point2f(800.0f, 600.0f)), true);
 
-    Zeni::Font &fr = get_Fonts()["title"];
-
-    fr.render_text(
-#if defined(_WINDOWS)
-                   "ALT+F4"
-#elif defined(_MACOSX)
-                   "Apple+Q"
-#else
-                   "Ctrl+Q"
-#endif
-                           " to Quit",
-                   Point2f(400.0f, 300.0f - 0.5f * fr.get_text_height()),
-                   get_Colors()["title_text"],
-                   ZENI_CENTER);
+    tb.render();
   }
 };
 
 class Bootstrap {
   class Gamestate_One_Initializer : public Gamestate_Zero_Initializer {
     virtual Gamestate_Base * operator()() {
-      Window::set_title("zenilib Application");
+      Window::set_title("Flame Example ");
 
       get_Joysticks();
       get_Video();
@@ -85,7 +55,7 @@ class Bootstrap {
       get_Sounds();
       get_Game().joy_mouse.enabled = true;
 
-      return new Title_State<Play_State, Instructions_State>("Zenipex Library\nApplication");
+        return new Title_State<Flame::Game_state_sample, Instructions_State>("Flame:\nExample ");
     }
   } m_goi;
 
