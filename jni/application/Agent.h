@@ -17,6 +17,7 @@ namespace Flame {
     }
 
     Zeni::Point2f get_location() const {return Moving_object::get_current_location();}
+    Flame::Collision_circle get_body() const {return body;}
     bool is_alive() const {return alive;}
     
     // getting hit cause health going down
