@@ -7,7 +7,7 @@
 //
 
 #include "Game_state_sample.h"
-#include "Control.h"
+#include "Utility.h"
 using namespace Flame;
 using namespace Zeni;
 using namespace std;
@@ -116,9 +116,11 @@ void Game_state_sample::perform_logic(){
      True_loc_player1 += Move_dir1 * time_step / 320;
     
      */
-    
-    True_loc_player1.x+=SDL_JoystickGetAxis(joy, 0)*time_step/320;
-    True_loc_player1.y+=SDL_JoystickGetAxis(joy, 1)*time_step/320;
+
+    True_loc_player1.x+=(abs(SDL_JoystickGetAxis(joy, 0)) < kAxis_constrain)? 0:
+        SDL_JoystickGetAxis(joy, 0)*time_step/320;
+    True_loc_player1.y+=(abs(SDL_JoystickGetAxis(joy, 1)) < kAxis_constrain)? 0:
+        SDL_JoystickGetAxis(joy, 1)*time_step/320;
     
     True_loc_player2.x += (Key_right - Key_left) * time_step * 150;
     True_loc_player2.y += (Key_down - Key_up) * time_step * 150;
