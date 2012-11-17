@@ -18,7 +18,7 @@ namespace Flame {
       Moving_object(speed_, location_), body(location_, radius_)
     {}
 
-    Zeni::Point2f get_location() const {return Moving_object::get_current_location();}
+    Zeni::Point2f get_location() {return Moving_object::get_current_location();}
     float get_current_health() const {return health;}
     Flame::Collision_circle get_body() const {return body;}
     bool is_alive() const {return alive;}
