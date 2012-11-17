@@ -14,7 +14,7 @@
 
 namespace Flame {
 
-class Game_state_sample : public Zeni::Gamestate_Base {
+class Game_state_sample : public Zeni::Gamestate_II {
 
     Zeni::Point2f True_loc_player1, True_loc_player2,
     Rel_loc_player1, Rel_loc_player2;
@@ -24,7 +24,7 @@ class Game_state_sample : public Zeni::Gamestate_Base {
     float m_time_passed;
     SDL_Joystick *joy;
     float scale;
-    Zeni::Vector2f Move_dir1;
+    Zeni::Vector2f Move_dir1, Move_dir2;
     
 public:
     Game_state_sample();
@@ -33,8 +33,9 @@ private:
     void on_pop();
     void on_cover();
     void on_uncover();
+	void on_event(const Zeni::Zeni_Input_ID &, const float &confidence, const int &action);
     void on_key(const SDL_KeyboardEvent &event);
-    void on_joy_axis(const SDL_JoyAxisEvent &event);
+  //  void on_joy_axis(const SDL_JoyAxisEvent &event);
     
     float get_scale(Zeni::Point2f &True_loc_layer1_, Zeni::Point2f &True_loc_player2_);
     Zeni::Point2f get_rel_loc(Zeni::Point2f &True_loc_);

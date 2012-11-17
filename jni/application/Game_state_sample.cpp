@@ -22,12 +22,49 @@ Game_state_sample::Game_state_sample()
 {
     m_set.start();
     set_pausable(true);
-    
-    // Open joystick;
-    if (SDL_NumJoysticks() > 0)
-        joy = SDL_JoystickOpen(0);
+	
+	set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), 1);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, 7), 1);
+    set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X, 0), 2);
+    set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y, 0), 3);
+    set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X, 1), 4);
+    set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y, 1), 5);    
     
 };
+
+
+void Game_state_sample::on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
+   switch(action) {
+	case 1:
+        if(confidence == 1.0f) {
+          Game &game = get_Game();
+          game.push_state(new Popup_Menu_State);
+        }
+        break;
+
+    case 2:
+        Move_dir1.x = confidence;
+        break;
+
+    case 3:
+        Move_dir1.y = confidence;
+        break;
+
+    case 4:
+        Move_dir2.x = confidence;
+		break;
+
+    case 5:
+        Move_dir2.y = confidence;
+		break;
+
+    
+    default:
+        break;
+    }
+};
+
+
 
 void Game_state_sample::on_push(){
     Zeni::get_Game().joy_mouse.enabled = false;
@@ -95,13 +132,6 @@ void Game_state_sample::on_key(const SDL_KeyboardEvent &event){
     }
 };
 
-void Game_state_sample::on_joy_axis(const SDL_JoyAxisEvent &event){
-    if (event.axis == 0)
-        Move_dir1.x = event.value;
-    else
-        Move_dir1.y = event.value;
-};
-
 Point2f Game_state_sample::get_rel_loc(Zeni::Point2f &True_loc_){
     return (True_loc_ - Center_loc_player) * scale + Point2f(400.0f, 300.0f);
 }
@@ -110,21 +140,11 @@ void Game_state_sample::perform_logic(){
     const float time_passed = m_set.seconds();
     const float time_step = time_passed - m_time_passed;
     m_time_passed = time_passed;
-
-    /*This does not work;
+	
     
-     True_loc_player1 += Move_dir1 * time_step / 320;
-    
-     */
-
-    True_loc_player1.x+=(abs(SDL_JoystickGetAxis(joy, 0)) < kAxis_constrain)? 0:
-        SDL_JoystickGetAxis(joy, 0)*time_step/320;
-    True_loc_player1.y+=(abs(SDL_JoystickGetAxis(joy, 1)) < kAxis_constrain)? 0:
-        SDL_JoystickGetAxis(joy, 1)*time_step/320;
-    
-    True_loc_player2.x += (Key_right - Key_left) * time_step * 150;
-    True_loc_player2.y += (Key_down - Key_up) * time_step * 150;
-    
+    True_loc_player1 += Move_dir1 * time_step * 20000.0f / 320;
+    True_loc_player2 += Move_dir2 * time_step * 20000.0f / 320;
+    	
     Center_loc_player = Point2f((True_loc_player1.x + True_loc_player2.x) / 2, (True_loc_player1.y + True_loc_player2.y) / 2);
     
     scale = get_scale(True_loc_player1, True_loc_player2);
