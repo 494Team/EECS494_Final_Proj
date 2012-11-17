@@ -19,7 +19,7 @@ namespace Flame {
     Zeni::Point2f get_current_orientation() const {return orientation;}
 
     // update orientation according to destination and location
-    void set_orientation(const Zeni::Point2f &orientation_) { orientation = orientation_.normalize(); }
+    void set_orientation(const Zeni::Vector2f &orientation_) { orientation = orientation_.normalize(); }
 
     // update speed
     void set_speed(const float &speed_) { speed = speed_; }
