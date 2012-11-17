@@ -2,12 +2,15 @@
 #define COLLISION_H
 
 #include <Zeni.h>
+#include <string>
+#include "Utility.h"
 
 namespace Flame {
 
   // forward declarations
   class Collision_circle;
   class Collision_rectangle;
+  class Collision_sector;
 
   // an abstract base class for all collision classes.
   // cannot be instantiated
@@ -41,15 +44,16 @@ namespace Flame {
   // circle-shaped collision object
   class Collision_circle : public Collision_object {
   public:
-    Collision_circle(const Zeni::Point2f& origin_ = Zeni::Point2f(0.f, 0.f),
+    Collision_circle(const Zeni::Point2f& origin_ = Zeni::Point2f(),
                      float radius_ = 0.f);
 
     // check if two objects collide
     virtual bool collide(const Collision_circle& other) const;
     virtual bool collide(const Collision_rectangle& other) const;
 
-    // make origin and size accessible to Collision_rectangle
-    friend Collision_rectangle;
+    // make origin and size accessible to Collision_rectangle and Collision_sector
+    friend class Collision_rectangle;
+    friend class Collision_sector;
 
   private:
     Zeni::Point2f origin;
@@ -62,8 +66,8 @@ namespace Flame {
   public:
     // corner is the upper left corner,
     // size is a Vector2f pointing to the lower right
-    Collision_rectangle(const Zeni::Point2f& corner_ = Zeni::Point2f(0.f, 0.f),
-                        const Zeni::Vector2f& size_ = Zeni::Vector2f(0.f, 0.f));
+    Collision_rectangle(const Zeni::Point2f& corner_ = Zeni::Point2f(),
+                        const Zeni::Vector2f& size_ = Zeni::Vector2f());
 
     // check if two objects collide
     virtual bool collide(const Collision_circle& other) const;
@@ -77,6 +81,24 @@ namespace Flame {
     Zeni::Vector2f size;
   };
 
+  // Collision_sector is only for attack dectection,
+  // thus can only dectect collision with Collision_circle
+  class Collision_sector : public Collision_object {
+  public:
+    Collision_sector(const Zeni::Point2f& origin_ = Zeni::Point2f(),
+                     const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
+                     float radius_ = 0.f);
+
+    // check if two objects collide
+    virtual bool collide(const Collision_circle& other) const;
+    virtual bool collide(const Collision_rectangle&) const
+      {throw Error("Collision_sector cannot collide an Collision_rectangle object!");}
+
+  private:
+    Zeni::Point2f origin;
+    Zeni::Vector2f orientation;
+    float radius;
+  };
 }
 
 #endif
