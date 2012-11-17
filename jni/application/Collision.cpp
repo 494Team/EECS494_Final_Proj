@@ -1,8 +1,10 @@
-#include <Zeni.h>
+#include <zeni.h>
 #include "Collision.h"
 #include <cmath>
 
-using Zeni::Point2f; using Zeni::Vector2f;
+using namespace Zeni;
+
+using Zeni::Point2f; using Zeni::Vector2f; using Zeni::Global::pi;
 
 namespace Flame {
 
@@ -52,6 +54,22 @@ namespace Flame {
         (other.corner.x < corner.x && corner.x < other.corner.x + other.size.x))
       return abs(other.corner.y - corner.y) < other.size.y;
     return abs(other.corner.x - corner.x) < size.x;
+  }
+
+  Collision_sector::Collision_sector(const Point2f& origin_,
+                                     const Vector2f& orientation_,
+                                     float radius_) :
+    origin(origin_),
+    orientation(orientation_),
+    radius(radius_)
+    {}
+
+  bool Collision_sector::collide(const Collision_circle& other) const
+  {
+    if (orientation.angle_between(other.origin - origin) < pi / 4)
+      if ((other.origin - origin).magnitude() < other.radius + radius)
+        return true;
+    return false;
   }
 
 }
