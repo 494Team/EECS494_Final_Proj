@@ -7,18 +7,23 @@
 //
 
 #include "Game_state_sample.h"
+
 #include "Utility.h"
-using namespace Flame;
 using namespace Zeni;
 using namespace std;
 
+namespace Flame {
+    
 Game_state_sample::Game_state_sample()
-    :True_loc_player1(400.0f, 300.0f),
-    True_loc_player2(400.0f, 300.0f),
+    :True_loc_player1(300.0f, 200.0f),
+    True_loc_player2(500.0f, 300.0f),
+	True_loc_player3(500.0f, 200.0f),
+    True_loc_player4(300.0f, 300.0f),
     Key_up(false),
     Key_down(false),
     Key_left(false),
-    Key_right(false)
+    Key_right(false),
+    brick1(Point2f(0.0f, 610.0f), Vector2f(800.0f,10.0f), String("brick"))
 {
     m_set.start();
     set_pausable(true);
@@ -29,9 +34,40 @@ Game_state_sample::Game_state_sample()
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y, 0), 3);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X, 1), 4);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y, 1), 5);    
+   
+	set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X, 2), 6);
+    set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y, 2), 7);    
+    set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X, 3), 8);
+    set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y, 3), 9);    
     
 };
 
+void Game_state_sample::update(Point2f &True_loc_player1,
+											 Point2f &True_loc_player2,
+											 Point2f &True_loc_player3,
+											 Point2f &True_loc_player4){
+
+	vector<Point2f> Player_list;
+	map<float, pair<int,int> > dis_list;
+
+	Player_list.push_back(True_loc_player1);
+	Player_list.push_back(True_loc_player2);
+	Player_list.push_back(True_loc_player3);
+	Player_list.push_back(True_loc_player4);
+
+
+	for(int i = 0; i < 4; ++i){
+		for(int j = 1; j < 4; ++j)
+		dis_list.insert(pair<float, pair<int,int>>(get_scale(Player_list[(i+j)%4], Player_list[i]), pair<int,int>(i,(j+i)%4)));
+	}
+	map<float,pair<int,int> >::iterator it = dis_list.begin();
+	Center_loc_player = Point2f((True_loc_player1.x + True_loc_player2.x + True_loc_player3.x + True_loc_player4.x) / 4, 
+								(True_loc_player1.y + True_loc_player2.y + True_loc_player3.y + True_loc_player4.y) / 4);
+
+	//Outter_player1 = Player_list[it->second.first];
+	//Outter_player2 = Player_list[it->second.second];
+	scale = it->first;
+}
 
 void Game_state_sample::on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
    switch(action) {
@@ -57,7 +93,22 @@ void Game_state_sample::on_event(const Zeni_Input_ID &, const float &confidence,
     case 5:
         Move_dir2.y = confidence;
 		break;
+    
+	case 6:
+        Move_dir3.x = confidence;
+		break;
 
+    case 7:
+        Move_dir3.y = confidence;
+		break;
+	
+	case 8:
+        Move_dir4.x = confidence;
+		break;
+
+    case 9:
+        Move_dir4.y = confidence;
+		break;
     
     default:
         break;
@@ -92,7 +143,7 @@ float Game_state_sample::get_scale(Zeni::Point2f &True_loc_player1_, Zeni::Point
     float Dis_y = abs(True_loc_player1_.y - True_loc_player2_.y);
     float Frac = Dis_x / Dis_y;
     
-    if (Frac < 4.0f / 3.0f){
+    if (Dis_y != 0 &&Frac < 4.0f / 3.0f){
         if (200.0f / Dis_y < 1)
             return 1;
         else if (200.0f / Dis_y > 5)
@@ -144,14 +195,18 @@ void Game_state_sample::perform_logic(){
     
     True_loc_player1 += Move_dir1 * time_step * 20000.0f / 320;
     True_loc_player2 += Move_dir2 * time_step * 20000.0f / 320;
-    	
-    Center_loc_player = Point2f((True_loc_player1.x + True_loc_player2.x) / 2, (True_loc_player1.y + True_loc_player2.y) / 2);
-    
-    scale = get_scale(True_loc_player1, True_loc_player2);
-    
+    True_loc_player3 += Move_dir3 * time_step * 20000.0f / 320;
+    True_loc_player4 += Move_dir4 * time_step * 20000.0f / 320;	
+
+	update(True_loc_player1, True_loc_player2, True_loc_player3, True_loc_player4);
+
     Rel_loc_player1 = get_rel_loc(True_loc_player1);
     Rel_loc_player2 = get_rel_loc(True_loc_player2);
-    
+    Rel_loc_player3 = get_rel_loc(True_loc_player3);
+    Rel_loc_player4 = get_rel_loc(True_loc_player4);
+
+	brick1.update(scale, Center_loc_player);
+
     SDL_Delay(5);
 };
 
@@ -181,8 +236,18 @@ void Game_state_sample::render(){
     Material a("brick");
     map.fax_Material(&a);
     vr.render(map);
+	brick1.render();
+    render_image("one", Point2f(Rel_loc_player1.x-10.0f*scale,Rel_loc_player1.y-10.0f*scale),
+				Point2f(Rel_loc_player1.x+10.0f*scale,Rel_loc_player1.y +10.0f*scale));
     
-    render_image("one", Point2f(Rel_loc_player1.x-10.0f*scale,Rel_loc_player1.y-10.0f*scale), Point2f(Rel_loc_player1.x+10.0f*scale,Rel_loc_player1.y +10.0f*scale));
+    render_image("two", Point2f(Rel_loc_player2.x-10.0f*scale,Rel_loc_player2.y-10.0f*scale), 
+				Point2f(Rel_loc_player2.x+10.0f*scale,Rel_loc_player2.y +10.0f*scale));
+
+	render_image("three", Point2f(Rel_loc_player3.x-10.0f*scale,Rel_loc_player3.y-10.0f*scale),
+				Point2f(Rel_loc_player3.x+10.0f*scale,Rel_loc_player3.y +10.0f*scale));
     
-    render_image("two", Point2f(Rel_loc_player2.x-10.0f*scale,Rel_loc_player2.y-10.0f*scale), Point2f(Rel_loc_player2.x+10.0f*scale,Rel_loc_player2.y +10.0f*scale));
+    render_image("four", Point2f(Rel_loc_player4.x-10.0f*scale,Rel_loc_player4.y-10.0f*scale), 
+				Point2f(Rel_loc_player4.x+10.0f*scale,Rel_loc_player4.y +10.0f*scale));
 };
+    
+}

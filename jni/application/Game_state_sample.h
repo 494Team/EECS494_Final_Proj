@@ -11,20 +11,24 @@
 
 #include <iostream>
 #include <zenilib.h>
+#include <vector>
+#include <map>
+#include "Map.h"
+#include "Collision.h"
 
 namespace Flame {
 
 class Game_state_sample : public Zeni::Gamestate_II {
 
-    Zeni::Point2f True_loc_player1, True_loc_player2,
-    Rel_loc_player1, Rel_loc_player2;
+    Zeni::Point2f True_loc_player1, True_loc_player2, True_loc_player3, True_loc_player4,
+    Rel_loc_player1, Rel_loc_player2, Rel_loc_player3, Rel_loc_player4;
     Zeni::Point2f Center_loc_player;
     bool Key_up, Key_down, Key_left, Key_right;
     Zeni::Chronometer<Zeni::Time> m_set;
     float m_time_passed;
     SDL_Joystick *joy;
     float scale;
-    Zeni::Vector2f Move_dir1, Move_dir2;
+    Zeni::Vector2f Move_dir1, Move_dir2, Move_dir3, Move_dir4;
     
 public:
     Game_state_sample();
@@ -37,11 +41,18 @@ private:
     void on_key(const SDL_KeyboardEvent &event);
   //  void on_joy_axis(const SDL_JoyAxisEvent &event);
     
-    float get_scale(Zeni::Point2f &True_loc_layer1_, Zeni::Point2f &True_loc_player2_);
-    Zeni::Point2f get_rel_loc(Zeni::Point2f &True_loc_);
+    float get_scale(Zeni::Point2f &True_loc_player1_, Zeni::Point2f &True_loc_player2_);
+    Zeni::Point2f get_rel_loc(Zeni::Point2f &True_loc_pla);
     
+	void update(Zeni::Point2f &True_loc_player1,
+				Zeni::Point2f &True_loc_player2, 
+				Zeni::Point2f &True_loc_player3, 
+				Zeni::Point2f &True_loc_player4);
+
     void perform_logic();
     void render();
+    Map_brick brick1;
+	//Collision_rectangle player1, player2;
 };
     
 }
