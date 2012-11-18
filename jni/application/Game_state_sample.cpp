@@ -23,7 +23,9 @@ Game_state_sample::Game_state_sample()
     Key_down(false),
     Key_left(false),
     Key_right(false),
-    brick1(Point2f(0.0f, 610.0f), Vector2f(800.0f,10.0f), String("brick"))
+    brick1(Point2f(0.0f, 610.0f), Vector2f(800.0f,10.0f), String("brick")),
+	player1(Point2f(290.0f, 190.0f), Vector2f(20.0f, 20.0f)),
+	rec1(Point2f(200.0f, 200.0f), Vector2f(50.0f, 50.0f), Point2f(200.0f, 200.0f), Vector2f(50.0f, 50.0f), String("monkey_king_front"))
 {
     m_set.start();
     set_pausable(true);
@@ -64,8 +66,6 @@ void Game_state_sample::update(Point2f &True_loc_player1,
 	Center_loc_player = Point2f((True_loc_player1.x + True_loc_player2.x + True_loc_player3.x + True_loc_player4.x) / 4, 
 								(True_loc_player1.y + True_loc_player2.y + True_loc_player3.y + True_loc_player4.y) / 4);
 
-	//Outter_player1 = Player_list[it->second.first];
-	//Outter_player2 = Player_list[it->second.second];
 	scale = it->first;
 }
 
@@ -194,8 +194,13 @@ void Game_state_sample::perform_logic(){
 	
     
     True_loc_player1 += Move_dir1 * time_step * 20000.0f / 320;
-    True_loc_player2 += Move_dir2 * time_step * 20000.0f / 320;
-    True_loc_player3 += Move_dir3 * time_step * 20000.0f / 320;
+
+	player1 = Collision_rectangle(Point2f(True_loc_player1 - Vector2f(10.0f, 10.0f)), Vector2f(20.0f, 20.0f));
+	if (!brick1.can_move(player1) || !rec1.can_move(player1))
+		True_loc_player1 -= Move_dir1 * time_step * 20000.0f /320;
+
+    True_loc_player2 += -Move_dir1 * time_step * 20000.0f / 320;
+    True_loc_player3 += Vector2f(Move_dir1.x, -Move_dir1.y) * time_step * 20000.0f / 320;
     True_loc_player4 += Move_dir4 * time_step * 20000.0f / 320;	
 
 	update(True_loc_player1, True_loc_player2, True_loc_player3, True_loc_player4);
@@ -206,7 +211,7 @@ void Game_state_sample::perform_logic(){
     Rel_loc_player4 = get_rel_loc(True_loc_player4);
 
 	brick1.update(scale, Center_loc_player);
-
+	rec1.update(scale, Center_loc_player);
     SDL_Delay(5);
 };
 
@@ -218,11 +223,11 @@ void Game_state_sample::render(){
     
     Quadrilateral<Vertex2f_Texture> map;
     Point2f Map_center(400.0f,300.0f);
+	
     Point2f Map_p0 = (Point2f(0.0f, 0.0f) - Center_loc_player) * scale + Map_center;
     Point2f Map_p1 = (Point2f(0.0f, 600.0f) - Center_loc_player) * scale + Map_center;
     Point2f Map_p2 = (Point2f(800.0f, 600.0f) - Center_loc_player) * scale + Map_center;
     Point2f Map_p3 = (Point2f(800.0f, 0.0f) - Center_loc_player) * scale+ Map_center;
-    
     Vertex2f_Texture p0(Map_p0, Point2f(0.0f,0.0f));
     Vertex2f_Texture p1(Map_p1, Point2f(0.0f, 30.0f));
     Vertex2f_Texture p2(Map_p2, Point2f(40.0f, 30.0f));
@@ -237,6 +242,10 @@ void Game_state_sample::render(){
     map.fax_Material(&a);
     vr.render(map);
 	brick1.render();
+	rec1.render();
+	
+	//render_image("one", True_loc_player1 - Vector2f(10.f, 10.f), True_loc_player1 + Vector2f(10.f, 10.f));
+
     render_image("one", Point2f(Rel_loc_player1.x-10.0f*scale,Rel_loc_player1.y-10.0f*scale),
 				Point2f(Rel_loc_player1.x+10.0f*scale,Rel_loc_player1.y +10.0f*scale));
     

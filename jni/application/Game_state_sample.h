@@ -52,6 +52,8 @@ private:
     void perform_logic();
     void render();
     Map_brick brick1;
+	Map_structure_rec rec1;
+	Collision_rectangle player1;
 	//Collision_rectangle player1, player2;
 };
     
