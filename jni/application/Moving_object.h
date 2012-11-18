@@ -32,6 +32,10 @@ namespace Flame {
 
     // update the location of this Moving_object
     void update_location(const float &time) { location = location + is_moving * orientation * time; }
+    
+    // alternative way to update the location of this Moving_object
+    // being used in Player class
+    void set_position(Zeni::Point2f pos) {location = pos;}
 
   private:
     bool is_moving;
