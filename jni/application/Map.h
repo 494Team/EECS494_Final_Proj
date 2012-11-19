@@ -12,7 +12,7 @@ namespace Flame {
         
         virtual Zeni::Point2f get_location(){return location;};
         virtual void update(const float &scale_, const Zeni::Point2f &center_) = 0;
-        virtual bool can_move(Collision_object &moving_obj_) = 0;
+        virtual bool can_move(Collision_object *moving_obj_) = 0;
     protected:
       //  virtual void render() = 0;
         Zeni::Point2f location;
@@ -27,7 +27,7 @@ namespace Flame {
         Zeni::Point2f get_location(){return Map::get_location();};
         void render();
         void update(const float &scale_, const Zeni::Point2f &center_);
-        bool can_move(Collision_object &moving_obj_);
+        bool can_move(Collision_object *moving_obj_);
     private:
         Collision_rectangle collision_body;
         Zeni::Quadrilateral<Zeni::Vertex2f_Texture> brick;
@@ -47,7 +47,7 @@ namespace Flame {
 		Zeni::Point2f get_location(){return Map::get_location();};
         void render();
         void update(const float &scale_, const Zeni::Point2f &center_);
-        bool can_move(Collision_object &moving_obj_);
+        bool can_move(Collision_object *moving_obj_);
 	private:
         Collision_rectangle collision_body;
 		Zeni::Point2f render_location, rel_location;
@@ -65,7 +65,7 @@ namespace Flame {
 		Zeni::Point2f get_location(){return Map::get_location();};
         void render();
         void update(const float &scale_, const Zeni::Point2f &center_);
-        bool can_move(Collision_object &moving_obj_);
+        bool can_move(Collision_object *moving_obj_);
 	private:
         Collision_circle collision_body;
 		Zeni::Point2f render_center, rel_center;

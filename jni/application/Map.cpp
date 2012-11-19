@@ -61,8 +61,8 @@ namespace Flame {
         vr.render(brick);
     }
     
-    bool Map_brick::can_move(Collision_object &moving_obj_){
-        return !moving_obj_.collide(collision_body);
+    bool Map_brick::can_move(Collision_object *moving_obj_){
+        return !moving_obj_->collide(collision_body);
     }
 
 	// Map_structure_rec functions;
@@ -88,8 +88,8 @@ namespace Flame {
 		render_image(structure_texture, rel_location, rel_location + rel_size);
 	}
 
-	bool Map_structure_rec::can_move(Collision_object &moving_obj_){
-		return !moving_obj_.collide(collision_body);
+	bool Map_structure_rec::can_move(Collision_object *moving_obj_){
+		return !moving_obj_->collide(collision_body);
 	}
 	
 	
@@ -117,8 +117,8 @@ namespace Flame {
 		render_image(structure_texture, rel_center - rel_size / 2, rel_center + rel_size / 2);
 	}
 
-	bool Map_structure_cir::can_move(Collision_object &moving_obj_){
-		return !moving_obj_.collide(collision_body);
+	bool Map_structure_cir::can_move(Collision_object *moving_obj_){
+		return !moving_obj_->collide(collision_body);
 	}
 
 }

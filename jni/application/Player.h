@@ -46,7 +46,7 @@ namespace Flame {
 		  for (std::vector<Flame::Map *>::iterator it = (*Map_obj_list_).begin();
 			  it != (*Map_obj_list_).end();
 			  ++it){
-				  if (!(*it)->can_move(get_body())){
+				  if (!(*it)->can_move(&get_body())){
 					  set_position(backup_position);
 					  update_body();
 				  }
@@ -62,7 +62,7 @@ namespace Flame {
 		  for (std::vector<Flame::Map *>::iterator it = (*Map_obj_list_).begin();
 			  it != (*Map_obj_list_).end();
 			  ++it){
-				  if (!(*it)->can_move(get_body())){
+				  if (!(*it)->can_move(&get_body())){
 					  set_position(backup_position);
 					  update_body();
 				  }
