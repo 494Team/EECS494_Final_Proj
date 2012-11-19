@@ -51,9 +51,20 @@ namespace Flame {
     if (!Collision_object::is_collidable() || !other.is_collidable())
       return false;
     if ((corner.x < other.corner.x && other.corner.x < corner.x + size.x) ||
-        (other.corner.x < corner.x && corner.x < other.corner.x + other.size.x))
-      return abs(other.corner.y - corner.y) < other.size.y;
-    return abs(other.corner.x - corner.x) < size.x;
+        (other.corner.x < corner.x && corner.x < other.corner.x + other.size.x)) {
+      if (corner.y > other.corner.y)
+        return corner.y - other.corner.y < other.size.y;
+      else
+        return other.corner.y - corner.y < size.y;
+    }
+    if ((corner.y < other.corner.y && other.corner.y < corner.y + size.y) ||
+        (other.corner.y < corner.y && corner.y < other.corner.y + other.size.y)) {
+      if (corner.x > other.corner.x)
+        return corner.x - other.corner.x < other.size.y;
+      else
+        return other.corner.x - corner.x < size.x;
+    }
+    return false;
   }
 
   Collision_sector::Collision_sector(const Point2f& origin_,
