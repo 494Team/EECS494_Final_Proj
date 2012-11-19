@@ -6,7 +6,7 @@ namespace Flame {
         location = location_;
         size = size_;
     }
-    
+/*    
     void Map::render(const String &texture_, const Color &filter){
         render_image(texture_,
                      location,
@@ -18,7 +18,7 @@ namespace Flame {
                      filter
                      );
     }
-    
+  */  
     Map_brick::Map_brick(const Point2f &location_,
                          const Vector2f &size_,
                          const String &texture_)

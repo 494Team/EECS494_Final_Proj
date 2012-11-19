@@ -57,7 +57,14 @@ The following things are unsupported:
         <filepath>textures/brick.png</filepath>
         <tile>1</tile>
     </brick>
-
+  <grass>
+    <filepath>textures/grass.png</filepath>
+    <tile>1</tile>
+  </grass>
+  <house>
+    <filepath>textures/house.png</filepath>
+    <tile>0</tile>
+  </house>
   <monkey_king_front>
     <is_sprite>0</is_sprite>
     <filepath>textures/monkey_king_front.png</filepath>
@@ -80,7 +87,7 @@ The following things are unsupported:
   </monkey_king_right>
   <sword_attack>
     <is_sprite>0</is_sprite>
-    <filepath>textures/sword_attack.png</filepath>
+    <filepath>textures/sword_attack_1.png</filepath>
     <tile>0</tile>
   </sword_attack>
   <rarrow3>

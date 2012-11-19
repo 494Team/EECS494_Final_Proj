@@ -31,7 +31,7 @@ enum kKey_type {
   X1, X2, X3, X4,
   Y1, Y2, Y3, Y4,
 };
-
+namespace Flame{
 struct Control {
   float move_hori;
   float move_vert;
@@ -44,5 +44,6 @@ struct Control {
   {
   }
 };
+}
 
 #endif

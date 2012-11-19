@@ -14,7 +14,7 @@ namespace Flame {
       const float &speed_ = 0.0f,
       const float &radius_ = 0.0f,
       const Zeni::Point2f &location_ = Zeni::Point2f())
-    : health(health_), initial_health(health_), alive(true), 
+    : health(health_), initial_health(health_), alive(true), radius(radius_),
       Moving_object(speed_, location_), body(location_, radius_)
     {}
 
@@ -22,7 +22,9 @@ namespace Flame {
     float get_current_health() const {return health;}
     Flame::Collision_circle get_body() const {return body;}
     bool is_alive() const {return alive;}
-    
+    void update_body(){
+		body = Flame::Collision_circle(get_location(), radius);
+	}
     // decrease health (if damage is negative, then increase)
     void dec_health(const float &damage) {
       health -= damage;
@@ -34,12 +36,13 @@ namespace Flame {
         health = initial_health;
       }
     }
-
+  
   private:
+	Flame::Collision_circle body;
     float initial_health;
     float health;
     bool alive;
-    Flame::Collision_circle body;
+	float radius;
   };
 
 }

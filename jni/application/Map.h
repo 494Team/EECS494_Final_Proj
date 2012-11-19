@@ -11,10 +11,10 @@ namespace Flame {
             const Zeni::Vector2f &size_ = Zeni::Vector2f());
         
         virtual Zeni::Point2f get_location(){return location;};
-        virtual void update(float time = 0.0f){};
+        virtual void update(const float &scale_, const Zeni::Point2f &center_) = 0;
         virtual bool can_move(Collision_object &moving_obj_) = 0;
     protected:
-        virtual void render(const Zeni::String &texture_, const Zeni::Color &filter = Zeni::Color());
+      //  virtual void render() = 0;
         Zeni::Point2f location;
         Zeni::Vector2f size;
     };

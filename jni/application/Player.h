@@ -3,7 +3,8 @@
 
 #include "Agent.h"
 #include <vector>
-//#include <zenilib.h>
+#include <zenilib.h>
+#include "Map.h"
 using namespace Zeni;
 
 namespace Flame {
@@ -24,12 +25,16 @@ namespace Flame {
       const Zeni::Point2f &location_ = Zeni::Point2f())
     : Agent(health_, speed_, radius_, location_),
       wpinuse(false),
-      damaged(false)
+      damaged(false),
+	  //size(Zeni::Vector2f(radius_ * 2, radius_ * 2))
+	  size(radius_)
     {
     }
-    void update(float time)  {
+
+	void update(float time, const float &scale_, const Zeni::Point2f &center_, std::vector<Flame::Map*> *Map_obj_list_)  {
       Point2f backup_position = get_location();
-      
+      scale = scale_;
+
       if (abs(ctrl.move_hori) + abs(ctrl.move_vert) > 0.3f) {
         Vector2f dir(ctrl.move_hori, ctrl.move_vert);
         set_orientation(dir);
@@ -37,16 +42,40 @@ namespace Flame {
         if (!ctrl.l) {
           Point2f new_position = backup_position + Point2f(ctrl.move_hori * time * get_current_speed(), 0.0f);
           set_position(new_position);
+		  update_body();
+		  for (std::vector<Flame::Map *>::iterator it = (*Map_obj_list_).begin();
+			  it != (*Map_obj_list_).end();
+			  ++it){
+				  if (!(*it)->can_move(get_body())){
+					  set_position(backup_position);
+					  update_body();
+				  }
+
+		  }
+
           //if (m_monkey_king.collide(m_collision_rectangle))
           //  monkey_king_position = backup_position;
           backup_position = get_location();
           new_position = backup_position + Point2f(0.0f, ctrl.move_vert * time * get_current_speed());
           set_position(new_position);
+		  update_body();
+		  for (std::vector<Flame::Map *>::iterator it = (*Map_obj_list_).begin();
+			  it != (*Map_obj_list_).end();
+			  ++it){
+				  if (!(*it)->can_move(get_body())){
+					  set_position(backup_position);
+					  update_body();
+				  }
+		  }
+
           //if (m_monkey_king.collide(m_collision_rectangle))
           //  monkey_king_position = backup_position;
           //m_monkey_king.set_position(monkey_king_position);
         }
+		
       }
+
+	  rel_loc = (get_location() - center_) * scale_ + Point2f(400.0f, 300.0f);
 
       const Zeni::Time_HQ current_time = Zeni::get_Timer_HQ().get_time();
       float passed_time = float(current_time.get_seconds_since(last_htime));
@@ -66,28 +95,40 @@ namespace Flame {
       Point2f loc = get_location();
       Vector2f orient = get_current_orientation();
       float rad = orient_vec_to_radians(orient);
+	  Zeni::String player_texture;
 
       if (rad <= 0.25f * Global::pi && rad > -0.25f * Global::pi) {
-        render_image("monkey_king_front",
-                     loc,
-                     loc + 5.0f * Vector2f(10.0f, 10.0f));
+      /*  render_image("monkey_king_front",
+                       loc,
+                       loc + 5.0f * Vector2f(10.0f, 10.0f));
+					   */
+		   player_texture = Zeni::String("monkey_king_front");
       } else if (rad <= 0.75f * Global::pi && rad > 0.25f * Global::pi) {
-        render_image("monkey_king_right",
+        /*render_image("monkey_king_right",
                      loc,
-                     loc + 5.0f * Vector2f(10.0f, 10.0f));
+                     loc + 5.0f * Vector2f(10.0f, 10.0f));*/
+		    player_texture = Zeni::String("monkey_king_right");
       } else if (rad <= Global::pi && rad > 0.75f * Global::pi ||
                 rad >= -Global::pi && rad < -0.75f * Global::pi) {
-        render_image("monkey_king_back",
+        /*render_image("monkey_king_back",
                      loc,
-                     loc + 5.0f * Vector2f(10.0f, 10.0f));
+                     loc + 5.0f * Vector2f(10.0f, 10.0f));*/
+			player_texture = Zeni::String("monkey_king_back");
       } else {
+		  /*
         render_image("monkey_king_left",
                      loc,
-                     loc + 5.0f * Vector2f(10.0f, 10.0f));
+                     loc + 5.0f * Vector2f(10.0f, 10.0f));*/
+		    player_texture = Zeni::String("monkey_king_left");
       }
 
+	  render_image(player_texture,
+				   Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
+				   Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
+
       //render the orientation arrow
-      render_image(
+      /*
+	  render_image(
         "rarrow3", // which texture to use
         loc + Point2f(0.0f, 50.0f), // upper-left corner
         loc + Point2f(50.0f, 70.0f),//m_size, // lower-right corner
@@ -95,9 +136,19 @@ namespace Flame {
         1.0f, // scaling factor
         loc + Point2f(25.0f, 25.0f), // point to rotate & scale about
         false);//, // whether or not to horizontally flip the texture
-        //filter); // what Color to "paint" the texture
+        //filter); // what Color to "paint" the texture*/
+	  render_image(
+		  "rarrow3",
+		  Point2f(rel_loc.x - size, rel_loc.y + size ),
+		  Point2f(rel_loc.x + size, rel_loc.y + size + size),
+		  rad,
+		  scale,
+		  rel_loc,
+		  false);
       //render weapon attacking
       if (wpinuse)
+		
+		 /*
         render_image(
           "sword_attack", // which texture to use
           loc + Point2f(0.0f, 50.0f), // upper-left corner
@@ -106,7 +157,16 @@ namespace Flame {
           1.0f, // scaling factor
           loc + Point2f(25.0f, 25.0f), // point to rotate & scale about
           false);//, // whether or not to horizontally flip the texture
-          //filter); // what Color to "paint" the texture
+          //filter); // what Color to "paint" the texture*/
+		render_image(
+		  "sword_attack",
+		  Point2f(rel_loc.x - size, rel_loc.y + size ),
+		  Point2f(rel_loc.x + size, rel_loc.y + size  + size * 2),
+		  rad,
+		  scale,
+		  rel_loc,
+		  false);
+          
     }
 
     //control
@@ -160,10 +220,16 @@ namespace Flame {
     bool wpinuse;
     bool damaged; //whether the normal attack has created a damage
     Zeni::Time_HQ last_htime;
-
-    //vector<Agent*>* Monsters;
+	
+	//vector<Agent*>* Monsters;
     int attack_strength;
     double attack_range;
+
+	//relative location;
+	Zeni::Point2f rel_loc;
+	Zeni::Point2f center;
+	float scale;
+	float size;
   };
 
 
