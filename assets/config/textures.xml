@@ -57,6 +57,18 @@ The following things are unsupported:
         <filepath>textures/brick.png</filepath>
         <tile>1</tile>
     </brick>
+    <rock>
+        <filepath>textures/rock.png</filepath>
+        <tile>1</tile>
+    </rock>
+    <floor>
+        <filepath>textures/floor.png</filepath>
+        <tile>1</tile>
+    </floor>
+    <ifloor>
+        <filepath>textures/illuminate_floor.png</filepath>
+        <tile>1</tile>
+    </ifloor>
   <grass>
     <filepath>textures/grass.png</filepath>
     <tile>1</tile>

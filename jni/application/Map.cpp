@@ -21,6 +21,8 @@ namespace Flame {
   */  
     Map_brick::Map_brick(const Point2f &location_,
                          const Vector2f &size_,
+						 const float &texture_size_x_,
+						 const float &texture_size_y_,
                          const String &texture_)
     :Map(location_, size_),
     collision_body(location_, size_)
@@ -31,9 +33,9 @@ namespace Flame {
         True_p3 = location_ + Vector2f(size_.x, 0.0f);
         
         Tile_p0 = Point2f(0.0f, 0.0f);
-        Tile_p1 = Point2f(0.0f, size_.y / 10.0f);
-        Tile_p2 = Point2f(size_.x / 10.0f, size_.y/10.0f);
-        Tile_p3 = Point2f(size_.x / 10.0f, 0.0f);
+        Tile_p1 = Point2f(0.0f, size_.y / texture_size_y_);
+        Tile_p2 = Point2f(size_.x / texture_size_x_, size_.y / texture_size_y_);
+		Tile_p3 = Point2f(size_.x / texture_size_x_, 0.0f);
         
         Brick_texture = texture_;
     }
@@ -61,7 +63,11 @@ namespace Flame {
         vr.render(brick);
     }
     
-    bool Map_brick::can_move(Collision_object *moving_obj_){
+    bool Map_brick::can_move_player(Collision_object *moving_obj_){
+        return !moving_obj_->collide(collision_body);
+    }
+	
+	bool Map_brick::can_move(Collision_object *moving_obj_){
         return !moving_obj_->collide(collision_body);
     }
 
@@ -92,7 +98,10 @@ namespace Flame {
 		return !moving_obj_->collide(collision_body);
 	}
 	
-	
+	bool Map_structure_rec::can_move_player(Collision_object *moving_obj_){
+		return !moving_obj_->collide(collision_body);
+	}
+
 	// Map_structure_cir functions;
 	Map_structure_cir::Map_structure_cir(const Zeni::Point2f &render_center_ ,
 					  const float &render_radius_,
@@ -119,6 +128,35 @@ namespace Flame {
 
 	bool Map_structure_cir::can_move(Collision_object *moving_obj_){
 		return !moving_obj_->collide(collision_body);
+	}
+
+	bool Map_structure_cir::can_move_player(Collision_object *moving_obj_){
+		return !moving_obj_->collide(collision_body);
+	}
+
+	bool Map_floor_illuminate::can_move_player(Collision_object *moving_obj_){
+		if (moving_obj_->collide(collision_body))
+			illuminated = true;
+		return true;
+	}
+	
+	void Map_floor_illuminate::reset(){
+		illuminated = false;
+	}
+
+	bool Map_floor_illuminate::can_move(Collision_object *moving_obj_){
+		return true;
+	}
+
+	void Map_floor_illuminate::render(){
+		Video &vr = get_Video();
+		Material Brick_material;
+        if(illuminated)
+			Brick_material = Material(illuminate_texture);
+		else
+			Brick_material = Material(Brick_texture);
+        brick.fax_Material(&Brick_material);
+        vr.render(brick);
 	}
 
 }

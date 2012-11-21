@@ -10,7 +10,7 @@ namespace Flame {
   public:
 
     // get the location of this Sim_object
-    virtual Zeni::Point2f get_location() = 0;
+    virtual Zeni::Point2f get_location()const = 0;
 
     // update this Sim_object with time passed passing in, and potentially a control
 	virtual void update(float time = 0.0f){};

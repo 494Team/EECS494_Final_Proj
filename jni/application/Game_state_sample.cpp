@@ -23,7 +23,6 @@ Game_state_sample::Game_state_sample()
     Key_down(false),
     Key_left(false),
     Key_right(false),
-    brick1(Point2f(0.0f, 610.0f), Vector2f(800.0f,10.0f), String("brick")),
 	player1(Point2f(290.0f, 190.0f), Vector2f(20.0f, 20.0f)),
 	rec1(Point2f(200.0f, 200.0f), Vector2f(50.0f, 50.0f), Point2f(200.0f, 200.0f), Vector2f(50.0f, 50.0f), String("monkey_king_front"))
 {
@@ -196,7 +195,7 @@ void Game_state_sample::perform_logic(){
     True_loc_player1 += Move_dir1 * time_step * 20000.0f / 320;
 
 	player1 = Collision_rectangle(Point2f(True_loc_player1 - Vector2f(10.0f, 10.0f)), Vector2f(20.0f, 20.0f));
-	if (!brick1.can_move(player1) || !rec1.can_move(player1))
+	if (!brick1.can_move(&player1) || !rec1.can_move(&player1))
 		True_loc_player1 -= Move_dir1 * time_step * 20000.0f /320;
 
     True_loc_player2 += -Move_dir1 * time_step * 20000.0f / 320;

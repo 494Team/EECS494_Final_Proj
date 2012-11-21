@@ -12,7 +12,7 @@
 #include "map.h"
 #include <cmath>
 #include "Utility.h"
-
+#include "Model_state.h"
 #include "Player.h"
 
 #if defined(_DEBUG) && defined(_WINDOWS)
@@ -22,6 +22,7 @@
 
 using namespace std;
 using namespace Zeni;
+using namespace Flame;
 
 class Play_State : public Gamestate_II {
   Play_State(const Play_State &);
@@ -30,7 +31,7 @@ class Play_State : public Gamestate_II {
 public:
   Play_State() :
     joystick_x(0.f),
-    joystick_y(0.f),
+    joystick_y(0.f), 
     m_time_passed(0.f),
     m_collision_rectangle(Point2f(384., 284.), Vector2f(32., 32.)),
     p1(100.0f, 200.0f, 15.0f, Point2f(300.0f, 200.0f)),
@@ -84,35 +85,49 @@ public:
 	
 	// wall on bottom
 	Map_obj_list.push_back(new Flame::Map_brick(Point2f(-20.0f, 600.0f), 
-								      		    Vector2f(820.0f,20.0f), 
-		     									String("brick")));
+								      		    Vector2f(820.0f,20.0f),
+												20.0f,
+												20.f,
+		     									String("rock")));
 	// wall on top
 	Map_obj_list.push_back(new Flame::Map_brick(Point2f(-20.0f, -20.0f), 
 								      		    Vector2f(820.0f,20.0f), 
-		     									String("brick")));
+												20.0f,
+												20.f,
+		     									String("rock")));
 	  
 	// wall on left
 	Map_obj_list.push_back(new Flame::Map_brick(Point2f(-20.0f, -20.0f), 
 								      		    Vector2f(20.0f,620.0f), 
-		     									String("brick")));
+												20.0f,
+												20.f,
+		     									String("rock")));
 
 	// wall on right
 	Map_obj_list.push_back(new Flame::Map_brick(Point2f(800.0f, -20.0f), 
 								      		    Vector2f(20.0f,640.0f), 
-		     									String("brick")));	
+												20.0f,
+												20.f,
+		     									String("rock")));	
+
+	// illuminate floor
+	Map_obj_list.push_back(new Flame::Map_floor_illuminate(Point2f(320.0f, 400.0f),
+														   Point2f(20.f, 20.f),
+														   "floor",
+														   "ifloor"));
 
 	// rec structure
 	Map_obj_list.push_back(new Flame::Map_structure_rec(Point2f(200.0f, 200.0f), 
 														Vector2f(50.0f, 50.0f), 
 														Point2f(200.0f, 200.0f), 
 														Vector2f(50.0f, 50.0f), 
-														String("brick")));
+														String("rock")));
 	
 	// rec half block half through
 	Map_obj_list.push_back(new Flame::Map_structure_rec(Point2f(400.0f, 400.0f), 
 														Vector2f(50.0f, 50.0f), 
-														Point2f(400.0f, 420.0f), 
-														Vector2f(50.0f, 30.0f), 
+														Point2f(400.0f, 410.0f), 
+														Vector2f(50.0f, 40.0f), 
 														String("house")));
   }
 
@@ -275,6 +290,11 @@ private:
 		for (float time_step = 0.05f;
 			processing_time > 0.0f;
 			processing_time -= time_step) {
+				for (std::vector<Flame::Map *>::iterator it = Map_obj_list.begin();
+					it != Map_obj_list.end();
+					++it)
+					(*it)->reset();
+
 				p1.update(time_step, scale, Center_loc_player, &Map_obj_list);
 				p2.update(time_step, scale, Center_loc_player, &Map_obj_list);
 				p3.update(time_step, scale, Center_loc_player, &Map_obj_list);
@@ -304,14 +324,13 @@ private:
 		Vertex2f_Texture text_p0(Map_p0, Point2f(0.0f,0.0f));
 		Vertex2f_Texture text_p1(Map_p1, Point2f(0.0f, 30.0f));
 		Vertex2f_Texture text_p2(Map_p2, Point2f(40.0f, 30.0f));
-		Vertex2f_Texture text_p3(Map_p3, Point2f(40.0f, 0.0f));
-    
+		Vertex2f_Texture text_p3(Map_p3, Point2f(40.0f, 0.0f));    
 		map[0] = text_p0;
 		map[1] = text_p1;
 		map[2] = text_p2;
 		map[3] = text_p3;
     
-		Material a("grass");
+		Material a("floor");
 		map.fax_Material(&a);
 		vr.render(map);
 		
@@ -324,6 +343,7 @@ private:
 		p2.render();
 		p3.render();
 		p4.render();
+
 	}
 
   float joystick_x;

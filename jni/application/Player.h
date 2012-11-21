@@ -46,15 +46,13 @@ namespace Flame {
 		  for (std::vector<Flame::Map *>::iterator it = (*Map_obj_list_).begin();
 			  it != (*Map_obj_list_).end();
 			  ++it){
-				  if (!(*it)->can_move(&get_body())){
+				  if (!(*it)->can_move_player(&get_body())){
 					  set_position(backup_position);
 					  update_body();
 				  }
 
 		  }
 
-          //if (m_monkey_king.collide(m_collision_rectangle))
-          //  monkey_king_position = backup_position;
           backup_position = get_location();
           new_position = backup_position + Point2f(0.0f, ctrl.move_vert * time * get_current_speed());
           set_position(new_position);
@@ -62,16 +60,13 @@ namespace Flame {
 		  for (std::vector<Flame::Map *>::iterator it = (*Map_obj_list_).begin();
 			  it != (*Map_obj_list_).end();
 			  ++it){
-				  if (!(*it)->can_move(&get_body())){
+				  if (!(*it)->can_move_player(&get_body())){
 					  set_position(backup_position);
 					  update_body();
 				  }
 		  }
 
-          //if (m_monkey_king.collide(m_collision_rectangle))
-          //  monkey_king_position = backup_position;
-          //m_monkey_king.set_position(monkey_king_position);
-        }
+          }
 		
       }
 

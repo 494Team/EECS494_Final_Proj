@@ -13,7 +13,7 @@ namespace Flame {
           const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
           float speed_ = 0.f);
 
-    virtual Zeni::Point2f get_location()
+    virtual Zeni::Point2f get_location()const
       {return get_current_location();}
 
     virtual void update(float time = 0.f);
