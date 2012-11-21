@@ -42,11 +42,11 @@ namespace Flame {
     }
   
   private:
-  Flame::Collision_circle body;
-  float initial_health;
-  float health;
-  bool alive;
-  float radius;
+    Flame::Collision_circle body;
+    float initial_health;
+    float health;
+    bool alive;
+    float radius;
   };
 
 }

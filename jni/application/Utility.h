@@ -16,6 +16,26 @@ namespace Flame{
 
   extern const float kAxis_constrain;
 
+  // float infinity
+  extern const float INFINITY;
+
+  // monster will attack player if distance(exclude radius) between them is lower than this value
+  extern const float MIN_DIST_MONSTER_PLAYER;
+
+  // the initial hatred for the closest player when a monster see one
+  extern const float INITIAL_HATRED;
+
+  // render time for a normal attack
+  extern const float RENDER_ATTACK_TIME;
+
+  // Wanderer constants
+  extern const float WANDERER_RADIUS;
+  extern const float WANDERER_SPEED;
+  extern const float WANDERER_DAMAGE;
+  extern const float WANDERER_HEALTH;
+  extern const float WANDERER_ATTACK_GAP;
+  extern const float WANDERER_ATTACK_RADIUS;
+
   // forward declaration
   class Sim_object;
   class Player;
