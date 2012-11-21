@@ -209,8 +209,8 @@ void Game_state_sample::perform_logic(){
     Rel_loc_player3 = get_rel_loc(True_loc_player3);
     Rel_loc_player4 = get_rel_loc(True_loc_player4);
 
-	brick1.update(scale, Center_loc_player);
-	rec1.update(scale, Center_loc_player);
+	brick1.update(0.);
+	rec1.update(0.);
     SDL_Delay(5);
 };
 

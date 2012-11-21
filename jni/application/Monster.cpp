@@ -15,7 +15,7 @@ void Monster::get_hit(const float &damage, Player* source) {
 Player * Monster::highest_hatred() {
   float max_hatred = -1.0f;
   Player* target_player = NULL;
-  for (int i = 0; i < players.size(); ++i) {
+  for (int i = 0; i < int(players.size()); ++i) {
     if (hatred[players[i]] > max_hatred) {
       max_hatred = hatred[players[i]];
       target_player = players[i];

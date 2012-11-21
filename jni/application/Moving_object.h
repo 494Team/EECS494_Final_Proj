@@ -10,7 +10,7 @@ namespace Flame {
     Moving_object(
       const float &speed_ = 0.0f, 
       const Zeni::Point2f &location_ = Zeni::Point2f())
-    : speed(speed_), location(location_), is_moving(false), orientation(Zeni::Vector2f())
+    : is_moving(false), speed(speed_), location(location_), orientation(Zeni::Vector2f())
     {}
 
     bool is_currently_moving() const {return is_moving;}

@@ -14,8 +14,12 @@ namespace Flame {
       const float &speed_ = 0.0f,
       const float &radius_ = 0.0f,
       const Zeni::Point2f &location_ = Zeni::Point2f())
-    : health(health_), initial_health(health_), alive(true), radius(radius_),
-      Moving_object(speed_, location_), body(location_, radius_)
+    : Moving_object(speed_, location_),
+      body(location_, radius_),
+      initial_health(health_),
+      health(health_),
+      alive(true),
+      radius(radius_)
     {}
 
     Zeni::Point2f get_location()const {return Moving_object::get_current_location();}
@@ -38,11 +42,11 @@ namespace Flame {
     }
   
   private:
-	Flame::Collision_circle body;
-    float initial_health;
-    float health;
-    bool alive;
-	float radius;
+  Flame::Collision_circle body;
+  float initial_health;
+  float health;
+  bool alive;
+  float radius;
   };
 
 }

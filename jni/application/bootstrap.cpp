@@ -5,6 +5,8 @@
  */
 
 #include <zenilib.h>
+#include <algorithm>
+#include <functional>
 #include <vector>
 #include <map>
 #include "Collision.h"
@@ -30,14 +32,7 @@ class Play_State : public Gamestate_II {
 
 public:
   Play_State() :
-    joystick_x(0.f),
-    joystick_y(0.f), 
-    m_time_passed(0.f),
-    m_collision_rectangle(Point2f(384., 284.), Vector2f(32., 32.)),
-    p1(100.0f, 200.0f, 15.0f, Point2f(300.0f, 200.0f)),
-	p2(100.0f, 200.0f, 15.0f, Point2f(500.0f, 300.0f)),
-	p3(100.0f, 200.0f, 15.0f, Point2f(500.0f, 200.0f)),
-	p4(100.0f, 200.0f, 15.0f, Point2f(300.0f, 300.0f))
+    m_time_passed(0.f)
   {
     set_pausable(true);
 
@@ -80,55 +75,8 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_X, 3), X4);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 3), Y4);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 3), L4);
-	//brick1 = new Flame::Map_brick(Point2f(0.0f, 610.0f), Vector2f(800.0f,10.0f), String("brick"));
-	//rec1 = new Flame::Map_structure_rec(Point2f(200.0f, 200.0f), Vector2f(50.0f, 50.0f), Point2f(200.0f, 200.0f), Vector2f(50.0f, 50.0f), String("brick"));
-	
-	// wall on bottom
-	Map_obj_list.push_back(new Flame::Map_brick(Point2f(-20.0f, 600.0f), 
-								      		    Vector2f(820.0f,20.0f),
-												20.0f,
-												20.f,
-		     									String("rock")));
-	// wall on top
-	Map_obj_list.push_back(new Flame::Map_brick(Point2f(-20.0f, -20.0f), 
-								      		    Vector2f(820.0f,20.0f), 
-												20.0f,
-												20.f,
-		     									String("rock")));
-	  
-	// wall on left
-	Map_obj_list.push_back(new Flame::Map_brick(Point2f(-20.0f, -20.0f), 
-								      		    Vector2f(20.0f,620.0f), 
-												20.0f,
-												20.f,
-		     									String("rock")));
 
-	// wall on right
-	Map_obj_list.push_back(new Flame::Map_brick(Point2f(800.0f, -20.0f), 
-								      		    Vector2f(20.0f,640.0f), 
-												20.0f,
-												20.f,
-		     									String("rock")));	
-
-	// illuminate floor
-	Map_obj_list.push_back(new Flame::Map_floor_illuminate(Point2f(320.0f, 400.0f),
-														   Point2f(20.f, 20.f),
-														   "floor",
-														   "ifloor"));
-
-	// rec structure
-	Map_obj_list.push_back(new Flame::Map_structure_rec(Point2f(200.0f, 200.0f), 
-														Vector2f(50.0f, 50.0f), 
-														Point2f(200.0f, 200.0f), 
-														Vector2f(50.0f, 50.0f), 
-														String("rock")));
-	
-	// rec half block half through
-	Map_obj_list.push_back(new Flame::Map_structure_rec(Point2f(400.0f, 400.0f), 
-														Vector2f(50.0f, 50.0f), 
-														Point2f(400.0f, 410.0f), 
-														Vector2f(50.0f, 40.0f), 
-														String("house")));
+    Model_state::get_instance()->init(0);
   }
 
 private:
@@ -234,93 +182,35 @@ private:
 		}
 	}
 
-	float get_scale(Zeni::Point2f &True_loc_player1_, Zeni::Point2f &True_loc_player2_){
-		float Dis_x = abs(True_loc_player1_.x - True_loc_player2_.x);
-		float Dis_y = abs(True_loc_player1_.y - True_loc_player2_.y);
-		float Frac = Dis_x / Dis_y;
-    
-		if (Dis_y != 0 &&Frac < 4.0f / 3.0f){
-			if (200.0f / Dis_y < 1)
-				return 1;
-			else if (200.0f / Dis_y > 5)
-				return 5;
-			else
-				return 200.0f / Dis_y;
-		}
-		else{
-			if (800.0f/3/Dis_x < 1)
-				return 1;
-			else if (800.0f/3/Dis_x > 5)
-				return 5;
-			else
-				return 800.0f/3/Dis_x;
-		}
-	}
+  void perform_logic() {
+    const float time_passed = m_set.seconds();
+    float processing_time = time_passed - m_time_passed;
+    m_time_passed = time_passed;
 
-	void update_location(Point2f &True_loc_player1,
-						 Point2f &True_loc_player2,
-						 Point2f &True_loc_player3,
-						 Point2f &True_loc_player4){
+    for (float time_step = 0.05f; processing_time > 0.0f; processing_time -= time_step) {
+      auto map_obj_list_ptr = Model_state::get_instance()->get_map_obj_list_ptr();
+      for (auto it = map_obj_list_ptr->begin(); it != map_obj_list_ptr->end(); ++it)
+        (*it)->reset();
 
-		vector<Point2f> Player_list;
-		map<float, pair<int,int> > dis_list;
-
-		Player_list.push_back(True_loc_player1);
-		Player_list.push_back(True_loc_player2);
-		Player_list.push_back(True_loc_player3);
-		Player_list.push_back(True_loc_player4);
-
-
-		for(int i = 0; i < 4; ++i){
-			for(int j = 1; j < 4; ++j)
-				dis_list.insert(pair<float, pair<int,int>>(get_scale(Player_list[(i+j)%4], Player_list[i]), pair<int,int>(i,(j+i)%4)));
-		}
-		map<float,pair<int,int> >::iterator it = dis_list.begin();
-		Center_loc_player = Point2f((True_loc_player1.x + True_loc_player2.x + True_loc_player3.x + True_loc_player4.x) / 4, 
-									(True_loc_player1.y + True_loc_player2.y + True_loc_player3.y + True_loc_player4.y) / 4);
-
-		scale = it->first;
-	}
-
-	void perform_logic() {
-		const float time_passed = m_set.seconds();
-		float processing_time = time_passed - m_time_passed;
-		m_time_passed = time_passed;
-
-		for (float time_step = 0.05f;
-			processing_time > 0.0f;
-			processing_time -= time_step) {
-				for (std::vector<Flame::Map *>::iterator it = Map_obj_list.begin();
-					it != Map_obj_list.end();
-					++it)
-					(*it)->reset();
-
-				p1.update(time_step, scale, Center_loc_player, &Map_obj_list);
-				p2.update(time_step, scale, Center_loc_player, &Map_obj_list);
-				p3.update(time_step, scale, Center_loc_player, &Map_obj_list);
-				p4.update(time_step, scale, Center_loc_player, &Map_obj_list);
-				update_location(p1.get_location(), p2.get_location(), p3.get_location(), p4.get_location());
-
-				for (std::vector<Flame::Map *>::iterator it = Map_obj_list.begin();
-					it != Map_obj_list.end();
-					++it)
-					(*it)->update(scale, Center_loc_player);
-												
-		}
-	}
+      Model_state::get_instance()->update(time_step);
+    }
+    Model_state::get_instance()->update_scale_and_center();
+  }
 
 	void render()
 	{
 		Video &vr = get_Video();
 		get_Video().set_2d(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
-    
+
+    /* render the map */
+    Point2f center_location = Model_state::get_instance()->get_center_location();
+    float scale = Model_state::get_instance()->get_scale();
 		Quadrilateral<Vertex2f_Texture> map;
 		Point2f Map_center(400.0f,300.0f);
-	
-		Point2f Map_p0 = (Point2f(0.0f, 0.0f) - Center_loc_player) * scale + Map_center;
-		Point2f Map_p1 = (Point2f(0.0f, 600.0f) - Center_loc_player) * scale + Map_center;
-		Point2f Map_p2 = (Point2f(800.0f, 600.0f) - Center_loc_player) * scale + Map_center;
-		Point2f Map_p3 = (Point2f(800.0f, 0.0f) - Center_loc_player) * scale+ Map_center;
+		Point2f Map_p0 = (Point2f(0.0f, 0.0f) - center_location) * scale + Map_center;
+		Point2f Map_p1 = (Point2f(0.0f, 600.0f) - center_location) * scale + Map_center;
+		Point2f Map_p2 = (Point2f(800.0f, 600.0f) - center_location) * scale + Map_center;
+		Point2f Map_p3 = (Point2f(800.0f, 0.0f) - center_location) * scale+ Map_center;
 		Vertex2f_Texture text_p0(Map_p0, Point2f(0.0f,0.0f));
 		Vertex2f_Texture text_p1(Map_p1, Point2f(0.0f, 30.0f));
 		Vertex2f_Texture text_p2(Map_p2, Point2f(40.0f, 30.0f));
@@ -329,33 +219,15 @@ private:
 		map[1] = text_p1;
 		map[2] = text_p2;
 		map[3] = text_p3;
-    
 		Material a("floor");
 		map.fax_Material(&a);
 		vr.render(map);
-		
-		for (std::vector<Flame::Map *>::iterator it = Map_obj_list.begin();
-			it != Map_obj_list.end();
-			++it)
-			(*it)->render();
-				
-		p1.render();
-		p2.render();
-		p3.render();
-		p4.render();
 
+    Model_state::get_instance()->render();
 	}
 
-  float joystick_x;
-  float joystick_y;
-  float scale;
-  Zeni::Point2f Center_loc_player;
   float m_time_passed;
-  Flame::Map_brick *brick1;
-  Flame::Map_structure_rec *rec1;
   Chronometer<Time> m_set;
-  Flame::Collision_rectangle m_collision_rectangle;
-  vector<Flame::Map*> Map_obj_list;
 
 };
 

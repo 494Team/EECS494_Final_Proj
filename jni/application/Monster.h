@@ -18,7 +18,7 @@ namespace Flame {
     : Agent(health_, speed_, radius_, location_),
       players(players_)
     {
-      for (int i = 0; i < players.size(); ++i) {
+      for (int i = 0; i < int(players.size()); ++i) {
         hatred[players[i]] = 0.0f;
       }
     }

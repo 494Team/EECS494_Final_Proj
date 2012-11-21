@@ -14,8 +14,10 @@
 namespace Flame {
 
   // forward declarations
+  class Collision_object;
   class Sim_object;
   class Player;
+  class Map;
   class Monster;
   class Spell;
 
@@ -30,10 +32,17 @@ namespace Flame {
     static Model_state * get_instance();
 
     /* services member functions defined here */
-    // should be called after all players are updated
-    void update();
+    void init(int level);
 
-    Render_list_t * get_sim_list_ptr()
+    // should be called after all players are updated
+    void update_scale_and_center();
+
+    // call update() for all sim_objects
+    void update(float time = 0.f);
+    // render all objects in render_list
+    void render();
+
+    Render_list_t * get_render_list_ptr()
     {return &render_list;}
     std::vector<Player *> * get_player_list_ptr()
     {return &player_list;}
@@ -41,9 +50,20 @@ namespace Flame {
     {return &monster_list;}
     std::vector<Spell *> * get_spell_list_ptr()
     {return &spell_list;}
+    std::vector<Map *> * get_map_obj_list_ptr()
+    {return &map_obj_list;}
 
     // never try to remove from outside!!!!!!!!!
-    void remove_from_render_list(Sim_object * sim_ptr);
+    void remove_player(Player * player_ptr);
+    void remove_monster(Monster * monster_ptr);
+    void remove_spell(Spell * spell_ptr);
+    void remove_map_obj(Map * map_ptr);
+
+    // check if a monster can move to the specific location
+    bool can_move(Collision_object * collision_obj);
+
+    // check if a player can move to the specific location, and trigger the map object to change
+    bool can_move_player(Collision_object * collision_obj);
 
     // accessors
     float get_scale()
@@ -59,9 +79,11 @@ namespace Flame {
 
     /* member variables */
     Render_list_t render_list;
+    std::vector<Sim_object *> sim_obj_list;
     std::vector<Player *> player_list;
     std::vector<Monster *> monster_list;
     std::vector<Spell *> spell_list;
+    std::vector<Map *> map_obj_list;
     Zeni::Point2f center_location;
     float scale;
 

@@ -5,6 +5,9 @@
 #include <vector>
 #include <zenilib.h>
 #include "Map.h"
+#include "Model_state.h"
+#include "Collision.h"
+
 using namespace Zeni;
 
 namespace Flame {
@@ -27,13 +30,12 @@ namespace Flame {
       wpinuse(false),
       damaged(false),
 	  //size(Zeni::Vector2f(radius_ * 2, radius_ * 2))
-	  size(radius_)
-    {
-    }
+	    size(radius_)
+    {}
 
-	void update(float time, const float &scale_, const Zeni::Point2f &center_, std::vector<Flame::Map*> *Map_obj_list_)  {
+	  virtual void update(float time = 0.f)  {
       Point2f backup_position = get_location();
-      scale = scale_;
+      float scale = Model_state::get_instance()->get_scale();
 
       if (abs(ctrl.move_hori) + abs(ctrl.move_vert) > 0.3f) {
         Vector2f dir(ctrl.move_hori, ctrl.move_vert);
@@ -42,35 +44,27 @@ namespace Flame {
         if (!ctrl.l) {
           Point2f new_position = backup_position + Point2f(ctrl.move_hori * time * get_current_speed(), 0.0f);
           set_position(new_position);
-		  update_body();
-		  for (std::vector<Flame::Map *>::iterator it = (*Map_obj_list_).begin();
-			  it != (*Map_obj_list_).end();
-			  ++it){
-				  if (!(*it)->can_move_player(&get_body())){
-					  set_position(backup_position);
-					  update_body();
-				  }
-
-		  }
+		      update_body();
+          Collision_circle collision_body = get_body();
+          if (!Model_state::get_instance()->can_move_player(&collision_body)) {
+            	set_position(backup_position);
+					    update_body();
+          }
 
           backup_position = get_location();
           new_position = backup_position + Point2f(0.0f, ctrl.move_vert * time * get_current_speed());
           set_position(new_position);
-		  update_body();
-		  for (std::vector<Flame::Map *>::iterator it = (*Map_obj_list_).begin();
-			  it != (*Map_obj_list_).end();
-			  ++it){
-				  if (!(*it)->can_move_player(&get_body())){
-					  set_position(backup_position);
-					  update_body();
-				  }
-		  }
-
+		      update_body();
+          collision_body = get_body();
+          if (!Model_state::get_instance()->can_move_player(&collision_body)) {
+            	set_position(backup_position);
+					    update_body();
           }
-		
+
+        }
       }
 
-	  rel_loc = (get_location() - center_) * scale_ + Point2f(400.0f, 300.0f);
+      rel_loc = (get_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
 
       const Zeni::Time_HQ current_time = Zeni::get_Timer_HQ().get_time();
       float passed_time = float(current_time.get_seconds_since(last_htime));
@@ -87,10 +81,11 @@ namespace Flame {
     }
 
     void render() {
-      Point2f loc = get_location();
+      //Point2f loc = get_location();
       Vector2f orient = get_current_orientation();
       float rad = orient_vec_to_radians(orient);
-	  Zeni::String player_texture;
+      float scale = Model_state::get_instance()->get_scale();
+	    Zeni::String player_texture;
 
       if (rad <= 0.25f * Global::pi && rad > -0.25f * Global::pi) {
       /*  render_image("monkey_king_front",
@@ -103,8 +98,8 @@ namespace Flame {
                      loc,
                      loc + 5.0f * Vector2f(10.0f, 10.0f));*/
 		    player_texture = Zeni::String("monkey_king_right");
-      } else if (rad <= Global::pi && rad > 0.75f * Global::pi ||
-                rad >= -Global::pi && rad < -0.75f * Global::pi) {
+      } else if ((rad <= Global::pi && rad > 0.75f * Global::pi) ||
+                (rad >= -Global::pi && rad < -0.75f * Global::pi)) {
         /*render_image("monkey_king_back",
                      loc,
                      loc + 5.0f * Vector2f(10.0f, 10.0f));*/
@@ -222,8 +217,6 @@ namespace Flame {
 
 	//relative location;
 	Zeni::Point2f rel_loc;
-	Zeni::Point2f center;
-	float scale;
 	float size;
   };
 

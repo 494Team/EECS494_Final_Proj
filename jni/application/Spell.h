@@ -17,6 +17,7 @@ namespace Flame {
       {return get_current_location();}
 
     virtual void update(float time = 0.f);
+    virtual void render() {}
 
     bool is_active() const
       {return active;}
