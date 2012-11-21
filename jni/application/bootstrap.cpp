@@ -37,7 +37,7 @@ public:
     set_pausable(true);
 
     m_set.start();
-    
+
     set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), MENU);
     //p1
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 0), MENU);
@@ -80,107 +80,106 @@ public:
   }
 
 private:
-	Flame::Player p1, p2, p3, p4;
 
-	void on_push() {
+  void on_push() {
     //get_Window().mouse_grab(true);
-		get_Window().mouse_hide(true);
-		get_Game().joy_mouse.enabled = false;
-	}
+    get_Window().mouse_hide(true);
+    get_Game().joy_mouse.enabled = false;
+  }
 
-	void on_pop() {
+  void on_pop() {
     //get_Window().mouse_grab(false);
-		get_Window().mouse_hide(false);
-		get_Game().joy_mouse.enabled = true;
-	}
+    get_Window().mouse_hide(false);
+    get_Game().joy_mouse.enabled = true;
+  }
 
-	void on_cover() {
-	    get_Window().mouse_hide(false);
-	    get_Game().joy_mouse.enabled = true;
-	}
+  void on_cover() {
+      get_Window().mouse_hide(false);
+      get_Game().joy_mouse.enabled = true;
+  }
 
-	void on_uncover() {
-	    get_Window().mouse_hide(true);
-	    get_Game().joy_mouse.enabled = false;
-	}
+  void on_uncover() {
+      get_Window().mouse_hide(true);
+      get_Game().joy_mouse.enabled = false;
+  }
 
-	void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
-		switch(action) {
-			case MENU:
-				if(confidence == 1.0f) {
-					Game &game = get_Game();
-					game.push_state(new Popup_Menu_State);
-				}
-				break;
+  void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
+    switch(action) {
+      case MENU:
+        if(confidence == 1.0f) {
+          Game &game = get_Game();
+          game.push_state(new Popup_Menu_State);
+        }
+        break;
 
-			case HORI1:
-				p1.ctrl.move_hori = confidence / 2;
-				break;
-			
-			case VERT1:
-				p1.ctrl.move_vert = confidence / 2;
-				break;
+      case HORI1:
+        (*Model_state::get_instance()->get_player_list_ptr())[0]->ctrl.move_hori = confidence / 2;
+        break;
 
-			case L1:
-				p1.ctrl.l = confidence > 0.5 ? true : false;
-				break;
+      case VERT1:
+        (*Model_state::get_instance()->get_player_list_ptr())[0]->ctrl.move_vert = confidence / 2;
+        break;
 
-			case A1:
-				p1.fire(A1);
-				break;
+      case L1:
+        (*Model_state::get_instance()->get_player_list_ptr())[0]->ctrl.l = confidence > 0.5 ? true : false;
+        break;
 
-			case HORI2:
-				p2.ctrl.move_hori = confidence / 2;
-				break;
+      case A1:
+        (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(A1);
+        break;
 
-			case VERT2:
-				p2.ctrl.move_vert = confidence / 2;
-          		break;
-			
-			case L2:
-				p2.ctrl.l = confidence > 0.5 ? true : false;
-				break;
+      case HORI2:
+        (*Model_state::get_instance()->get_player_list_ptr())[1]->ctrl.move_hori = confidence / 2;
+        break;
 
-			case A2:
-				p2.fire(A2);
-				break;
+      case VERT2:
+        (*Model_state::get_instance()->get_player_list_ptr())[1]->ctrl.move_vert = confidence / 2;
+              break;
 
-			case HORI3:
-				p3.ctrl.move_hori = confidence / 2;
-				break;
+      case L2:
+        (*Model_state::get_instance()->get_player_list_ptr())[1]->ctrl.l = confidence > 0.5 ? true : false;
+        break;
 
-			case VERT3:
-				p3.ctrl.move_vert = confidence / 2;
-          		break;
-			
-			case L3:
-				p3.ctrl.l = confidence > 0.5 ? true : false;
-				break;
+      case A2:
+        (*Model_state::get_instance()->get_player_list_ptr())[1]->fire(A2);
+        break;
 
-			case A3:
-				p3.fire(A3);
-				break;
+      case HORI3:
+        (*Model_state::get_instance()->get_player_list_ptr())[2]->ctrl.move_hori = confidence / 2;
+        break;
 
-			case HORI4:
-				p4.ctrl.move_hori = confidence / 2;
-				break;
+      case VERT3:
+        (*Model_state::get_instance()->get_player_list_ptr())[2]->ctrl.move_vert = confidence / 2;
+              break;
 
-			case VERT4:
-				p4.ctrl.move_vert = confidence / 2;
-          		break;
-			
-			case L4:
-				p4.ctrl.l = confidence > 0.5 ? true : false;
-				break;
+      case L3:
+        (*Model_state::get_instance()->get_player_list_ptr())[2]->ctrl.l = confidence > 0.5 ? true : false;
+        break;
 
-			case A4:
-				p4.fire(A4);
-				break;
+      case A3:
+        (*Model_state::get_instance()->get_player_list_ptr())[2]->fire(A3);
+        break;
 
-			default:	
-				break;
-		}
-	}
+      case HORI4:
+        (*Model_state::get_instance()->get_player_list_ptr())[3]->ctrl.move_hori = confidence / 2;
+        break;
+
+      case VERT4:
+        (*Model_state::get_instance()->get_player_list_ptr())[3]->ctrl.move_vert = confidence / 2;
+              break;
+
+      case L4:
+        (*Model_state::get_instance()->get_player_list_ptr())[3]->ctrl.l = confidence > 0.5 ? true : false;
+        break;
+
+      case A4:
+        (*Model_state::get_instance()->get_player_list_ptr())[3]->fire(A4);
+        break;
+
+      default:
+        break;
+    }
+  }
 
   void perform_logic() {
     const float time_passed = m_set.seconds();
@@ -197,34 +196,34 @@ private:
     Model_state::get_instance()->update_scale_and_center();
   }
 
-	void render()
-	{
-		Video &vr = get_Video();
-		get_Video().set_2d(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
+  void render()
+  {
+    Video &vr = get_Video();
+    get_Video().set_2d(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
 
     /* render the map */
     Point2f center_location = Model_state::get_instance()->get_center_location();
     float scale = Model_state::get_instance()->get_scale();
-		Quadrilateral<Vertex2f_Texture> map;
-		Point2f Map_center(400.0f,300.0f);
-		Point2f Map_p0 = (Point2f(0.0f, 0.0f) - center_location) * scale + Map_center;
-		Point2f Map_p1 = (Point2f(0.0f, 600.0f) - center_location) * scale + Map_center;
-		Point2f Map_p2 = (Point2f(800.0f, 600.0f) - center_location) * scale + Map_center;
-		Point2f Map_p3 = (Point2f(800.0f, 0.0f) - center_location) * scale+ Map_center;
-		Vertex2f_Texture text_p0(Map_p0, Point2f(0.0f,0.0f));
-		Vertex2f_Texture text_p1(Map_p1, Point2f(0.0f, 30.0f));
-		Vertex2f_Texture text_p2(Map_p2, Point2f(40.0f, 30.0f));
-		Vertex2f_Texture text_p3(Map_p3, Point2f(40.0f, 0.0f));    
-		map[0] = text_p0;
-		map[1] = text_p1;
-		map[2] = text_p2;
-		map[3] = text_p3;
-		Material a("floor");
-		map.fax_Material(&a);
-		vr.render(map);
+    Quadrilateral<Vertex2f_Texture> map;
+    Point2f Map_center(400.0f,300.0f);
+    Point2f Map_p0 = (Point2f(0.0f, 0.0f) - center_location) * scale + Map_center;
+    Point2f Map_p1 = (Point2f(0.0f, 600.0f) - center_location) * scale + Map_center;
+    Point2f Map_p2 = (Point2f(800.0f, 600.0f) - center_location) * scale + Map_center;
+    Point2f Map_p3 = (Point2f(800.0f, 0.0f) - center_location) * scale+ Map_center;
+    Vertex2f_Texture text_p0(Map_p0, Point2f(0.0f,0.0f));
+    Vertex2f_Texture text_p1(Map_p1, Point2f(0.0f, 30.0f));
+    Vertex2f_Texture text_p2(Map_p2, Point2f(40.0f, 30.0f));
+    Vertex2f_Texture text_p3(Map_p3, Point2f(40.0f, 0.0f));
+    map[0] = text_p0;
+    map[1] = text_p1;
+    map[2] = text_p2;
+    map[3] = text_p3;
+    Material a("floor");
+    map.fax_Material(&a);
+    vr.render(map);
 
     Model_state::get_instance()->render();
-	}
+  }
 
   float m_time_passed;
   Chronometer<Time> m_set;
