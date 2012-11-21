@@ -3,8 +3,26 @@
 using namespace std;
 using namespace Flame;
 
-void Monster::increase_hatred(const float &hate_, Player* target) {
-  hatred[target] += hate_;
+Monster::Monster(
+  const std::vector<Flame::Player *> &players_,
+  const float &health_,
+  const float &speed_,
+  const float &radius_,
+  const float &attack_gap_,
+  const Zeni::Point2f &location_)
+: Agent(health_, speed_, radius_, location_),
+  players(players_),
+  current_time(0.0f),
+  prev_attack_time(0.0f),
+  attack_gap(attack_gap_)
+{
+  for (int i = 0; i < int(players.size()); ++i) {
+    hatred[players[i]] = 0.0f;
+  }
+}
+
+void Monster::increase_hatred(const float &hate_, Player* player) {
+  hatred[player] += hate_;
 }
 
 void Monster::get_hit(const float &damage, Player* source) {
@@ -25,9 +43,10 @@ Player * Monster::highest_hatred() {
   return target_player;
 }
 
-void Monster::target_at(Player* target) {
-  Zeni::Point2f target_loc = target->get_location();
-  Zeni::Point2f my_loc = get_location();
-  Zeni::Vector2f orientation = target_loc - my_loc;
-  set_orientation(orientation);
+bool Monster::can_attack() {
+  if (current_time - prev_attack_time > attack_gap) {
+    return true;
+  } else {
+    return false;
+  }
 }

@@ -51,6 +51,8 @@ namespace Flame {
     virtual bool collide(const Collision_circle& other) const;
     virtual bool collide(const Collision_rectangle& other) const;
 
+    float get_radius() const {return radius;}
+
     // make origin and size accessible to Collision_rectangle and Collision_sector
     friend class Collision_rectangle;
     friend class Collision_sector;
