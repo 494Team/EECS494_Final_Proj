@@ -41,10 +41,9 @@ namespace Flame {
       it = monster_list.erase(it);
     for (auto it = spell_list.begin(); it != spell_list.end();)
       it = spell_list.erase(it);
-    for (auto it = render_list.begin(); it != render_list.end(); ++it) {
+    for (auto it = render_list.begin(); it != render_list.end(); ++it)
       delete *it;
-      render_list.erase(it);
-    }
+    render_list.clear();
   }
 
   Model_state * Model_state::get_instance()
