@@ -31,11 +31,11 @@ namespace Flame {
     : Agent(health_, speed_, radius_, location_),
       wpinuse(false),
       damaged(false),
-	  //size(Zeni::Vector2f(radius_ * 2, radius_ * 2))
-	    size(radius_)
+    //size(Zeni::Vector2f(radius_ * 2, radius_ * 2))
+      size(radius_)
     {}
 
-	  virtual void update(float time = 0.f)  {
+    virtual void update(float time = 0.f)  {
       Point2f backup_position = get_location();
       float scale = Model_state::get_instance()->get_scale();
       if (abs(ctrl.move_hori) + abs(ctrl.move_vert) > 0.3f) {
@@ -45,21 +45,21 @@ namespace Flame {
         if (!ctrl.l) {
           Point2f new_position = backup_position + Point2f(ctrl.move_hori * time * get_current_speed(), 0.0f);
           set_position(new_position);
-		      update_body();
+          update_body();
           Collision_circle collision_body = get_body();
-          if (!Model_state::get_instance()->can_move_player(&collision_body)) {
-            	set_position(backup_position);
-					    update_body();
+          if (!Model_state::get_instance()->can_move(&collision_body)) {
+              set_position(backup_position);
+              update_body();
           }
 
           backup_position = get_location();
           new_position = backup_position + Point2f(0.0f, ctrl.move_vert * time * get_current_speed());
           set_position(new_position);
-		      update_body();
+          update_body();
           collision_body = get_body();
-          if (!Model_state::get_instance()->can_move_player(&collision_body)) {
-            	set_position(backup_position);
-					    update_body();
+          if (!Model_state::get_instance()->can_move(&collision_body)) {
+              set_position(backup_position);
+              update_body();
           }
         }
       }
@@ -87,40 +87,40 @@ namespace Flame {
       Vector2f orient = get_current_orientation();
       float rad = orient_vec_to_radians(orient);
       float scale = Model_state::get_instance()->get_scale();
-	    Zeni::String player_texture;
+      Zeni::String player_texture;
 
       if (rad <= 0.25f * Global::pi && rad > -0.25f * Global::pi) {
       /*  render_image("monkey_king_front",
                        loc,
                        loc + 5.0f * Vector2f(10.0f, 10.0f));
-					   */
-		   player_texture = Zeni::String("monkey_king_front");
+       */
+       player_texture = Zeni::String("monkey_king_front");
       } else if (rad <= 0.75f * Global::pi && rad > 0.25f * Global::pi) {
         /*render_image("monkey_king_right",
                      loc,
                      loc + 5.0f * Vector2f(10.0f, 10.0f));*/
-		    player_texture = Zeni::String("monkey_king_right");
+        player_texture = Zeni::String("monkey_king_right");
       } else if ((rad <= Global::pi && rad > 0.75f * Global::pi) ||
                  (rad >= -Global::pi && rad < -0.75f * Global::pi)) {
         /*render_image("monkey_king_back",
                      loc,
                      loc + 5.0f * Vector2f(10.0f, 10.0f));*/
-			player_texture = Zeni::String("monkey_king_back");
+      player_texture = Zeni::String("monkey_king_back");
       } else {
-		  /*
+      /*
         render_image("monkey_king_left",
                      loc,
                      loc + 5.0f * Vector2f(10.0f, 10.0f));*/
-		    player_texture = Zeni::String("monkey_king_left");
+        player_texture = Zeni::String("monkey_king_left");
       }
 
-	  render_image(player_texture,
-				   Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
-				   Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
+    render_image(player_texture,
+           Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
+           Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
 
       //render the orientation arrow
       /*
-	  render_image(
+    render_image(
         "rarrow3", // which texture to use
         loc + Point2f(0.0f, 50.0f), // upper-left corner
         loc + Point2f(50.0f, 70.0f),//m_size, // lower-right corner
@@ -129,18 +129,18 @@ namespace Flame {
         loc + Point2f(25.0f, 25.0f), // point to rotate & scale about
         false);//, // whether or not to horizontally flip the texture
         //filter); // what Color to "paint" the texture*/
-	  render_image(
-		  "rarrow3",
-		  Point2f(rel_loc.x - size, rel_loc.y + size ),
-		  Point2f(rel_loc.x + size, rel_loc.y + size + size),
-		  rad,
-		  scale,
-		  rel_loc,
-		  false);
+    render_image(
+      "rarrow3",
+      Point2f(rel_loc.x - size, rel_loc.y + size ),
+      Point2f(rel_loc.x + size, rel_loc.y + size + size),
+      rad,
+      scale,
+      rel_loc,
+      false);
       //render weapon attacking
       if (wpinuse)
-		
-		 /*
+    
+     /*
         render_image(
           "sword_attack", // which texture to use
           loc + Point2f(0.0f, 50.0f), // upper-left corner
@@ -151,12 +151,12 @@ namespace Flame {
           false);//, // whether or not to horizontally flip the texture
           //filter); // what Color to "paint" the texture*/
         render_image("sword_attack",
-		                 Point2f(rel_loc.x - size, rel_loc.y + size ),
-		                 Point2f(rel_loc.x + size, rel_loc.y + size  + size * 2),
-		                 rad,
-		                 scale,
-		                 rel_loc,
-		                 false);
+                     Point2f(rel_loc.x - size, rel_loc.y + size ),
+                     Point2f(rel_loc.x + size, rel_loc.y + size  + size * 2),
+                     rad,
+                     scale,
+                     rel_loc,
+                     false);
           
     }
 
@@ -212,14 +212,14 @@ namespace Flame {
     bool wpinuse;
     bool damaged; //whether the normal attack has created a damage
     Zeni::Time_HQ last_htime;
-	
-	//vector<Agent*>* Monsters;
+  
+  //vector<Agent*>* Monsters;
     int attack_strength;
     double attack_range;
 
-	//relative location;
-	Zeni::Point2f rel_loc;
-	float size;
+  //relative location;
+  Zeni::Point2f rel_loc;
+  float size;
   };
 
 
