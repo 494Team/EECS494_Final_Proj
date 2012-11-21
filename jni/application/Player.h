@@ -4,6 +4,8 @@
 #include "Agent.h"
 #include <vector>
 #include <zenilib.h>
+//#define NDEBUG
+#include <cassert>
 #include "Map.h"
 #include "Model_state.h"
 #include "Collision.h"
@@ -36,7 +38,6 @@ namespace Flame {
 	  virtual void update(float time = 0.f)  {
       Point2f backup_position = get_location();
       float scale = Model_state::get_instance()->get_scale();
-
       if (abs(ctrl.move_hori) + abs(ctrl.move_vert) > 0.3f) {
         Vector2f dir(ctrl.move_hori, ctrl.move_vert);
         set_orientation(dir);
@@ -60,7 +61,6 @@ namespace Flame {
             	set_position(backup_position);
 					    update_body();
           }
-
         }
       }
 
@@ -78,6 +78,8 @@ namespace Flame {
         damaged = true;
         //search the enemy list
       }
+      Collision_circle collision_body = get_body();
+      Model_state::get_instance()->can_move_player(&collision_body);
     }
 
     void render() {
@@ -99,7 +101,7 @@ namespace Flame {
                      loc + 5.0f * Vector2f(10.0f, 10.0f));*/
 		    player_texture = Zeni::String("monkey_king_right");
       } else if ((rad <= Global::pi && rad > 0.75f * Global::pi) ||
-                (rad >= -Global::pi && rad < -0.75f * Global::pi)) {
+                 (rad >= -Global::pi && rad < -0.75f * Global::pi)) {
         /*render_image("monkey_king_back",
                      loc,
                      loc + 5.0f * Vector2f(10.0f, 10.0f));*/
@@ -148,14 +150,13 @@ namespace Flame {
           loc + Point2f(25.0f, 25.0f), // point to rotate & scale about
           false);//, // whether or not to horizontally flip the texture
           //filter); // what Color to "paint" the texture*/
-		render_image(
-		  "sword_attack",
-		  Point2f(rel_loc.x - size, rel_loc.y + size ),
-		  Point2f(rel_loc.x + size, rel_loc.y + size  + size * 2),
-		  rad,
-		  scale,
-		  rel_loc,
-		  false);
+        render_image("sword_attack",
+		                 Point2f(rel_loc.x - size, rel_loc.y + size ),
+		                 Point2f(rel_loc.x + size, rel_loc.y + size  + size * 2),
+		                 rad,
+		                 scale,
+		                 rel_loc,
+		                 false);
           
     }
 
@@ -200,6 +201,7 @@ namespace Flame {
         //in PLAYER_ATTACK_INTERVAL
       }
     }
+
   private:
     float orient_vec_to_radians(Vector2f vec) {
       float radians = atan2(vec.i, vec.j);
