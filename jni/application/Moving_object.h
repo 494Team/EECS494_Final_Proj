@@ -16,7 +16,7 @@ namespace Flame {
     bool is_currently_moving() const {return is_moving;}
     float get_current_speed() const {return speed;}
     Zeni::Point2f get_current_location() const {return location;}
-    Zeni::Point2f get_current_orientation() const {return orientation;}
+    Zeni::Vector2f get_current_orientation() const {return orientation;}
 
     // update orientation according to destination and location
     void set_orientation(const Zeni::Vector2f &orientation_) { 
