@@ -11,10 +11,12 @@ namespace Flame {
             const Zeni::Vector2f &size_ = Zeni::Vector2f());
 
         virtual Zeni::Point2f get_location() const{return location;};
+        virtual bool can_move(const Zeni::Collision::Capsule&) = 0;
+        virtual bool can_move_player(const Zeni::Collision::Capsule&) = 0;
         //virtual void update(float) {};
         //virtual void update(const float &scale_, const Zeni::Point2f &center_) = 0;
-        virtual bool can_move(Collision_object *moving_obj_) = 0;
-        virtual bool can_move_player(Collision_object *moving_obj_) = 0;
+        //virtual bool can_move(Collision_object *moving_obj_) = 0;
+        //virtual bool can_move_player(Collision_object *moving_obj_) = 0;
         virtual void reset() = 0;
     protected:
         //  virtual void render() = 0;
@@ -32,12 +34,17 @@ namespace Flame {
         Zeni::Point2f get_location()const{return Map::get_location();};
         virtual void render();
         virtual void update(float);
+        bool can_move(const Zeni::Collision::Capsule& other)
+        { return collision_body.intersects(other); }
+        bool can_move_player(const Zeni::Collision::Capsule& other)
+        { return collision_body.intersects(other); }
         //void update(const float &scale_, const Zeni::Point2f &center_);
-        virtual bool can_move(Collision_object *moving_obj_);
-        virtual bool can_move_player(Collision_object *moving_obj_);
+        //virtual bool can_move(Collision_object *moving_obj_);
+        //virtual bool can_move_player(Collision_object *moving_obj_);
         void reset(){};
     protected:
-        Collision_rectangle collision_body;
+        Zeni::Collision::Parallelepiped collision_body;
+        //Collision_rectangle collision_body;
         Zeni::String Brick_texture;
         Zeni::Quadrilateral<Zeni::Vertex2f_Texture> brick;
     private:
@@ -57,12 +64,17 @@ namespace Flame {
         Zeni::Point2f get_location()const{return Map::get_location();};
         void render();
         virtual void update(float);
+        bool can_move(const Zeni::Collision::Capsule& other)
+        { return collision_body.intersects(other); }
+        bool can_move_player(const Zeni::Collision::Capsule& other)
+        { return collision_body.intersects(other); }
         //void update(const float &scale_, const Zeni::Point2f &center_);
-		    bool can_move_player(Collision_object *moving_obj_);
-        bool can_move(Collision_object *moving_obj_);
+		    //bool can_move_player(Collision_object *moving_obj_);
+        //bool can_move(Collision_object *moving_obj_);
 		    void reset(){};
 	  private:
-        Collision_rectangle collision_body;
+        Zeni::Collision::Parallelepiped collision_body;
+        //Collision_rectangle collision_body;
         Zeni::Point2f render_location, rel_location;
         Zeni::Vector2f render_size, rel_size;
         Zeni::String structure_texture;
@@ -78,12 +90,17 @@ namespace Flame {
         Zeni::Point2f get_location()const{return Map::get_location();};
         void render();
         virtual void update(float);
+        bool can_move(const Zeni::Collision::Capsule& other)
+        { return collision_body.intersects(other); }
+        bool can_move_player(const Zeni::Collision::Capsule& other)
+        { return collision_body.intersects(other); }
         //void update(const float &scale_, const Zeni::Point2f &center_);
-        bool can_move(Collision_object *moving_obj_);
-        bool can_move_player(Collision_object *moving_obj_);
+        //bool can_move(Collision_object *moving_obj_);
+        //bool can_move_player(Collision_object *moving_obj_);
         void reset(){};
 	  private:
-        Collision_circle collision_body;
+        Zeni::Collision::Capsule collision_body;
+        //Collision_circle collision_body;
         Zeni::Point2f render_center, rel_center;
         float render_radius;
         Zeni::Vector2f rel_size;
@@ -101,8 +118,10 @@ namespace Flame {
         illuminate_texture(illuminate_texture_)
         {};
         void reset();
-        bool can_move_player(Collision_object *moving_obj_);
-        bool can_move(Collision_object *moving_obj_);
+        bool can_move(const Zeni::Collision::Capsule&);
+        bool can_move_player(const Zeni::Collision::Capsule& other);
+        //bool can_move_player(Collision_object *moving_obj_);
+        //bool can_move(Collision_object *moving_obj_);
         void render();
     private:
         bool illuminated;

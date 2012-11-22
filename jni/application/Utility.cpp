@@ -14,6 +14,8 @@ using std::set;
 
 namespace Flame {
 
+  const float kCollision_object_height = 5.f;
+
   const float kAxis_constraint = 3000;
 
   const float MIN_DIST_MONSTER_PLAYER = 5.0f;

@@ -27,31 +27,28 @@ namespace Flame {
                  filter); // what Color to "paint" the texture
   }
 
-  Light_ball::Light_ball(const Point2f& location_,
-                         const Vector2f& orientation_,
-                         const Vector2f& size_,
-                         const float speed_,
-                         const float life_time_) :
+  Moving_ball::Moving_ball(const Point2f& location_,
+                           const Vector2f& orientation_,
+                           const Vector2f& size_,
+                           const float speed_,
+                           const float life_time_) :
     Spell(location_, orientation_, speed_),
-    collision_body(location_ + size_ / 2, size_.x / 2),
     life_time(life_time_)
     {}
 
-  void Light_ball::update(float time)
+  void Moving_ball::update(float time)
   {
-    if (!Spell::is_active())
+    if (!Moving_ball::is_active())
       return;
     life_time -= time;
     if (life_time < 0.f) {
       Spell::inactivate_spell();
-      collision_body.destroy_body();
       return;
     }
     Spell::update(time);
-    collision_body = Collision_circle(get_location() + get_size() / 2, get_size().x / 2);
   }
 
-  void Light_ball::render()
+  void Moving_ball::render()
   {
     if (Spell::is_active())
       Spell::render("brick");

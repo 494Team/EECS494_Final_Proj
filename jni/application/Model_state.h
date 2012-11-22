@@ -60,10 +60,10 @@ namespace Flame {
     void remove_map_obj(Map * map_ptr);
 
     // check if a monster can move to the specific location
-    bool can_move(Collision_object * collision_obj);
+    bool can_move(const Zeni::Collision::Capsule& collision_body);
 
     // check if a player can move to the specific location, and trigger the map object to change
-    bool can_move_player(Collision_object * collision_obj);
+    bool can_move_player(const Zeni::Collision::Capsule& collision_body);
 
     // accessors
     float get_scale()

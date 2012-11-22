@@ -14,6 +14,8 @@
 
 namespace Flame{
 
+  extern const float kCollision_object_height;
+
   extern const float kAxis_constrain;
 
   // float infinity

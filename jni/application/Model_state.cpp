@@ -188,19 +188,19 @@ namespace Flame {
     render_list.erase(map_obj_ptr);
   }
 
-  bool Model_state::can_move(Collision_object * collision_obj)
+  bool Model_state::can_move(const Zeni::Collision::Capsule& collision_body)
   {
     for (auto it = map_obj_list.begin(); it != map_obj_list.end(); ++it)
-      if (!(*it)->can_move(collision_obj))
+      if (!(*it)->can_move(collision_body))
         return false;
     return true;
   }
 
-  bool Model_state::can_move_player(Collision_object * collision_obj)
+  bool Model_state::can_move_player(const Zeni::Collision::Capsule& collision_body)
   {
     bool can_move = true;
     for (auto it = map_obj_list.begin(); it != map_obj_list.end(); ++it)
-      can_move = (*it)->can_move_player(collision_obj);
+      can_move = (*it)->can_move_player(collision_body);
     return can_move;
   }
   
