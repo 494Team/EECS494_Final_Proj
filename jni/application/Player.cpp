@@ -26,8 +26,7 @@ void Player::update(float time) {
       Point2f new_position = backup_position + Point2f(ctrl.move_hori * time * get_current_speed(), 0.0f);
       set_position(new_position);
       update_body();
-      Collision_circle collision_body = get_body();
-      if (!Model_state::get_instance()->can_move(&collision_body)) {
+      if (!Model_state::get_instance()->can_move(get_body())) {
           set_position(backup_position);
           update_body();
       }
@@ -36,8 +35,7 @@ void Player::update(float time) {
       new_position = backup_position + Point2f(0.0f, ctrl.move_vert * time * get_current_speed());
       set_position(new_position);
       update_body();
-      collision_body = get_body();
-      if (!Model_state::get_instance()->can_move(&collision_body)) {
+      if (!Model_state::get_instance()->can_move(get_body())) {
           set_position(backup_position);
           update_body();
       }
@@ -58,8 +56,7 @@ void Player::update(float time) {
     damaged = true;
     //search the enemy list
   }
-  Collision_circle collision_body = get_body();
-  Model_state::get_instance()->can_move_player(&collision_body);
+  Model_state::get_instance()->can_move_player(get_body());
 }
 
 void Player::render() {
