@@ -43,9 +43,7 @@ Player * Monster::highest_hatred() {
 }
 
 bool Monster::can_attack() {
-  std::cout << "current_time: " <<current_time<<endl;
   if (current_time - prev_attack_time > attack_gap) {
-    std::cout << "prev_attack_time: " <<prev_attack_time << std::endl;
     return true;
   } else {
     return false;

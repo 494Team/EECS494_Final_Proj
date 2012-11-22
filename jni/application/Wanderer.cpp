@@ -62,13 +62,11 @@ void Wanderer::update(float time) {
 }
 
 void Wanderer::render() {
-  std::cout << "###################################\n";
   float scale = Model_state::get_instance()->get_scale();
   Zeni::Point2f ul = rel_loc 
     - Zeni::Vector2f(get_body().get_radius(), get_body().get_radius()) * scale;
   Zeni::Point2f lr = ul + Zeni::Vector2f(get_body().get_radius() * 2.0f, get_body().get_radius() * 2.0f) * scale;
   float radians_ccw = get_current_orientation().angle_between(Zeni::Vector2f(1.0f, 0.0f));
-  std::cout << "radians: " << radians_ccw << std::endl;
   if (get_current_orientation().y < 0.0f) {
     radians_ccw = Zeni::Global::pi * 2.0f - radians_ccw;
   }
