@@ -97,11 +97,11 @@ The following things are unsupported:
     <filepath>textures/monkey_king_right.png</filepath>
     <tile>0</tile>
   </monkey_king_right>
-  <sword_attack>
+  <sword_attack_1>
     <is_sprite>0</is_sprite>
     <filepath>textures/sword_attack_1.png</filepath>
     <tile>0</tile>
-  </sword_attack>
+  </sword_attack_1>
   <rarrow3>
     <is_sprite>0</is_sprite>
     <filepath>textures/rarrow3.png</filepath>
@@ -111,6 +111,10 @@ The following things are unsupported:
     <filepath>textures/enemy.png</filepath>
     <tile>0</tile>
   </enemy>
+  <sword_attack>
+    <filepath>textures/sword_attack.png</filepath>
+    <tile>0</tile>
+  </sword_attack>
   <!--
   <one>
     <is_sprite>0</is_sprite>

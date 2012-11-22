@@ -10,7 +10,6 @@ namespace Flame {
   class Monster : public Agent {
   public:
     Monster::Monster(
-      const std::vector<Flame::Player *> &players_,
       const float &health_ = 0.0f,
       const float &speed_ = 0.0f,
       const float &radius_ = 0.0f,
@@ -35,12 +34,18 @@ namespace Flame {
     // increase current_time by time. MUST be called at every perform_logic()
     void update_current_time(float time) {current_time += time;}
 
+    // set prev_attack_time every time an attack happens
     void set_prev_attack_time(float prev_attack_time_) {prev_attack_time = prev_attack_time_;}
+
+    void update_rel_loc();
+
+    void make_move(float time);
       
   protected:
     Player* target;
     std::vector<Player *> players;
     std::map<Player *, float> hatred;
+    Zeni::Point2f rel_loc;
   private:
     float current_time;
     float prev_attack_time;

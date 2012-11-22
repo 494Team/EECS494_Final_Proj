@@ -127,7 +127,7 @@ render_image(
       loc + Point2f(25.0f, 25.0f), // point to rotate & scale about
       false);//, // whether or not to horizontally flip the texture
       //filter); // what Color to "paint" the texture*/
-    render_image("sword_attack",
+    render_image("sword_attack_1",
                  Point2f(rel_loc.x - size, rel_loc.y + size ),
                  Point2f(rel_loc.x + size, rel_loc.y + size  + size * 2),
                  rad,

@@ -16,6 +16,7 @@
 #include "Utility.h"
 #include "Model_state.h"
 #include "Player.h"
+#include "Wanderer.h"
 
 #if defined(_DEBUG) && defined(_WINDOWS)
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -77,6 +78,10 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 3), L4);
 
     Model_state::get_instance()->init(0);
+    Wanderer* w1 = new Wanderer(Zeni::Point2f(100, 200));
+    Model_state::get_instance()->get_monster_list_ptr()->push_back(w1);
+    Model_state::get_instance()->get_render_list_ptr()->insert(w1);
+    Model_state::get_instance()->get_sim_obj_list()->push_back(w1);
   }
 
 private:
@@ -186,7 +191,13 @@ private:
     float processing_time = time_passed - m_time_passed;
     m_time_passed = time_passed;
 
-    for (float time_step = 0.05f; processing_time > 0.0f; processing_time -= time_step) {
+    float time_step = 0.005f;
+    while (processing_time > 0.0f + EPSILON) {
+      if (processing_time < time_step) {
+        time_step = processing_time;
+      }
+      processing_time -= time_step;
+      
       auto map_obj_list_ptr = Model_state::get_instance()->get_map_obj_list_ptr();
       for (auto it = map_obj_list_ptr->begin(); it != map_obj_list_ptr->end(); ++it)
         (*it)->reset();

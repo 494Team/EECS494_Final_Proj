@@ -11,6 +11,7 @@
 
 #include <string>
 #include <set>
+#include <Zeni.h>
 
 namespace Flame{
 
@@ -18,8 +19,13 @@ namespace Flame{
 
   extern const float kAxis_constrain;
 
+  // render center 
+  extern const Zeni::Point2f RENDER_CENTER;
+
   // float infinity
   extern const float INFINITY;
+  // float epsilon
+  extern const float EPSILON;
 
   // monster will attack player if distance(exclude radius) between them is lower than this value
   extern const float MIN_DIST_MONSTER_PLAYER;

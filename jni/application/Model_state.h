@@ -42,6 +42,8 @@ namespace Flame {
     // render all objects in render_list
     void render();
 
+    std::vector<Sim_object *> * get_sim_obj_list()
+    {return &sim_obj_list;}
     Render_list_t * get_render_list_ptr()
     {return &render_list;}
     std::vector<Player *> * get_player_list_ptr()
