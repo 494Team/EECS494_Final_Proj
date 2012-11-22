@@ -107,6 +107,10 @@ The following things are unsupported:
     <filepath>textures/rarrow3.png</filepath>
     <tile>0</tile>
   </rarrow3>
+  <enemy>
+    <filepath>textures/enemy.png</filepath>
+    <tile>0</tile>
+  </enemy>
   <!--
   <one>
     <is_sprite>0</is_sprite>
