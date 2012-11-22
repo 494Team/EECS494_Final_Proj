@@ -23,21 +23,21 @@ namespace Flame {
         Zeni::Point2f location;
         Zeni::Vector2f size;
     };
-    
+
     class Map_brick : public Map{
     public:
         Map_brick(const Zeni::Point2f &location_ = Zeni::Point2f(),
                   const Zeni::Vector2f &size_ = Zeni::Vector2f(),
-				          const float &texture_size_x_ = 0.f,
-				          const float &texture_size_y_ = 0.f,
+                  const float &texture_size_x_ = 0.f,
+                  const float &texture_size_y_ = 0.f,
                   const Zeni::String &texture_ = Zeni::String());
         Zeni::Point2f get_location()const{return Map::get_location();};
         virtual void render();
         virtual void update(float);
         bool can_move(const Zeni::Collision::Capsule& other)
-        { return collision_body.intersects(other); }
+        { return !collision_body.intersects(other); }
         bool can_move_player(const Zeni::Collision::Capsule& other)
-        { return collision_body.intersects(other); }
+        { return !collision_body.intersects(other); }
         //void update(const float &scale_, const Zeni::Point2f &center_);
         //virtual bool can_move(Collision_object *moving_obj_);
         //virtual bool can_move_player(Collision_object *moving_obj_);
@@ -54,8 +54,8 @@ namespace Flame {
         float texture_size;
     };
 
-	  class Map_structure_rec : public Map{
-	  public:
+    class Map_structure_rec : public Map{
+    public:
         Map_structure_rec(const Zeni::Point2f &render_location_ = Zeni::Point2f(),
                           const Zeni::Vector2f &render_size_ = Zeni::Vector2f(),
                           const Zeni::Point2f &collide_location_ = Zeni::Point2f(),
@@ -65,23 +65,23 @@ namespace Flame {
         void render();
         virtual void update(float);
         bool can_move(const Zeni::Collision::Capsule& other)
-        { return collision_body.intersects(other); }
+        { return !collision_body.intersects(other); }
         bool can_move_player(const Zeni::Collision::Capsule& other)
-        { return collision_body.intersects(other); }
+        { return !collision_body.intersects(other); }
         //void update(const float &scale_, const Zeni::Point2f &center_);
-		    //bool can_move_player(Collision_object *moving_obj_);
+        //bool can_move_player(Collision_object *moving_obj_);
         //bool can_move(Collision_object *moving_obj_);
-		    void reset(){};
-	  private:
+        void reset(){};
+    private:
         Zeni::Collision::Parallelepiped collision_body;
         //Collision_rectangle collision_body;
         Zeni::Point2f render_location, rel_location;
         Zeni::Vector2f render_size, rel_size;
         Zeni::String structure_texture;
-	  };
-	
-	  class Map_structure_cir : public Map{
-	  public:
+    };
+
+    class Map_structure_cir : public Map{
+    public:
         Map_structure_cir(const Zeni::Point2f &render_center_ = Zeni::Point2f(),
                           const float &render_radius_ = 0.f,
                           const Zeni::Point2f &collide_center_ = Zeni::Point2f(),
@@ -91,24 +91,24 @@ namespace Flame {
         void render();
         virtual void update(float);
         bool can_move(const Zeni::Collision::Capsule& other)
-        { return collision_body.intersects(other); }
+        { return !collision_body.intersects(other); }
         bool can_move_player(const Zeni::Collision::Capsule& other)
-        { return collision_body.intersects(other); }
+        { return !collision_body.intersects(other); }
         //void update(const float &scale_, const Zeni::Point2f &center_);
         //bool can_move(Collision_object *moving_obj_);
         //bool can_move_player(Collision_object *moving_obj_);
         void reset(){};
-	  private:
+    private:
         Zeni::Collision::Capsule collision_body;
         //Collision_circle collision_body;
         Zeni::Point2f render_center, rel_center;
         float render_radius;
         Zeni::Vector2f rel_size;
         Zeni::String structure_texture;
-	  };
+    };
 
     class Map_floor_illuminate : public Map_brick{
-	  public:
+    public:
         Map_floor_illuminate(const Zeni::Point2f &location_ = Zeni::Point2f(),
                              const Zeni::Vector2f &size_ = Zeni::Vector2f(),
                              const Zeni::String &texture_ = Zeni::String(),
@@ -126,7 +126,7 @@ namespace Flame {
     private:
         bool illuminated;
         Zeni::String illuminate_texture;
-	};
+  };
 
 }
 
