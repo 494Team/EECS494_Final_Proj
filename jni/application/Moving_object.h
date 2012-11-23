@@ -31,7 +31,7 @@ namespace Flame {
     void set_moving(const bool &is_moving_) { is_moving = is_moving_; }
 
     // update the location of this Moving_object
-    void update_location(const float &time) { location = location + is_moving * orientation * time; }
+    void update_location(const float &time) { location = location + is_moving * speed * orientation * time; }
     
     // alternative way to update the location of this Moving_object
     // being used in Player class

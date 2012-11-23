@@ -63,7 +63,7 @@ void Monster::make_move(float time) {
   attemp_loc = get_location() + time * get_current_speed() * ori.get_i();
   set_position(attemp_loc);
   update_body();
-  if (!Model_state::get_instance()->can_move(&get_body())) {
+  if (!Model_state::get_instance()->can_move(get_body())) {
     set_position(backup_loc);
     update_body();
   }
@@ -72,7 +72,7 @@ void Monster::make_move(float time) {
   attemp_loc = get_location() + time * get_current_speed() * ori.get_j();
   set_position(attemp_loc);
   update_body();
-  if (!Model_state::get_instance()->can_move(&get_body())) {
+  if (!Model_state::get_instance()->can_move(get_body())) {
     set_position(backup_loc);
     update_body();
   }

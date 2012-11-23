@@ -42,8 +42,6 @@ namespace Flame {
     // render all objects in render_list
     void render();
 
-    std::vector<Sim_object *> * get_sim_obj_list()
-    {return &sim_obj_list;}
     Render_list_t * get_render_list_ptr()
     {return &render_list;}
     std::vector<Player *> * get_player_list_ptr()
@@ -55,14 +53,21 @@ namespace Flame {
     std::vector<Map *> * get_map_obj_list_ptr()
     {return &map_obj_list;}
 
-    // never try to remove from outside!!!!!!!!!
-    void remove_player(Player * player_ptr);
-    void remove_monster(Monster * monster_ptr);
-    void remove_spell(Spell * spell_ptr);
-    void remove_map_obj(Map * map_ptr);
+    // never try to add yourself! use these functions!!!!!!!
+    void add_player(Player * player_ptr);
+    void add_monster(Monster * monster_ptr);
+    void add_spell(Spell * spell_ptr);
+    void add_map_obj(Map * map_obj_ptr);
 
-    // check if a monster can move to the specific location
+    // never try to remove yourself! use these functions!!!!!!!
+    std::vector<Player *>::iterator remove_player(Player * player_ptr);
+    std::vector<Monster *>::iterator remove_monster(Monster * monster_ptr);
+    std::vector<Spell *>::iterator remove_spell(Spell * spell_ptr);
+    std::vector<Map *>::iterator remove_map_obj(Map * map_ptr);
+
+    // check if a monster/spell/player can move to the specific location
     bool can_move(const Zeni::Collision::Capsule& collision_body);
+    bool can_move(const Zeni::Collision::Parallelepiped& collision_body);
 
     // check if a player can move to the specific location, and trigger the map object to change
     bool can_move_player(const Zeni::Collision::Capsule& collision_body);

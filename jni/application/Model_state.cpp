@@ -155,40 +155,85 @@ namespace Flame {
       (*it)->update(time);
       render_list.insert(*it);
     }
+    for (auto it = spell_list.begin(); it != spell_list.end();)
+      if (!(*it)->is_active())
+        it = remove_spell(*it);
+      else
+        ++it;
   }
 
   void Model_state::render()
   {for_each(render_list.begin(), render_list.end(), bind(&Sim_object::render, _1));}
 
-  void Model_state::remove_player(Player * player_ptr)
+  void Model_state::add_player(Player * player_ptr)
   {
-    player_list.erase(find(player_list.begin(), player_list.end(), player_ptr));
+    render_list.insert(player_ptr);
+    sim_obj_list.push_back(player_ptr);
+    player_list.push_back(player_ptr);
+  }
+
+  void Model_state::add_monster(Monster * monster_ptr)
+  {
+    render_list.insert(monster_ptr);
+    sim_obj_list.push_back(monster_ptr);
+    monster_list.push_back(monster_ptr);
+  }
+
+  void Model_state::add_spell(Spell * spell_ptr)
+  {
+    render_list.insert(spell_ptr);
+    sim_obj_list.push_back(spell_ptr);
+    spell_list.push_back(spell_ptr);
+  }
+
+  void Model_state::add_map_obj(Map * map_obj_ptr)
+  {
+    render_list.insert(map_obj_ptr);
+    sim_obj_list.push_back(map_obj_ptr);
+    map_obj_list.push_back(map_obj_ptr);
+  }
+
+  vector<Player *>::iterator Model_state::remove_player(Player * player_ptr)
+  {
+    auto it = player_list.erase(find(player_list.begin(), player_list.end(), player_ptr));
     sim_obj_list.erase(find(sim_obj_list.begin(), sim_obj_list.end(), player_ptr));
     render_list.erase(player_ptr);
+    return it;
   }
 
-  void Model_state::remove_monster(Monster * monster_ptr)
+  vector<Monster *>::iterator Model_state::remove_monster(Monster * monster_ptr)
   {
-    monster_list.erase(find(monster_list.begin(), monster_list.end(), monster_ptr));
+    auto it = monster_list.erase(find(monster_list.begin(), monster_list.end(), monster_ptr));
     sim_obj_list.erase(find(sim_obj_list.begin(), sim_obj_list.end(), monster_ptr));
     render_list.erase(monster_ptr);
+    return it;
   }
 
-  void Model_state::remove_spell(Spell * spell_ptr)
+  vector<Spell *>::iterator Model_state::remove_spell(Spell * spell_ptr)
   {
-    spell_list.erase(find(spell_list.begin(), spell_list.end(), spell_ptr));
+    auto it = spell_list.erase(find(spell_list.begin(), spell_list.end(), spell_ptr));
     sim_obj_list.erase(find(sim_obj_list.begin(), sim_obj_list.end(), spell_ptr));
     render_list.erase(spell_ptr);
+    return it;
   }
 
-  void Model_state::remove_map_obj(Map * map_obj_ptr)
+  vector<Map *>::iterator Model_state::remove_map_obj(Map * map_obj_ptr)
   {
-    map_obj_list.erase(find(map_obj_list.begin(), map_obj_list.end(), map_obj_ptr));
+    auto it = map_obj_list.erase(find(map_obj_list.begin(), map_obj_list.end(), map_obj_ptr));
     sim_obj_list.erase(find(sim_obj_list.begin(), sim_obj_list.end(), map_obj_ptr));
     render_list.erase(map_obj_ptr);
+    return it;
   }
 
   bool Model_state::can_move(const Zeni::Collision::Capsule& collision_body)
+  {
+    for (auto it = map_obj_list.begin(); it != map_obj_list.end(); ++it)
+      if (!(*it)->can_move(collision_body))
+        return false;
+    return true;
+  }
+
+  bool Model_state::can_move(const Zeni::Collision::Parallelepiped& collision_body)
   {
     for (auto it = map_obj_list.begin(); it != map_obj_list.end(); ++it)
       if (!(*it)->can_move(collision_body))

@@ -8,19 +8,7 @@ namespace Flame {
         location = location_;
         size = size_;
     }
-/*    
-    void Map::render(const String &texture_, const Color &filter){
-        render_image(texture_,
-                     location,
-                     location + size,
-                     0.0f,
-                     1.0f,
-                     location + 0.5 * size,
-                     false,
-                     filter
-                     );
-    }
-  */  
+
     Map_brick::Map_brick(const Point2f &location_,
                          const Vector2f &size_,
                          const float &texture_size_x_,
@@ -69,14 +57,6 @@ namespace Flame {
         vr.render(brick);
     }
 
-    /*
-    bool Map_brick::can_move_player(Collision_object *moving_obj_)
-    {return !collision_body.collide(*moving_obj_);}
-
-    bool Map_brick::can_move(Collision_object *moving_obj_)
-    {return !collision_body.collide(*moving_obj_);}
-    */
-
     // Map_structure_rec functions;
     Map_structure_rec::Map_structure_rec(const Zeni::Point2f &render_location_ ,
                                          const Zeni::Vector2f &render_size_,
@@ -104,14 +84,6 @@ namespace Flame {
     void Map_structure_rec::render()
     {render_image(structure_texture, rel_location, rel_location + rel_size);}
 
-    /*
-	  bool Map_structure_rec::can_move(Collision_object *moving_obj_)
-    {return !collision_body.collide(*moving_obj_);}
-	
-	  bool Map_structure_rec::can_move_player(Collision_object *moving_obj_)
-    {return !collision_body.collide(*moving_obj_);}
-    */
-
     // Map_structure_cir functions;
     Map_structure_cir::Map_structure_cir(const Zeni::Point2f &render_center_ ,
                                          const float &render_radius_,
@@ -138,24 +110,6 @@ namespace Flame {
 
     void Map_structure_cir::render()
     {render_image(structure_texture, rel_center - rel_size / 2, rel_center + rel_size / 2);}
-
-    /*
-    bool Map_structure_cir::can_move(Collision_object *moving_obj_)
-    {return !collision_body.collide(*moving_obj_);}
-
-    bool Map_structure_cir::can_move_player(Collision_object *moving_obj_)
-    {return !collision_body.collide(*moving_obj_);}
-    
-
-    bool Map_floor_illuminate::can_move_player(Collision_object *moving_obj_){
-        if (collision_body.collide(*moving_obj_))
-            illuminated = true;
-        return true;
-    }
-
-    bool Map_floor_illuminate::can_move(Collision_object * moving_obj_)
-    {return true;}
-    */
 	
     bool Map_floor_illuminate::can_move_player(const Collision::Capsule& other)
     {

@@ -12,11 +12,8 @@ namespace Flame {
 
         virtual Zeni::Point2f get_location() const{return location;};
         virtual bool can_move(const Zeni::Collision::Capsule&) = 0;
+        virtual bool can_move(const Zeni::Collision::Parallelepiped&) = 0;
         virtual bool can_move_player(const Zeni::Collision::Capsule&) = 0;
-        //virtual void update(float) {};
-        //virtual void update(const float &scale_, const Zeni::Point2f &center_) = 0;
-        //virtual bool can_move(Collision_object *moving_obj_) = 0;
-        //virtual bool can_move_player(Collision_object *moving_obj_) = 0;
         virtual void reset() = 0;
     protected:
         //  virtual void render() = 0;
@@ -36,11 +33,10 @@ namespace Flame {
         virtual void update(float);
         bool can_move(const Zeni::Collision::Capsule& other)
         { return !collision_body.intersects(other); }
+        bool can_move(const Zeni::Collision::Parallelepiped& other)
+        { return !collision_body.intersects(other); }
         bool can_move_player(const Zeni::Collision::Capsule& other)
         { return !collision_body.intersects(other); }
-        //void update(const float &scale_, const Zeni::Point2f &center_);
-        //virtual bool can_move(Collision_object *moving_obj_);
-        //virtual bool can_move_player(Collision_object *moving_obj_);
         void reset(){};
     protected:
         Zeni::Collision::Parallelepiped collision_body;
@@ -66,11 +62,10 @@ namespace Flame {
         virtual void update(float);
         bool can_move(const Zeni::Collision::Capsule& other)
         { return !collision_body.intersects(other); }
+        bool can_move(const Zeni::Collision::Parallelepiped& other)
+        { return !collision_body.intersects(other); }
         bool can_move_player(const Zeni::Collision::Capsule& other)
         { return !collision_body.intersects(other); }
-        //void update(const float &scale_, const Zeni::Point2f &center_);
-        //bool can_move_player(Collision_object *moving_obj_);
-        //bool can_move(Collision_object *moving_obj_);
         void reset(){};
     private:
         Zeni::Collision::Parallelepiped collision_body;
@@ -92,11 +87,10 @@ namespace Flame {
         virtual void update(float);
         bool can_move(const Zeni::Collision::Capsule& other)
         { return !collision_body.intersects(other); }
+        bool can_move(const Zeni::Collision::Parallelepiped& other)
+        { return !collision_body.intersects(other); }
         bool can_move_player(const Zeni::Collision::Capsule& other)
         { return !collision_body.intersects(other); }
-        //void update(const float &scale_, const Zeni::Point2f &center_);
-        //bool can_move(Collision_object *moving_obj_);
-        //bool can_move_player(Collision_object *moving_obj_);
         void reset(){};
     private:
         Zeni::Collision::Capsule collision_body;
@@ -119,9 +113,9 @@ namespace Flame {
         {};
         void reset();
         bool can_move(const Zeni::Collision::Capsule&);
+        bool can_move(const Zeni::Collision::Parallelepiped&)
+        { return true; }
         bool can_move_player(const Zeni::Collision::Capsule& other);
-        //bool can_move_player(Collision_object *moving_obj_);
-        //bool can_move(Collision_object *moving_obj_);
         void render();
     private:
         bool illuminated;

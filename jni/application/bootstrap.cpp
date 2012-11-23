@@ -79,9 +79,7 @@ public:
 
     Model_state::get_instance()->init(0);
     Wanderer* w1 = new Wanderer(Zeni::Point2f(100, 200));
-    Model_state::get_instance()->get_monster_list_ptr()->push_back(w1);
-    Model_state::get_instance()->get_render_list_ptr()->insert(w1);
-    Model_state::get_instance()->get_sim_obj_list()->push_back(w1);
+    Model_state::get_instance()->add_monster(w1);
   }
 
 private:

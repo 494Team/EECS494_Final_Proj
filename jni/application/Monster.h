@@ -9,7 +9,7 @@
 namespace Flame {
   class Monster : public Agent {
   public:
-    Monster::Monster(
+    Monster(
       const float &health_ = 0.0f,
       const float &speed_ = 0.0f,
       const float &radius_ = 0.0f,
