@@ -24,6 +24,8 @@ namespace Flame {
 
     // find player with the highest hatred
     Player * highest_hatred();
+    // find player nearest to this monster
+    Player * nearest_player();
 
     // is previous attack finished?
     bool can_attack();

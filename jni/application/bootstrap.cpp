@@ -17,6 +17,7 @@
 #include "Model_state.h"
 #include "Player.h"
 #include "Wanderer.h"
+#include "Whisper.h"
 
 #if defined(_DEBUG) && defined(_WINDOWS)
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -78,8 +79,10 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 3), L4);
 
     Model_state::get_instance()->init(0);
-    Wanderer* w1 = new Wanderer(Zeni::Point2f(100, 200));
-    Model_state::get_instance()->add_monster(w1);
+    Wanderer* wanderer = new Wanderer(Zeni::Point2f(100, 200));
+    Model_state::get_instance()->add_monster(wanderer);
+    //Whisper* whisper = new Whisper(Zeni::Point2f(400, 400));
+    //Model_state::get_instance()->add_monster(whisper);
   }
 
 private:

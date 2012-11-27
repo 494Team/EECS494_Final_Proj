@@ -42,6 +42,18 @@ Player * Monster::highest_hatred() {
   return target_player;
 }
 
+Player * Monster::nearest_player() {
+  float min_dist = INFINITY;
+  Player* nearest_p = NULL;
+  for (int i = 0; i < int(players.size()); ++i) {
+    if ((players[i]->get_location() - get_location()).magnitude() < min_dist) {
+      min_dist = (players[i]->get_location() - get_location()).magnitude();
+      nearest_p = players[i];
+    }
+  }
+  return nearest_p;
+}
+
 bool Monster::can_attack() {
   if (current_time - prev_attack_time > attack_gap) {
     return true;

@@ -27,9 +27,6 @@ namespace Flame{
   // float epsilon
   extern const float EPSILON;
 
-  // monster will attack player if distance(exclude radius) between them is lower than this value
-  extern const float MIN_DIST_MONSTER_PLAYER;
-
   // the initial hatred for the closest player when a monster see one
   extern const float INITIAL_HATRED;
 
@@ -43,6 +40,17 @@ namespace Flame{
   extern const float WANDERER_HEALTH;
   extern const float WANDERER_ATTACK_GAP;
   extern const float WANDERER_ATTACK_RADIUS;
+  extern const float WANDERER_MIN_DIST;
+
+  // Whisper constants
+  extern const float WHISPER_RADIUS;
+  extern const float WHISPER_SPEED;
+  extern const float WHISPER_DAMAGE;
+  extern const float WHISPER_HEALTH;
+  extern const float WHISPER_ATTACK_GAP;
+  extern const float WHISPER_SPELL_RADIUS;
+  extern const float WHISPER_MIN_DIST;
+  extern const float WHISPER_MAX_DIST;
 
   // forward declaration
   class Sim_object;

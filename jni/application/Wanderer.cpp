@@ -46,7 +46,7 @@ void Wanderer::update(float time) {
   // attack
   float dist = (get_location() - target->get_location()).magnitude()
     - get_body().get_radius() - target->get_body().get_radius();
-  if (dist < MIN_DIST_MONSTER_PLAYER) {
+  if (dist < WANDERER_MIN_DIST) {
     set_moving(false);
     if (can_attack()) {
       attack();
