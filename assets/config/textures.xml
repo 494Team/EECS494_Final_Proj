@@ -78,6 +78,48 @@ The following things are unsupported:
     <tile>0</tile>
   </house>
 
+  <!-- Players texture start..............................-->
+  <tripitaka_front0>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/tripitaka_front0.png</filepath>
+    <tile>0</tile>
+  </tripitaka_front0>
+  <tripitaka_back0>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/tripitaka_back0.png</filepath>
+    <tile>0</tile>
+  </tripitaka_back0>
+  <tripitaka_left0>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/tripitaka_left0.png</filepath>
+    <tile>0</tile>
+  </tripitaka_left0>
+  <tripitaka_right0>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/tripitaka_right0.png</filepath>
+    <tile>0</tile>
+  </tripitaka_right0>
+  <tripitaka_front1>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/tripitaka_front1.png</filepath>
+    <tile>0</tile>
+  </tripitaka_front1>
+  <tripitaka_back1>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/tripitaka_back1.png</filepath>
+    <tile>0</tile>
+  </tripitaka_back1>
+  <tripitaka_left1>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/tripitaka_left1.png</filepath>
+    <tile>0</tile>
+  </tripitaka_left1>
+  <tripitaka_right1>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/tripitaka_right1.png</filepath>
+    <tile>0</tile>
+  </tripitaka_right1>
+  
   <monkey_king_front0>
     <is_sprite>0</is_sprite>
     <filepath>textures/monkey_king_front0.png</filepath>
@@ -118,6 +160,51 @@ The following things are unsupported:
     <filepath>textures/monkey_king_right1.png</filepath>
     <tile>0</tile>
   </monkey_king_right1>
+
+  <friar_sand_front0>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/friar_sand_front0.png</filepath>
+    <tile>0</tile>
+  </friar_sand_front0>
+  <friar_sand_back0>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/friar_sand_back0.png</filepath>
+    <tile>0</tile>
+  </friar_sand_back0>
+  <friar_sand_left0>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/friar_sand_left0.png</filepath>
+    <tile>0</tile>
+  </friar_sand_left0>
+  <friar_sand_right0>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/friar_sand_right0.png</filepath>
+    <tile>0</tile>
+  </friar_sand_right0>
+  <friar_sand_front1>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/friar_sand_front1.png</filepath>
+    <tile>0</tile>
+  </friar_sand_front1>
+  <friar_sand_back1>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/friar_sand_back1.png</filepath>
+    <tile>0</tile>
+  </friar_sand_back1>
+  <friar_sand_left1>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/friar_sand_left1.png</filepath>
+    <tile>0</tile>
+  </friar_sand_left1>
+  <friar_sand_right1>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/friar_sand_right1.png</filepath>
+    <tile>0</tile>
+  </friar_sand_right1>
+  
+  
+  
+  <!-- Players texture end................................-->
   
   <sword_attack_1>
     <is_sprite>0</is_sprite>
@@ -162,4 +249,7 @@ The following things are unsupported:
     </file>
   </sprite_token>
   -->
+
+
+
 </Textures>
