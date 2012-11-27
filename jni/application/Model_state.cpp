@@ -151,7 +151,7 @@ namespace Flame {
       else
         ++it;
     for (auto it = next_loop_update_list.begin(); it != next_loop_update_list.end(); ++it)
-      sim_obj_list.insert(*it);
+      sim_obj_list.push_back(*it);
     next_loop_update_list.clear();
   }
 
