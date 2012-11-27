@@ -17,7 +17,12 @@ Player::Player(
 //size(Zeni::Vector2f(radius_ * 2, radius_ * 2))
   size(radius_)
 {
-  render_clock = Zeni::get_Timer_HQ().get_time();
+  const Zeni::Time_HQ current_time = Zeni::get_Timer_HQ().get_time();
+  render_clock = current_time;
+  last_htime = current_time;
+  last_spell1 = current_time;
+  last_spell2 = current_time;
+  last_spell3 = current_time;
 }
 
 void Player::update(float time) {
@@ -87,11 +92,8 @@ void Player::render() {
     case SHASENG:
       ttype = "friar_sand";
       break;
-    case BAJIE:
+    default: // case BAJIE:
       ttype = "pigsy";
-      break;
-    default:
-      ttype = "monkey_king";
       break;
   }
   if (rad <= 0.25f * Global::pi && rad > -0.25f * Global::pi) {
@@ -194,21 +196,21 @@ void Player::fire(kKey_type type) {
       case B3:
       case B4:
         //spell 1
-        try_spell1();
+        try_spell1(current_time);
         break;
       case X1:
       case X2:
       case X3:
       case X4:
         //spell 2
-        try_spell2();
+        try_spell2(current_time);
         break;
       case Y1:
       case Y2:
       case Y3:
       case Y4:
         //spell 3
-        try_spell3();
+        try_spell3(current_time);
         break;
       default:
         break;
@@ -218,13 +220,61 @@ void Player::fire(kKey_type type) {
   }
 }
 
-void Player::try_spell1() {
-  Healing_spell* new_spell = new Healing_spell(get_location(), get_current_orientation());
-  Model_state::get_instance()->add_spell(new_spell);
+void Player::try_spell1(const Zeni::Time_HQ current_time) {
+  float passed_time = float(current_time.get_seconds_since(last_spell1));
+  Healing_spell* new_spell;
+  if (passed_time > kSpell1_CD) {
+    last_spell1 = current_time;
+    //create spell based on character type
+    switch (ptype) {
+      case SANZANG:
+        new_spell = new Healing_spell(get_location(), get_current_orientation());
+        Model_state::get_instance()->add_spell(new_spell);
+        break;
+      case WUKONG:
+        break;
+      case SHASENG:
+        break;
+      default: // case BAJIE:
+        break;
+    }
+  }
 }
 
-void Player::try_spell2() {
+void Player::try_spell2(const Zeni::Time_HQ current_time) {
+  float passed_time = float(current_time.get_seconds_since(last_spell2));
+  Healing_spell* new_spell;
+  if (passed_time > kSpell2_CD) {
+    last_spell2 = current_time;
+    //create spell based on character type
+    switch (ptype) {
+      case SANZANG:
+        break;
+      case WUKONG:
+        break;
+      case SHASENG:
+        break;
+      default: // case BAJIE:
+        break;
+    }
+  }
 }
 
-void Player::try_spell3() {
+void Player::try_spell3(const Zeni::Time_HQ current_time) {
+  float passed_time = float(current_time.get_seconds_since(last_spell3));
+  Healing_spell* new_spell;
+  if (passed_time > kSpell3_CD) {
+    last_spell3 = current_time;
+    //create spell based on character type
+    switch (ptype) {
+      case SANZANG:
+        break;
+      case WUKONG:
+        break;
+      case SHASENG:
+        break;
+      default: // case BAJIE:
+        break;
+    }
+  }
 }

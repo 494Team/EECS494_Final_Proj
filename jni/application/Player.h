@@ -15,6 +15,10 @@ using namespace Zeni;
 
 namespace Flame {
   #define PLAYER_ATTACK_INTERVAL 0.5f
+  const float kSpell1_CD = 1.0f;
+  const float kSpell2_CD = 1.0f;
+  const float kSpell3_CD = 1.0f;
+
   const float kAttack_show_time = 0.2f;
   #define PLAYER_SPELL1_CD 1.0f
   #define PLAYER_SPELL2_CD 1.0f
@@ -40,9 +44,9 @@ namespace Flame {
     Control ctrl;
     kPlayer_type ptype;
     void fire(kKey_type type);
-    void try_spell1();
-    void try_spell2();
-    void try_spell3();
+    void try_spell1(const Zeni::Time_HQ current_time);
+    void try_spell2(const Zeni::Time_HQ current_time);
+    void try_spell3(const Zeni::Time_HQ current_time);
 
   private:
     float orient_vec_to_radians(Vector2f vec) {
@@ -57,6 +61,9 @@ namespace Flame {
 
     //spell status
     bool bloodsucking;
+    Zeni::Time_HQ last_spell1;
+    Zeni::Time_HQ last_spell2;
+    Zeni::Time_HQ last_spell3;
 
     //running renderer
     bool running_status;
