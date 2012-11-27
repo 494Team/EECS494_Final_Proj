@@ -13,6 +13,7 @@ Player::Player(
   damaged(false),
   running_status(false),
   bloodsucking(false),
+  ptype(SANZANG),
 //size(Zeni::Vector2f(radius_ * 2, radius_ * 2))
   size(radius_)
 {
@@ -76,16 +77,32 @@ void Player::render() {
   float scale = Model_state::get_instance()->get_scale();
   Zeni::String player_texture;
   string ttype;
-
+  switch (ptype) {
+    case SANZANG:
+      ttype = "tripitaka";
+      break;
+    case WUKONG:
+      ttype = "monkey_king";
+      break;
+    case SHASENG:
+      ttype = "friar_sand";
+      break;
+    case BAJIE:
+      ttype = "pigsy";
+      break;
+    default:
+      ttype = "monkey_king";
+      break;
+  }
   if (rad <= 0.25f * Global::pi && rad > -0.25f * Global::pi) {
-    ttype = "monkey_king_front";
+    ttype += "_front";
   } else if (rad <= 0.75f * Global::pi && rad > 0.25f * Global::pi) {
-    ttype = "monkey_king_right";
+    ttype += "_right";
   } else if ((rad <= Global::pi && rad > 0.75f * Global::pi) ||
              (rad >= -Global::pi && rad < -0.75f * Global::pi)) {
-    ttype = "monkey_king_back";
+    ttype += "_back";
   } else {
-    ttype = "monkey_king_left";
+    ttype += "_left";
   }
   if (running_status) {
     ttype += "1";

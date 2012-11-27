@@ -38,7 +38,7 @@ namespace Flame {
 
     //control
     Control ctrl;
-
+    kPlayer_type ptype;
     void fire(kKey_type type);
     void try_spell1();
     void try_spell2();
