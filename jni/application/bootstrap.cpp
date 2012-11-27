@@ -130,15 +130,6 @@ private:
       case A1:
         (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(A1);
         break;
-      case B1:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(B1);
-        break;
-      case X1:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(X1);
-        break;
-      case Y1:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(Y1);
-        break;
 
       case HORI2:
         (*Model_state::get_instance()->get_player_list_ptr())[1]->ctrl.move_hori = confidence / 2;
@@ -154,15 +145,6 @@ private:
 
       case A2:
         (*Model_state::get_instance()->get_player_list_ptr())[1]->fire(A2);
-        break;
-      case B2:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(B2);
-        break;
-      case X2:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(X2);
-        break;
-      case Y2:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(Y2);
         break;
 
       case HORI3:
@@ -180,15 +162,6 @@ private:
       case A3:
         (*Model_state::get_instance()->get_player_list_ptr())[2]->fire(A3);
         break;
-      case B3:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(B3);
-        break;
-      case X3:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(X3);
-        break;
-      case Y3:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(Y3);
-        break;
 
       case HORI4:
         (*Model_state::get_instance()->get_player_list_ptr())[3]->ctrl.move_hori = confidence / 2;
@@ -205,16 +178,6 @@ private:
       case A4:
         (*Model_state::get_instance()->get_player_list_ptr())[3]->fire(A4);
         break;
-      case B4:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(B4);
-        break;
-      case X4:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(X4);
-        break;
-      case Y4:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(Y4);
-        break;
-
 
       default:
         break;
