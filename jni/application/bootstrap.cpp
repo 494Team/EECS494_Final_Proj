@@ -312,6 +312,95 @@ private:
   }
 };
 
+class Preparation_State : public Widget_Gamestate {
+  Preparation_State(const Preparation_State &);
+  Preparation_State operator=(const Preparation_State &);
+
+  class Menu_Button : public Text_Button {
+  public:
+    Menu_Button()
+      : Text_Button(Point2f(20.0f, 20.0f), Point2f(220.0f, 80.0f), "system_36_800x600", "Back to Top")
+    {
+    }
+  private:
+    void reset_statistics() {
+      //
+    }
+    
+    void on_accept() {
+      reset_statistics();
+      get_Game().pop_state();
+    }
+  } menu_button;
+
+  class Play_Button : public Text_Button {
+  public:
+    Play_Button()
+    : Text_Button(Point2f(520.0f, 20.0f), Point2f(780.0f, 80.0f), "system_36_800x600", "Default characters")
+    {
+    }
+  private:
+    void on_accept() {
+      get_Game().push_state(new Play_State());
+    }
+  } play_button;
+
+public:
+  Preparation_State()
+    : Widget_Gamestate(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)))
+  {
+    set_pausable(true);
+    m_widgets.lend_Widget(play_button);
+    m_widgets.lend_Widget(menu_button);
+  }
+
+private:
+  void on_push() {
+    get_Window().mouse_grab(true);
+    //get_Window().mouse_hide(true);
+    //get_Game().joy_mouse.enabled = false;
+  }
+ 
+  void on_pop() {
+    get_Window().mouse_grab(false);
+    //get_Window().mouse_hide(false);
+    //get_Game().joy_mouse.enabled = true;
+  }
+
+  void on_key(const SDL_KeyboardEvent &event) {
+    if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED)
+      get_Game().pop_state();
+  }
+
+  void render() {
+    Widget_Gamestate::render();
+    render_image("pigsy_front0",
+       Point2f(600.0f, 150.0f),
+       Point2f(800.0f, 500.0f));
+    render_image("friar_sand_front0",
+       Point2f(400.0f, 150.0f),
+       Point2f(650.0f, 500.0f));
+    render_image("monkey_king_front0",
+       Point2f(200.0f, 150.0f),
+       Point2f(450.0f, 500.0f));
+    render_image("tripitaka_front0",
+       Point2f(50.0f, 150.0f),
+       Point2f(250.0f, 500.0f));
+    render_image("p1cursor",
+       Point2f(30.0f, 100.0f),
+       Point2f(80.0f, 200.0f));
+    render_image("p2cursor",
+       Point2f(30.0f, 200.0f),
+       Point2f(80.0f, 300.0f));
+    render_image("p3cursor",
+       Point2f(30.0f, 300.0f),
+       Point2f(80.0f, 400.0f));
+    render_image("p4cursor",
+       Point2f(30.0f, 400.0f),
+       Point2f(80.0f, 500.0f));
+  }
+};
+
 class Bootstrap {
   class Gamestate_One_Initializer : public Gamestate_Zero_Initializer {
     virtual Gamestate_Base * operator()() {
@@ -323,8 +412,8 @@ class Bootstrap {
       get_Fonts();
       get_Sounds();
       get_Game().joy_mouse.enabled = true;
-
-      return new Title_State<Play_State, Instructions_State>("Zenipex Library\nApplication");
+      return new Title_State<Preparation_State, Instructions_State>("Zenipex Library\nApplication");
+      //return new Title_State<Play_State, Instructions_State>("Zenipex Library\nApplication");
     }
   } m_goi;
 

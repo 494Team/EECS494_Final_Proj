@@ -81,7 +81,29 @@ The following things are unsupported:
     <filepath>textures/house.png</filepath>
     <tile>0</tile>
   </house>
-
+  <!-- Players cursor start..............................-->
+  <p1cursor>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/p1cursor.png</filepath>
+    <tile>0</tile>
+  </p1cursor>
+  <p2cursor>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/p2cursor.png</filepath>
+    <tile>0</tile>
+  </p2cursor>
+  <p3cursor>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/p3cursor.png</filepath>
+    <tile>0</tile>
+  </p3cursor>
+  <p4cursor>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/p4cursor.png</filepath>
+    <tile>0</tile>
+  </p4cursor>
+  <!-- Players cursor end................................-->
+  
   <!-- Players texture start..............................-->
   <tripitaka_front0>
     <is_sprite>0</is_sprite>
@@ -205,6 +227,47 @@ The following things are unsupported:
     <filepath>textures/friar_sand_right1.png</filepath>
     <tile>0</tile>
   </friar_sand_right1>
+
+  <pigsy_front0>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/pigsy_front0.png</filepath>
+    <tile>0</tile>
+  </pigsy_front0>
+  <pigsy_back0>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/pigsy_back0.png</filepath>
+    <tile>0</tile>
+  </pigsy_back0>
+  <pigsy_left0>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/pigsy_left0.png</filepath>
+    <tile>0</tile>
+  </pigsy_left0>
+  <pigsy_right0>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/pigsy_right0.png</filepath>
+    <tile>0</tile>
+  </pigsy_right0>
+  <pigsy_front1>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/pigsy_front1.png</filepath>
+    <tile>0</tile>
+  </pigsy_front1>
+  <pigsy_back1>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/pigsy_back1.png</filepath>
+    <tile>0</tile>
+  </pigsy_back1>
+  <pigsy_left1>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/pigsy_left1.png</filepath>
+    <tile>0</tile>
+  </pigsy_left1>
+  <pigsy_right1>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/pigsy_right1.png</filepath>
+    <tile>0</tile>
+  </pigsy_right1>
   <!-- Players texture end................................-->
 
   <healing_spell>
