@@ -10,16 +10,62 @@ namespace Flame {
         Map(const Zeni::Point2f& location_ = Zeni::Point2f(),
             const Zeni::Vector2f &size_ = Zeni::Vector2f());
 
+
+		virtual Zeni::Collision::Parallelepiped get_body() = 0;
         virtual Zeni::Point2f get_location() const{return location;};
         virtual bool can_move(const Zeni::Collision::Capsule&) = 0;
         virtual bool can_move(const Zeni::Collision::Parallelepiped&) = 0;
         virtual bool can_move_player(const Zeni::Collision::Capsule&) = 0;
         virtual void reset() = 0;
+		Zeni::Point2f get_center(){return location + size / 2;};
+		//virtual Zeni::Point2f get_center() = 0;
     protected:
         //  virtual void render() = 0;
         Zeni::Point2f location;
         Zeni::Vector2f size;
     };
+
+	/*
+	class Map_puzzle : public Sim_object{
+	public:
+		Map_puzzle(const Zeni::Point2f &location_ = Zeni::Point2f(),
+			const Zeni::Vector2f &size_ = Zeni::Vector2f())
+			:location(location_),
+			soz;
+		
+		virtual Zeni::Point2f get_location() const{return location;};
+		virtual void reset() = 0;
+		Zeni::Point2f get_center(){return location + size / 2;};
+	protected:
+		Zeni::Point2f location;
+		Zeni::Vector2f size;
+	};
+	*/
+
+
+	class Map_light_beam : public Map{
+	public:
+		Map_light_beam(const Zeni::Point2f &location_ = Zeni::Point2f(),
+					   const Zeni::Vector2f &dir_ = Zeni::Vector2f());
+		void update(float time = 0.f);
+		Zeni::Collision::Parallelepiped get_body(){return Zeni::Collision::Parallelepiped();};  
+		void reset(){};
+		bool can_move(const Zeni::Collision::Capsule&){return true;};
+		bool can_move(const Zeni::Collision::Parallelepiped&){return true;};
+		bool can_move_player(const Zeni::Collision::Capsule &){return true;};
+		void render();
+	private:
+		Zeni::Vector2f dir;
+		Zeni::Collision::Capsule collision_body;
+		Zeni::Point2f end_point;
+		Zeni::Point2f render_start, render_end, rel_lu, rel_dr, rel_about;
+		float rel_ccw, dis;
+      
+	};
+
+
+
+
 
     class Map_brick : public Map{
     public:
@@ -38,7 +84,9 @@ namespace Flame {
         bool can_move_player(const Zeni::Collision::Capsule& other)
         { return !collision_body.intersects(other); }
         void reset(){};
-    protected:
+	//	Zeni::Point2f get_center(){return location + size / 2;}
+		Zeni::Collision::Parallelepiped get_body(){return collision_body;};
+	protected:
         Zeni::Collision::Parallelepiped collision_body;
         //Collision_rectangle collision_body;
         Zeni::String Brick_texture;
@@ -59,6 +107,7 @@ namespace Flame {
                           const Zeni::String &texture_ = Zeni::String());
         Zeni::Point2f get_location()const{return Map::get_location();};
         void render();
+		//Zeni::Point2f get_center(){return location + size / 2;}
         virtual void update(float);
         bool can_move(const Zeni::Collision::Capsule& other)
         { return !collision_body.intersects(other); }
@@ -67,7 +116,8 @@ namespace Flame {
         bool can_move_player(const Zeni::Collision::Capsule& other)
         { return !collision_body.intersects(other); }
         void reset(){};
-    private:
+		Zeni::Collision::Parallelepiped get_body(){return collision_body;};
+	private:
         Zeni::Collision::Parallelepiped collision_body;
         //Collision_rectangle collision_body;
         Zeni::Point2f render_location, rel_location;
@@ -82,6 +132,7 @@ namespace Flame {
                           const Zeni::Point2f &collide_center_ = Zeni::Point2f(),
                           const float &collide_radius_ = 0.f,
                           const Zeni::String &texture_ = Zeni::String());
+	//	Zeni::Point2f get_center(){return location + size / 2;}
         Zeni::Point2f get_location()const{return Map::get_location();};
         void render();
         virtual void update(float);
@@ -92,6 +143,7 @@ namespace Flame {
         bool can_move_player(const Zeni::Collision::Capsule& other)
         { return !collision_body.intersects(other); }
         void reset(){};
+		Zeni::Collision::Parallelepiped get_body(){return Zeni::Collision::Parallelepiped();};        
     private:
         Zeni::Collision::Capsule collision_body;
         //Collision_circle collision_body;
@@ -111,12 +163,14 @@ namespace Flame {
         illuminated(false),
         illuminate_texture(illuminate_texture_)
         {};
+	//	Zeni::Point2f get_center(){return location + size / 2;}
         void reset();
         bool can_move(const Zeni::Collision::Capsule&);
         bool can_move(const Zeni::Collision::Parallelepiped&)
         { return true; }
         bool can_move_player(const Zeni::Collision::Capsule& other);
         void render();
+		bool get_illuminated(){return illuminated;};		        
     private:
         bool illuminated;
         Zeni::String illuminate_texture;

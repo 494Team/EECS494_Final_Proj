@@ -1,8 +1,10 @@
 #include <zenilib.h>
+#include <vector>
 #include "Map.h"
 #include "Model_state.h"
 #include "Utility.h"
 using namespace Zeni;
+using namespace std;
 namespace Flame {
     Map::Map(const Point2f &location_, const Vector2f &size_){
         location = location_;
@@ -134,5 +136,47 @@ namespace Flame {
         brick.fax_Material(&Brick_material);
         vr.render(brick);
     }
+
+	Map_light_beam::Map_light_beam(const Point2f &location_, const Vector2f &dir_)
+		:Map(location_), dir(dir_.normalized()), rel_ccw(0.f), render_start(location_), dis(0.f)
+	{
+		render_end = render_start;
+		collision_body = Collision::Capsule (Point3f(render_start.x, render_start.y, kCollision_object_height / 2),
+										    Vector3f(render_end.x, render_end.y, kCollision_object_height / 2),
+											kCollision_object_height / 2);
+	};
+
+
+	void Map_light_beam::update(float time){
+		vector<Map* > *map_obj_list = Model_state::get_instance()->get_map_obj_list_ptr();
+		vector<Player* > *player_list = Model_state::get_instance()->get_player_list_ptr();
+				
+		for (vector<Map *>::iterator it = map_obj_list->begin();
+			it != map_obj_list->end();
+			++it){
+				if (collision_body.intersects((*it)->get_body())){
+					dis -= 1000.0f * time;
+					break;
+				}
+		}
+		dis += 1000.f *time;
+		render_end = dis * dir + render_start;
+		collision_body = Collision::Capsule (Point3f(render_start.x, render_start.y, kCollision_object_height / 2),
+										    Vector3f(render_end.x, render_end.y, kCollision_object_height / 2),
+											kCollision_object_height / 2);
+		float scale = Model_state::get_instance()->get_scale();
+		Point2f center = Model_state::get_instance()->get_center_location();
+		float dis = (render_start - render_end).magnitude();
+        rel_lu = (render_start + Point2f(0.f, +kCollision_object_height / 2) - center) * scale + Point2f(400.f, 300.0f);
+		rel_dr = (render_start + Point2f(dis, -kCollision_object_height / 2) - center) * scale + Point2f(400.f, 300.0f);
+        rel_about = (render_start -center) * scale + Point2f(400.f, 300.f);
+		rel_ccw = (render_end - render_start).theta();
+	};
+
+	void Map_light_beam::render(){
+		render_image("light_beam",rel_lu,rel_dr,-rel_ccw,1.0f,rel_about);
+	}
+
+
 
 }
