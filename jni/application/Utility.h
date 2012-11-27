@@ -74,6 +74,13 @@ namespace Flame{
     Y1, Y2, Y3, Y4,
   };
 
+  enum kPlayer_type {
+    SANZANG,
+    WUKONG,
+    SHASENG,
+    BAJIE
+  };
+
   struct Control {
     float move_hori;
     float move_vert;

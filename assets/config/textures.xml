@@ -77,26 +77,48 @@ The following things are unsupported:
     <filepath>textures/house.png</filepath>
     <tile>0</tile>
   </house>
-  <monkey_king_front>
+
+  <monkey_king_front0>
     <is_sprite>0</is_sprite>
-    <filepath>textures/monkey_king_front.png</filepath>
+    <filepath>textures/monkey_king_front0.png</filepath>
     <tile>0</tile>
-  </monkey_king_front>
-  <monkey_king_back>
+  </monkey_king_front0>
+  <monkey_king_back0>
     <is_sprite>0</is_sprite>
-    <filepath>textures/monkey_king_back.png</filepath>
+    <filepath>textures/monkey_king_back0.png</filepath>
     <tile>0</tile>
-  </monkey_king_back>
-  <monkey_king_left>
+  </monkey_king_back0>
+  <monkey_king_left0>
     <is_sprite>0</is_sprite>
-    <filepath>textures/monkey_king_left.png</filepath>
+    <filepath>textures/monkey_king_left0.png</filepath>
     <tile>0</tile>
-  </monkey_king_left>
-  <monkey_king_right>
+  </monkey_king_left0>
+  <monkey_king_right0>
     <is_sprite>0</is_sprite>
-    <filepath>textures/monkey_king_right.png</filepath>
+    <filepath>textures/monkey_king_right0.png</filepath>
     <tile>0</tile>
-  </monkey_king_right>
+  </monkey_king_right0>
+  <monkey_king_front1>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/monkey_king_front1.png</filepath>
+    <tile>0</tile>
+  </monkey_king_front1>
+  <monkey_king_back1>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/monkey_king_back1.png</filepath>
+    <tile>0</tile>
+  </monkey_king_back1>
+  <monkey_king_left1>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/monkey_king_left1.png</filepath>
+    <tile>0</tile>
+  </monkey_king_left1>
+  <monkey_king_right1>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/monkey_king_right1.png</filepath>
+    <tile>0</tile>
+  </monkey_king_right1>
+  
   <sword_attack_1>
     <is_sprite>0</is_sprite>
     <filepath>textures/sword_attack_1.png</filepath>

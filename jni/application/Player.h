@@ -20,6 +20,7 @@ namespace Flame {
   #define PLAYER_SPELL3_CD 1.0f
   #define HURT_SHOWING_INTERVAL 0.2f
   const float kMove_speed = 500.0f;
+  const float kRun_render_gap = 0.2f;
 
   class Player: public Agent {
   public:
@@ -36,6 +37,9 @@ namespace Flame {
     Control ctrl;
 
     void fire(kKey_type type);
+    void try_spell1();
+    void try_spell2();
+    void try_spell3();
 
   private:
     float orient_vec_to_radians(Vector2f vec) {
@@ -47,6 +51,10 @@ namespace Flame {
     bool wpinuse;
     bool damaged; //whether the normal attack has created a damage
     Zeni::Time_HQ last_htime;
+
+    //running renderer
+    bool running_status;
+    Zeni::Time_HQ render_clock;
   
   //vector<Agent*>* Monsters;
     int attack_strength;

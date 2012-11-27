@@ -11,9 +11,12 @@ Player::Player(
 : Agent(health_, speed_, radius_, location_),
   wpinuse(false),
   damaged(false),
+  running_status(false),
 //size(Zeni::Vector2f(radius_ * 2, radius_ * 2))
   size(radius_)
-{}
+{
+  render_clock = Zeni::get_Timer_HQ().get_time();
+}
 
 void Player::update(float time) {
   Point2f backup_position = get_location();
@@ -50,6 +53,13 @@ void Player::update(float time) {
     wpinuse = false;
   }
 
+  float render_passed_time = float(current_time.get_seconds_since(render_clock));
+  if (render_passed_time > kRun_render_gap) {
+    running_status = !running_status;
+    render_clock = current_time;
+  }
+    
+
   //hit
   if (wpinuse && !damaged) {
     //create damage
@@ -60,36 +70,29 @@ void Player::update(float time) {
 }
 
 void Player::render() {
-  //Point2f loc = get_location();
   Vector2f orient = get_current_orientation();
   float rad = orient_vec_to_radians(orient);
   float scale = Model_state::get_instance()->get_scale();
   Zeni::String player_texture;
+  string ttype;
 
   if (rad <= 0.25f * Global::pi && rad > -0.25f * Global::pi) {
-  /*  render_image("monkey_king_front",
-                   loc,
-                   loc + 5.0f * Vector2f(10.0f, 10.0f));
-   */
-   player_texture = Zeni::String("monkey_king_front");
+    ttype = "monkey_king_front";
   } else if (rad <= 0.75f * Global::pi && rad > 0.25f * Global::pi) {
-    /*render_image("monkey_king_right",
-                 loc,
-                 loc + 5.0f * Vector2f(10.0f, 10.0f));*/
-    player_texture = Zeni::String("monkey_king_right");
+    ttype = "monkey_king_right";
   } else if ((rad <= Global::pi && rad > 0.75f * Global::pi) ||
              (rad >= -Global::pi && rad < -0.75f * Global::pi)) {
-    /*render_image("monkey_king_back",
-                 loc,
-                 loc + 5.0f * Vector2f(10.0f, 10.0f));*/
-  player_texture = Zeni::String("monkey_king_back");
+    ttype = "monkey_king_back";
   } else {
-  /*
-    render_image("monkey_king_left",
-                 loc,
-                 loc + 5.0f * Vector2f(10.0f, 10.0f));*/
-    player_texture = Zeni::String("monkey_king_left");
+    ttype = "monkey_king_left";
   }
+  if (running_status) {
+    ttype += "1";
+  } else {
+    ttype += "0";
+  }
+  
+  player_texture = Zeni::String(ttype);//("monkey_king_front");
 
 render_image(player_texture,
        Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
@@ -155,18 +158,21 @@ void Player::fire(kKey_type type) {
       case B3:
       case B4:
         //spell 1
+        try_spell1();
         break;
       case X1:
       case X2:
       case X3:
       case X4:
         //spell 2
+        try_spell2();
         break;
       case Y1:
       case Y2:
       case Y3:
       case Y4:
         //spell 3
+        try_spell3();
         break;
       default:
         break;
@@ -174,4 +180,13 @@ void Player::fire(kKey_type type) {
   } else {
     //in PLAYER_ATTACK_INTERVAL
   }
+}
+
+void Player::try_spell1() {
+}
+
+void Player::try_spell2() {
+}
+
+void Player::try_spell3() {
 }
