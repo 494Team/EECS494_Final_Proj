@@ -55,6 +55,9 @@ namespace Flame {
 		bool can_move(const Zeni::Collision::Parallelepiped&){return true;};
 		bool can_move_player(const Zeni::Collision::Capsule &){return true;};
 		void render();
+    void set_location(const Zeni::Point2f &location_ = Zeni::Point2f()){render_start = location_;render_end = location_;};
+    void set_dir(const Zeni::Vector2f &dir_ = Zeni::Vector2f()){dir = dir_;};
+    void set_player(const int player_no_ = 0){player = player_no_;};
 	private:
 		Zeni::Vector2f dir;
 		Zeni::Collision::Capsule collision_body;

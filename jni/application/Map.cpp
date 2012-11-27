@@ -4,6 +4,7 @@
 #include "Map.h"
 #include "Model_state.h"
 #include "Utility.h"
+#include <cassert>
 using namespace Zeni;
 using namespace std;
 namespace Flame {
@@ -151,10 +152,16 @@ namespace Flame {
 	void Map_light_beam::update(float time){
 		vector<Map* > *map_obj_list = Model_state::get_instance()->get_map_obj_list_ptr();
 		vector<Player* > *player_list = Model_state::get_instance()->get_player_list_ptr();
-		bool player_collide = false;		
-		float short_dis = dis + 1000.f * time;
+		
+    bool player_collide = false;
+    int player_collide_no;
+    Point2f player_location;
 
-		for (vector<Map *>::iterator it = map_obj_list->begin();
+		float short_dis = dis + 1000.f * time;
+    Vector2f new_dir;
+    Map_light_beam *tmp;
+		
+    for (vector<Map *>::iterator it = map_obj_list->begin();
 			it != map_obj_list->end();
 			++it){
 				if (collision_body.intersects((*it)->get_body())){
@@ -162,40 +169,54 @@ namespace Flame {
 						short_dis = (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z));
 				}
 		}
+
     int cnt = 0;
 		for (vector<Player *>::iterator it = player_list->begin();
 			   it != player_list->end();
-			  ++it){
+			  ++it)
+    {
       ++cnt;
-      
+      if(cnt!=player){
 			  if (collision_body.intersects((*it)->get_body())){
 			    if (short_dis > (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z))){
-            
-					  Vector2f orient = (*it)->get_current_orientation();
+        	  Vector2f orient = (*it)->get_current_orientation();
 					  float angle = orient.angle_between(dir) * 2;
 					  Quaternion change = Quaternion::Axis_Angle(Vector3f(0.0f, 0.0f, 1.0f), angle);
 					  Vector3f dir3 = Vector3f(dir.x, dir.y, 0.f);
 					  dir3 = change*dir3;
 
-					  Vector2f new_dir = Vector2f(dir3.x, dir3.y);
-            Map_light_beam *tmp =new Map_light_beam((*it)->get_current_location(), new_dir, cnt);
-            child = tmp;
-            player = cnt;
-            if (cnt != player){
-					    Model_state::get_instance()->add_map_puzzle_obj(tmp);
-            }
-					  short_dis = (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z)) + 10.f;
+					  new_dir = Vector2f(dir3.x, dir3.y);
+            short_dis = (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z));
+
+            player_location = (*it)->get_location();
+            player_collide_no = cnt;
+            player_collide = true;
 					}
-					player_collide = true;
-				}
-		  
+        }
+      }
     }
-    
-    if(!player_collide && child != NULL){
-      Model_state::get_instance()->remove_map_puzzle_obj(child);
-      child = NULL;
+
+   
+
+    if (player_collide){ 
+      if (child != NULL){
+        child->set_location(player_location);
+        child->set_dir(new_dir);
+        child->set_player(player_collide_no);
+      }
+      else{
+        tmp = new Map_light_beam(player_location, new_dir, player_collide_no);
+        Model_state::get_instance()->add_map_puzzle_obj(tmp);   
+        child = tmp;
+      }
     }
-    
+    else{
+      if(child != NULL){
+        Model_state::get_instance()->remove_map_puzzle_obj(child);
+        child = NULL;
+      }
+    }
+        
 	  dis = short_dis;
 
 	  render_end = dis * dir + render_start;
