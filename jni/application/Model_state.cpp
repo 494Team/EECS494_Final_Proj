@@ -33,18 +33,14 @@ namespace Flame {
 
   Model_state::~Model_state()
   {
-    for (auto it = sim_obj_list.begin(); it != sim_obj_list.end();)
-      it = sim_obj_list.erase(it);
-    for (auto it = player_list.begin(); it != player_list.end();)
-      it = player_list.erase(it);
-    for (auto it = monster_list.begin(); it != monster_list.end();)
-      it = monster_list.erase(it);
-    for (auto it = spell_list.begin(); it != spell_list.end();)
-      it = spell_list.erase(it);
-    for (auto it = render_list.begin(); it != render_list.end(); ++it) {
+    for (auto it = render_list.begin(); it != render_list.end(); ++it)
       delete *it;
-      render_list.erase(it);
-    }
+    render_list.clear();
+    sim_obj_list.clear();
+    player_list.clear();
+    monster_list.clear();
+    spell_list.clear();
+    map_obj_list.clear();
   }
 
   Model_state * Model_state::get_instance()
