@@ -4,11 +4,7 @@
 #include "Collision.h"
 #include "Moving_object.h"
 #include "Model_state.h"
-#include "Agent.h"
-#include "Monster.h"
-#include "Player.h"
 #include "Sim_object.h"
-#include <vector>
 
 namespace Flame {
 
@@ -33,7 +29,7 @@ namespace Flame {
     virtual void update_body() = 0;
     // first check if the spell should be inactivate,
     // then call Moving_object::update_location(time)
-    virtual void update(float time);
+    virtual void update(float time = 0.f);
     virtual void render() = 0;
 
   private:
@@ -59,7 +55,7 @@ namespace Flame {
       {return size;}
 
     virtual void update_body() = 0;
-    virtual void update(float time = 0.f) override;
+    virtual void update(float time = 0.f);
     virtual void render() = 0;
   protected:
     void render(const Zeni::String& texture) const;
@@ -90,8 +86,8 @@ namespace Flame {
            size_.x)
     {}
 
-    virtual void update_body() override;
-    virtual void update(float time = 0.f) override;
+    virtual void update_body();
+    virtual void update(float time = 0.f);
     virtual void render() = 0;
 
   private:
@@ -114,8 +110,8 @@ namespace Flame {
            Zeni::Vector3f(0.f, 0.f, kCollision_object_height))
     {}
 
-    virtual void update_body() override;
-    virtual void update(float time = 0.f) override;
+    virtual void update_body();
+    virtual void update(float time = 0.f);
     virtual void render() = 0;
     
   private:
@@ -134,8 +130,8 @@ namespace Flame {
     virtual Zeni::Point2f get_location() const
       {return location;}
 
-    virtual void update_body() override;
-    virtual void update(float time = 0.f) override;
+    virtual void update_body();
+    virtual void update(float time = 0.f);
     virtual void render() = 0;
 
   protected:

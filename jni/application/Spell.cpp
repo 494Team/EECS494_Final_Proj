@@ -7,7 +7,7 @@ using namespace Zeni;
 
 namespace Flame {
 
-  void Spell::update(float time = 0.f)
+  void Spell::update(float time)
   {
     life_time -= time;
     if (life_time < 0.f)
