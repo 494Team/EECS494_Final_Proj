@@ -46,7 +46,8 @@ namespace Flame {
 	class Map_light_beam : public Map{
 	public:
 		Map_light_beam(const Zeni::Point2f &location_ = Zeni::Point2f(),
-					   const Zeni::Vector2f &dir_ = Zeni::Vector2f());
+					   const Zeni::Vector2f &dir_ = Zeni::Vector2f(),
+             const int &parent_ = 0);
 		void update(float time = 0.f);
 		Zeni::Collision::Parallelepiped get_body(){return Zeni::Collision::Parallelepiped();};  
 		void reset(){};
@@ -60,7 +61,8 @@ namespace Flame {
 		Zeni::Point2f end_point;
 		Zeni::Point2f render_start, render_end, rel_lu, rel_dr, rel_about;
 		float rel_ccw, dis;
-      
+    int player;
+    Map_light_beam *child;
 	};
 
 

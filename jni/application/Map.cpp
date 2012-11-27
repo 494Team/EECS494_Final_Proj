@@ -1,5 +1,6 @@
 #include <zenilib.h>
 #include <vector>
+#include "Player.h"
 #include "Map.h"
 #include "Model_state.h"
 #include "Utility.h"
@@ -137,8 +138,8 @@ namespace Flame {
         vr.render(brick);
     }
 
-	Map_light_beam::Map_light_beam(const Point2f &location_, const Vector2f &dir_)
-		:Map(location_), dir(dir_.normalized()), rel_ccw(0.f), render_start(location_), dis(0.f)
+	Map_light_beam::Map_light_beam(const Point2f &location_, const Vector2f &dir_, const int &player_)
+		:Map(location_), dir(dir_.normalized()), rel_ccw(0.f), render_start(location_), dis(0.f), player(player_),child(NULL)
 	{
 		render_end = render_start;
 		collision_body = Collision::Capsule (Point3f(render_start.x, render_start.y, kCollision_object_height / 2),
@@ -150,26 +151,63 @@ namespace Flame {
 	void Map_light_beam::update(float time){
 		vector<Map* > *map_obj_list = Model_state::get_instance()->get_map_obj_list_ptr();
 		vector<Player* > *player_list = Model_state::get_instance()->get_player_list_ptr();
-				
+		bool player_collide = false;		
+		float short_dis = dis + 1000.f * time;
+
 		for (vector<Map *>::iterator it = map_obj_list->begin();
 			it != map_obj_list->end();
 			++it){
 				if (collision_body.intersects((*it)->get_body())){
-					dis -= 1000.0f * time;
-					break;
+					if (short_dis > (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z)))
+						short_dis = (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z));
 				}
 		}
-		dis += 1000.f *time;
-		render_end = dis * dir + render_start;
+    int cnt = 0;
+		for (vector<Player *>::iterator it = player_list->begin();
+			   it != player_list->end();
+			  ++it){
+      ++cnt;
+      
+			  if (collision_body.intersects((*it)->get_body())){
+			    if (short_dis > (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z))){
+            
+					  Vector2f orient = (*it)->get_current_orientation();
+					  float angle = orient.angle_between(dir) * 2;
+					  Quaternion change = Quaternion::Axis_Angle(Vector3f(0.0f, 0.0f, 1.0f), angle);
+					  Vector3f dir3 = Vector3f(dir.x, dir.y, 0.f);
+					  dir3 = change*dir3;
+
+					  Vector2f new_dir = Vector2f(dir3.x, dir3.y);
+            Map_light_beam *tmp =new Map_light_beam((*it)->get_current_location(), new_dir, cnt);
+            child = tmp;
+            player = cnt;
+            if (cnt != player){
+					    Model_state::get_instance()->add_map_puzzle_obj(tmp);
+            }
+					  short_dis = (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z)) + 10.f;
+					}
+					player_collide = true;
+				}
+		  
+    }
+    
+    if(!player_collide && child != NULL){
+      Model_state::get_instance()->remove_map_puzzle_obj(child);
+      child = NULL;
+    }
+    
+	  dis = short_dis;
+
+	  render_end = dis * dir + render_start;
 		collision_body = Collision::Capsule (Point3f(render_start.x, render_start.y, kCollision_object_height / 2),
-										    Vector3f(render_end.x, render_end.y, kCollision_object_height / 2),
-											kCollision_object_height / 2);
+		                           				   Vector3f(render_end.x, render_end.y, kCollision_object_height / 2),
+											                   kCollision_object_height / 2);
 		float scale = Model_state::get_instance()->get_scale();
 		Point2f center = Model_state::get_instance()->get_center_location();
 		float dis = (render_start - render_end).magnitude();
-        rel_lu = (render_start + Point2f(0.f, +kCollision_object_height / 2) - center) * scale + Point2f(400.f, 300.0f);
+    rel_lu = (render_start + Point2f(0.f, +kCollision_object_height / 2) - center) * scale + Point2f(400.f, 300.0f);
 		rel_dr = (render_start + Point2f(dis, -kCollision_object_height / 2) - center) * scale + Point2f(400.f, 300.0f);
-        rel_about = (render_start -center) * scale + Point2f(400.f, 300.f);
+    rel_about = (render_start -center) * scale + Point2f(400.f, 300.f);
 		rel_ccw = (render_end - render_start).theta();
 	};
 
