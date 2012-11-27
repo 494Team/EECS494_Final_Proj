@@ -83,7 +83,7 @@ namespace Flame {
     map_obj_list.push_back(new Map_structure_rec(Point2f(400.0f, 400.0f), Vector2f(50.0f, 50.0f), Point2f(400.0f, 410.0f),
                                                  Vector2f(50.0f, 40.0f), String("house")));
 
-	map_puzzle_obj_list.push_back(new Map_light_beam(Point2f(100.0f, 200.0f), Vector2f(0.0f, 1.0f)));
+    map_puzzle_obj_list.push_back(new Map_light_beam(Point2f(100.0f, 200.0f), Vector2f(0.0f, 1.0f)));
 
     for (auto it = player_list.begin(); it != player_list.end(); ++it) {
       sim_obj_list.push_back(*it);
@@ -94,7 +94,7 @@ namespace Flame {
       render_list.insert(*it);
     }
 
-	for (auto it = map_puzzle_obj_list.begin(); it != map_puzzle_obj_list.end(); ++it) {
+    for (auto it = map_puzzle_obj_list.begin(); it != map_puzzle_obj_list.end(); ++it) {
       sim_obj_list.push_back(*it);
       render_list.insert(*it);
     }
@@ -165,6 +165,9 @@ namespace Flame {
         it = remove_spell(*it);
       else
         ++it;
+    for (auto it = next_loop_update_list.begin(); it != next_loop_update_list.end(); ++it)
+      render_list.insert(*it);
+    next_loop_update_list.clear();
   }
 
   void Model_state::render()
@@ -200,8 +203,10 @@ namespace Flame {
 
   void Model_state::add_map_puzzle_obj(Map * map_obj_ptr)
   {
+    cerr << "adding " << render_list.size() << endl;
     render_list.insert(map_obj_ptr);
-    sim_obj_list.push_back(map_obj_ptr);
+    cerr << "adding finished" << render_list.size() << endl;
+    next_loop_update_list.push_back(map_obj_ptr);
     map_puzzle_obj_list.push_back(map_obj_ptr);
   }
 

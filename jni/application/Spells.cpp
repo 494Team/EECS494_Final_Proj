@@ -43,11 +43,11 @@ namespace Flame {
   }
 
   Healing_spell::Healing_spell(const Point2f& location_, const Vector2f& orientation_) :
-    Moving_spell_circle(location_ + 50 * orientation_.normalized(),
+    Moving_spell_circle(location_ + 50.f * orientation_.normalized(),
                         orientation_,
-                        Vector2f(kAmitabha_size, kAmitabha_size),
-                        kAmitabha_speed,
-                        kAmitabha_life_time)
+                        Vector2f(kHealing_size, kHealing_size),
+                        kHealing_speed,
+                        kHealing_life_time)
     {}
 
   void Healing_spell::update(float time)
@@ -57,7 +57,7 @@ namespace Flame {
       vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
       for (auto it = player_list_ptr->begin(); it != player_list_ptr->end(); ++it)
         if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
-          (*it)->dec_health(kAmitabha_healing_amount);
+          (*it)->dec_health(kHealing_healing_amount);
           disable_spell();
           break;
         }
@@ -66,5 +66,30 @@ namespace Flame {
 
   void Healing_spell::render()
   {Moving_spell::render("healing_spell");}
+
+  Arrow_attack::Arrow_attack(const Point2f& location_, const Vector2f& orientation_) :
+    Moving_spell_rectangle(location_ + 50.f * orientation_.normalized(), 
+                           orientation_,
+                           kArrow_size,
+                           kArrow_speed,
+                           kArrow_life_time)
+    {}
+
+  void Arrow_attack::update(float time)
+  {
+    Moving_spell_rectangle::update(time);
+    if (is_active()) {
+      vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
+      for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
+        if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
+          (*it)->dec_health(kArrow_damage);
+          disable_spell();
+          break;
+        }
+    }
+  }
+
+  void Arrow_attack::render()
+  {Moving_spell::render("brick");}
 
 }

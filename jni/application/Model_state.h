@@ -52,8 +52,8 @@ namespace Flame {
     {return &spell_list;}
     std::vector<Map *> * get_map_obj_list_ptr()
     {return &map_obj_list;}
-	std::vector<Map *> * get_map_puzzle_obj_list_ptr()
-	{return &map_puzzle_obj_list;}
+    std::vector<Map *> * get_map_puzzle_obj_list_ptr()
+    {return &map_puzzle_obj_list;}
 
 
     // never try to add yourself! use these functions!!!!!!!
@@ -61,14 +61,14 @@ namespace Flame {
     void add_monster(Monster * monster_ptr);
     void add_spell(Spell * spell_ptr);
     void add_map_obj(Map * map_obj_ptr);
-	void add_map_puzzle_obj(Map * map_obj_ptr);
+    void add_map_puzzle_obj(Map * map_obj_ptr);
 
     // never try to remove yourself! use these functions!!!!!!!
     std::vector<Player *>::iterator remove_player(Player * player_ptr);
     std::vector<Monster *>::iterator remove_monster(Monster * monster_ptr);
     std::vector<Spell *>::iterator remove_spell(Spell * spell_ptr);
     std::vector<Map *>::iterator remove_map_obj(Map * map_ptr);
-	std::vector<Map *>::iterator remove_map_puzzle_obj(Map * map_ptr);
+    std::vector<Map *>::iterator remove_map_puzzle_obj(Map * map_ptr);
 
     // check if a monster/spell/player can move to the specific location
     bool can_move(const Zeni::Collision::Capsule& collision_body);
@@ -91,12 +91,13 @@ namespace Flame {
 
     /* member variables */
     Render_list_t render_list;
+    std::vector<Sim_object *> next_loop_update_list;
     std::vector<Sim_object *> sim_obj_list;
     std::vector<Player *> player_list;
     std::vector<Monster *> monster_list;
     std::vector<Spell *> spell_list;
     std::vector<Map *> map_obj_list;
-	std::vector<Map *> map_puzzle_obj_list;
+    std::vector<Map *> map_puzzle_obj_list;
     Zeni::Point2f center_location;
     float scale;
 

@@ -44,7 +44,7 @@ namespace Flame {
   {
     Vector2f orientation = get_current_orientation();
     float theta = orientation.angle_between(Vector2f(0.f, 1.f));
-    if (orientation.x > 0.f)
+    if (orientation.x < 0.f)
       theta = 2 * Global::pi - theta;
     render_image(texture, // which texture to use
                  relative_location, // upper-left corner
