@@ -30,7 +30,7 @@ namespace Flame {
     center_location(Point2f()),
     scale(1.f)
   {}
-
+ 
   Model_state::~Model_state()
   {
     for (auto it = render_list.begin(); it != render_list.end(); ++it)
@@ -42,7 +42,7 @@ namespace Flame {
     spell_list.clear();
     map_obj_list.clear();
   }
-
+  
   Model_state * Model_state::get_instance()
   {
     if (!ptr)
@@ -82,6 +82,9 @@ namespace Flame {
     // rec half block half through
     map_obj_list.push_back(new Map_structure_rec(Point2f(400.0f, 400.0f), Vector2f(50.0f, 50.0f), Point2f(400.0f, 410.0f),
                                                  Vector2f(50.0f, 40.0f), String("house")));
+
+	map_puzzle_obj_list.push_back(new Map_light_beam(Point2f(100.0f, 200.0f), Vector2f(0.0f, 1.0f)));
+
     for (auto it = player_list.begin(); it != player_list.end(); ++it) {
       sim_obj_list.push_back(*it);
       render_list.insert(*it);
@@ -90,6 +93,12 @@ namespace Flame {
       sim_obj_list.push_back(*it);
       render_list.insert(*it);
     }
+
+	for (auto it = map_puzzle_obj_list.begin(); it != map_puzzle_obj_list.end(); ++it) {
+      sim_obj_list.push_back(*it);
+      render_list.insert(*it);
+    }
+
     update_scale_and_center(); // get initial scale and location
   }
   
@@ -189,6 +198,13 @@ namespace Flame {
     map_obj_list.push_back(map_obj_ptr);
   }
 
+  void Model_state::add_map_puzzle_obj(Map * map_obj_ptr)
+  {
+    render_list.insert(map_obj_ptr);
+    sim_obj_list.push_back(map_obj_ptr);
+    map_puzzle_obj_list.push_back(map_obj_ptr);
+  }
+
   vector<Player *>::iterator Model_state::remove_player(Player * player_ptr)
   {
     auto it = player_list.erase(find(player_list.begin(), player_list.end(), player_ptr));
@@ -216,6 +232,14 @@ namespace Flame {
   vector<Map *>::iterator Model_state::remove_map_obj(Map * map_obj_ptr)
   {
     auto it = map_obj_list.erase(find(map_obj_list.begin(), map_obj_list.end(), map_obj_ptr));
+    sim_obj_list.erase(find(sim_obj_list.begin(), sim_obj_list.end(), map_obj_ptr));
+    render_list.erase(map_obj_ptr);
+    return it;
+  }
+
+  vector<Map *>::iterator Model_state::remove_map_puzzle_obj(Map * map_obj_ptr)
+  {
+    auto it = map_puzzle_obj_list.erase(find(map_puzzle_obj_list.begin(), map_puzzle_obj_list.end(), map_obj_ptr));
     sim_obj_list.erase(find(sim_obj_list.begin(), sim_obj_list.end(), map_obj_ptr));
     render_list.erase(map_obj_ptr);
     return it;
