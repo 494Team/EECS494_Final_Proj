@@ -12,6 +12,7 @@ Player::Player(
   wpinuse(false),
   damaged(false),
   running_status(false),
+  bloodsucking(false),
 //size(Zeni::Vector2f(radius_ * 2, radius_ * 2))
   size(radius_)
 {
@@ -145,6 +146,7 @@ void Player::fire(kKey_type type) {
   float passed_time = float(current_time.get_seconds_since(last_htime));
   if (passed_time > PLAYER_ATTACK_INTERVAL) {
     last_htime = current_time;
+    Attack_spell* new_spell;
     switch (type) {
       case A1:
       case A2:
@@ -152,6 +154,23 @@ void Player::fire(kKey_type type) {
       case A4:
         wpinuse = true;
         damaged = false;
+        new_spell = new Attack_spell(get_location(),
+                                        get_current_orientation(),
+                                        kPlayer_attack_range,
+                                        kPlayer_attack_strengh,
+                                        true,
+                                        bloodsucking,
+                                        this);
+        Model_state::get_instance()->add_spell(new_spell);
+        /*
+            Attack_spell(const Zeni::Point2f& location_ = Zeni::Point2f(),
+                 const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
+                 float radius_ = 0.f,
+                 float attack_strength_ = 0.f,
+                 bool is_player_ = false,
+                 bool heal_self_ = false,
+                 Player * player_ptr_ = nullptr);
+                 */
         break;
       case B1:
       case B2:

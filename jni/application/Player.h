@@ -9,6 +9,7 @@
 #include "Map.h"
 #include "Model_state.h"
 #include "Collision.h"
+#include "Spells.h"
 
 using namespace Zeni;
 
@@ -21,6 +22,8 @@ namespace Flame {
   #define HURT_SHOWING_INTERVAL 0.2f
   const float kMove_speed = 500.0f;
   const float kRun_render_gap = 0.2f;
+  const float kPlayer_attack_range = 40.0f;
+  const float kPlayer_attack_strengh = 100.0f;
 
   class Player: public Agent {
   public:
@@ -51,6 +54,9 @@ namespace Flame {
     bool wpinuse;
     bool damaged; //whether the normal attack has created a damage
     Zeni::Time_HQ last_htime;
+
+    //spell status
+    bool bloodsucking;
 
     //running renderer
     bool running_status;
