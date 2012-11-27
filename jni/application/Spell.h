@@ -90,6 +90,9 @@ namespace Flame {
     virtual void update(float time = 0.f);
     virtual void render() = 0;
 
+    Zeni::Collision::Capsule get_body() const
+    {return body;}
+
   private:
     Zeni::Collision::Capsule body;
   };
@@ -114,6 +117,9 @@ namespace Flame {
     virtual void update(float time = 0.f);
     virtual void render() = 0;
     
+    Zeni::Collision::Parallelepiped get_body() const
+    {return body;}
+
   private:
     Zeni::Collision::Parallelepiped body;
   };

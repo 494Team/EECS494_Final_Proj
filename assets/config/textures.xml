@@ -201,11 +201,14 @@ The following things are unsupported:
     <filepath>textures/friar_sand_right1.png</filepath>
     <tile>0</tile>
   </friar_sand_right1>
-  
-  
-  
   <!-- Players texture end................................-->
-  
+
+  <healing_spell>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/healing_spell.png</filepath>
+    <tile>0</tile>
+  </healing_spell>
+
   <sword_attack_1>
     <is_sprite>0</is_sprite>
     <filepath>textures/sword_attack_1.png</filepath>

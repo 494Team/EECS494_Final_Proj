@@ -202,6 +202,8 @@ void Player::fire(kKey_type type) {
 }
 
 void Player::try_spell1() {
+  Healing_spell* new_spell = new Healing_spell(get_location(), get_current_orientation());
+  Model_state::get_instance()->add_spell(new_spell);
 }
 
 void Player::try_spell2() {

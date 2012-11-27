@@ -6,6 +6,11 @@
 
 namespace Flame {
 
+  const float kAmitabha_size = 16.f;
+  const float kAmitabha_speed = 50.f;
+  const float kAmitabha_life_time = 3.f;
+  const float kAmitabha_healing_amount = 50.f;
+
   class Attack_spell : public Spell {
   public:
     Attack_spell(const Zeni::Point2f& location_ = Zeni::Point2f(),
@@ -15,16 +20,24 @@ namespace Flame {
                  bool is_player_ = false,
                  bool heal_self_ = false,
                  Player * player_ptr_ = nullptr);
+    virtual Zeni::Point2f get_location() const {return Zeni::Point2f();}
     virtual void update_body() {}
     virtual void update(float time = 0.f); 
     virtual void render() {};
-    virtual Zeni::Point2f get_location() const {return Zeni::Point2f();}
   private:
     Collision_sector body;
     Player * player_ptr;
     float attack_strength;
     bool is_player;
     bool heal_self;
+  };
+
+  class Healing_spell : public Moving_spell_circle {
+  public:
+    Healing_spell(const Zeni::Point2f& location_ = Zeni::Point2f(),
+             const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
+    virtual void update(float time = 0.f);
+    virtual void render();
   };
 
 
