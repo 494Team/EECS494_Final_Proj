@@ -18,6 +18,7 @@ namespace Flame {
     virtual void update_body() {}
     virtual void update(float time = 0.f); 
     virtual void render() {};
+    virtual Zeni::Point2f get_location() const {return Zeni::Point2f();}
   private:
     Collision_sector body;
     Player * player_ptr;
