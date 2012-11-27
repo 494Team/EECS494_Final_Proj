@@ -5,13 +5,11 @@
 #include "Spell.h"
 #include <algorithm>
 #include <functional>
-#include <iostream>
 #include <map>
 #include <utility>
 
 using std::bind; using std::find; using std::for_each;
 using std::placeholders::_1;
-using std::cerr; using std::endl;
 using std::map;
 using std::pair; using std::make_pair;
 using std::vector;
@@ -30,19 +28,10 @@ namespace Flame {
     center_location(Point2f()),
     scale(1.f)
   {}
- 
+
   Model_state::~Model_state()
-  {
-    for (auto it = render_list.begin(); it != render_list.end(); ++it)
-      delete *it;
-    render_list.clear();
-    sim_obj_list.clear();
-    player_list.clear();
-    monster_list.clear();
-    spell_list.clear();
-    map_obj_list.clear();
-  }
-  
+  {clear();}
+
   Model_state * Model_state::get_instance()
   {
     if (!ptr)
@@ -52,11 +41,7 @@ namespace Flame {
 
   void Model_state::init(int level)
   {
-    render_list.clear();
-    sim_obj_list.clear();
-    player_list.clear();
-    monster_list.clear();
-    spell_list.clear();
+    clear();
     player_list.push_back(new Player(100.f, 200.f, 16.f, Point2f(300.f, 200.f)));
     player_list.push_back(new Player(100.f, 200.f, 16.f, Point2f(500.f, 300.f)));
     player_list.push_back(new Player(100.f, 200.f, 16.f, Point2f(500.f, 200.f)));
@@ -101,7 +86,7 @@ namespace Flame {
 
     update_scale_and_center(); // get initial scale and location
   }
-  
+
   void Model_state::update_scale_and_center()
   {
     scale = 5.f;
@@ -166,7 +151,7 @@ namespace Flame {
       else
         ++it;
     for (auto it = next_loop_update_list.begin(); it != next_loop_update_list.end(); ++it)
-      render_list.insert(*it);
+      sim_obj_list.insert(*it);
     next_loop_update_list.clear();
   }
 
@@ -203,9 +188,7 @@ namespace Flame {
 
   void Model_state::add_map_puzzle_obj(Map * map_obj_ptr)
   {
-    cerr << "adding " << render_list.size() << endl;
     render_list.insert(map_obj_ptr);
-    cerr << "adding finished" << render_list.size() << endl;
     next_loop_update_list.push_back(map_obj_ptr);
     map_puzzle_obj_list.push_back(map_obj_ptr);
   }
@@ -272,6 +255,20 @@ namespace Flame {
     for (auto it = map_obj_list.begin(); it != map_obj_list.end(); ++it)
       can_move = (*it)->can_move_player(collision_body);
     return can_move;
+  }
+
+  void Model_state::clear()
+  {
+    for (auto it = sim_obj_list.begin(); it != sim_obj_list.end(); ++it)
+      delete *it;
+    render_list.clear();
+    next_loop_update_list.clear();
+    sim_obj_list.clear();
+    player_list.clear();
+    monster_list.clear();
+    spell_list.clear();
+    map_obj_list.clear();
+    map_puzzle_obj_list.clear();
   }
 
 }

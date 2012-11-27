@@ -85,6 +85,8 @@ namespace Flame {
 
     friend class Model_state_destroyer;
   private:
+    void clear();
+
     // constructor is private thus nobody else can create one
     Model_state();
     static Model_state * ptr; // only one, class-wide
