@@ -44,6 +44,8 @@ namespace Flame {
     void make_move(float time);
       
   protected:
+    float calc_angle_between(const Zeni::Vector2f &a, const Zeni::Vector2f &b);
+
     Player* target;
     std::vector<Player *> players;
     std::map<Player *, float> hatred;

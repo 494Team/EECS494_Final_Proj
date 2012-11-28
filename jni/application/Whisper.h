@@ -17,9 +17,15 @@ namespace Flame {
     void render();
 
   private:
+
+    Zeni::Collision::Parallelepiped create_path(const Zeni::Point3f &point1, const Zeni::Point3f &point2, const float radius);
+    bool is_path_clear(const Zeni::Collision::Parallelepiped &path_obj);
+
     float damage;
     float spell_radius;
     bool is_attacking;
+    bool made_decision;
+    Random rand_inst;
   };
 }
 

@@ -12,9 +12,9 @@ Monster::Monster(
 : Agent(health_, speed_, radius_, location_),
   players((*Model_state::get_instance()->get_player_list_ptr())),
   current_time(0.0f),
-  prev_attack_time(0.0f),
   attack_gap(attack_gap_)
 {
+  prev_attack_time = - 2.0f * attack_gap_;
   for (int i = 0; i < int(players.size()); ++i) {
     hatred[players[i]] = 0.0f;
   }
@@ -88,4 +88,17 @@ void Monster::make_move(float time) {
     set_position(backup_loc);
     update_body();
   }
+}
+
+float Monster::calc_angle_between(const Zeni::Vector2f &a, const Zeni::Vector2f &b) {
+  float a_len = a.magnitude();
+  float b_len = b.magnitude();
+  float c_len = (b - a).magnitude();
+  float cos_val = (a_len * a_len + b_len * b_len - c_len * c_len) / (2 * a_len * b_len);
+  if (cos_val > 1.0f) {
+    cos_val = 1.0f;
+  } else if (cos_val < -1.0f) {
+    cos_val = -1.0f;
+  }
+  return float(acos(cos_val));
 }
