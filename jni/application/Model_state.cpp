@@ -150,6 +150,11 @@ namespace Flame {
         it = remove_spell(*it);
       else
         ++it;
+    for (auto it = monster_list.begin(); it != monster_list.end();)
+      if (!(*it)->is_active())
+        it = remove_monster(*it);
+      else
+        ++it;
     for (auto it = next_loop_update_list.begin(); it != next_loop_update_list.end(); ++it)
       sim_obj_list.push_back(*it);
     next_loop_update_list.clear();
@@ -229,6 +234,7 @@ namespace Flame {
   {
     auto it = map_puzzle_obj_list.erase(find(map_puzzle_obj_list.begin(), map_puzzle_obj_list.end(), map_obj_ptr));
     sim_obj_list.erase(find(sim_obj_list.begin(), sim_obj_list.end(), map_obj_ptr));
+    next_loop_update_list.erase(find(next_loop_update_list.begin(), next_loop_update_list.end(), map_obj_ptr));
     render_list.erase(map_obj_ptr);
     return it;
   }

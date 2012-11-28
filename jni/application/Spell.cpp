@@ -46,20 +46,21 @@ namespace Flame {
     float theta = orientation.angle_between(Vector2f(0.f, 1.f));
     if (orientation.x < 0.f)
       theta = 2 * Global::pi - theta;
+    theta += Global::pi;
     render_image(texture, // which texture to use
-                 relative_location, // upper-left corner
-                 relative_location + scale * size, // lower-right corner
+                 relative_location - scale * size / 2, // upper-left corner
+                 relative_location + scale * size / 2, // lower-right corner
                  theta, // rotation in radians
                  1.f, // scaling factor
-                 relative_location + scale * size / 2); // point to rotate & scale about
+                 relative_location); // point to rotate & scale about
   }
 
   void Moving_spell_circle::update_body()
   {
     Point2f location = get_location();
     Vector2f size = get_size();
-    body = Collision::Capsule(Point3f(location.x + size.x / 2, location.y + size.y / 2, 0.f),
-                              Point3f(location.x + size.x / 2, location.y + size.y / 2, kCollision_object_height),
+    body = Collision::Capsule(Point3f(location.x, location.y, 0.f),
+                              Point3f(location.x, location.y, kCollision_object_height),
                               size.x);
   }
 
@@ -73,8 +74,8 @@ namespace Flame {
 
   void Moving_spell_rectangle::update_body()
   {
-    Point2f location = get_location();
     Vector2f size = get_size();
+    Point2f location = get_location() - size / 2;
     body = Collision::Parallelepiped(Point3f(location.x, location.y, 0.f),
                                      Vector3f(size.x, 0.f, 0.f),
                                      Vector3f(0.f, size.y, 0.f),
@@ -124,8 +125,8 @@ namespace Flame {
     float scale = Model_state::get_instance()->get_scale();
     Point2f relative_location = (get_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
     render_image(texture, // which texture to use
-                 relative_location, // upper-left corner
-                 relative_location + scale * size); // lower-right corner
+                 relative_location - scale * size / 2, // upper-left corner
+                 relative_location + scale * size / 2); // lower-right corner
   }
 
 }

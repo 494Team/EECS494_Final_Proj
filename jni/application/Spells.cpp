@@ -90,6 +90,6 @@ namespace Flame {
   }
 
   void Arrow_attack::render()
-  {Moving_spell::render("brick");}
+  {Moving_spell::render("arrow");}
 
 }

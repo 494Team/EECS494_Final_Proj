@@ -10,8 +10,8 @@ namespace Flame {
   const float kHealing_speed = 50.f;
   const float kHealing_life_time = 3.f;
   const float kHealing_healing_amount = -50.f;
-  const Zeni::Vector2f kArrow_size = Zeni::Vector2f(16.f, 32.f);
-  const float kArrow_speed = 50.f;
+  const Zeni::Vector2f kArrow_size = Zeni::Vector2f(4.f, 16.f);
+  const float kArrow_speed = 200.f;
   const float kArrow_life_time = 5.f;
   const float kArrow_damage = 50.f;
 

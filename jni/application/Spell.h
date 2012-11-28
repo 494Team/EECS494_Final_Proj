@@ -40,7 +40,7 @@ namespace Flame {
   // all spells that can move
   class Moving_spell : public Spell, private Moving_object {
   public:
-    // location is the upper left corner!!!!!
+    // location is the center!!!!!
     Moving_spell(const Zeni::Point2f& location_ = Zeni::Point2f(),
                  const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
                  const Zeni::Vector2f& size_ = Zeni::Vector2f(),
@@ -74,7 +74,7 @@ namespace Flame {
   // all moving spells that has a circular collision body
   class Moving_spell_circle : public Moving_spell {
   public:
-    // location is the upper left corner!!!!!
+    // location is the center!!!!!
     Moving_spell_circle(const Zeni::Point2f& location_ = Zeni::Point2f(),
                         const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
                         const Zeni::Vector2f& size_ = Zeni::Vector2f(),
@@ -100,7 +100,7 @@ namespace Flame {
   // all moving spells that has a rectangle collision body
   class Moving_spell_rectangle : public Moving_spell {
   public:
-    // location is the upper left corner!!!!!
+    // location is the center!!!!!
     Moving_spell_rectangle(const Zeni::Point2f& location_ = Zeni::Point2f(),
                            const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
                            const Zeni::Vector2f& size_ = Zeni::Vector2f(),
@@ -127,7 +127,7 @@ namespace Flame {
   // all spell that is resizable
   class Resizable_spell : public Spell {
   public:
-    // location is the upper left corner!!!!!
+    // location is the center!!!!!
     Resizable_spell(const Zeni::Point2f& location_ = Zeni::Point2f(),
                     const Zeni::Vector2f& size_ = Zeni::Vector2f(),
                     const Zeni::Vector2f& resize_speed_ = Zeni::Vector2f(),
