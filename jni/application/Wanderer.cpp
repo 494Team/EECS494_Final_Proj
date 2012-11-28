@@ -12,7 +12,7 @@ Wanderer::Wanderer(
 {
   float min_dist = INFINITY;
   int idx = 0;
-  for (int i = 0; i < players.size(); ++i) {
+  for (int i = 0; i < (int)players.size(); ++i) {
     float dist = (players[i]->get_location() - get_location()).magnitude();
     if (dist < min_dist) {
       min_dist = dist;

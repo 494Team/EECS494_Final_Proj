@@ -151,7 +151,7 @@ namespace Flame {
       else
         ++it;
     for (auto it = monster_list.begin(); it != monster_list.end();)
-      if (!(*it)->is_active())
+      if (!(*it)->is_alive())
         it = remove_monster(*it);
       else
         ++it;
