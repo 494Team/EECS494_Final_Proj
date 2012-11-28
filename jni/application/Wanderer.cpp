@@ -33,8 +33,15 @@ void Wanderer::attack() {
 }
 
 void Wanderer::update(float time) {
-  update_current_time(time);
-  update_rel_loc();
+  Monster::update(time);
+  if (is_freeze()) {
+    return;
+  }
+  if (is_hitback()) {
+    set_moving(true);
+    make_move(time);
+    return;
+  }
 
   // move
   target = highest_hatred();

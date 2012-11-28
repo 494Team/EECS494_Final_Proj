@@ -4,6 +4,7 @@
 #include "Moving_object.h"
 #include "Sim_object.h"
 #include "Collision.h"
+#include <map>
 
 namespace Flame {
 
@@ -21,37 +22,38 @@ namespace Flame {
       initial_health(health_),
       health(health_),
       alive(true),
-      radius(radius_)
+      radius(radius_),
+      hitback(false),
+      freeze(false)
     {}
 
     Zeni::Point2f get_location()const {return Moving_object::get_current_location();}
     float get_current_health() const {return health;}
     const Zeni::Collision::Capsule& get_body() const {return body;}
     bool is_alive() const {return alive;}
-    void update_body()
-    {
-      body = Zeni::Collision::Capsule(Zeni::Point3f(get_location().x, get_location().y, 0.f),
-                                      Zeni::Point3f(get_location().x, get_location().y, kCollision_object_height),
-                                      radius);
-	  }
+    bool is_hitback() const {return hitback;}
+    bool is_freeze() const {return freeze;}
+
+    void update(float time);
+
+    void update_body();
+
     // decrease health (if damage is negative, then increase)
-    void dec_health(const float &damage) {
-      health -= damage;
-      if (health < 0) {
-        alive = false;
-        health = 0.0f;
-      }
-      if (health > initial_health) {
-        health = initial_health;
-      }
-    }
+    void dec_health(const float &damage);
+
+    void get_hit(const float &damage, const std::vector<attack_effect> &effects);
   
   private:
+    std::map<attack_effect, float> effect_timers;
     Zeni::Collision::Capsule body;
     float initial_health;
     float health;
     bool alive;
     float radius;
+
+    // effects
+    bool hitback;
+    bool freeze;
   };
 
 }

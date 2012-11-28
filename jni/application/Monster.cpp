@@ -24,11 +24,6 @@ void Monster::increase_hatred(const float &hate_, Player* player) {
   hatred[player] += hate_;
 }
 
-void Monster::get_hit(const float &damage, Player* source) {
-  increase_hatred(damage, source);
-  dec_health(damage);
-}
-
 Player * Monster::highest_hatred() {
   float max_hatred = -1.0f;
   Player* target_player = NULL;
@@ -101,4 +96,10 @@ float Monster::calc_angle_between(const Zeni::Vector2f &a, const Zeni::Vector2f 
     cos_val = -1.0f;
   }
   return float(acos(cos_val));
+}
+
+void Monster::update(float time) {
+  Agent::update(time);
+  update_current_time(time);
+  update_rel_loc();
 }

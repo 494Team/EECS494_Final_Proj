@@ -19,9 +19,6 @@ namespace Flame {
     // increase hatred for a specific player
     void increase_hatred(const float &hate_, Player* player);
 
-    // get hit from player, cause hatred increase
-    void get_hit(const float &damage, Player* source);
-
     // find player with the highest hatred
     Player * highest_hatred();
     // find player nearest to this monster
@@ -42,6 +39,8 @@ namespace Flame {
     void update_rel_loc();
 
     void make_move(float time);
+
+    void update(float time);
       
   protected:
     float calc_angle_between(const Zeni::Vector2f &a, const Zeni::Vector2f &b);

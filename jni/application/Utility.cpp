@@ -44,6 +44,10 @@ namespace Flame {
   const float WHISPER_SPELL_RADIUS = 16.0f;
   const float WHISPER_MIN_DIST = 100.0f;
   const float WHISPER_MAX_DIST = 500.0f;
+
+  const float HITBACK_TIME = 2.0f;
+  const float SLOWDOWN_TIME = 2.0f;
+  const float FREEZE_TIME = 2.0f;
   
   bool Less_than::operator() (const Sim_object * lhs, const Sim_object * rhs)
   {

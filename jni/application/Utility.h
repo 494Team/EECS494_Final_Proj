@@ -52,6 +52,11 @@ namespace Flame{
   extern const float WHISPER_MIN_DIST;
   extern const float WHISPER_MAX_DIST;
 
+  // attack effect time
+  extern const float HITBACK_TIME;
+  extern const float SLOWDOWN_TIME;
+  extern const float FREEZE_TIME;
+
   // forward declaration
   class Sim_object;
   class Player;
@@ -69,6 +74,12 @@ namespace Flame{
       {}
 
     std::string msg;
+  };
+
+  enum attack_effect {
+    HITBACK,
+    SLOWDOWN,
+    FREEZE
   };
 
   enum kKey_type {

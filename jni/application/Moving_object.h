@@ -10,7 +10,7 @@ namespace Flame {
     Moving_object(
       const float &speed_ = 0.0f, 
       const Zeni::Point2f &location_ = Zeni::Point2f())
-    : is_moving(false), speed(speed_), location(location_), orientation(Zeni::Vector2f())
+    : is_moving(false), speed(speed_), initial_speed(speed_), location(location_), orientation(Zeni::Vector2f())
     {}
 
     bool is_currently_moving() const {return is_moving;}
@@ -27,6 +27,9 @@ namespace Flame {
     // update speed
     void set_speed(const float &speed_) { speed = speed_; }
 
+    // recover to initial speed
+    void recover_speed() { speed = initial_speed; }
+
     // update is_moving
     void set_moving(const bool &is_moving_) { is_moving = is_moving_; }
 
@@ -40,6 +43,7 @@ namespace Flame {
   private:
     bool is_moving;
     float speed;
+    float initial_speed;
     Zeni::Point2f location;
 
     // orientation should be unit vector

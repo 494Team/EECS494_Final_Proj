@@ -57,8 +57,15 @@ bool Whisper::is_path_clear(const Zeni::Collision::Parallelepiped &path_obj) {
 }
 
 void Whisper::update(float time) {
-  update_current_time(time);
-  update_rel_loc();
+  Monster::update(time);
+  if (is_freeze()) {
+    return;
+  }
+  if (is_hitback()) {
+    set_moving(true);
+    make_move(time);
+    return;
+  }
 
   target = highest_hatred();
 
