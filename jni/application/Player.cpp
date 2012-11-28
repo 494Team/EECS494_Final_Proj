@@ -9,11 +9,12 @@ Player::Player(
   const float &radius_,
   const Zeni::Point2f &location_)
 : Agent(health_, speed_, radius_, location_),
-  wpinuse(false),
+  normal_attack(false),
   damaged(false),
   running_status(false),
   bloodsucking(false),
-  ptype(SANZANG),
+  shielding(false),
+  ptype(BAJIE),
 //size(Zeni::Vector2f(radius_ * 2, radius_ * 2))
   size(radius_)
 {
@@ -23,6 +24,28 @@ Player::Player(
   last_spell1 = current_time;
   last_spell2 = current_time;
   last_spell3 = current_time;
+  switch (ptype) {
+    case SANZANG:
+      spell1_CD = kSpell1_CD;
+      spell2_CD = kSpell2_CD;
+      spell3_CD = kSpell3_CD;
+      break;
+    case WUKONG:
+      spell1_CD = kSpell1_CD;
+      spell2_CD = kSpell2_CD;
+      spell3_CD = kSpell3_CD;
+      break;
+    case SHASENG:
+      spell1_CD = kSpell1_CD;
+      spell2_CD = kSpell2_CD;
+      spell3_CD = kSpell3_CD;
+      break;
+    default: // case BAJIE:
+      spell1_CD = kSpell1_CD;
+      spell2_CD = kSpell2_CD;
+      spell3_CD = kSpell3_CD;
+      break;
+  }
 }
 
 void Player::update(float time) {
@@ -54,11 +77,17 @@ void Player::update(float time) {
 
   rel_loc = (get_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
 
+  // local spell removing
   const Zeni::Time_HQ current_time = Zeni::get_Timer_HQ().get_time();
   float passed_time = float(current_time.get_seconds_since(last_htime));
-  if (wpinuse && passed_time > kAttack_show_time) {
-    wpinuse = false;
+  if (normal_attack && passed_time > kAttack_show_time) {
+    normal_attack = false;
   }
+
+  if (ptype == BAJIE && shielding && float(current_time.get_seconds_since(last_spell1)) > kShield_last) {
+    shielding = false;
+  }
+  //
 
   float render_passed_time = float(current_time.get_seconds_since(render_clock));
   if (render_passed_time > kRun_render_gap) {
@@ -68,7 +97,7 @@ void Player::update(float time) {
     
 
   //hit
-  if (wpinuse && !damaged) {
+  if (normal_attack && !damaged) {
     //create damage
     damaged = true;
     //search the enemy list
@@ -114,9 +143,14 @@ void Player::render() {
   
   player_texture = Zeni::String(ttype);//("monkey_king_front");
 
-render_image(player_texture,
-       Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
-       Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
+  render_image(player_texture,
+         Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
+         Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
+  if (shielding) {
+    render_image("shield",
+           Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
+           Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
+  }
 
   //render the orientation arrow
   /*
@@ -138,7 +172,7 @@ render_image(
   rel_loc,
   false);
   //render weapon attacking
-  if (wpinuse)
+  if (normal_attack)
 
  /*
     render_image(
@@ -171,7 +205,7 @@ void Player::fire(kKey_type type) {
       case A2:
       case A3:
       case A4:
-        wpinuse = true;
+        normal_attack = true;
         damaged = false;
         new_spell = new Attack_spell(get_location(),
                                         get_current_orientation(),
@@ -220,10 +254,14 @@ void Player::fire(kKey_type type) {
   }
 }
 
+void Player::shield() {
+  shielding = true;
+}
+
 void Player::try_spell1(const Zeni::Time_HQ current_time) {
   float passed_time = float(current_time.get_seconds_since(last_spell1));
   Spell* new_spell;
-  if (passed_time > kSpell1_CD) {
+  if (passed_time > spell1_CD) {
     last_spell1 = current_time;
     //create spell based on character type
     switch (ptype) {
@@ -238,6 +276,7 @@ void Player::try_spell1(const Zeni::Time_HQ current_time) {
       case SHASENG:
         break;
       default: // case BAJIE:
+        shield();
         break;
     }
   }
@@ -246,7 +285,7 @@ void Player::try_spell1(const Zeni::Time_HQ current_time) {
 void Player::try_spell2(const Zeni::Time_HQ current_time) {
   float passed_time = float(current_time.get_seconds_since(last_spell2));
   Healing_spell* new_spell;
-  if (passed_time > kSpell2_CD) {
+  if (passed_time > spell2_CD) {
     last_spell2 = current_time;
     //create spell based on character type
     switch (ptype) {
@@ -265,7 +304,7 @@ void Player::try_spell2(const Zeni::Time_HQ current_time) {
 void Player::try_spell3(const Zeni::Time_HQ current_time) {
   float passed_time = float(current_time.get_seconds_since(last_spell3));
   Healing_spell* new_spell;
-  if (passed_time > kSpell3_CD) {
+  if (passed_time > spell3_CD) {
     last_spell3 = current_time;
     //create spell based on character type
     switch (ptype) {

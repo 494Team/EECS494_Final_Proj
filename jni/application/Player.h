@@ -15,6 +15,7 @@ using namespace Zeni;
 
 namespace Flame {
   #define PLAYER_ATTACK_INTERVAL 0.5f
+  //temp
   const float kSpell1_CD = 1.0f;
   const float kSpell2_CD = 1.0f;
   const float kSpell3_CD = 1.0f;
@@ -28,6 +29,11 @@ namespace Flame {
   const float kRun_render_gap = 0.2f;
   const float kPlayer_attack_range = 40.0f;
   const float kPlayer_attack_strengh = 100.0f;
+
+  // spells
+  const float kShield_last = 0.5f;
+  const float kShield_CD = 1.0f;
+  const float kShield_effect = 0.5f;
 
   class Player: public Agent {
   public:
@@ -55,15 +61,24 @@ namespace Flame {
     }
 
     //attack
-    bool wpinuse;
+    bool normal_attack;
     bool damaged; //whether the normal attack has created a damage
     Zeni::Time_HQ last_htime;
 
     //spell status
-    bool bloodsucking;
+    float spell1_CD;
+    float spell2_CD;
+    float spell3_CD;
     Zeni::Time_HQ last_spell1;
     Zeni::Time_HQ last_spell2;
     Zeni::Time_HQ last_spell3;
+    //SANZANG
+    //WUKONG
+    //SHASENG
+    //BAJIE
+    bool bloodsucking;
+    bool shielding;
+    void shield();
 
     //running renderer
     bool running_status;
