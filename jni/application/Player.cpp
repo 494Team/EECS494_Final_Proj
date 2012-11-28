@@ -87,6 +87,9 @@ void Player::update(float time) {
   if (ptype == BAJIE && shielding && float(current_time.get_seconds_since(last_spell1)) > kShield_last) {
     shielding = false;
   }
+  if (ptype == BAJIE && bloodsucking && float(current_time.get_seconds_since(last_spell3)) > kBloodsuck_last) {
+    bloodsucking = false;
+  }
   //
 
   float render_passed_time = float(current_time.get_seconds_since(render_clock));
@@ -148,6 +151,11 @@ void Player::render() {
          Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
   if (shielding) {
     render_image("shield",
+           Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
+           Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
+  }
+  if (bloodsucking) {
+    render_image("bloodsuck",
            Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
            Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
   }
@@ -253,6 +261,9 @@ void Player::fire(kKey_type type) {
     //in PLAYER_ATTACK_INTERVAL
   }
 }
+void Player::bloodsuck() {
+  bloodsucking = true;
+}
 
 void Player::shield() {
   shielding = true;
@@ -315,6 +326,7 @@ void Player::try_spell3(const Zeni::Time_HQ current_time) {
       case SHASENG:
         break;
       default: // case BAJIE:
+        bloodsuck();
         break;
     }
   }
