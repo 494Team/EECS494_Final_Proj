@@ -81,8 +81,8 @@ public:
     Model_state::get_instance()->init(0);
     Wanderer* wanderer = new Wanderer(Zeni::Point2f(100, 200));
     Model_state::get_instance()->add_monster(wanderer);
-    Whisper* whisper = new Whisper(Zeni::Point2f(400, 100));
-    Model_state::get_instance()->add_monster(whisper);
+    Whisper* whisper_1 = new Whisper(Zeni::Point2f(400, 100));
+    Model_state::get_instance()->add_monster(whisper_1);
   }
 
 private:
