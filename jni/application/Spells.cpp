@@ -92,4 +92,30 @@ namespace Flame {
   void Arrow_attack::render()
   {Moving_spell::render("arrow");}
 
+
+  // Boss1
+  Fire_ball::Fire_ball(const Point2f& location_, const Vector2f& orientation_) :
+    Moving_spell_circle(location_ + 50.f * orientation_.normalized(),
+                        orientation_,
+                        Vector2f(kFireball_size, kFireball_size),
+                        kFireball_speed,
+                        kFireball_life_time)
+    {}
+
+  void Fire_ball::update(float time)
+  {
+    Moving_spell_circle::update(time);
+    if (is_active()) {
+      vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
+      for (auto it = player_list_ptr->begin(); it != player_list_ptr->end(); ++it)
+        if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
+          (*it)->dec_health(kFireball_damage);
+          disable_spell();
+          break;
+        }
+    }
+  }
+
+  void Fire_ball::render()
+  {Moving_spell::render("fire_ball");}
 }

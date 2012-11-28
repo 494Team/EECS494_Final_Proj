@@ -10,10 +10,16 @@ namespace Flame {
   const float kHealing_speed = 50.f;
   const float kHealing_life_time = 3.f;
   const float kHealing_healing_amount = -50.f;
+
   const Zeni::Vector2f kArrow_size = Zeni::Vector2f(4.f, 16.f);
   const float kArrow_speed = 200.f;
   const float kArrow_life_time = 5.f;
   const float kArrow_damage = 50.f;
+
+  const float kFireball_size = 16.0f;
+  const float kFireball_speed = 50.0f;
+  const float kFireball_life_time = 3.0f;
+  const float kFireball_damage = 50.0f;
 
   class Attack_spell : public Spell {
   public:
@@ -48,6 +54,16 @@ namespace Flame {
   public:
     Arrow_attack(const Zeni::Point2f& location_ = Zeni::Point2f(),
                  const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
+    virtual void update(float time = 0.f);
+    virtual void render();
+  };
+
+
+  // Boss1
+  class Fire_ball : public Moving_spell_circle {
+  public:
+    Fire_ball(const Zeni::Point2f& location_ = Zeni::Point2f(),
+                  const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
     virtual void update(float time = 0.f);
     virtual void render();
   };

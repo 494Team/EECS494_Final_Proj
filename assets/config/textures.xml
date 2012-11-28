@@ -270,6 +270,14 @@ The following things are unsupported:
   </pigsy_right1>
   <!-- Players texture end................................-->
 
+  <!-- Players cursor start..............................-->
+  <fire_ball>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/fire_ball.png</filepath>
+    <tile>0</tile>
+  </fire_ball>
+  <!-- Players cursor end................................-->
+  
   <healing_spell>
     <is_sprite>0</is_sprite>
     <filepath>textures/healing_spell.png</filepath>
