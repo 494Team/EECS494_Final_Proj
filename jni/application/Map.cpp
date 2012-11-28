@@ -2,7 +2,7 @@
 #include <vector>
 #include "Player.h"
 #include "Map.h"
-#include "Model_state.h"
+
 #include "Utility.h"
 #include <cassert>
 using namespace Zeni;
@@ -131,10 +131,12 @@ namespace Flame {
     void Map_floor_illuminate::render() {
         Video &vr = get_Video();
         Material Brick_material;
+
         if(illuminated)
             Brick_material = Material(illuminate_texture);
         else
             Brick_material = Material(Brick_texture);
+
         brick.fax_Material(&Brick_material);
         vr.render(brick);
     }
@@ -163,31 +165,31 @@ namespace Flame {
 		
     for (vector<Map *>::iterator it = map_obj_list->begin();
 			it != map_obj_list->end();
-			++it){
-				if (collision_body.intersects((*it)->get_body())){
+			++it)
+    {
+				if (collision_body.intersects((*it)->get_body()))
+        {
 					if (short_dis > (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z)))
 						short_dis = (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z));
 				}
 		}
 
     int cnt = 0;
+    Player *collided_player;
 		for (vector<Player *>::iterator it = player_list->begin();
 			   it != player_list->end();
-			  ++it)
+			   ++it)
     {
       ++cnt;
-      if(cnt!=player){
-			  if (collision_body.intersects((*it)->get_body())){
-			    if (short_dis > (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z))){
-        	  Vector2f orient = (*it)->get_current_orientation();
-					  float angle = orient.angle_between(dir) * 2;
-					  Quaternion change = Quaternion::Axis_Angle(Vector3f(0.0f, 0.0f, 1.0f), angle);
-					  Vector3f dir3 = Vector3f(dir.x, dir.y, 0.f);
-					  dir3 = change*dir3;
+      if(cnt!=player)
+      {
+			  if (collision_body.intersects((*it)->get_body()))
+        {
+			    if (short_dis > (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z)))
+          {
+        	  short_dis = (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z));
 
-					  new_dir = Vector2f(dir3.x, dir3.y);
-            short_dis = (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z));
-
+            collided_player = *it;
             player_location = (*it)->get_location();
             player_collide_no = cnt;
             player_collide = true;
@@ -196,27 +198,37 @@ namespace Flame {
       }
     }
 
-   
+    if (player_collide)
+    { 
+      Vector2f orient = collided_player->get_current_orientation();
+      Quaternion change = Quaternion::Axis_Angle(Vector3f(0.0f, 0.0f, 1.0f), -Global::pi / 2);
+			Vector3f dir3 = Vector3f(dir.x, dir.y, 0.f);
+			dir3 = change*dir3;
 
-    if (player_collide){ 
-      if (child != NULL){
+			new_dir = Vector2f(dir3.x, dir3.y);
+      
+      if (child != NULL)
+      {
         child->set_location(player_location);
         child->set_dir(new_dir);
         child->set_player(player_collide_no);
       }
-      else{
+      else
+      {
         tmp = new Map_light_beam(player_location, new_dir, player_collide_no);
         Model_state::get_instance()->add_map_puzzle_obj(tmp);   
         child = tmp;
       }
     }
-    else{
-      if(child != NULL){
+    else
+    {
+      if(child != NULL)
+      {
         Model_state::get_instance()->remove_map_puzzle_obj(child);
         child = NULL;
       }
     }
-        
+    
 	  dis = short_dis;
 
 	  render_end = dis * dir + render_start;

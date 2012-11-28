@@ -1,6 +1,6 @@
 #ifndef MAP_H
 #define MAP_H
-
+#include "Model_state.h"
 #include "Collision.h"
 #include "Sim_object.h"
 
@@ -66,8 +66,13 @@ namespace Flame {
 		float rel_ccw, dis;
     int player;
     Map_light_beam *child;
+    ~Map_light_beam(){
+      if(child)
+        Model_state::get_instance()->remove_map_puzzle_obj(child);
+    };
 	};
 
+  
 
 
 
