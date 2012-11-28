@@ -12,7 +12,11 @@ void Agent::update_body()
 }
 
 void Agent::dec_health(const float &damage) {
-  health -= damage;
+  if (damage < 0.0f) {
+    health -= damage;
+  } else {
+    health -= damage * armor;
+  }
   if (health < 0) {
     alive = false;
     health = 0.0f;

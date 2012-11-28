@@ -24,7 +24,8 @@ namespace Flame {
       alive(true),
       radius(radius_),
       hitback(false),
-      freeze(false)
+      freeze(false),
+      armor(1.0f)
     {}
 
     Zeni::Point2f get_location()const {return Moving_object::get_current_location();}
@@ -33,6 +34,9 @@ namespace Flame {
     bool is_alive() const {return alive;}
     bool is_hitback() const {return hitback;}
     bool is_freeze() const {return freeze;}
+    float get_armor() const {return armor;}
+
+    void set_armor(float armor_) { armor = armor_; }
 
     void update(float time);
 
@@ -46,6 +50,7 @@ namespace Flame {
   private:
     std::map<attack_effect, float> effect_timers;
     Zeni::Collision::Capsule body;
+    float armor; // armor is between 0.0 and 1.0
     float initial_health;
     float health;
     bool alive;
