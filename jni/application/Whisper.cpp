@@ -9,7 +9,8 @@ Whisper::Whisper(const Zeni::Point2f &location_)
   damage(WHISPER_DAMAGE),
   spell_radius(WHISPER_SPELL_RADIUS),
   is_attacking(false),
-  made_decision(false)
+  made_decision(false),
+  decision_time(1.0f)
  {
 
   set_orientation(Zeni::Vector2f(1.0f, 0.0f));
@@ -45,15 +46,15 @@ Zeni::Collision::Parallelepiped Whisper::create_path(const Zeni::Point3f &point1
 }
 
 bool Whisper::is_path_clear(const Zeni::Collision::Parallelepiped &path_obj) {
-  bool attack_path_clear = true;
+  bool path_clear = true;
   std::vector<Map *> * map_obj_list = Model_state::get_instance()->get_map_obj_list_ptr();
   for (std::vector<Map *>::iterator it = map_obj_list->begin(); it != map_obj_list->end(); ++it) {
     if ((*it)->get_body().intersects(path_obj)) {
-      attack_path_clear = false;
+      path_clear = false;
       break;
     }
   }
-  return attack_path_clear;
+  return path_clear;
 }
 
 void Whisper::update(float time) {
@@ -63,6 +64,14 @@ void Whisper::update(float time) {
   }
   if (is_hitback()) {
     set_moving(true);
+    make_move(time);
+    return;
+  }
+
+  decision_time += time;
+  if (decision_time > 0.5f) {
+    decision_time = 0.0f;
+  } else {
     make_move(time);
     return;
   }
@@ -80,18 +89,18 @@ void Whisper::update(float time) {
     if (!attack_path_clear) {
       Zeni::Collision::Parallelepiped temp_spell_path = create_path(Zeni::Point3f(target_loc.x, my_loc.y, 0.0f), target_loc, spell_radius);
       Zeni::Collision::Parallelepiped temp_walk_path = create_path(my_loc, Zeni::Point3f(target_loc.x, my_loc.y, 0.0f), get_body().get_radius());
-      if (is_path_clear(temp_spell_path) && is_path_clear(temp_spell_path)) {
+      if (is_path_clear(temp_spell_path) && is_path_clear(temp_walk_path)) {
         Zeni::Vector3f ori_3 = Zeni::Point3f(target_loc.x, my_loc.y, 0.0f) - my_loc;
         set_orientation(Zeni::Vector2f(ori_3.x, ori_3.y));
       } else {
         temp_spell_path = create_path(Zeni::Point3f(my_loc.x, target_loc.y, 0.0f), target_loc, spell_radius);
         temp_walk_path = create_path(my_loc, Zeni::Point3f(my_loc.x, target_loc.y, 0.0f), get_body().get_radius());
-        if (is_path_clear(temp_spell_path) && is_path_clear(temp_spell_path)) {
+        if (is_path_clear(temp_spell_path) && is_path_clear(temp_walk_path)) {
           Zeni::Vector3f ori_3 = Zeni::Point3f(my_loc.x, target_loc.y, 0.0f) - my_loc;
           set_orientation(Zeni::Vector2f(ori_3.x, ori_3.y));
         } else {
           // make random move
-          set_orientation(Zeni::Vector2f(rand_inst.frand_lte(), rand_inst.frand_lte()));
+          set_orientation(Zeni::Vector2f(rand_inst.frand_lte() * 2.0f - 1.0f, rand_inst.frand_lte() * 2.0f - 1.0f));
         }
       }
       make_move(time);
