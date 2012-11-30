@@ -4,6 +4,7 @@
 #include "Moving_object.h"
 #include "Sim_object.h"
 #include "Collision.h"
+#include "Model_state.h"
 #include <map>
 
 namespace Flame {
@@ -41,6 +42,8 @@ namespace Flame {
     void update(float time);
 
     void update_body();
+
+    void render();
 
     // decrease health (if damage is negative, then increase)
     void dec_health(const float &damage);

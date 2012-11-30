@@ -57,6 +57,8 @@ namespace Flame{
   extern const float SLOWDOWN_TIME;
   extern const float FREEZE_TIME;
 
+  const float kHpbar_width = 3.0f;
+
   // forward declaration
   class Sim_object;
   class Player;

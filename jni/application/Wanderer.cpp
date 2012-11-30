@@ -95,4 +95,6 @@ void Wanderer::render() {
       rel_loc
     );
   }
+
+  Agent::render();
 }

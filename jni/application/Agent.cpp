@@ -1,4 +1,5 @@
 #include <Agent.h>
+#include <zenilib.h>
 
 using namespace Flame;
 
@@ -47,6 +48,19 @@ void Agent::update(float time) {
   }
 }
 
+void Agent::render() {
+  float scale = Model_state::get_instance()->get_scale();
+  Zeni::Point2f rel_loc = (get_location() - Model_state::get_instance()->get_center_location()) * scale + Zeni::Point2f(400.0f, 300.0f);
+  Zeni::Video &vr = Zeni::get_Video();
+  Zeni::Colors &cr = Zeni::get_Colors();
+
+  Zeni::Vertex2f_Color hpp0(rel_loc - Zeni::Point2f(radius, radius * 1.7f), cr["red"]);
+  Zeni::Vertex2f_Color hpp1(rel_loc - Zeni::Point2f(radius, radius * 1.7f) + Zeni::Point2f(0.0f, kHpbar_width), cr["red"]);
+  Zeni::Vertex2f_Color hpp2(rel_loc - Zeni::Point2f(radius, radius * 1.7f) + Zeni::Point2f(2 * radius * health/initial_health, kHpbar_width), cr["red"]);
+  Zeni::Vertex2f_Color hpp3(rel_loc - Zeni::Point2f(radius, radius * 1.7f) + Zeni::Point2f(2 * radius * health/initial_health, 0.0f), cr["red"]);
+  Zeni::Quadrilateral<Zeni::Vertex2f_Color> hppanel(hpp0, hpp1, hpp2, hpp3);
+  vr.render(hppanel);
+}
 
 void Agent::get_hit(const float &damage, const std::vector<attack_effect> &effects = std::vector<attack_effect>()) {
   dec_health(damage);

@@ -164,4 +164,6 @@ void Whisper::render() {
       rel_loc
     );
   }
+
+  Agent::render();
 }

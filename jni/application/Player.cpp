@@ -200,6 +200,7 @@ render_image(
                  rel_loc,
                  false);
       
+  Agent::render();
 }
 
 void Player::fire(kKey_type type) {
