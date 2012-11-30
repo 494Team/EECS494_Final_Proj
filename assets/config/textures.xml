@@ -287,6 +287,17 @@ The following things are unsupported:
     <tile>0</tile>
   </bloodsuck>
   <!-- Players skill end................................-->
+
+  <dialog_box>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/dialog_box.png</filepath>
+    <tile>0</tile>
+  </dialog_box>
+  <button>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/button.png</filepath>
+    <tile>0</tile>
+  </button>
   
   <healing_spell>
     <is_sprite>0</is_sprite>

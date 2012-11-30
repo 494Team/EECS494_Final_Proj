@@ -89,6 +89,13 @@ namespace Flame{
 
     std::string msg;
   };
+  
+  enum Dialog_state {
+    NO_DIALOG,
+    LVL1_1,
+    LVL2_1,
+    LVL3_1
+  };
 
   enum attack_effect {
     HITBACK,

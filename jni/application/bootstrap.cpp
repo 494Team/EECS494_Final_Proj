@@ -18,6 +18,7 @@
 #include "Player.h"
 #include "Wanderer.h"
 #include "Whisper.h"
+#include "Dialog_box.h"
 
 #if defined(_DEBUG) && defined(_WINDOWS)
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -31,10 +32,11 @@ using namespace Flame;
 class Play_State : public Gamestate_II {
   Play_State(const Play_State &);
   Play_State operator=(const Play_State &);
-
+  Dialog_box dialog;
 public:
   Play_State() :
-    m_time_passed(0.f)
+    m_time_passed(0.f),
+    dialog(NO_DIALOG)
   {
     set_pausable(true);
 
@@ -247,6 +249,7 @@ private:
 
   void render()
   {
+
     Video &vr = get_Video();
     get_Video().set_2d(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
 
@@ -272,11 +275,11 @@ private:
     vr.render(map);
 
     Model_state::get_instance()->render();
+    dialog.render();
   }
 
   float m_time_passed;
   Chronometer<Time> m_set;
-
 };
 
 class Instructions_State : public Widget_Gamestate {
