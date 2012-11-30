@@ -18,7 +18,7 @@ void Agent::dec_health(const float &damage) {
   } else {
     health -= damage * armor;
   }
-  if (health < 0) {
+  if (health <= 0) {
     alive = false;
     health = 0.0f;
   }
@@ -54,10 +54,10 @@ void Agent::render() {
   Zeni::Video &vr = Zeni::get_Video();
   Zeni::Colors &cr = Zeni::get_Colors();
 
-  Zeni::Vertex2f_Color hpp0(rel_loc - Zeni::Point2f(radius, radius * 1.7f), cr["red"]);
-  Zeni::Vertex2f_Color hpp1(rel_loc - Zeni::Point2f(radius, radius * 1.7f) + Zeni::Point2f(0.0f, kHpbar_width), cr["red"]);
-  Zeni::Vertex2f_Color hpp2(rel_loc - Zeni::Point2f(radius, radius * 1.7f) + Zeni::Point2f(2 * radius * health/initial_health, kHpbar_width), cr["red"]);
-  Zeni::Vertex2f_Color hpp3(rel_loc - Zeni::Point2f(radius, radius * 1.7f) + Zeni::Point2f(2 * radius * health/initial_health, 0.0f), cr["red"]);
+  Zeni::Vertex2f_Color hpp0(rel_loc - Zeni::Point2f(radius * scale, radius * 1.6f * scale), cr["red"]);
+  Zeni::Vertex2f_Color hpp1(rel_loc - Zeni::Point2f(radius * scale, radius * 1.6f * scale) + Zeni::Point2f(0.0f, kHpbar_width * scale), cr["red"]);
+  Zeni::Vertex2f_Color hpp2(rel_loc - Zeni::Point2f(radius * scale, radius * 1.6f * scale) + Zeni::Point2f(2 * radius * health/initial_health * scale, kHpbar_width * scale), cr["red"]);
+  Zeni::Vertex2f_Color hpp3(rel_loc - Zeni::Point2f(radius * scale, radius * 1.6f * scale) + Zeni::Point2f(2 * radius * health/initial_health * scale, 0.0f), cr["red"]);
   Zeni::Quadrilateral<Zeni::Vertex2f_Color> hppanel(hpp0, hpp1, hpp2, hpp3);
   vr.render(hppanel);
 }
