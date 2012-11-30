@@ -33,10 +33,11 @@ class Play_State : public Gamestate_II {
   Play_State(const Play_State &);
   Play_State operator=(const Play_State &);
   Dialog_box dialog;
+  int lvl;
 public:
   Play_State() :
     m_time_passed(0.f),
-    dialog(NO_DIALOG)
+    lvl(0)
   {
     set_pausable(true);
 
@@ -85,6 +86,9 @@ public:
     Model_state::get_instance()->add_monster(wanderer);
     Whisper* whisper_1 = new Whisper(Zeni::Point2f(400, 100));
     Model_state::get_instance()->add_monster(whisper_1);
+
+    //!!! test
+    dialog.start(lvl);
   }
 
 private:
@@ -133,7 +137,12 @@ private:
         break;
 
       case A1:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(A1);
+        if(confidence == 1.0f) {
+          if (dialog.is_goingon()) {
+            dialog.proceed();
+          }
+          (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(A1);
+        }
         break;
       case B1:
         (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(B1);
