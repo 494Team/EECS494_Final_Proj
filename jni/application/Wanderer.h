@@ -18,7 +18,6 @@ namespace Flame {
   private:
     float damage;
     float attack_radius;
-    bool is_attacking;
   };
 }
 

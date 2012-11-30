@@ -12,12 +12,26 @@ Monster::Monster(
 : Agent(health_, speed_, radius_, location_),
   players((*Model_state::get_instance()->get_player_list_ptr())),
   current_time(0.0f),
-  attack_gap(attack_gap_)
+  attack_gap(attack_gap_),
+  is_attacking(false)
 {
   prev_attack_time = - 2.0f * attack_gap_;
   for (int i = 0; i < int(players.size()); ++i) {
     hatred[players[i]] = 0.0f;
   }
+
+  set_orientation(Zeni::Vector2f(1.0f, 0.0f));
+  float min_dist = INFINITY;
+  int idx = 0;
+  for (int i = 0; i < (int)players.size(); ++i) {
+    float dist = (players[i]->get_location() - get_location()).magnitude();
+    if (dist < min_dist) {
+      min_dist = dist;
+      idx = i;
+    }
+  }
+  hatred[players[idx]] += INITIAL_HATRED;
+  set_moving(true); 
 }
 
 void Monster::increase_hatred(const float &hate_, Player* player) {
@@ -47,6 +61,11 @@ Player * Monster::nearest_player() {
     }
   }
   return nearest_p;
+}
+
+void Monster::attack() {
+  set_prev_attack_time(get_current_time());
+  is_attacking = true;
 }
 
 bool Monster::can_attack() {

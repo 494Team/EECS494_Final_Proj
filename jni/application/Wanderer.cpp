@@ -7,26 +7,12 @@ Wanderer::Wanderer(
   const Zeni::Point2f &location_)
 : Monster(WANDERER_HEALTH, WANDERER_SPEED, WANDERER_RADIUS, WANDERER_ATTACK_GAP, location_),
   damage(WANDERER_DAMAGE),
-  attack_radius(WANDERER_ATTACK_RADIUS),
-  is_attacking(false)
-{
-  float min_dist = INFINITY;
-  int idx = 0;
-  for (int i = 0; i < (int)players.size(); ++i) {
-    float dist = (players[i]->get_location() - get_location()).magnitude();
-    if (dist < min_dist) {
-      min_dist = dist;
-      idx = i;
-    }
-  }
-  hatred[players[idx]] += INITIAL_HATRED;
-  set_moving(true);
-}
+  attack_radius(WANDERER_ATTACK_RADIUS)
+{}
 
 void Wanderer::attack() {
   //Collision_sector attack_sector(get_location(), get_current_orientation(), attack_radius);
-  set_prev_attack_time(get_current_time());
-  is_attacking = true;
+  Monster::attack();
 
   // TODO: add attack sector to spell vector
   //Model_state::get_instance()->get_spell_list_ptr()->push_back(

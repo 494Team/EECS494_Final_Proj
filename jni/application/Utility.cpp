@@ -48,7 +48,7 @@ namespace Flame {
   const float HITBACK_TIME = 2.0f;
   const float SLOWDOWN_TIME = 2.0f;
   const float FREEZE_TIME = 2.0f;
-  
+
   bool Less_than::operator() (const Sim_object * lhs, const Sim_object * rhs)
   {
     if (lhs->get_location().y < rhs->get_location().y)

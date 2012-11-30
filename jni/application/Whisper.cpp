@@ -1,6 +1,5 @@
 #include "Whisper.h"
 #include "zenilib.h"
-#include <iostream>
 
 using namespace Flame;
 
@@ -8,28 +7,12 @@ Whisper::Whisper(const Zeni::Point2f &location_)
 : Monster(WHISPER_HEALTH, WHISPER_SPEED, WHISPER_RADIUS, WHISPER_ATTACK_GAP, location_),
   damage(WHISPER_DAMAGE),
   spell_radius(WHISPER_SPELL_RADIUS),
-  is_attacking(false),
   made_decision(false),
   decision_time(1.0f)
- {
-
-  set_orientation(Zeni::Vector2f(1.0f, 0.0f));
-  float min_dist = INFINITY;
-  int idx = 0;
-  for (int i = 0; i < (int)players.size(); ++i) {
-    float dist = (players[i]->get_location() - get_location()).magnitude();
-    if (dist < min_dist) {
-      min_dist = dist;
-      idx = i;
-    }
-  }
-  hatred[players[idx]] += INITIAL_HATRED;
-  set_moving(true);
-}
+{}
 
 void Whisper::attack() {
-  set_prev_attack_time(get_current_time());
-  is_attacking = true;
+  Monster::attack();
   Healing_spell* test_spell = new Healing_spell(get_location(), target->get_location() - get_location());
   Model_state::get_instance()->add_spell(test_spell);
 }

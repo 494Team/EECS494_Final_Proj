@@ -24,6 +24,8 @@ namespace Flame {
     // find player nearest to this monster
     Player * nearest_player();
 
+    void attack();
+
     // is previous attack finished?
     bool can_attack();
 
@@ -51,6 +53,8 @@ namespace Flame {
     std::vector<Player *> players;
     std::map<Player *, float> hatred;
     Zeni::Point2f rel_loc;
+
+    bool is_attacking;
   private:
     float current_time;
     float prev_attack_time;

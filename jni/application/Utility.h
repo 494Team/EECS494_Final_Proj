@@ -52,6 +52,18 @@ namespace Flame{
   extern const float WHISPER_MIN_DIST;
   extern const float WHISPER_MAX_DIST;
 
+  // Redboy constants
+  const float REDBOY_RADIUS = 32.0f;
+  const float REDBOY_SPEED = 50.0f;
+  const float REDBOY_DAMAGE = 300.0f;
+  const float REDBOY_HEALTH = 10000.0f;
+  const float REDBOY_ATTACK_GAP = 1.5f;
+  const float REDBOY_ATTACK_RADIUS = 32.0f;
+  const float REDBOY_MIN_DIST = 30.0f;
+  const float REDBOY_FIRE_CHARGE_COOLDOWN = 10.0f;
+  const float REDBOY_RING_OF_FIRE_COOLDOWN = 15.0f;
+  const float REDBOY_FIRE_SPIKES_COOLDOWN = 20.0f;
+
   // attack effect time
   extern const float HITBACK_TIME;
   extern const float SLOWDOWN_TIME;

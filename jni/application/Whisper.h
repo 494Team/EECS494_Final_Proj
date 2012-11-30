@@ -23,7 +23,6 @@ namespace Flame {
 
     float damage;
     float spell_radius;
-    bool is_attacking;
     bool made_decision;
     float decision_time;
     Random rand_inst;
