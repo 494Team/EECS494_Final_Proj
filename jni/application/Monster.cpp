@@ -103,3 +103,8 @@ void Monster::update(float time) {
   update_current_time(time);
   update_rel_loc();
 }
+
+void Monster::get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker) {
+  Agent::get_hit(damage, effects);
+  increase_hatred(damage, attacker);
+}

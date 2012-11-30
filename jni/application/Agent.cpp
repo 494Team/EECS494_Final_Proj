@@ -62,7 +62,11 @@ void Agent::render() {
   vr.render(hppanel);
 }
 
-void Agent::get_hit(const float &damage, const std::vector<attack_effect> &effects = std::vector<attack_effect>()) {
+void Agent::get_hit(
+  const float &damage, 
+  const std::vector<attack_effect> &effects = std::vector<attack_effect>(),
+  Player* attacker) {
+
   dec_health(damage);
   for (int i = 0; i < (int) effects.size(); ++i) {
     switch (effects[i]) {

@@ -41,6 +41,8 @@ namespace Flame {
     void make_move(float time);
 
     void update(float time);
+
+    void get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker);
       
   protected:
     float calc_angle_between(const Zeni::Vector2f &a, const Zeni::Vector2f &b);

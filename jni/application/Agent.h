@@ -48,7 +48,7 @@ namespace Flame {
     // decrease health (if damage is negative, then increase)
     void dec_health(const float &damage);
 
-    void get_hit(const float &damage, const std::vector<attack_effect> &effects);
+    virtual void get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker=NULL);
   
   private:
     std::map<attack_effect, float> effect_timers;
