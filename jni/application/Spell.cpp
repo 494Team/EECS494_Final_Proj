@@ -27,7 +27,7 @@ namespace Flame {
     Moving_object::set_orientation(orientation_);
     Moving_object::set_moving(true);
     size = size_;
-    relative_location = (get_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
+    relative_location = (get_center_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
   }
 
   void Moving_spell::update(float time)
@@ -37,7 +37,7 @@ namespace Flame {
       return;
     Moving_object::update_location(time);
     scale = Model_state::get_instance()->get_scale();
-    relative_location = (get_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
+    relative_location = (get_center_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
   }
 
   void Moving_spell::render(const String& texture) const
@@ -57,7 +57,7 @@ namespace Flame {
 
   void Moving_spell_circle::update_body()
   {
-    Point2f location = get_location();
+    Point2f location = get_center_location();
     Vector2f size = get_size();
     body = Collision::Capsule(Point3f(location.x, location.y, 0.f),
                               Point3f(location.x, location.y, kCollision_object_height),
@@ -75,7 +75,7 @@ namespace Flame {
   void Moving_spell_rectangle::update_body()
   {
     Vector2f size = get_size();
-    Point2f location = get_location() - size / 2;
+    Point2f location = get_center_location() - size / 2;
     body = Collision::Parallelepiped(Point3f(location.x, location.y, 0.f),
                                      Vector3f(size.x, 0.f, 0.f),
                                      Vector3f(0.f, size.y, 0.f),
@@ -123,7 +123,7 @@ namespace Flame {
   void Resizable_spell::render(const String& texture) const
   {
     float scale = Model_state::get_instance()->get_scale();
-    Point2f relative_location = (get_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
+    Point2f relative_location = (get_center_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
     render_image(texture, // which texture to use
                  relative_location - scale * size / 2, // upper-left corner
                  relative_location + scale * size / 2); // lower-right corner

@@ -48,6 +48,8 @@ namespace Flame {
                  float life_time_ = 0.f);
 
     virtual Zeni::Point2f get_location() const
+      {return get_current_location() - size / 2;}
+    Zeni::Point2f get_center_location() const
       {return get_current_location();}
     Zeni::Vector2f get_orientation() const
       {return get_current_orientation();}
@@ -134,9 +136,13 @@ namespace Flame {
                     float life_time_ = 0.f);
 
     virtual Zeni::Point2f get_location() const
+      {return location - size / 2;}
+    Zeni::Point2f get_center_location() const
       {return location;}
 
     virtual void update_body();
+    Zeni::Collision::Capsule get_body() const
+    {return body;}
     virtual void update(float time = 0.f);
     virtual void render() = 0;
 

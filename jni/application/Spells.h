@@ -11,6 +11,10 @@ namespace Flame {
   const float kHealing_life_time = 3.f;
   const float kHealing_healing_amount = -50.f;
 
+  const float kTaunt_radius = 112.f;
+  const float kTaunt_hatred = 1000.f;
+  const float kTaunt_life_time = 0.15f;
+
   const Zeni::Vector2f kArrow_size = Zeni::Vector2f(4.f, 16.f);
   const float kArrow_speed = 200.f;
   const float kArrow_life_time = 5.f;
@@ -42,6 +46,7 @@ namespace Flame {
     bool heal_self;
   };
 
+  // Tripitaka
   class Healing_spell : public Moving_spell_circle {
   public:
     Healing_spell(const Zeni::Point2f& location_ = Zeni::Point2f(),
@@ -50,6 +55,16 @@ namespace Flame {
     virtual void render();
   };
 
+  // Pigsy
+  class Taunt : public Resizable_spell {
+  public:
+    Taunt(const Zeni::Point2f& location_ = Zeni::Point2f(), Player * player_ptr_ = nullptr);
+    virtual void render();
+  private:
+    Player * player_ptr;
+  };
+
+  // Friar Sand
   class Arrow_attack : public Moving_spell_rectangle {
   public:
     Arrow_attack(const Zeni::Point2f& location_ = Zeni::Point2f(),
@@ -63,7 +78,7 @@ namespace Flame {
   class Fire_ball : public Moving_spell_circle {
   public:
     Fire_ball(const Zeni::Point2f& location_ = Zeni::Point2f(),
-                  const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
+              const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
     virtual void update(float time = 0.f);
     virtual void render();
   };

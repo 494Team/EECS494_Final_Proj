@@ -42,6 +42,7 @@ namespace Flame {
     disable_spell();
   }
 
+  // Tripitaka
   Healing_spell::Healing_spell(const Point2f& location_, const Vector2f& orientation_) :
     Moving_spell_circle(location_ + 50.f * orientation_.normalized(),
                         orientation_,
@@ -75,6 +76,22 @@ namespace Flame {
                            kArrow_life_time)
     {}
 
+  // Pigsy
+  Taunt::Taunt(const Point2f& location_,
+               Player * player_ptr_) :
+    Resizable_spell(location_, Vector2f(kTaunt_radius, kTaunt_radius), Vector2f(), kTaunt_life_time),
+    player_ptr(player_ptr_)
+    {
+      vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
+      for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
+        if (get_body().intersects((*it)->get_body()))
+          (*it)->increase_hatred(kTaunt_hatred, player_ptr);
+    }
+
+  void Taunt::render()
+  {Resizable_spell::render("brick");}
+
+  // Friar Sand
   void Arrow_attack::update(float time)
   {
     Moving_spell_rectangle::update(time);
