@@ -234,7 +234,9 @@ namespace Flame {
   {
     auto it = map_puzzle_obj_list.erase(find(map_puzzle_obj_list.begin(), map_puzzle_obj_list.end(), map_obj_ptr));
     sim_obj_list.erase(find(sim_obj_list.begin(), sim_obj_list.end(), map_obj_ptr));
-    next_loop_update_list.erase(find(next_loop_update_list.begin(), next_loop_update_list.end(), map_obj_ptr));
+    auto it1 = find(next_loop_update_list.begin(), next_loop_update_list.end(), map_obj_ptr);
+    if (it1 != next_loop_update_list.end())
+      next_loop_update_list.erase(it1);
     render_list.erase(map_obj_ptr);
     return it;
   }
