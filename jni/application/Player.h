@@ -51,7 +51,8 @@ namespace Flame {
       const float &health_ = 0.0f,
       const float &speed_ = 0.0f,
       const float &radius_ = 0.0f,
-      const Zeni::Point2f &location_ = Zeni::Point2f());
+      const Zeni::Point2f &location_ = Zeni::Point2f(),
+      const kPlayer_type player_type_ = WUKONG);
 
     virtual void update(float time = 0.f);
     void render();

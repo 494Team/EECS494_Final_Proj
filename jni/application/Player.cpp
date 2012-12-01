@@ -8,12 +8,13 @@ Player::Player(
   const float &health_,
   const float &speed_,
   const float &radius_,
-  const Zeni::Point2f &location_)
+  const Zeni::Point2f &location_,
+  const kPlayer_type player_type_)
 : Agent(health_, speed_, radius_, location_),
   crazy(false),
   normal_attack(false),
   running_status(false),
-  ptype(BAJIE),
+  ptype(player_type_),
 //size(Zeni::Vector2f(radius_ * 2, radius_ * 2))
   size(radius_),
   attack_buff(kInit_buff),

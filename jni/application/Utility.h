@@ -69,7 +69,12 @@ namespace Flame{
   extern const float SLOWDOWN_TIME;
   extern const float FREEZE_TIME;
 
+  //others
   const float kHpbar_width = 3.0f;
+  
+  //choosing character page "Preparation State"
+  const int kCursor_max = 3;
+  const int kCursor_min = 0;
 
   // forward declaration
   class Sim_object;
@@ -115,7 +120,7 @@ namespace Flame{
   };
 
   enum kPlayer_type {
-    SANZANG,
+    SANZANG = 0,
     WUKONG,
     SHASENG,
     BAJIE

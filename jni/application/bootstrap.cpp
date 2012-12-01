@@ -341,92 +341,255 @@ private:
   }
 };
 
-class Preparation_State : public Widget_Gamestate {
+class Preparation_State :public Gamestate_II { //public Widget_Gamestate,
   Preparation_State(const Preparation_State &);
   Preparation_State operator=(const Preparation_State &);
-
-  class Menu_Button : public Text_Button {
-  public:
-    Menu_Button()
-      : Text_Button(Point2f(20.0f, 20.0f), Point2f(220.0f, 80.0f), "system_36_800x600", "Back to Top")
-    {
-    }
-  private:
-    void reset_statistics() {
-      //
-    }
-    
-    void on_accept() {
-      reset_statistics();
-      get_Game().pop_state();
-    }
-  } menu_button;
-
-  class Play_Button : public Text_Button {
-  public:
-    Play_Button()
-    : Text_Button(Point2f(520.0f, 20.0f), Point2f(780.0f, 80.0f), "system_36_800x600", "Default characters")
-    {
-    }
-  private:
-    void on_accept() {
-      get_Game().push_state(new Play_State());
-    }
-  } play_button;
-
 public:
   Preparation_State()
-    : Widget_Gamestate(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)))
+  : chosen_num(0)
+    //: Widget_Gamestate(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)))
   {
     set_pausable(true);
-    m_widgets.lend_Widget(play_button);
-    m_widgets.lend_Widget(menu_button);
+    //m_widgets.lend_Widget(play_button);
+    //m_widgets.lend_Widget(menu_button);
+
+    set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), MENU);
+    //p1
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 0), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X /* x-axis */, 0), HORI1);
+    set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 0), VERT1);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 0), A1);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 0), B1);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_X, 0), X1);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 0), Y1);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 0), L1);
+    //p2
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 1), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X /* x-axis */, 1), HORI2);
+    set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 1), VERT2);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 1), A2);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 1), B2);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_X, 1), X2);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 1), Y2);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 1), L2);
+    //p3
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 2), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X /* x-axis */, 2), HORI3);
+    set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 2), VERT3);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 2), A3);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 2), B3);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_X, 2), X3);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 2), Y3);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 2), L3);
+    //p4
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 3), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X /* x-axis */, 3), HORI4);
+    set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 3), VERT4);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 3), A4);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 3), B4);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_X, 3), X4);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 3), Y4);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 3), L4);
+
+
+    
+    for (int i=0; i<4; i++) {
+      cursor_pos[i] = kCursor_min;
+      char_available[i] = true;
+      p_decided[i] = false;
+      p_color[i] = Color();
+    }
+
   }
 
 private:
   void on_push() {
-    get_Window().mouse_grab(true);
-    //get_Window().mouse_hide(true);
-    //get_Game().joy_mouse.enabled = false;
+    //get_Window().mouse_grab(true);
+    get_Window().mouse_hide(true);
+    get_Game().joy_mouse.enabled = false;
   }
- 
+
   void on_pop() {
-    get_Window().mouse_grab(false);
-    //get_Window().mouse_hide(false);
-    //get_Game().joy_mouse.enabled = true;
+    //get_Window().mouse_grab(false);
+    get_Window().mouse_hide(false);
+    get_Game().joy_mouse.enabled = true;
+  }
+
+  void on_cover() {
+      get_Window().mouse_hide(false);
+      get_Game().joy_mouse.enabled = true;
+  }
+
+  void on_uncover() {
+      get_Window().mouse_hide(true);
+      get_Game().joy_mouse.enabled = false;
   }
 
   void on_key(const SDL_KeyboardEvent &event) {
     if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED)
       get_Game().pop_state();
   }
+  
+  void move_cursor(const int player_n, const bool is_to_right) {
+    if (!p_decided[player_n]) {
+      if (is_to_right) {
+        cursor_pos[player_n]++;
+      } else {
+        cursor_pos[player_n]--;
+      }
+      if (cursor_pos[player_n] > kCursor_max) {
+        cursor_pos[player_n] -= kCursor_max + 1;
+      } else if (cursor_pos[player_n] < kCursor_min) {
+        cursor_pos[player_n] += kCursor_max + 1;
+      }
+    }
+  }
+
+  /*
+  SANZANG,
+  WUKONG,
+  SHASENG,
+  BAJIE
+  */
+  bool char_available[4];
+  bool p_decided[4];
+  kPlayer_type chosen_char[4];
+  int cursor_pos[4];
+  Color p_color[4];
+  int chosen_num;
+
+  void choose_char(const int player_n) {
+    if (!p_decided[player_n]) {
+      int pos = cursor_pos[player_n];
+      if (char_available[pos]) {
+        switch (pos) {
+          case 0:
+            chosen_char[player_n] = SANZANG;
+            break;
+          case 1:
+            chosen_char[player_n] = WUKONG;
+            break;
+          case 2:
+            chosen_char[player_n] = SHASENG;
+            break;
+          case 3:
+            chosen_char[player_n] = BAJIE;
+            break;
+          default:
+            break;
+        }
+        chosen_num++;
+        p_decided[player_n] = true;
+        p_color[pos] = Color(1.0f, 0.3f, 0.3f, 0.3f);
+        char_available[pos] = false;
+      }
+      if (chosen_num == 1) { //4
+        get_Game().pop_state();
+        get_Game().push_state(new Play_State());
+      }
+    }
+  }
+
+  void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
+    switch(action) {
+      case HORI1:
+        if (confidence >= 1.0f)
+          move_cursor(0, true);
+        else if (confidence <= -1.0f)
+          move_cursor(0, false);
+        break;
+      case HORI2:
+        if (confidence >= 1.0f)
+          move_cursor(1, true);
+        else if (confidence <= -1.0f)
+          move_cursor(1, false);
+        break;
+      case HORI3:
+        if (confidence >= 1.0f)
+          move_cursor(2, true);
+        else if (confidence <= -1.0f)
+          move_cursor(2, false);
+        break;
+      case HORI4:
+        if (confidence >= 1.0f)
+          move_cursor(3, true);
+        else if (confidence <= -1.0f)
+          move_cursor(3, false);
+        break;
+      default:
+        break;
+    }
+    //get_Game().push_state(new Play_State());
+    if(confidence >= 1.0f) {
+      switch(action) {
+        case MENU: {
+          Game &game = get_Game();
+          //game.push_state(new Play_State());
+          game.push_state(new Popup_Menu_State);
+          break;
+        }
+        case A1:
+          choose_char(0);
+          break;
+        case A2:
+          choose_char(1);
+          break;
+        case A3:
+          choose_char(2);
+          break;
+        case A4:
+          choose_char(3);
+          break;
+        default:
+          break;
+      }
+    }
+  }
 
   void render() {
-    Widget_Gamestate::render();
+    //Widget_Gamestate::render();
     render_image("pigsy_front0",
        Point2f(600.0f, 150.0f),
-       Point2f(800.0f, 500.0f));
+       Point2f(800.0f, 500.0f),
+       false,
+       p_color[3]);
     render_image("friar_sand_front0",
        Point2f(400.0f, 150.0f),
-       Point2f(650.0f, 500.0f));
+       Point2f(650.0f, 500.0f),
+       false,
+       p_color[2]);
     render_image("monkey_king_front0",
        Point2f(200.0f, 150.0f),
-       Point2f(450.0f, 500.0f));
+       Point2f(450.0f, 500.0f),
+       false,
+       p_color[1]);
     render_image("tripitaka_front0",
        Point2f(50.0f, 150.0f),
-       Point2f(250.0f, 500.0f));
-    render_image("p1cursor",
-       Point2f(30.0f, 100.0f),
-       Point2f(80.0f, 200.0f));
-    render_image("p2cursor",
-       Point2f(30.0f, 200.0f),
-       Point2f(80.0f, 300.0f));
-    render_image("p3cursor",
-       Point2f(30.0f, 300.0f),
-       Point2f(80.0f, 400.0f));
-    render_image("p4cursor",
-       Point2f(30.0f, 400.0f),
-       Point2f(80.0f, 500.0f));
+       Point2f(250.0f, 500.0f),
+       false,
+       p_color[0]);
+    float pos[4] = {30.0f, 180.0f, 380.0f, 580.0f};
+
+      render_image("p1cursor",
+         Point2f(pos[cursor_pos[0]], 100.0f),
+         Point2f(pos[cursor_pos[0]]+50.0f, 200.0f),
+         false,
+         p_color[cursor_pos[0]]);
+      render_image("p2cursor",
+         Point2f(pos[cursor_pos[1]], 200.0f),
+         Point2f(pos[cursor_pos[1]]+50.0f, 300.0f),
+         false,
+         p_color[cursor_pos[1]]);
+      render_image("p3cursor",
+         Point2f(pos[cursor_pos[2]], 300.0f),
+         Point2f(pos[cursor_pos[2]]+50.0f, 400.0f),
+         false,
+         p_color[cursor_pos[2]]);
+      render_image("p4cursor",
+         Point2f(pos[cursor_pos[3]], 400.0f),
+         Point2f(pos[cursor_pos[3]]+50.0f, 500.0f),
+         false,
+         p_color[cursor_pos[3]]);
   }
 };
 
