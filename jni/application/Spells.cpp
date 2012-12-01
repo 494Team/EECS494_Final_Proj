@@ -202,4 +202,21 @@ namespace Flame {
 
   void Fire_ball::render()
   {Moving_spell::render("fire_ball");}
+
+  Fire_spikes::Fire_spikes(const Point2f& location_) :
+    Resizable_spell(location_, kFire_spike_size, Vector2f(), kFire_spike_life_time)
+  {}
+
+  void Fire_spikes::update(float time)
+  {
+    Resizable_spell::update(time);
+    vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
+    for (auto it = player_list_ptr->begin(); it != player_list_ptr->end(); ++it)
+      if (get_body().intersects((*it)->get_body()) && (*it)->is_alive())
+        (*it)->dec_health(kFire_spike_damage);
+  }
+
+  void Fire_spikes::render()
+  {Resizable_spell::render("brick");}
+
 }

@@ -29,6 +29,10 @@ namespace Flame {
   const float kFireball_life_time = 3.0f;
   const float kFireball_damage = 50.0f;
 
+  const Zeni::Vector2f kFire_spike_size = Zeni::Vector2f(50.f, 50.f);
+  const float kFire_spike_life_time = 5.f;
+  const float kFire_spike_damage = 50.f;
+
   class Attack_spell : public Spell {
   public:
     Attack_spell(const Zeni::Point2f& location_ = Zeni::Point2f(),
@@ -108,6 +112,13 @@ namespace Flame {
   public:
     Fire_ball(const Zeni::Point2f& location_ = Zeni::Point2f(),
               const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
+    virtual void update(float time = 0.f);
+    virtual void render();
+  };
+
+  class Fire_spikes : public Resizable_spell {
+  public:
+    Fire_spikes(const Zeni::Point2f& location_ = Zeni::Point2f());
     virtual void update(float time = 0.f);
     virtual void render();
   };
