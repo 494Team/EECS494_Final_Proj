@@ -28,7 +28,9 @@ namespace Flame {
       vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
       for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
         if (body.intersect((*it)->get_body())) {
-          (*it)->dec_health(attack_strength);
+          vector<attack_effect> effects;
+          effects.push_back(HITBACK);
+          (*it)->get_hit(attack_strength, effects, nullptr);
           if (heal_self)
             player_ptr->dec_health(.5f * attack_strength);
         }
@@ -37,7 +39,7 @@ namespace Flame {
       vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
       for (auto it = player_list_ptr->begin(); it != player_list_ptr->end(); ++it)
         if (body.intersect((*it)->get_body()))
-          (*it)->dec_health(attack_strength);
+          (*it)->get_hit(attack_strength, vector<attack_effect>(), player_ptr);
     }
     disable_spell();
   }
@@ -99,7 +101,9 @@ namespace Flame {
       vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
       for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
         if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
-          (*it)->dec_health(kArrow_damage);
+          vector<attack_effect> effects;
+          effects.push_back(HITBACK);
+          (*it)->get_hit(kArrow_damage, effects, nullptr);
           disable_spell();
           break;
         }
