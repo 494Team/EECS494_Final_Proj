@@ -13,7 +13,7 @@ using std::placeholders::_1;
 using std::map;
 using std::pair; using std::make_pair;
 using std::vector;
-using Zeni::Point2f;
+using Zeni::Point2f; using Zeni::Chronometer; using Zeni::Time;
 
 namespace Flame {
 
@@ -39,9 +39,10 @@ namespace Flame {
     return ptr;
   }
 
-  void Model_state::init(int level)
+  void Model_state::init(int level, Chronometer<Time> * timer_)
   {
     clear();
+    timer = timer_;
     player_list.push_back(new Player(100.f, 200.f, 16.f, Point2f(300.f, 200.f)));
     player_list.push_back(new Player(100.f, 200.f, 16.f, Point2f(500.f, 300.f)));
     player_list.push_back(new Player(100.f, 200.f, 16.f, Point2f(500.f, 200.f)));

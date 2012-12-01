@@ -8,6 +8,7 @@
  */
 
 #include <zeni.h>
+#include <zenilib.h>
 #include "Utility.h"
 #include <vector>
 
@@ -32,7 +33,7 @@ namespace Flame {
     static Model_state * get_instance();
 
     /* services member functions defined here */
-    void init(int level);
+    void init(int level, Zeni::Chronometer<Zeni::Time> * timer_);
 
     // should be called after all players are updated
     void update_scale_and_center();
@@ -101,6 +102,7 @@ namespace Flame {
     std::vector<Map *> map_obj_list;
     std::vector<Map *> map_puzzle_obj_list;
     Zeni::Point2f center_location;
+    Zeni::Chronometer<Zeni::Time> * timer;
     float scale;
 
     /* prevent copy constructor/assignment and destructor */

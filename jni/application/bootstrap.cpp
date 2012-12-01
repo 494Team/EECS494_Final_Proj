@@ -82,7 +82,7 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 3), Y4);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 3), L4);
 
-    Model_state::get_instance()->init(0);
+    Model_state::get_instance()->init(lvl, &m_set);
     Wanderer* wanderer = new Wanderer(Zeni::Point2f(100, 200));
     Model_state::get_instance()->add_monster(wanderer);
     Whisper* whisper_1 = new Whisper(Zeni::Point2f(400, 100));

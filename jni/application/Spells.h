@@ -20,6 +20,10 @@ namespace Flame {
   const float kArrow_life_time = 5.f;
   const float kArrow_damage = 50.f;
 
+  const Zeni::Vector2f kTrap_size = Zeni::Vector2f(16.f, 16.f);
+  const float kTrap_life_time = 30.f;
+  const float kTrap_damage = 50.f;
+
   const float kFireball_size = 16.0f;
   const float kFireball_speed = 50.0f;
   const float kFireball_life_time = 3.0f;
@@ -73,6 +77,31 @@ namespace Flame {
     virtual void render();
   };
 
+  class Strafe : public Spell{
+  public:
+    Strafe(const Zeni::Point2f& location_ = Zeni::Point2f(),
+           const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
+    virtual Zeni::Point2f get_location() const
+      {return location;}
+    virtual void update_body() {}
+    virtual void update(float time = 0.f);
+    virtual void render();
+
+  private:
+    Zeni::Point2f location;
+    Arrow_attack arrow0;
+    Arrow_attack arrow1;
+    Arrow_attack arrow2;
+    Arrow_attack arrow3;
+    Arrow_attack arrow4;
+  };
+
+  class Trap : public Resizable_spell {
+  public:
+    Trap(const Zeni::Point2f& location_ = Zeni::Point2f());
+    virtual void update(float time = 0.f);
+    virtual void render();
+  };
 
   // Boss1
   class Fire_ball : public Moving_spell_circle {

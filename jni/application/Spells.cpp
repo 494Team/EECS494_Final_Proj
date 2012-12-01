@@ -68,14 +68,6 @@ namespace Flame {
   void Healing_spell::render()
   {Moving_spell::render("healing_spell");}
 
-  Arrow_attack::Arrow_attack(const Point2f& location_, const Vector2f& orientation_) :
-    Moving_spell_rectangle(location_ + 50.f * orientation_.normalized(), 
-                           orientation_,
-                           kArrow_size,
-                           kArrow_speed,
-                           kArrow_life_time)
-    {}
-
   // Pigsy
   Taunt::Taunt(const Point2f& location_,
                Player * player_ptr_) :
@@ -92,6 +84,14 @@ namespace Flame {
   {Resizable_spell::render("brick");}
 
   // Friar Sand
+  Arrow_attack::Arrow_attack(const Point2f& location_, const Vector2f& orientation_) :
+    Moving_spell_rectangle(location_, 
+                           orientation_,
+                           kArrow_size,
+                           kArrow_speed,
+                           kArrow_life_time)
+    {}
+
   void Arrow_attack::update(float time)
   {
     Moving_spell_rectangle::update(time);
@@ -109,6 +109,69 @@ namespace Flame {
   void Arrow_attack::render()
   {Moving_spell::render("arrow");}
 
+  Strafe::Strafe(const Point2f& location_, const Vector2f& orientation_) :
+    Spell(kArrow_life_time),
+    location(location_),
+    arrow0(location_, orientation_)
+  {
+    Vector3f orientation0 = Vector3f(orientation_.x, orientation_.y, 0.f);
+    Vector3f orientation1 = Quaternion::Axis_Angle(Vector3f(0.f, 0.f, 1.f), Global::pi / 8) * orientation0;
+    Vector3f orientation2 = Quaternion::Axis_Angle(Vector3f(0.f, 0.f, 1.f), Global::pi / 4) * orientation0;
+    Vector3f orientation3 = Quaternion::Axis_Angle(Vector3f(0.f, 0.f, 1.f), -Global::pi / 8) * orientation0;
+    Vector3f orientation4 = Quaternion::Axis_Angle(Vector3f(0.f, 0.f, 1.f), -Global::pi / 4) * orientation0;
+    arrow1 = Arrow_attack(location_, Vector2f(orientation1.x, orientation1.y));
+    arrow2 = Arrow_attack(location_, Vector2f(orientation2.x, orientation2.y));
+    arrow3 = Arrow_attack(location_, Vector2f(orientation3.x, orientation3.y));
+    arrow4 = Arrow_attack(location_, Vector2f(orientation4.x, orientation4.y));
+  }
+
+  void Strafe::update(float time)
+  {
+    if (arrow0.is_active())
+      arrow0.update(time);
+    if (arrow1.is_active())
+      arrow1.update(time);
+    if (arrow2.is_active())
+      arrow2.update(time);
+    if (arrow3.is_active())
+      arrow3.update(time);
+    if (arrow4.is_active())
+      arrow4.update(time);
+    location = arrow0.get_location();
+  }
+
+  void Strafe::render()
+  {
+    if (arrow0.is_active())
+      arrow0.render();
+    if (arrow1.is_active())
+      arrow1.render();
+    if (arrow2.is_active())
+      arrow2.render();
+    if (arrow3.is_active())
+      arrow3.render();
+    if (arrow4.is_active())
+      arrow4.render();
+  }
+
+  Trap::Trap(const Zeni::Point2f& location_) :
+    Resizable_spell(location_, kTrap_size, Vector2f(), kTrap_life_time)
+    {}
+
+  void Trap::update(float time)
+  {
+    Resizable_spell::update(time);
+    vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
+    for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
+      if (Resizable_spell::get_body().intersects((*it)->get_body())) {
+        (*it)->dec_health(kTrap_damage);
+        Spell::disable_spell();
+        break;
+      }
+  }
+
+  void Trap::render()
+  {Resizable_spell::render("brick");}
 
   // Boss1
   Fire_ball::Fire_ball(const Point2f& location_, const Vector2f& orientation_) :
