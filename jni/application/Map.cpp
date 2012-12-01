@@ -141,8 +141,8 @@ namespace Flame {
         vr.render(brick);
     }
 
-	Map_light_beam::Map_light_beam(const Point2f &location_, const Vector2f &dir_, const int &player_)
-		:Map(location_), dir(dir_.normalized()), rel_ccw(0.f), render_start(location_), dis(0.f), player(player_),child(NULL)
+	Map_light_beam::Map_light_beam(const Point2f &location_, const Vector2f &dir_, const int &player_, const String &texture_)
+		:Map(location_), dir(dir_.normalized()), rel_ccw(0.f), render_start(location_), dis(0.f), player(player_),child(NULL),texture(texture_)
 	{
 		render_end = render_start;
 		collision_body = Collision::Capsule (Point3f(render_start.x, render_start.y, kCollision_object_height / 2),
@@ -215,7 +215,7 @@ namespace Flame {
       }
       else
       {
-        tmp = new Map_light_beam(player_location, new_dir, player_collide_no);
+        tmp = new Map_light_beam(player_location, new_dir, player_collide_no,"light_beam");
         Model_state::get_instance()->add_map_puzzle_obj(tmp);   
         child = tmp;
       }
@@ -225,6 +225,7 @@ namespace Flame {
       if(child != NULL)
       {
         Model_state::get_instance()->remove_map_puzzle_obj(child);
+        delete child;
         child = NULL;
       }
     }
@@ -245,9 +246,129 @@ namespace Flame {
 	};
 
 	void Map_light_beam::render(){
-		render_image("light_beam",rel_lu,rel_dr,-rel_ccw,1.0f,rel_about);
-	}
+		render_image(texture,rel_lu,rel_dr,-rel_ccw,1.0f,rel_about);
+	};
 
+  Map_door::Map_door(const Point2f &location_,
+                     const Vector2f &size_,
+                     const String &closed_texture_,
+                     const String &open_texture_
+                     )
+                     :Map_structure_rec(location_,
+                                        size_,
+                                        location_,
+                                        size_),
+                     open_texture(open_texture_),
+                     closed_texture(closed_texture_),
+                     open(false)
+  {
+    
+  };
+  
+  void Map_door::create_body(){
+    collision_body=Collision::Parallelepiped(Point3f(render_location.x, render_location.y, 0.f),
+                     Vector3f(render_size.x, 0.f, 0.f),
+                     Vector3f(0.f, render_size.y, 0.f),
+                     Vector3f(0.f, 0.f, kCollision_object_height));
+  };
 
+  
+
+  void Map_door::render()
+  {
+    open = true;
+    for (vector<Map*>::iterator it = trigger_list.begin();
+         it != trigger_list.end();
+         ++it)
+    {
+      if (!(*it)->triggerred()){
+        open = false;
+        break;
+      }
+    }
+    
+    if(open){
+      destroy_body();
+      render_image(open_texture, rel_location, rel_location + rel_size);
+    }
+    else{
+      create_body();
+      render_image(closed_texture, rel_location, rel_location+rel_size);
+    }
+  };
+
+  Map_laser::Map_laser(const Point2f &location_,
+    const Vector2f &dir_,
+    const String &texture_)
+    :Map_light_beam(location_, dir_, 0, texture_)
+  {};
+
+  void Map_laser::update(float time){
+    vector<Map* > *map_obj_list = Model_state::get_instance()->get_map_obj_list_ptr();
+		vector<Player* > *player_list = Model_state::get_instance()->get_player_list_ptr();
+		
+    bool player_collide = false;
+    int player_collide_no;
+    Point2f player_location;
+
+		float short_dis = dis + 1000.f * time;
+    Vector2f new_dir;
+    Map_light_beam *tmp;
+		
+    for (vector<Map *>::iterator it = map_obj_list->begin();
+			it != map_obj_list->end();
+			++it)
+    {
+				if (collision_body.intersects((*it)->get_body()))
+        {
+					if (short_dis > (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z)))
+						short_dis = (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z));
+				}
+		}
+
+    int cnt = 0;
+    Player *collided_player;
+		for (vector<Player *>::iterator it = player_list->begin();
+			   it != player_list->end();
+			   ++it)
+    {
+      ++cnt;
+      if(cnt!=player)
+      {
+			  if (collision_body.intersects((*it)->get_body()))
+        {
+			    if (short_dis > (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z)))
+          {
+        	  short_dis = (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z));
+
+            collided_player = *it;
+            player_location = (*it)->get_location();
+            player_collide_no = cnt;
+            player_collide = true;
+					}
+        }
+      }
+    }
+
+    if (player_collide)
+    { 
+      vector<attack_effect> empty;
+      collided_player->get_hit(time*10.f, empty);       
+    }
+    
+	  dis = short_dis;
+
+	  render_end = dis * dir + render_start;
+		collision_body = Collision::Capsule (Point3f(render_start.x, render_start.y, kCollision_object_height / 2),
+		                           				   Vector3f(render_end.x, render_end.y, kCollision_object_height / 2),
+											                   kCollision_object_height / 2);
+		float scale = Model_state::get_instance()->get_scale();
+		Point2f center = Model_state::get_instance()->get_center_location();
+		float dis = (render_start - render_end).magnitude();
+    rel_lu = (render_start + Point2f(0.f, +kCollision_object_height / 2) - center) * scale + Point2f(400.f, 300.0f);
+		rel_dr = (render_start + Point2f(dis, -kCollision_object_height / 2) - center) * scale + Point2f(400.f, 300.0f);
+    rel_about = (render_start -center) * scale + Point2f(400.f, 300.f);
+		rel_ccw = (render_end - render_start).theta();
+  }
 
 }

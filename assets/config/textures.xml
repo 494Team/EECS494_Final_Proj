@@ -41,6 +41,18 @@ The following things are unsupported:
         <filepath>textures/light_beam.png</filepath>
         <tile>1</tile>
     </light_beam>
+    <laser>
+        <filepath>textures/laser.png</filepath>
+        <tile>1</tile>
+    </laser>
+    <open_door>
+        <filepath>textures/open_door.png</filepath>
+        <tile>0</tile>
+    </open_door>
+    <close_door>
+        <filepath>textures/closed_door.png</filepath>
+        <tile>0</tile>
+    </close_door>
   <one>
     <filepath>textures/frame1.png</filepath>
     <tile>0</tile>
