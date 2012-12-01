@@ -79,6 +79,8 @@ namespace Flame {
     bool can_move_player(const Zeni::Collision::Capsule& collision_body);
 
     // accessors
+    Zeni::Chronometer<Zeni::Time> * get_timer() const
+    {return timer;}
     float get_scale()
     {return scale;}
     Zeni::Point2f get_center_location() const
