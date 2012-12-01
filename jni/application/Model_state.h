@@ -55,6 +55,8 @@ namespace Flame {
     {return &map_obj_list;}
     std::vector<Map *> * get_map_puzzle_obj_list_ptr()
     {return &map_puzzle_obj_list;}
+    std::vector<Map *> * get_map_door_obj_list_ptr()
+    {return &map_door_obj_lisg;}
 
 
     // never try to add yourself! use these functions!!!!!!!
@@ -103,6 +105,7 @@ namespace Flame {
     std::vector<Spell *> spell_list;
     std::vector<Map *> map_obj_list;
     std::vector<Map *> map_puzzle_obj_list;
+    std::vector<Map *> map_door_obj_list;
     Zeni::Point2f center_location;
     Zeni::Chronometer<Zeni::Time> * timer;
     float scale;

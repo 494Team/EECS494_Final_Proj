@@ -58,9 +58,6 @@ namespace Flame {
     // wall on right
     map_obj_list.push_back(new Map_brick(Point2f(800.0f, -20.0f), Vector2f(20.0f,640.0f), 20.0f, 20.f, String("rock")));  
 
-    // illuminate floor
-    map_obj_list.push_back(new Map_floor_illuminate(Point2f(320.0f, 400.0f), Point2f(20.f, 20.f), "floor", "ifloor"));
-
     // rec structure
     map_obj_list.push_back(new Map_structure_rec(Point2f(200.0f, 200.0f), Vector2f(50.0f, 50.0f), Point2f(200.0f, 200.0f),
                                                  Vector2f(50.0f, 50.0f), String("rock")));
@@ -69,7 +66,14 @@ namespace Flame {
     map_obj_list.push_back(new Map_structure_rec(Point2f(400.0f, 400.0f), Vector2f(50.0f, 50.0f), Point2f(400.0f, 410.0f),
                                                  Vector2f(50.0f, 40.0f), String("house")));
 
-    map_puzzle_obj_list.push_back(new Map_light_beam(Point2f(100.0f, 200.0f), Vector2f(0.0f, 1.0f)));
+    // illuminate floor
+    map_obj_list.push_back(new Map_floor_illuminate(Point2f(320.0f, 400.0f), Point2f(20.f, 20.f), "floor", "ifloor"));
+
+    map_door_obj_list.push_back(new Map_door(Point2f(300.f, -20.f), Vector2f(50.f, 50.f), "close_door", "open_door"));
+    (*map_door_obj_list.back()).add_trigger(map_obj_list.back());
+
+    map_puzzle_obj_list.push_back(new Map_light_beam(Point2f(3.0f, 100.0f), Vector2f(1.0f, 0.0f), 0, "light_beam"));
+    map_puzzle_obj_list.push_back(new Map_laser(Point2f(3.f, 500.f), Vector2f(1.f, 0.f), "laser"));
 
     for (auto it = player_list.begin(); it != player_list.end(); ++it) {
       sim_obj_list.push_back(*it);
@@ -81,6 +85,11 @@ namespace Flame {
     }
 
     for (auto it = map_puzzle_obj_list.begin(); it != map_puzzle_obj_list.end(); ++it) {
+      sim_obj_list.push_back(*it);
+      render_list.insert(*it);
+    }
+
+    for (auto it = map_door_obj_list.begin(); it != map_door_obj_list.end(); ++it) {
       sim_obj_list.push_back(*it);
       render_list.insert(*it);
     }
@@ -278,6 +287,7 @@ namespace Flame {
     spell_list.clear();
     map_obj_list.clear();
     map_puzzle_obj_list.clear();
+    map_door_obj_list.clear();
   }
 
 }
