@@ -89,11 +89,12 @@ void Player::update(float time) {
 
   if (ptype == BAJIE && shielding && float(current_time.get_seconds_since(last_spell1)) > kShield_last) {
     shielding = false;
+    set_armor(backup_armor);
   }
   if (ptype == BAJIE && bloodsucking && float(current_time.get_seconds_since(last_spell3)) > kBloodsuck_last) {
     bloodsucking = false;
-    attack_buff = kInit_buff;
   }
+
   //
 
   float render_passed_time = float(current_time.get_seconds_since(render_clock));
@@ -258,6 +259,7 @@ void Player::fire(kKey_type type) {
 
 void Player::get_crazy() {
   crazy = true;
+  attack_buff = 2.0f;
 }
 
 void Player::bloodsuck() {
@@ -266,6 +268,8 @@ void Player::bloodsuck() {
 
 void Player::shield() {
   shielding = true;
+  backup_armor = get_armor();
+  set_armor(backup_armor * kShield_effect);
 }
 
 void Player::try_normal_attack(const Zeni::Time_HQ current_time) {

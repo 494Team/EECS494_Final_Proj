@@ -13,7 +13,7 @@ Whisper::Whisper(const Zeni::Point2f &location_)
 
 void Whisper::attack() {
   Monster::attack();
-  Healing_spell* test_spell = new Healing_spell(get_location(), target->get_location() - get_location());
+  Fire_ball* test_spell = new Fire_ball(get_location(), target->get_location() - get_location());
   Model_state::get_instance()->add_spell(test_spell);
 }
 

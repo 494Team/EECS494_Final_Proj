@@ -37,6 +37,8 @@ namespace Flame {
   const float kShield_last = 0.5f;
   const float kShield_CD = 1.0f;
   const float kShield_effect = 0.5f;
+
+
   const float kBloodsuck_last = 0.5f;
   const float kBloodsuck_CD = 1.0f;
   const float kBloodsuck_effect = 0.5f;
@@ -91,6 +93,7 @@ namespace Flame {
     bool bloodsucking;
     void bloodsuck();
     bool shielding;
+    float backup_armor;
     void shield();
 
     //running renderer
