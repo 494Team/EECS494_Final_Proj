@@ -21,6 +21,7 @@ namespace Flame {
   const float kSpell3_CD = 1.0f;
 
   const float kAttack_show_time = 0.2f;
+
   #define PLAYER_SPELL1_CD 1.0f
   #define PLAYER_SPELL2_CD 1.0f
   #define PLAYER_SPELL3_CD 1.0f
@@ -29,6 +30,8 @@ namespace Flame {
   const float kRun_render_gap = 0.2f;
   const float kPlayer_attack_range = 40.0f;
   const float kPlayer_attack_strengh = 100.0f;
+
+  const float kInit_buff = 1.0f;
 
   // spells
   const float kShield_last = 0.5f;
@@ -41,6 +44,7 @@ namespace Flame {
   class Player: public Agent {
   public:
     Player(
+      Chronometer<Time>* game_t,
       const float &health_ = 0.0f,
       const float &speed_ = 0.0f,
       const float &radius_ = 0.0f,
@@ -53,11 +57,14 @@ namespace Flame {
     Control ctrl;
     kPlayer_type ptype;
     void fire(kKey_type type);
+    void try_normal_attack(const Zeni::Time_HQ current_time);
     void try_spell1(const Zeni::Time_HQ current_time);
     void try_spell2(const Zeni::Time_HQ current_time);
     void try_spell3(const Zeni::Time_HQ current_time);
 
   private:
+    Chronometer<Time>* game_time;
+
     float orient_vec_to_radians(Vector2f vec) {
       float radians = atan2(vec.i, vec.j);
       return radians;
@@ -65,8 +72,8 @@ namespace Flame {
 
     //attack
     bool normal_attack;
-    bool damaged; //whether the normal attack has created a damage
     Zeni::Time_HQ last_htime;
+    float attack_buff; //range: [1, +INF]; initial:1.0f
 
     //spell status
     float spell1_CD;
@@ -77,6 +84,8 @@ namespace Flame {
     Zeni::Time_HQ last_spell3;
     //SANZANG
     //WUKONG
+    void get_crazy();
+    bool crazy;
     //SHASENG
     //BAJIE
     bool bloodsucking;

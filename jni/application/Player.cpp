@@ -4,19 +4,22 @@ using namespace std;
 using namespace Flame;
 
 Player::Player(
+  Chronometer<Time>* game_t_,
   const float &health_,
   const float &speed_,
   const float &radius_,
   const Zeni::Point2f &location_)
 : Agent(health_, speed_, radius_, location_),
+  crazy(false),
   normal_attack(false),
-  damaged(false),
   running_status(false),
   bloodsucking(false),
   shielding(false),
   ptype(BAJIE),
 //size(Zeni::Vector2f(radius_ * 2, radius_ * 2))
-  size(radius_)
+  size(radius_),
+  attack_buff(kInit_buff),
+  game_time(game_t_)
 {
   const Zeni::Time_HQ current_time = Zeni::get_Timer_HQ().get_time();
   render_clock = current_time;
@@ -89,6 +92,7 @@ void Player::update(float time) {
   }
   if (ptype == BAJIE && bloodsucking && float(current_time.get_seconds_since(last_spell3)) > kBloodsuck_last) {
     bloodsucking = false;
+    attack_buff = kInit_buff;
   }
   //
 
@@ -97,14 +101,7 @@ void Player::update(float time) {
     running_status = !running_status;
     render_clock = current_time;
   }
-    
 
-  //hit
-  if (normal_attack && !damaged) {
-    //create damage
-    damaged = true;
-    //search the enemy list
-  }
   Model_state::get_instance()->can_move_player(get_body());
 }
 
@@ -204,26 +201,22 @@ render_image(
 }
 
 void Player::fire(kKey_type type) {
+  if (!game_time->is_running()) {
+    return;
+  }
+
   const Zeni::Time_HQ current_time = Zeni::get_Timer_HQ().get_time();
   float passed_time = float(current_time.get_seconds_since(last_htime));
   if (passed_time > PLAYER_ATTACK_INTERVAL) {
     last_htime = current_time;
-    Attack_spell* new_spell;
+
     switch (type) {
       case A1:
       case A2:
       case A3:
       case A4:
-        normal_attack = true;
-        damaged = false;
-        new_spell = new Attack_spell(get_location(),
-                                        get_current_orientation(),
-                                        kPlayer_attack_range,
-                                        kPlayer_attack_strengh,
-                                        true,
-                                        bloodsucking,
-                                        this);
-        Model_state::get_instance()->add_spell(new_spell);
+        try_normal_attack(current_time);
+
         /*
             Attack_spell(const Zeni::Point2f& location_ = Zeni::Point2f(),
                  const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
@@ -262,6 +255,11 @@ void Player::fire(kKey_type type) {
     //in PLAYER_ATTACK_INTERVAL
   }
 }
+
+void Player::get_crazy() {
+  crazy = true;
+}
+
 void Player::bloodsuck() {
   bloodsucking = true;
 }
@@ -270,6 +268,17 @@ void Player::shield() {
   shielding = true;
 }
 
+void Player::try_normal_attack(const Zeni::Time_HQ current_time) {
+  normal_attack = true;
+  Attack_spell* new_spell = new Attack_spell(get_location(),
+                                        get_current_orientation(),
+                                        kPlayer_attack_range,
+                                        kPlayer_attack_strengh * attack_buff,
+                                        true,
+                                        bloodsucking,
+                                        this);
+  Model_state::get_instance()->add_spell(new_spell);
+}
 void Player::try_spell1(const Zeni::Time_HQ current_time) {
   float passed_time = float(current_time.get_seconds_since(last_spell1));
   Spell* new_spell;
@@ -277,17 +286,17 @@ void Player::try_spell1(const Zeni::Time_HQ current_time) {
     last_spell1 = current_time;
     //create spell based on character type
     switch (ptype) {
-      case SANZANG:
+      case SANZANG: //stopping
         //new_spell = new Healing_spell(get_location(), get_current_orientation());
         //new_spell = new Arrow_attack(get_location(), get_current_orientation());
         new_spell = new Fire_ball(get_location(), get_current_orientation());
         Model_state::get_instance()->add_spell(new_spell);
         break;
-      case WUKONG:
+      case WUKONG: //Cudgel Fury
         break;
-      case SHASENG:
+      case SHASENG: //Strafe
         break;
-      default: // case BAJIE:
+      default: // case BAJIE: Shield
         shield();
         break;
     }
@@ -301,13 +310,13 @@ void Player::try_spell2(const Zeni::Time_HQ current_time) {
     last_spell2 = current_time;
     //create spell based on character type
     switch (ptype) {
-      case SANZANG:
+      case SANZANG: //healing_spell
         break;
-      case WUKONG:
+      case WUKONG: //Charge
         break;
-      case SHASENG:
+      case SHASENG: //Trap
         break;
-      default: // case BAJIE:
+      default: // case BAJIE: Taunt
         break;
     }
   }
@@ -320,13 +329,13 @@ void Player::try_spell3(const Zeni::Time_HQ current_time) {
     last_spell3 = current_time;
     //create spell based on character type
     switch (ptype) {
-      case SANZANG:
+      case SANZANG: //all_healing
         break;
-      case WUKONG:
+      case WUKONG: //Berserk
         break;
-      case SHASENG:
+      case SHASENG: //Magic Arrow
         break;
-      default: // case BAJIE:
+      default: // case BAJIE:  Life Trap
         bloodsuck();
         break;
     }
