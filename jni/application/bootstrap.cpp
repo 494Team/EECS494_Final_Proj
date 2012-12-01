@@ -37,7 +37,8 @@ class Play_State : public Gamestate_II {
 public:
   Play_State() :
     m_time_passed(0.f),
-    lvl(0)
+    lvl(0),
+    dialog(&m_set)
   {
     set_pausable(true);
 
@@ -88,10 +89,16 @@ public:
     Model_state::get_instance()->add_monster(whisper_1);
 
     //!!! test
-    dialog.start(lvl);
+    //dialog.start(lvl);
+    begin_dialog(&dialog, lvl);
   }
 
 private:
+
+  void begin_dialog(Dialog_box* dialog_ptr, int lvl) {
+    //m_set.pause_all();
+    dialog_ptr->start(lvl);
+  }
 
   void on_push() {
     //get_Window().mouse_grab(true);
@@ -117,121 +124,128 @@ private:
 
   void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
     switch(action) {
-      case MENU:
-        if(confidence == 1.0f) {
-          Game &game = get_Game();
-          game.push_state(new Popup_Menu_State);
-        }
-        break;
-
       case HORI1:
         (*Model_state::get_instance()->get_player_list_ptr())[0]->ctrl.move_hori = confidence / 2;
         break;
-
       case VERT1:
         (*Model_state::get_instance()->get_player_list_ptr())[0]->ctrl.move_vert = confidence / 2;
         break;
-
       case L1:
         (*Model_state::get_instance()->get_player_list_ptr())[0]->ctrl.l = confidence > 0.5 ? true : false;
-        break;
-
-      case A1:
-        if(confidence == 1.0f) {
-          if (dialog.is_goingon()) {
-            dialog.proceed();
-          }
-          (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(A1);
-        }
-        break;
-      case B1:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(B1);
-        break;
-      case X1:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(X1);
-        break;
-      case Y1:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(Y1);
         break;
 
       case HORI2:
         (*Model_state::get_instance()->get_player_list_ptr())[1]->ctrl.move_hori = confidence / 2;
         break;
-
       case VERT2:
         (*Model_state::get_instance()->get_player_list_ptr())[1]->ctrl.move_vert = confidence / 2;
-              break;
-
+        break;
       case L2:
         (*Model_state::get_instance()->get_player_list_ptr())[1]->ctrl.l = confidence > 0.5 ? true : false;
-        break;
-
-      case A2:
-        (*Model_state::get_instance()->get_player_list_ptr())[1]->fire(A2);
-        break;
-      case B2:
-        (*Model_state::get_instance()->get_player_list_ptr())[1]->fire(B2);
-        break;
-      case X2:
-        (*Model_state::get_instance()->get_player_list_ptr())[1]->fire(X2);
-        break;
-      case Y2:
-        (*Model_state::get_instance()->get_player_list_ptr())[1]->fire(Y2);
         break;
 
       case HORI3:
         (*Model_state::get_instance()->get_player_list_ptr())[2]->ctrl.move_hori = confidence / 2;
         break;
-
       case VERT3:
         (*Model_state::get_instance()->get_player_list_ptr())[2]->ctrl.move_vert = confidence / 2;
-              break;
-
+        break;
       case L3:
         (*Model_state::get_instance()->get_player_list_ptr())[2]->ctrl.l = confidence > 0.5 ? true : false;
-        break;
-
-      case A3:
-        (*Model_state::get_instance()->get_player_list_ptr())[2]->fire(A3);
-        break;
-      case B3:
-        (*Model_state::get_instance()->get_player_list_ptr())[2]->fire(B3);
-        break;
-      case X3:
-        (*Model_state::get_instance()->get_player_list_ptr())[2]->fire(X3);
-        break;
-      case Y3:
-        (*Model_state::get_instance()->get_player_list_ptr())[2]->fire(Y3);
         break;
 
       case HORI4:
         (*Model_state::get_instance()->get_player_list_ptr())[3]->ctrl.move_hori = confidence / 2;
         break;
-
       case VERT4:
         (*Model_state::get_instance()->get_player_list_ptr())[3]->ctrl.move_vert = confidence / 2;
-              break;
-
+        break;
       case L4:
         (*Model_state::get_instance()->get_player_list_ptr())[3]->ctrl.l = confidence > 0.5 ? true : false;
         break;
 
-      case A4:
-        (*Model_state::get_instance()->get_player_list_ptr())[3]->fire(A4);
-        break;
-      case B4:
-        (*Model_state::get_instance()->get_player_list_ptr())[3]->fire(B4);
-        break;
-      case X4:
-        (*Model_state::get_instance()->get_player_list_ptr())[3]->fire(X4);
-        break;
-      case Y4:
-        (*Model_state::get_instance()->get_player_list_ptr())[3]->fire(Y4);
-        break;
-
-
       default:
         break;
+    }
+
+    if(confidence == 1.0f) {
+      switch(action) {
+        case MENU: {
+          Game &game = get_Game();
+          game.push_state(new Popup_Menu_State);
+          break;
+        }
+        case A1:
+          if (dialog.is_goingon()) {
+            dialog.proceed();
+          } else {
+            (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(A1);
+          }
+          break;
+        case B1:
+          (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(B1);
+          break;
+        case X1:
+          (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(X1);
+          break;
+        case Y1:
+          (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(Y1);
+          break;
+
+        case A2:
+          if (dialog.is_goingon()) {
+            dialog.proceed();
+          } else {
+            (*Model_state::get_instance()->get_player_list_ptr())[1]->fire(A2);
+          }
+          break;
+        case B2:
+          (*Model_state::get_instance()->get_player_list_ptr())[1]->fire(B2);
+          break;
+        case X2:
+          (*Model_state::get_instance()->get_player_list_ptr())[1]->fire(X2);
+          break;
+        case Y2:
+          (*Model_state::get_instance()->get_player_list_ptr())[1]->fire(Y2);
+          break;
+
+        case A3:
+          if (dialog.is_goingon()) {
+            dialog.proceed();
+          } else {
+            (*Model_state::get_instance()->get_player_list_ptr())[2]->fire(A3);
+          }
+          break;
+        case B3:
+          (*Model_state::get_instance()->get_player_list_ptr())[2]->fire(B3);
+          break;
+        case X3:
+          (*Model_state::get_instance()->get_player_list_ptr())[2]->fire(X3);
+          break;
+        case Y3:
+          (*Model_state::get_instance()->get_player_list_ptr())[2]->fire(Y3);
+          break;
+
+        case A4:
+          if (dialog.is_goingon()) {
+            dialog.proceed();
+          } else {
+            (*Model_state::get_instance()->get_player_list_ptr())[3]->fire(A4);
+          }
+          break;
+        case B4:
+          (*Model_state::get_instance()->get_player_list_ptr())[3]->fire(B4);
+          break;
+        case X4:
+          (*Model_state::get_instance()->get_player_list_ptr())[3]->fire(X4);
+          break;
+        case Y4:
+          (*Model_state::get_instance()->get_player_list_ptr())[3]->fire(Y4);
+          break;
+
+        default:
+          break;
+      }
     }
   }
 

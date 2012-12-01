@@ -13,10 +13,12 @@ namespace Flame {
     int lvl;
     int dialog_n;
     bool in_conversation;
+    Chronometer<Time>* game_time;
   public:
-    Dialog_box()
+    Dialog_box(Chronometer<Time>* game_t)
     : in_conversation(false),
-      dialog_n(0)
+      dialog_n(0),
+      game_time(game_t)
     {
     }
 
@@ -28,14 +30,17 @@ namespace Flame {
       lvl = lvl_;
       dialog_n = 0;
       in_conversation = true;
+      game_time->pause_all();
     }
 
     void proceed() {
       if (in_conversation) {
-        if (dialog_n < dialog_max[lvl])
+        if (dialog_n < dialog_max[lvl]) {
           dialog_n++;
-        else
+        } else {
           in_conversation = false;
+          game_time->unpause_all();
+        }
       }
     }
 
