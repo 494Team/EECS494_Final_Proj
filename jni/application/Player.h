@@ -38,9 +38,10 @@ namespace Flame {
   const float kShield_CD = 1.0f;
   const float kShield_effect = 0.5f;
 
+  const float kTaunt_CD = 3.0f;
 
-  const float kBloodsuck_last = 0.5f;
-  const float kBloodsuck_CD = 1.0f;
+  const float kBloodsuck_last = 3.0f;
+  const float kBloodsuck_CD = 6.0f;
   const float kBloodsuck_effect = 0.5f;
 
   class Player: public Agent {
@@ -84,17 +85,23 @@ namespace Flame {
     Zeni::Time_HQ last_spell1;
     Zeni::Time_HQ last_spell2;
     Zeni::Time_HQ last_spell3;
+    bool spell1_active;
+    bool spell2_active;
+    bool spell3_active;
     //SANZANG
     //WUKONG
     void get_crazy();
     bool crazy;
     //SHASENG
     //BAJIE
-    bool bloodsucking;
-    void bloodsuck();
-    bool shielding;
+    //1
     float backup_armor;
     void shield();
+    //2
+    void taunt();
+    //3
+    void bloodsuck();
+
 
     //running renderer
     bool running_status;

@@ -32,7 +32,7 @@ namespace Flame {
           effects.push_back(HITBACK);
           (*it)->get_hit(attack_strength, effects, nullptr);
           if (heal_self)
-            player_ptr->dec_health(.5f * attack_strength);
+            player_ptr->dec_health(-.5f * attack_strength);
         }
     }
     else {

@@ -13,13 +13,14 @@ Player::Player(
   crazy(false),
   normal_attack(false),
   running_status(false),
-  bloodsucking(false),
-  shielding(false),
   ptype(BAJIE),
 //size(Zeni::Vector2f(radius_ * 2, radius_ * 2))
   size(radius_),
   attack_buff(kInit_buff),
-  game_time(game_t_)
+  game_time(game_t_),
+  spell1_active(false),
+  spell2_active(false),
+  spell3_active(false)
 {
   const Zeni::Time_HQ current_time = Zeni::get_Timer_HQ().get_time();
   render_clock = current_time;
@@ -44,9 +45,9 @@ Player::Player(
       spell3_CD = kSpell3_CD;
       break;
     default: // case BAJIE:
-      spell1_CD = kSpell1_CD;
-      spell2_CD = kSpell2_CD;
-      spell3_CD = kSpell3_CD;
+      spell1_CD = kShield_CD;
+      spell2_CD = kTaunt_CD;
+      spell3_CD = kBloodsuck_CD;
       break;
   }
 }
@@ -87,12 +88,12 @@ void Player::update(float time) {
     normal_attack = false;
   }
 
-  if (ptype == BAJIE && shielding && float(current_time.get_seconds_since(last_spell1)) > kShield_last) {
-    shielding = false;
+  if (ptype == BAJIE && spell1_active && float(current_time.get_seconds_since(last_spell1)) > kShield_last) {
+    spell1_active = false;
     set_armor(backup_armor);
   }
-  if (ptype == BAJIE && bloodsucking && float(current_time.get_seconds_since(last_spell3)) > kBloodsuck_last) {
-    bloodsucking = false;
+  if (ptype == BAJIE && spell3_active && float(current_time.get_seconds_since(last_spell3)) > kBloodsuck_last) {
+    spell3_active = false;
   }
 
   //
@@ -147,12 +148,12 @@ void Player::render() {
   render_image(player_texture,
          Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
          Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
-  if (shielding) {
+  if (spell1_active) {
     render_image("shield",
            Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
            Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
   }
-  if (bloodsucking) {
+  if (spell3_active) {
     render_image("bloodsuck",
            Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
            Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
@@ -262,24 +263,33 @@ void Player::get_crazy() {
   attack_buff = 2.0f;
 }
 
-void Player::bloodsuck() {
-  bloodsucking = true;
-}
+
 
 void Player::shield() {
-  shielding = true;
+  spell1_active = true;
   backup_armor = get_armor();
   set_armor(backup_armor * kShield_effect);
 }
 
+void Player::taunt() {
+  spell2_active = true;
+  Taunt* new_spell = new Taunt(get_location(), this);
+  Model_state::get_instance()->add_spell(new_spell);
+}
+
+void Player::bloodsuck() {
+  spell3_active = true;
+}
+
 void Player::try_normal_attack(const Zeni::Time_HQ current_time) {
   normal_attack = true;
+  bool heal_self = (ptype == BAJIE) && spell3_active;
   Attack_spell* new_spell = new Attack_spell(get_location(),
                                         get_current_orientation(),
                                         kPlayer_attack_range,
                                         kPlayer_attack_strengh * attack_buff,
                                         true,
-                                        bloodsucking,
+                                        heal_self,
                                         this);
   Model_state::get_instance()->add_spell(new_spell);
 }
@@ -321,6 +331,7 @@ void Player::try_spell2(const Zeni::Time_HQ current_time) {
       case SHASENG: //Trap
         break;
       default: // case BAJIE: Taunt
+        taunt();
         break;
     }
   }
