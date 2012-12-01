@@ -56,7 +56,7 @@ namespace Flame {
     std::vector<Map *> * get_map_puzzle_obj_list_ptr()
     {return &map_puzzle_obj_list;}
     std::vector<Map *> * get_map_door_obj_list_ptr()
-    {return &map_door_obj_lisg;}
+    {return &map_door_obj_list;}
 
 
     // never try to add yourself! use these functions!!!!!!!
