@@ -367,6 +367,28 @@ The following things are unsupported:
     <filepath>textures/sword_attack.png</filepath>
     <tile>0</tile>
   </sword_attack>
+  <!-- Redboy texture starts-->
+  <redboy_right>
+    <filepath>textures/red_boy_right.png</filepath>
+    <tile>0</tile>
+  </redboy_right>
+  <redboy_left>
+    <filepath>textures/red_boy_left.png</filepath>
+    <tile>0</tile>
+  </redboy_left>
+  <redboy_front>
+    <filepath>textures/red_boy_front.png</filepath>
+    <tile>0</tile>
+  </redboy_front>
+  <redboy_back>
+    <filepath>textures/red_boy_back.png</filepath>
+    <tile>0</tile>
+  </redboy_back>
+  <redboy_casting>
+    <filepath>textures/red_boy_casting.png</filepath>
+    <tile>0</tile>
+  </redboy_casting>
+  <!-- Redboy texture ends-->
   <!--
   <one>
     <is_sprite>0</is_sprite>
