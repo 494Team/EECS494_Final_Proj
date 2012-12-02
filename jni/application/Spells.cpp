@@ -113,6 +113,14 @@ namespace Flame {
   void Arrow_attack::render()
   {Moving_spell::render("arrow");}
 
+  Magic_arrow::Magic_arrow(const Point2f& location_, const Vector2f& orientation_)
+  : Arrow_attack(location_, orientation_)
+  {
+  }
+
+  void Magic_arrow::render()
+  {Moving_spell::render("magic_arrow_ice");}
+
   Strafe::Strafe(const Point2f& location_, const Vector2f& orientation_) :
     Spell(kArrow_life_time),
     location(location_),

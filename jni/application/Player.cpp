@@ -41,9 +41,9 @@ Player::Player(
       spell3_CD = kSpell3_CD;
       break;
     case SHASENG:
-      spell1_CD = kSpell1_CD;
-      spell2_CD = kSpell2_CD;
-      spell3_CD = kSpell3_CD;
+      spell1_CD = kStrafe_CD;
+      spell2_CD = kTrap_CD;
+      spell3_CD = kMagicarrow_CD;
       break;
     default: // case BAJIE:
       spell1_CD = kShield_CD;
@@ -317,6 +317,8 @@ void Player::try_spell1(const Zeni::Time_HQ current_time) {
       case WUKONG: //Cudgel Fury
         break;
       case SHASENG: //Strafe
+        new_spell = new Strafe(get_location(), get_current_orientation());
+        Model_state::get_instance()->add_spell(new_spell);
         break;
       default: // case BAJIE: Shield
         shield();
@@ -327,7 +329,7 @@ void Player::try_spell1(const Zeni::Time_HQ current_time) {
 
 void Player::try_spell2(const Zeni::Time_HQ current_time) {
   float passed_time = float(current_time.get_seconds_since(last_spell2));
-  Healing_spell* new_spell;
+  Spell* new_spell;
   if (passed_time > spell2_CD) {
     last_spell2 = current_time;
     //create spell based on character type
@@ -337,6 +339,8 @@ void Player::try_spell2(const Zeni::Time_HQ current_time) {
       case WUKONG: //Charge
         break;
       case SHASENG: //Trap
+        new_spell = new Trap(get_location());
+        Model_state::get_instance()->add_spell(new_spell);
         break;
       default: // case BAJIE: Taunt
         taunt();
@@ -347,7 +351,7 @@ void Player::try_spell2(const Zeni::Time_HQ current_time) {
 
 void Player::try_spell3(const Zeni::Time_HQ current_time) {
   float passed_time = float(current_time.get_seconds_since(last_spell3));
-  Healing_spell* new_spell;
+  Spell* new_spell;
   if (passed_time > spell3_CD) {
     last_spell3 = current_time;
     //create spell based on character type
@@ -357,6 +361,8 @@ void Player::try_spell3(const Zeni::Time_HQ current_time) {
       case WUKONG: //Berserk
         break;
       case SHASENG: //Magic Arrow
+        new_spell = new Magic_arrow(get_location(), get_current_orientation());
+        Model_state::get_instance()->add_spell(new_spell);
         break;
       default: // case BAJIE:  Life Trap
         bloodsuck();

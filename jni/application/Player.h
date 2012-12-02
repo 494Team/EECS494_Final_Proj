@@ -34,6 +34,11 @@ namespace Flame {
   const float kInit_buff = 1.0f;
 
   // spells
+  //SHASENG
+  const float kStrafe_CD = 2.0f;
+  const float kTrap_CD = 2.0f;
+  const float kMagicarrow_CD = 2.0f;
+  //BAJIE
   const float kShield_last = 0.5f;
   const float kShield_CD = 1.0f;
   const float kShield_effect = 0.5f;

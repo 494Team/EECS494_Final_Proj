@@ -81,6 +81,14 @@ namespace Flame {
     virtual void render();
   };
 
+  class Magic_arrow: public Arrow_attack {
+  public:
+    Magic_arrow(const Zeni::Point2f& location_ = Zeni::Point2f(),
+                 const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
+    //virtual void update(float time = 0.f);
+    virtual void render();
+  };
+
   class Strafe : public Spell{
   public:
     Strafe(const Zeni::Point2f& location_ = Zeni::Point2f(),
