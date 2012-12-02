@@ -283,16 +283,23 @@ void Player::bloodsuck() {
 }
 
 void Player::try_normal_attack(const Zeni::Time_HQ current_time) {
-  normal_attack = true;
-  bool heal_self = (ptype == BAJIE) && spell3_active;
-  Attack_spell* new_spell = new Attack_spell(get_location(),
-                                        get_current_orientation(),
-                                        kPlayer_attack_range,
-                                        kPlayer_attack_strengh * attack_buff,
-                                        true,
-                                        heal_self,
-                                        this);
-  Model_state::get_instance()->add_spell(new_spell);
+  Spell* new_spell;
+  if (ptype == SHASENG) {
+    new_spell = new Arrow_attack(get_location(), get_current_orientation());
+    Model_state::get_instance()->add_spell(new_spell);
+  } else {
+    bool heal_self = (ptype == BAJIE) && spell3_active;
+    new_spell = new Attack_spell(get_location(),
+                                          get_current_orientation(),
+                                          kPlayer_attack_range,
+                                          kPlayer_attack_strengh * attack_buff,
+                                          true,
+                                          heal_self,
+                                          this);
+    normal_attack = true;
+    Model_state::get_instance()->add_spell(new_spell);
+  }
+  
 }
 void Player::try_spell1(const Zeni::Time_HQ current_time) {
   float passed_time = float(current_time.get_seconds_since(last_spell1));
