@@ -43,14 +43,14 @@ void Redboy::skill2() {
     Zeni::Vector3f ori = Zeni::Vector3f(0.0f, -1.0f, 0.0f);
     Zeni::Quaternion rotate = Zeni::Quaternion::Axis_Angle(Zeni::Vector3f(0.0f, 0.0f, -1.0f), theta * i);
     ori = rotate * ori;
-    Model_state::get_instance()->add_spell(new Fire_ball(get_location(), Zeni::Point2f(ori.i, ori.j)));
+    Model_state::get_instance()->add_spell(new Ring_of_fire(get_location(), Zeni::Point2f(ori.i, ori.j)));
   }
 }
 
 // fire spikes
 void Redboy::skill3() {
   int player_num = randomer.rand_lt(4);
-  Model_state::get_instance()->add_spell(new Fire_spikes(players[player_num]->get_location()));
+  Model_state::get_instance()->add_spell(new Hell_spikes(players[player_num]->get_location()));
 }
 
 void Redboy::update(float time) {
