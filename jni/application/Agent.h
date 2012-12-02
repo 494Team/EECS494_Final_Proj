@@ -31,6 +31,7 @@ namespace Flame {
 
     Zeni::Point2f get_location()const {return Moving_object::get_current_location();}
     float get_current_health() const {return health;}
+    float get_initial_health() const {return initial_health;}
     const Zeni::Collision::Capsule& get_body() const {return body;}
     bool is_alive() const {return alive;}
     bool is_hitback() const {return hitback;}

@@ -92,7 +92,7 @@ void Whisper::update(float time) {
       made_decision = false;
     }
   } else {
-    if (get_current_time() - get_prev_attack_time() > RENDER_ATTACK_TIME && !made_decision) {
+    if (get_current_time() - get_prev_attack_time() > ATTACK_DURATION && !made_decision) {
       made_decision = true;
       is_attacking = false;
       // if can not yet do another attack, move around
@@ -123,13 +123,9 @@ void Whisper::update(float time) {
 
 void Whisper::render() {
   float scale = Model_state::get_instance()->get_scale();
-  Zeni::Point2f ul = rel_loc
-    - Zeni::Vector2f(get_body().get_radius(), get_body().get_radius()) * scale;
-  Zeni::Point2f lr = ul + Zeni::Vector2f(get_body().get_radius() * 2.0f, get_body().get_radius() * 2.0f) * scale;
-  float radians_ccw = calc_angle_between(get_current_orientation(), Zeni::Vector2f(1.0f, 0.0f));
-  if (get_current_orientation().y < 0.0f) {
-    radians_ccw = Zeni::Global::pi * 2.0f - radians_ccw;
-  }
+  Zeni::Point2f ul, lr;
+  float radians_ccw;
+  get_render_params(ul, lr, radians_ccw);
 
   Zeni::render_image("enemy",
     ul,

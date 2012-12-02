@@ -45,6 +45,8 @@ namespace Flame {
     void update(float time);
 
     void get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker);
+
+    void get_render_params(Zeni::Point2f &ul, Zeni::Point2f &lr, float &radians_ccw);
       
   protected:
     float calc_angle_between(const Zeni::Vector2f &a, const Zeni::Vector2f &b);
@@ -55,10 +57,10 @@ namespace Flame {
     Zeni::Point2f rel_loc;
 
     bool is_attacking;
+    float attack_gap;
   private:
     float current_time;
     float prev_attack_time;
-    float attack_gap;
   };
 }
 

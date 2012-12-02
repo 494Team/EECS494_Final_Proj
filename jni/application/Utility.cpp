@@ -26,7 +26,7 @@ namespace Flame {
 
   const float INITIAL_HATRED = 100.0f;
 
-  const float RENDER_ATTACK_TIME = 0.5f;
+  const float ATTACK_DURATION = 0.5f;
 
   const float WANDERER_RADIUS = 16.0f;
   const float WANDERER_SPEED = 50.0f;

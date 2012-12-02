@@ -19,6 +19,8 @@
 #include "Wanderer.h"
 #include "Whisper.h"
 #include "Dialog_box.h"
+#include "Redboy.h"
+#include <iostream>
 
 #if defined(_DEBUG) && defined(_WINDOWS)
 #define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
@@ -87,6 +89,8 @@ public:
     Model_state::get_instance()->add_monster(wanderer);
     Whisper* whisper_1 = new Whisper(Zeni::Point2f(400, 100));
     Model_state::get_instance()->add_monster(whisper_1);
+    Redboy* redboy_inst = new Redboy(Zeni::Point2f(300, 300));
+    Model_state::get_instance()->add_monster(redboy_inst);
 
     //!!! test
     //dialog.start(lvl);

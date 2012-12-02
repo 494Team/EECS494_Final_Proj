@@ -127,3 +127,13 @@ void Monster::get_hit(const float &damage, const std::vector<attack_effect> &eff
   Agent::get_hit(damage, effects);
   increase_hatred(damage, attacker);
 }
+
+void Monster::get_render_params(Zeni::Point2f &ul, Zeni::Point2f &lr, float &radians_ccw) {
+  float scale = Model_state::get_instance()->get_scale();
+  ul = rel_loc - Zeni::Vector2f(get_body().get_radius(), get_body().get_radius()) * scale;
+  lr = ul + Zeni::Vector2f(get_body().get_radius() * 2.0f, get_body().get_radius() * 2.0f) * scale;
+  radians_ccw = calc_angle_between(get_current_orientation(), Zeni::Vector2f(1.0f, 0.0f));
+  if (get_current_orientation().y < 0.0f) {
+    radians_ccw = Zeni::Global::pi * 2.0f - radians_ccw;
+  } 
+}

@@ -31,7 +31,7 @@ namespace Flame{
   extern const float INITIAL_HATRED;
 
   // render time for a normal attack
-  extern const float RENDER_ATTACK_TIME;
+  extern const float ATTACK_DURATION;
 
   // Wanderer constants
   extern const float WANDERER_RADIUS;
@@ -63,6 +63,7 @@ namespace Flame{
   const float REDBOY_FIRE_CHARGE_COOLDOWN = 10.0f;
   const float REDBOY_RING_OF_FIRE_COOLDOWN = 15.0f;
   const float REDBOY_FIRE_SPIKES_COOLDOWN = 20.0f;
+  const float REDBOY_FIRE_CHARGE_DAMAGE = 500.0f;
 
   // attack effect time
   extern const float HITBACK_TIME;
