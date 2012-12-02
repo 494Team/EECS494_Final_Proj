@@ -34,6 +34,14 @@ namespace Flame {
   const float kInit_buff = 1.0f;
 
   // spells
+  //SANZANG
+  const float kConfusing_CD = 2.0f;
+  const float kHealing_CD = 2.0f;
+  const float kAll_healing_CD = 2.0f;
+  //WUKONG
+  const float kCudge_fury_CD = 2.0f;
+  const float kCharge_CD = 2.0f;
+  const float kBerserk_CD = 2.0f;
   //SHASENG
   const float kStrafe_CD = 2.0f;
   const float kTrap_CD = 2.0f;
