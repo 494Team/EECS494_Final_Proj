@@ -1,9 +1,10 @@
 #include <zenilib.h>
-
+#include <iostream>
 #include "Spell.h"
 #include "Model_state.h"
 
 using namespace Zeni;
+using std::cout; using std::endl;
 
 namespace Flame {
 

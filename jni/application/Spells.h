@@ -29,9 +29,15 @@ namespace Flame {
   const float kFireball_life_time = 3.0f;
   const float kFireball_damage = 50.0f;
 
-  const Zeni::Vector2f kFire_spike_size = Zeni::Vector2f(50.f, 50.f);
-  const float kFire_spike_life_time = 5.f;
-  const float kFire_spike_damage = 50.f;
+  const Zeni::Vector2f kRing_of_fire_size = Zeni::Vector2f(16.0f, 16.f);
+  const float kRing_of_fire_speed = 50.0f;
+  const float kRing_of_fire_life_time = 5.0f;
+  const float kRing_of_fire_damage = 50.0f;
+
+  const Zeni::Vector2f kHell_spikes_size = Zeni::Vector2f(125.f, 125.f);
+  const float kHell_spikes_pre_time = 1.f;
+  const float kHell_spikes_life_time = 5.f;
+  const float kHell_spikes_damage = 50.f;
 
   class Attack_spell : public Spell {
   public:
@@ -124,11 +130,21 @@ namespace Flame {
     virtual void render();
   };
 
-  class Fire_spikes : public Resizable_spell {
+  class Ring_of_fire : public Moving_spell_circle {
   public:
-    Fire_spikes(const Zeni::Point2f& location_ = Zeni::Point2f());
+    Ring_of_fire(const Zeni::Point2f& location_ = Zeni::Point2f(),
+                 const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
     virtual void update(float time = 0.f);
     virtual void render();
+  };
+
+  class Hell_spikes : public Resizable_spell {
+  public:
+    Hell_spikes(const Zeni::Point2f& location_ = Zeni::Point2f());
+    virtual void update(float time = 0.f);
+    virtual void render();
+  private:
+    float pre_time;
   };
 
 }

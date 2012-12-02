@@ -44,9 +44,9 @@ namespace Flame {
     clear();
     timer = timer_;
     player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(300.f, 200.f), SHASENG));
-    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(500.f, 300.f), SANZANG));
-    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(500.f, 200.f), WUKONG));
-    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(300.f, 300.f), BAJIE));
+    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(500.f, 300.f), SHASENG));
+    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(500.f, 200.f), SHASENG));
+    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(300.f, 300.f), SHASENG));
     // wall on bottom
     map_obj_list.push_back(new Map_brick(Point2f(-20.0f, 600.0f), Vector2f(820.0f,20.0f), 20.0f, 20.f, String("rock")));
     // wall on top
@@ -190,7 +190,7 @@ namespace Flame {
   void Model_state::add_spell(Spell * spell_ptr)
   {
     render_list.insert(spell_ptr);
-    sim_obj_list.push_back(spell_ptr);
+    next_loop_update_list.push_back(spell_ptr);
     spell_list.push_back(spell_ptr);
   }
 

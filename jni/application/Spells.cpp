@@ -1,4 +1,5 @@
 #include "Spells.h"
+#include "Model_state.h"
 #include "Monster.h"
 #include <vector>
 
@@ -211,20 +212,70 @@ namespace Flame {
   void Fire_ball::render()
   {Moving_spell::render("fire_ball");}
 
-  Fire_spikes::Fire_spikes(const Point2f& location_) :
-    Resizable_spell(location_, kFire_spike_size, Vector2f(), kFire_spike_life_time)
+  Hell_spikes::Hell_spikes(const Point2f& location_) :
+    Resizable_spell(location_, kHell_spikes_size, Vector2f(),
+                    kHell_spikes_pre_time + kHell_spikes_life_time),
+    pre_time(kHell_spikes_pre_time)
   {}
 
-  void Fire_spikes::update(float time)
+  Ring_of_fire::Ring_of_fire(const Point2f& location_, const Vector2f& orientation_) :
+    Moving_spell_circle(location_ + 50.f * orientation_.normalized(),
+                        orientation_,
+                        kRing_of_fire_size,
+                        kRing_of_fire_speed,
+                        kRing_of_fire_life_time)
+    {}
+
+  void Ring_of_fire::update(float time)
+  {
+    Moving_spell_circle::update(time);
+    if (is_active()) {
+      vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
+      for (auto it = player_list_ptr->begin(); it != player_list_ptr->end(); ++it)
+        if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
+          (*it)->dec_health(kFireball_damage);
+          disable_spell();
+          break;
+        }
+    }
+  }
+
+  void Ring_of_fire::render()
+  {
+    Vector2f orientation = get_orientation();
+    float theta = orientation.angle_between(Vector2f(0.f, 1.f));
+    float scale = Model_state::get_instance()->get_scale();
+    Vector2f size = get_size();
+    if (orientation.x < 0.f)
+      theta = 2 * Global::pi - theta;
+    theta += Global::pi;
+    render_image("ring_of_fire",
+                 get_relative_location() - scale * size / 2 - Vector2f(size.x / 4, 0.f),
+                 get_relative_location() + scale * size / 2 + Vector2f(size.x / 4, size.y),
+                 theta,
+                 1.f,
+                 get_relative_location());
+  }
+
+  void Hell_spikes::update(float time)
   {
     Resizable_spell::update(time);
+    if (pre_time > 0.f) {
+      pre_time -= time;
+      return;
+    }
     vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
     for (auto it = player_list_ptr->begin(); it != player_list_ptr->end(); ++it)
       if (get_body().intersects((*it)->get_body()) && (*it)->is_alive())
-        (*it)->dec_health(kFire_spike_damage);
+        (*it)->dec_health(kHell_spikes_damage);
   }
 
-  void Fire_spikes::render()
-  {Resizable_spell::render("brick");}
+  void Hell_spikes::render()
+  {
+    if (pre_time > 0.f)
+      Resizable_spell::render("hell_spikes_pre");
+    else
+      Resizable_spell::render("hell_spikes");
+  }
 
 }

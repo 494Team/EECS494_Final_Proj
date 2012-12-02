@@ -51,6 +51,8 @@ namespace Flame {
       {return get_current_location() - size / 2;}
     Zeni::Point2f get_center_location() const
       {return get_current_location();}
+    Zeni::Point2f get_relative_location() const
+      {return relative_location;}
     Zeni::Vector2f get_orientation() const
       {return get_current_orientation();}
     Zeni::Vector2f get_size() const
