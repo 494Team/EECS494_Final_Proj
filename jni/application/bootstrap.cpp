@@ -270,6 +270,65 @@ private:
     Model_state::get_instance()->update_scale_and_center();
   }
 
+  void render_status_helper(int p_x, Player* p_ptr) {
+    Zeni::String player_texture;
+    Point2f loc(20.0f + p_x*200.0f, 20.0f);
+    Point2f head_size(50.0f, 50.0f);
+    switch (p_ptr->get_player_type()) {
+      case SANZANG:
+        player_texture = "tripitaka_head";
+        break;
+      case WUKONG:
+        player_texture = "monkey_king_head";
+        break;
+      case SHASENG:
+        player_texture = "friar_sand_head";
+        break;
+      case BAJIE:
+        player_texture = "pigsy_head";
+        break;
+      default:
+        break;
+    }
+    render_image(player_texture, loc, loc + head_size);
+
+    float CD1percent = p_ptr->get_CD1_percent();
+    float CD2percent = p_ptr->get_CD2_percent();
+    float CD3percent = p_ptr->get_CD3_percent();
+    float kCDbar_length = 50.0f;
+    float kCDbar_width = 10.0f;
+    Zeni::String kCDbar_color = "blue";
+
+    
+    Zeni::Video &vr = Zeni::get_Video();
+    Zeni::Colors &cr = Zeni::get_Colors();
+
+    Point2f CDbar_loc(loc.x, loc.y + head_size.y + 5.0f);
+    Zeni::Vertex2f_Color p00(CDbar_loc, cr[kCDbar_color]);
+    Zeni::Vertex2f_Color p01(CDbar_loc + Zeni::Point2f(0.0f, kCDbar_width), cr[kCDbar_color]);
+    Zeni::Vertex2f_Color p02(CDbar_loc + Zeni::Point2f(CD1percent * kCDbar_length, kCDbar_width), cr[kCDbar_color]);
+    Zeni::Vertex2f_Color p03(CDbar_loc + Zeni::Point2f(CD1percent * kCDbar_length, 0.0f), cr[kCDbar_color]);
+    Zeni::Quadrilateral<Zeni::Vertex2f_Color> bar1(p00, p01, p02, p03);
+
+    CDbar_loc += Point2f(kCDbar_length + 5.0f, 0.0f);
+    Zeni::Vertex2f_Color p10(CDbar_loc, cr[kCDbar_color]);
+    Zeni::Vertex2f_Color p11(CDbar_loc + Zeni::Point2f(0.0f, kCDbar_width), cr[kCDbar_color]);
+    Zeni::Vertex2f_Color p12(CDbar_loc + Zeni::Point2f(CD2percent * kCDbar_length, kCDbar_width), cr[kCDbar_color]);
+    Zeni::Vertex2f_Color p13(CDbar_loc + Zeni::Point2f(CD2percent * kCDbar_length, 0.0f), cr[kCDbar_color]);
+    Zeni::Quadrilateral<Zeni::Vertex2f_Color> bar2(p10, p11, p12, p13);
+
+    CDbar_loc += Point2f(kCDbar_length + 5.0f, 0.0f);
+    Zeni::Vertex2f_Color p20(CDbar_loc, cr[kCDbar_color]);
+    Zeni::Vertex2f_Color p21(CDbar_loc + Zeni::Point2f(0.0f, kCDbar_width), cr[kCDbar_color]);
+    Zeni::Vertex2f_Color p22(CDbar_loc + Zeni::Point2f(CD3percent * kCDbar_length, kCDbar_width), cr[kCDbar_color]);
+    Zeni::Vertex2f_Color p23(CDbar_loc + Zeni::Point2f(CD3percent * kCDbar_length, 0.0f), cr[kCDbar_color]);
+    Zeni::Quadrilateral<Zeni::Vertex2f_Color> bar3(p20, p21, p22, p23);
+
+    vr.render(bar1);
+    vr.render(bar2);
+    vr.render(bar3);
+  }
+
   void render()
   {
 
@@ -301,8 +360,10 @@ private:
 
     /* render the PLAYER STATUS */
     std::vector<Player *> * plist = Model_state::get_instance()->get_player_list_ptr();
+
+    int p_x = 0;
     for (vector<Player *>::iterator it = plist->begin(); it != plist->end(); it++) {
-      float per = (*it)->get_CD1_percent();
+      render_status_helper(p_x++, *it);
     }
 
     dialog.render();

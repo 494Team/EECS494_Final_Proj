@@ -71,6 +71,9 @@ namespace Flame {
     void try_spell2();
     void try_spell3();
     
+    kPlayer_type get_player_type() {
+      return ptype;
+    }
     float get_CD1_percent() {
       float current_time = game_time->seconds();
       float passed_time = current_time - last_spell1;

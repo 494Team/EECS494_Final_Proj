@@ -280,6 +280,28 @@ The following things are unsupported:
     <filepath>textures/pigsy_right1.png</filepath>
     <tile>0</tile>
   </pigsy_right1>
+
+  <tripitaka_head>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/tripitaka_head.png</filepath>
+    <tile>0</tile>
+  </tripitaka_head>
+  <monkey_king_head>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/monkey_king_head.png</filepath>
+    <tile>0</tile>
+  </monkey_king_head>  
+  <friar_sand_head>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/friar_sand_head.png</filepath>
+    <tile>0</tile>
+  </friar_sand_head>
+  <pigsy_head>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/pigsy_head.png</filepath>
+    <tile>0</tile>
+  </pigsy_head>
+
   <!-- Players texture end................................-->
 
   <!-- Players skill start..............................-->
