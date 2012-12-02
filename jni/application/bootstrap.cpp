@@ -298,6 +298,13 @@ private:
     vr.render(map);
 
     Model_state::get_instance()->render();
+
+    /* render the PLAYER STATUS */
+    std::vector<Player *> * plist = Model_state::get_instance()->get_player_list_ptr();
+    for (vector<Player *>::iterator it = plist->begin(); it != plist->end(); it++) {
+      float per = (*it)->get_CD1_percent();
+    }
+
     dialog.render();
   }
 

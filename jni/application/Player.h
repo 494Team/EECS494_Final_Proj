@@ -67,9 +67,28 @@ namespace Flame {
     kPlayer_type ptype;
     void fire(kKey_type type);
     void try_normal_attack(const Zeni::Time_HQ current_time);
-    void try_spell1(const Zeni::Time_HQ current_time);
-    void try_spell2(const Zeni::Time_HQ current_time);
-    void try_spell3(const Zeni::Time_HQ current_time);
+    void try_spell1();
+    void try_spell2();
+    void try_spell3();
+    
+    float get_CD1_percent() {
+      float current_time = game_time->seconds();
+      float passed_time = current_time - last_spell1;
+      float percent = passed_time > spell1_CD ? 1.0f : passed_time/spell1_CD;
+      return percent;
+    }
+    float get_CD2_percent() {
+      float current_time = game_time->seconds();
+      float passed_time = current_time - last_spell2;
+      float percent = passed_time > spell1_CD ? 1.0f : passed_time/spell2_CD;
+      return percent;
+    }
+    float get_CD3_percent() {
+      float current_time = game_time->seconds();
+      float passed_time = current_time - last_spell3;
+      float percent = passed_time > spell1_CD ? 1.0f : passed_time/spell3_CD;
+      return percent;
+    }
 
   private:
     Chronometer<Time>* game_time;
@@ -88,12 +107,17 @@ namespace Flame {
     float spell1_CD;
     float spell2_CD;
     float spell3_CD;
-    Zeni::Time_HQ last_spell1;
-    Zeni::Time_HQ last_spell2;
-    Zeni::Time_HQ last_spell3;
+
     bool spell1_active;
     bool spell2_active;
     bool spell3_active;
+    
+    //timer_begin
+    float last_spell1;
+    float last_spell2;
+    float last_spell3;
+    //timer_end
+
     //SANZANG
     //WUKONG
     void get_crazy();

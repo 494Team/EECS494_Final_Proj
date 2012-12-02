@@ -21,14 +21,15 @@ Player::Player(
   game_time(game_t_),
   spell1_active(false),
   spell2_active(false),
-  spell3_active(false)
+  spell3_active(false),
+  last_spell1(0.0f),
+  last_spell2(0.0f),
+  last_spell3(0.0f)
 {
   const Zeni::Time_HQ current_time = Zeni::get_Timer_HQ().get_time();
   render_clock = current_time;
   last_htime = current_time;
-  last_spell1 = current_time;
-  last_spell2 = current_time;
-  last_spell3 = current_time;
+
   switch (ptype) {
     case SANZANG:
       spell1_CD = kSpell1_CD;
@@ -235,21 +236,21 @@ void Player::fire(kKey_type type) {
       case B3:
       case B4:
         //spell 1
-        try_spell1(current_time);
+        try_spell1();
         break;
       case X1:
       case X2:
       case X3:
       case X4:
         //spell 2
-        try_spell2(current_time);
+        try_spell2();
         break;
       case Y1:
       case Y2:
       case Y3:
       case Y4:
         //spell 3
-        try_spell3(current_time);
+        try_spell3();
         break;
       default:
         break;
@@ -301,8 +302,10 @@ void Player::try_normal_attack(const Zeni::Time_HQ current_time) {
   }
   
 }
-void Player::try_spell1(const Zeni::Time_HQ current_time) {
-  float passed_time = float(current_time.get_seconds_since(last_spell1));
+void Player::try_spell1() {
+  //float passed_time = float(current_time.get_seconds_since(last_spell1));
+  float current_time = game_time->seconds();
+  float passed_time = current_time - last_spell1;
   Spell* new_spell;
   if (passed_time > spell1_CD) {
     last_spell1 = current_time;
@@ -327,8 +330,10 @@ void Player::try_spell1(const Zeni::Time_HQ current_time) {
   }
 }
 
-void Player::try_spell2(const Zeni::Time_HQ current_time) {
-  float passed_time = float(current_time.get_seconds_since(last_spell2));
+void Player::try_spell2() {
+  //float passed_time = float(current_time.get_seconds_since(last_spell2));
+  float current_time = game_time->seconds();
+  float passed_time = current_time - last_spell2;
   Spell* new_spell;
   if (passed_time > spell2_CD) {
     last_spell2 = current_time;
@@ -349,8 +354,10 @@ void Player::try_spell2(const Zeni::Time_HQ current_time) {
   }
 }
 
-void Player::try_spell3(const Zeni::Time_HQ current_time) {
-  float passed_time = float(current_time.get_seconds_since(last_spell3));
+void Player::try_spell3() {
+  //float passed_time = float(current_time.get_seconds_since(last_spell3));
+  float current_time = game_time->seconds();
+  float passed_time = current_time - last_spell3;
   Spell* new_spell;
   if (passed_time > spell3_CD) {
     last_spell3 = current_time;
