@@ -58,7 +58,7 @@ void Wanderer::render() {
   float scale = Model_state::get_instance()->get_scale();
   Zeni::Point2f ul, lr;
   float radians_ccw;
-  get_render_params(ul, lr, radians_ccw);
+  get_render_params(get_body().get_radius(), ul, lr, radians_ccw);
 
 
   Zeni::render_image("enemy",

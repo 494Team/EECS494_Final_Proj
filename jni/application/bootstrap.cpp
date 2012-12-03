@@ -712,7 +712,7 @@ class Bootstrap {
       get_Sounds();
       get_Game().joy_mouse.enabled = true;
       //return new Title_State<Preparation_State, Instructions_State>("Zenipex Library\nApplication");
-      return new Title_State<Play_level_one, Instructions_State>("Zenipex Library\nApplication");
+      return new Title_State<Play_State, Instructions_State>("Zenipex Library\nApplication");
     }
   } m_goi;
 

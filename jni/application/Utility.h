@@ -53,7 +53,7 @@ namespace Flame{
   extern const float WHISPER_MAX_DIST;
 
   // Redboy constants
-  const float REDBOY_RADIUS = 32.0f;
+  const float REDBOY_RADIUS = 20.0f;
   const float REDBOY_SPEED = 50.0f;
   const float REDBOY_DAMAGE = 300.0f;
   const float REDBOY_HEALTH = 10000.0f;

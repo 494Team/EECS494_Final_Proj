@@ -391,26 +391,66 @@ The following things are unsupported:
   </ring_of_fire>
   <!-- Boss skills ends .......................................-->
   <!-- Redboy texture starts-->
-  <redboy_right>
-    <filepath>textures/red_boy_right.png</filepath>
+  <redboy_right0>
+    <filepath>textures/red_boy_right0.png</filepath>
     <tile>0</tile>
-  </redboy_right>
-  <redboy_left>
-    <filepath>textures/red_boy_left.png</filepath>
+  </redboy_right0>
+  <redboy_right1>
+    <filepath>textures/red_boy_right1.png</filepath>
     <tile>0</tile>
-  </redboy_left>
-  <redboy_front>
-    <filepath>textures/red_boy_front.png</filepath>
+  </redboy_right1>
+  <redboy_left0>
+    <filepath>textures/red_boy_left0.png</filepath>
     <tile>0</tile>
-  </redboy_front>
-  <redboy_back>
-    <filepath>textures/red_boy_back.png</filepath>
+  </redboy_left0>
+  <redboy_left1>
+    <filepath>textures/red_boy_left1.png</filepath>
     <tile>0</tile>
-  </redboy_back>
-  <redboy_casting>
-    <filepath>textures/red_boy_casting.png</filepath>
+  </redboy_left1>
+  <redboy_front0>
+    <filepath>textures/red_boy_front0.png</filepath>
     <tile>0</tile>
-  </redboy_casting>
+  </redboy_front0>
+  <redboy_front1>
+    <filepath>textures/red_boy_front1.png</filepath>
+    <tile>0</tile>
+  </redboy_front1>
+  <redboy_back0>
+    <filepath>textures/red_boy_back0.png</filepath>
+    <tile>0</tile>
+  </redboy_back0>
+  <redboy_back1>
+    <filepath>textures/red_boy_back1.png</filepath>
+    <tile>0</tile>
+  </redboy_back1>
+  <redboy_casting0>
+    <filepath>textures/red_boy_casting0.png</filepath>
+    <tile>0</tile>
+  </redboy_casting0>
+  <redboy_casting1>
+    <filepath>textures/red_boy_casting1.png</filepath>
+    <tile>0</tile>
+  </redboy_casting1>
+  <redboy_casting2>
+    <filepath>textures/red_boy_casting2.png</filepath>
+    <tile>0</tile>
+  </redboy_casting2>
+  <redboy_left_attack>
+    <filepath>textures/red_boy_attack_left.png</filepath>
+    <tile>0</tile>
+  </redboy_left_attack>
+  <redboy_right_attack>
+    <filepath>textures/red_boy_attack_right.png</filepath>
+    <tile>0</tile>
+  </redboy_right_attack>
+  <redboy_front_attack>
+    <filepath>textures/red_boy_attack_front.png</filepath>
+    <tile>0</tile>
+  </redboy_front_attack>
+  <redboy_back_attack>
+    <filepath>textures/red_boy_attack_back.png</filepath>
+    <tile>0</tile>
+  </redboy_back_attack>
   <!-- Redboy texture ends-->
   <!--
   <one>

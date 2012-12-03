@@ -57,6 +57,7 @@ void Redboy::update(float time) {
   Boss::update(time);
   target = highest_hatred();
 
+  set_moving(false);
   switch (status) {
     case ATTACK:
       if (get_current_time() - last_skill_starts_time > attack_gap) {
@@ -74,6 +75,7 @@ void Redboy::update(float time) {
           set_orientation(target->get_location());
           status = IDLE;
         } else {
+          set_moving(true);
           make_move(time);
           for (int i = 0; i < (int)players.size(); ++i) {
             if (players[i]->get_body().intersects(get_body())) {
@@ -108,6 +110,7 @@ void Redboy::update(float time) {
         - get_body().get_radius() - target->get_body().get_radius();
       set_orientation(target->get_location() - get_location());
       if (dist > REDBOY_MIN_DIST) {
+        set_moving(true);
         make_move(time);
       }
       decide_attack_type();
@@ -119,44 +122,54 @@ void Redboy::render() {
   float scale = Model_state::get_instance()->get_scale();
   Zeni::Point2f ul, lr;
   float radians_ccw;
-  get_render_params(ul, lr, radians_ccw);
+  get_render_params(get_body().get_radius() * 1.8f, ul, lr, radians_ccw);
 
-      //std::cout << "ori: " << get_current_orientation().x << ' ' << get_current_orientation().y << std::endl;
+  update_render_suffix();
+  if (!is_currently_moving())
+    render_suffix = "0";
   switch (status) {
     case SKILL1:
       if (get_current_time() - last_skill_starts_time > ATTACK_DURATION) {
         if (radians_ccw < Zeni::Global::pi * 0.25f || radians_ccw >= Zeni::Global::pi *1.75f) {
-          Zeni::render_image("redboy_right", ul, lr, 0, 1.0f, rel_loc);
+          Zeni::render_image("redboy_right" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
         } else if (radians_ccw >= Zeni::Global::pi * 0.25f && radians_ccw < Zeni::Global::pi * 0.75f) {
-          Zeni::render_image("redboy_front", ul, lr, 0, 1.0f, rel_loc);
+          Zeni::render_image("redboy_front" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
         } else if (radians_ccw >= Zeni::Global::pi * 0.75f && radians_ccw < Zeni::Global::pi * 1.25f) {
-          Zeni::render_image("redboy_left", ul, lr, 0, 1.0f, rel_loc);
+          Zeni::render_image("redboy_left" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
         } else {
-          Zeni::render_image("redboy_back", ul, lr, 0, 1.0f, rel_loc);
+          Zeni::render_image("redboy_back" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
         }
 
       } else {
-        Zeni::render_image("redboy_casting", ul, lr, 0, 1.0f, rel_loc);
+        Zeni::render_image("redboy_casting0", ul, lr, 0, 1.0f, rel_loc);
       }
       break;
     case SKILL2:
-      Zeni::render_image("redboy_casting", ul, lr, 0, 1.0f, rel_loc);
+      Zeni::render_image("redboy_casting1", ul, lr, 0, 1.0f, rel_loc);
       break;
     case SKILL3:
-      Zeni::render_image("redboy_casting", ul, lr, 0, 1.0f, rel_loc);
+      Zeni::render_image("redboy_casting2", ul, lr, 0, 1.0f, rel_loc);
       break;
     case ATTACK:
-      Zeni::render_image("sword_attack", ul, lr, 0.0f, 1.0f, rel_loc);
+      Zeni::render_image(
+        "sword_attack", 
+        ul + Zeni::Vector2f(get_body().get_radius(), 0.0f), 
+        lr + Zeni::Vector2f(get_body().get_radius(), 0.0f), 
+        radians_ccw, 
+        1.0f, 
+        rel_loc
+      );
+      render_suffix = "_attack";
     case IDLE: {
 
       if (radians_ccw < Zeni::Global::pi * 0.25f || radians_ccw >= Zeni::Global::pi *1.75f) {
-        Zeni::render_image("redboy_right", ul, lr, 0, 1.0f, rel_loc);
+        Zeni::render_image("redboy_right" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
       } else if (radians_ccw >= Zeni::Global::pi * 0.25f && radians_ccw < Zeni::Global::pi * 0.75f) {
-        Zeni::render_image("redboy_front", ul, lr, 0, 1.0f, rel_loc);
+        Zeni::render_image("redboy_front" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
       } else if (radians_ccw >= Zeni::Global::pi * 0.75f && radians_ccw < Zeni::Global::pi * 1.25f) {
-        Zeni::render_image("redboy_left", ul, lr, 0, 1.0f, rel_loc);
+        Zeni::render_image("redboy_left" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
       } else {
-        Zeni::render_image("redboy_back", ul, lr, 0, 1.0f, rel_loc);
+        Zeni::render_image("redboy_back" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
       }
       break;
     }

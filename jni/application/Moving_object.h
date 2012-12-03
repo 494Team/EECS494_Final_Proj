@@ -22,6 +22,8 @@ namespace Flame {
     void set_orientation(const Zeni::Vector2f &orientation_) { 
       orientation = orientation_;  
       orientation.normalize();
+      if (orientation.magnitude() == 0.0f)
+        orientation = Zeni::Vector2f(1.0f, 0.0f);
     }
 
     // update speed
