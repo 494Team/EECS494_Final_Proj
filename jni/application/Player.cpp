@@ -50,7 +50,7 @@ Player::Player(
   set_moving(true);
 }
 
-void Player::hitback_move(float time) {
+void Player::static_move(float time) {
   Point2f backup_position;
   Zeni::Vector2f backup_ori = get_current_orientation();
   float speed = get_current_speed();
@@ -91,7 +91,7 @@ void Player::update(float time) {
   Point2f new_position;
   float scale = Model_state::get_instance()->get_scale();
 
-  if (abs(ctrl.move_hori) + abs(ctrl.move_vert) > 0.3f) {
+  if (!is_hitback() && !is_charging() && abs(ctrl.move_hori) + abs(ctrl.move_vert) > 0.3f) {
     bool move_x = true;
     bool move_y = true;
     if (!ctrl.l) {
@@ -121,11 +121,17 @@ void Player::update(float time) {
     set_orientation(dir);
     set_speed(sqrt(pow(ctrl.move_hori * (int)move_x, 2) + pow(ctrl.move_vert * int(move_y), 2)));
   }
+
   if (is_hitback() && is_charging()) {
     charge_end();
   }
   if (is_hitback()) {
-    hitback_move(time);
+    static_move(time);
+  }
+  float sp;
+  if (is_charging()) {
+    static_move(time);
+    get_current_speed();
   }
   if (is_charging()) {
     
@@ -267,7 +273,7 @@ render_image(
                  scale,
                  rel_loc,
                  false);
-      
+
   Agent::render();
 }
 

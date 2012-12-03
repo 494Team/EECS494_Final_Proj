@@ -133,6 +133,7 @@ private:
     for (int i=0; i<4; i++) {
       p_ptr = (*Model_state::get_instance()->get_player_list_ptr())[i];
       control_enable[i] = ((!p_ptr->is_hitback()) && (!p_ptr->is_charging()));
+      //if (!control_enable[i])
     }
     switch(action) {
       case HORI1:
@@ -711,8 +712,8 @@ class Bootstrap {
       get_Fonts();
       get_Sounds();
       get_Game().joy_mouse.enabled = true;
-      //return new Title_State<Preparation_State, Instructions_State>("Zenipex Library\nApplication");
-      return new Title_State<Play_State, Instructions_State>("Zenipex Library\nApplication");
+      return new Title_State<Preparation_State, Instructions_State>("Zenipex Library\nApplication");
+      //return new Title_State<Play_level_one, Instructions_State>("Zenipex Library\nApplication");
     }
   } m_goi;
 

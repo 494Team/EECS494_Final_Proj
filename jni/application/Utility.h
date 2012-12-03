@@ -72,6 +72,7 @@ namespace Flame{
 
   //others
   const float kHpbar_width = 3.0f;
+  const int kPlayer_num = 4;
   
   //choosing character page "Preparation State"
   const int kCursor_max = 3;
