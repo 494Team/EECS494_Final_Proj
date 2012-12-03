@@ -8,12 +8,13 @@
 using namespace Zeni;
 using namespace std;
 namespace Flame {
-    Map::Map(const Point2f &location_, const Vector2f &size_){
+  Map::Map(const Point2f &location_, const Vector2f &size_){
         location = location_;
         size = size_;
     }
 
-    Map_brick::Map_brick(const Point2f &location_,
+  // --------------------------------------
+  Map_brick::Map_brick(const Point2f &location_,
                          const Vector2f &size_,
                          const float &texture_size_x_,
                          const float &texture_size_y_,
@@ -38,7 +39,7 @@ namespace Flame {
     }
     
     
-    void Map_brick::update(float) {
+  void Map_brick::update(float) {
         float scale = Model_state::get_instance()->get_scale();
         Point2f center = Model_state::get_instance()->get_center_location();
 		
@@ -53,7 +54,7 @@ namespace Flame {
         brick[3] = p3;
     }
     
-    void Map_brick::render() {
+  void Map_brick::render() {
         Video &vr = get_Video();
 
         Material Brick_material(Brick_texture);
@@ -61,8 +62,8 @@ namespace Flame {
         vr.render(brick);
     }
 
-    // Map_structure_rec functions;
-    Map_structure_rec::Map_structure_rec(const Zeni::Point2f &render_location_ ,
+  // --------------------------------------
+  Map_structure_rec::Map_structure_rec(const Zeni::Point2f &render_location_ ,
                                          const Zeni::Vector2f &render_size_,
                                          const Zeni::Point2f &collide_location_,
                                          const Zeni::Vector2f &collide_size_ ,
@@ -77,7 +78,7 @@ namespace Flame {
       structure_texture(texture_)
     {}
 	
-    void Map_structure_rec::update(float) {
+  void Map_structure_rec::update(float) {
         float scale = Model_state::get_instance()->get_scale();
         Point2f center = Model_state::get_instance()->get_center_location();
 
@@ -85,11 +86,11 @@ namespace Flame {
         rel_size = render_size * scale;
     }
 
-    void Map_structure_rec::render()
+  void Map_structure_rec::render()
     {render_image(structure_texture, rel_location, rel_location + rel_size);}
 
-    // Map_structure_cir functions;
-    Map_structure_cir::Map_structure_cir(const Zeni::Point2f &render_center_ ,
+  // --------------------------------------
+  Map_structure_cir::Map_structure_cir(const Zeni::Point2f &render_center_ ,
                                          const float &render_radius_,
                                          const Zeni::Point2f &collide_center_,
                                          const float &collide_radius_ ,
@@ -104,7 +105,7 @@ namespace Flame {
       structure_texture(texture_)
     {}
 	
-    void Map_structure_cir::update(float){
+  void Map_structure_cir::update(float){
         float scale = Model_state::get_instance()->get_scale();
         Point2f center = Model_state::get_instance()->get_center_location();
 		
@@ -112,23 +113,25 @@ namespace Flame {
         rel_size = Vector2f(render_radius *2, render_radius * 2) * scale;
     }
 
-    void Map_structure_cir::render()
+  void Map_structure_cir::render()
     {render_image(structure_texture, rel_center - rel_size / 2, rel_center + rel_size / 2);}
-	
-    bool Map_floor_illuminate::can_move_player(const Collision::Capsule& other)
+   
+
+	// --------------------------------------
+  bool Map_floor_illuminate::can_move_player(const Collision::Capsule& other)
     {
       if (collision_body.intersects(other))
         illuminated = true;
       return true;
     }
 
-    bool Map_floor_illuminate::can_move(const Collision::Capsule&)
+  bool Map_floor_illuminate::can_move(const Collision::Capsule&)
     {return true;}
 
-    void Map_floor_illuminate::reset()
+  void Map_floor_illuminate::reset()
     {illuminated = false;}
 
-    void Map_floor_illuminate::render() {
+  void Map_floor_illuminate::render() {
         Video &vr = get_Video();
         Material Brick_material;
 
@@ -141,7 +144,9 @@ namespace Flame {
         vr.render(brick);
     }
 
-	Map_light_beam::Map_light_beam(const Point2f &location_, const Vector2f &dir_, const int &player_, const String &texture_)
+
+  // --------------------------------------
+  Map_light_beam::Map_light_beam(const Point2f &location_, const Vector2f &dir_, const int &player_, const String &texture_)
 		:Map(location_), dir(dir_.normalized()), rel_ccw(0.f), render_start(location_), dis(0.f), player(player_),child(NULL),texture(texture_)
 	{
 		render_end = render_start;
@@ -151,7 +156,7 @@ namespace Flame {
 	};
 
 
-	void Map_light_beam::update(float time){
+  void Map_light_beam::update(float time){
 		vector<Map* > *map_obj_list = Model_state::get_instance()->get_map_obj_list_ptr();
 		vector<Player* > *player_list = Model_state::get_instance()->get_player_list_ptr();
 		
@@ -169,7 +174,7 @@ namespace Flame {
     {
 				if (collision_body.intersects((*it)->get_body()))
         {
-					if (short_dis > (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z)))
+    			if (short_dis > (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z)))
 						short_dis = (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z));
 				}
 		}
@@ -193,7 +198,7 @@ namespace Flame {
             player_location = (*it)->get_location();
             player_collide_no = cnt;
             player_collide = true;
-					}
+          }
         }
       }
     }
@@ -249,6 +254,8 @@ namespace Flame {
 		render_image(texture,rel_lu,rel_dr,-rel_ccw,1.0f,rel_about);
 	};
 
+
+  //-------------------------------------
   Map_door::Map_door(const Point2f &location_,
                      const Vector2f &size_,
                      const String &closed_texture_,
@@ -271,9 +278,7 @@ namespace Flame {
                      Vector3f(0.f, render_size.y, 0.f),
                      Vector3f(0.f, 0.f, kCollision_object_height));
   };
-
-  
-
+    
   void Map_door::render()
   {
     open = true;
@@ -297,6 +302,8 @@ namespace Flame {
     }
   };
 
+
+  // ------------------------------------
   Map_laser::Map_laser(const Point2f &location_,
     const Vector2f &dir_,
     const String &texture_)
@@ -308,10 +315,11 @@ namespace Flame {
 		vector<Player* > *player_list = Model_state::get_instance()->get_player_list_ptr();
 		
     bool player_collide = false;
+    bool map_obj_collide = false;
     int player_collide_no;
     Point2f player_location;
 
-		float short_dis = dis + 1000.f * time;
+		float short_dis = dis + 500.f * time;
     Vector2f new_dir;
     Map_light_beam *tmp;
 		
@@ -321,6 +329,7 @@ namespace Flame {
     {
 				if (collision_body.intersects((*it)->get_body()))
         {
+          map_obj_collide = true;
 					if (short_dis > (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z)))
 						short_dis = (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z));
 				}
@@ -345,19 +354,25 @@ namespace Flame {
             player_location = (*it)->get_location();
             player_collide_no = cnt;
             player_collide = true;
+            map_obj_list = false;
 					}
         }
       }
     }
+
+    dis = short_dis;
 
     if (player_collide)
     { 
       vector<attack_effect> empty;
       collided_player->get_hit(time*10.f, empty);       
     }
+    else if (map_obj_collide)
+    {
+      dis = 0.f;
+    }
     
-	  dis = short_dis;
-
+	 
 	  render_end = dis * dir + render_start;
 		collision_body = Collision::Capsule (Point3f(render_start.x, render_start.y, kCollision_object_height / 2),
 		                           				   Vector3f(render_end.x, render_end.y, kCollision_object_height / 2),
@@ -370,5 +385,37 @@ namespace Flame {
     rel_about = (render_start -center) * scale + Point2f(400.f, 300.f);
 		rel_ccw = (render_end - render_start).theta();
   }
+
+  // ----------------------------------------
+  Map_transmission_gate::Map_transmission_gate(const Point2f &location_,
+    const Point2f &target_position_,
+    const Vector2f &size_,
+    const String &texture_)
+    :Map_door(location_,size_,texture_,texture_),
+  target_position(target_position_)
+  {};
+
+  void Map_transmission_gate::render(){
+    bool all_here = true;
+    vector<Player*> *player_list = Model_state::get_instance()->get_player_list_ptr();
+    for (vector<Player *>::iterator it = player_list->begin();
+      it != player_list->end();
+     ++it){
+       if(!(*it)->get_body().intersects(collision_body)){
+         all_here = false;
+         break;
+       }
+    }
+    if(all_here){
+      for (vector<Player *>::iterator it = player_list->begin();
+          it != player_list->end();
+          ++it)
+      {
+        (*it)->set_position(target_position);
+      }
+    }
+    render_image(open_texture, rel_location, rel_location + rel_size);
+
+  };
 
 }

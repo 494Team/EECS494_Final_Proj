@@ -191,30 +191,30 @@ namespace Flame {
              const Zeni::String &closed_texture_ = Zeni::String(),
              const Zeni::String &open_texture_ = Zeni::String()
              );
-      void render();
-      void add_trigger(Flame::Map *trigger_)
+      virtual void render();
+      virtual void add_trigger(Flame::Map *trigger_)
       {trigger_list.push_back(trigger_);};
       bool triggerred(){return true;};
-      bool can_move(const Zeni::Collision::Capsule& other)
+      virtual bool can_move(const Zeni::Collision::Capsule& other)
       {
         if (open)
           return true;
         else
           return Map_structure_rec::can_move(other);
       };
-      bool can_move(const Zeni::Collision::Parallelepiped& other){
+      virtual bool can_move(const Zeni::Collision::Parallelepiped& other){
+        if (open)
+          return true;
+        else
+         return Map_structure_rec::can_move(other);
+      };
+      virtual bool can_move_player(const Zeni::Collision::Capsule& other){
         if (open)
           return true;
         else
           return Map_structure_rec::can_move(other);
       };
-      bool can_move_player(const Zeni::Collision::Capsule& other){
-        if (open)
-          return true;
-        else
-          return Map_structure_rec::can_move(other);
-      };
-    private:
+    protected:
       void create_body();
       void destroy_body()
       {
@@ -223,6 +223,27 @@ namespace Flame {
       Zeni::String open_texture, closed_texture;
       bool open;
       std::vector<Map* > trigger_list;   
+    };
+
+    class Map_transmission_gate : public Map_door{
+    public:
+      Map_transmission_gate(const Zeni::Point2f &location_ = Zeni::Point2f(),
+        const Zeni::Point2f &target_position_ = Zeni::Point2f(),
+        const Zeni::Vector2f &size_ = Zeni::Point2f(),
+        const Zeni::String &texture_ = Zeni::String());
+      void render();
+      bool can_move(const Zeni::Collision::Capsule& other)
+      {
+        return true;
+      };
+      bool can_move(const Zeni::Collision::Parallelepiped& other){
+        return true;
+      };
+      bool can_move_player(const Zeni::Collision::Capsule& other){
+        return true;
+      };
+    private:
+      Zeni::Point2f target_position;
     };
 
 

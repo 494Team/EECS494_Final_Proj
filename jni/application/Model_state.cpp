@@ -43,29 +43,46 @@ namespace Flame {
   {
     clear();
     timer = timer_;
-    player_list.push_back(new Player(timer, 1000.f, 200.f, 16.f, Point2f(300.f, 200.f), WUKONG));
-    player_list.push_back(new Player(timer, 1000.f, 200.f, 16.f, Point2f(500.f, 300.f), SANZANG));
-    player_list.push_back(new Player(timer, 1000.f, 200.f, 16.f, Point2f(500.f, 200.f), SHASENG));
-    player_list.push_back(new Player(timer, 1000.f, 200.f, 16.f, Point2f(300.f, 300.f), BAJIE));
-    // wall on bottom
-    map_obj_list.push_back(new Map_brick(Point2f(-20.0f, 600.0f), Vector2f(820.0f,20.0f), 20.0f, 20.f, String("rock")));
-    // wall on top
-    map_obj_list.push_back(new Map_brick(Point2f(-20.0f, -20.0f), Vector2f(820.0f,20.0f), 20.0f, 20.f, String("rock")));
+    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(300.f, 200.f), SHASENG));
+    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(400.f, 300.f), BAJIE));
+    //player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(500.f, 200.f), SHASENG));
+    //player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(300.f, 300.f), SHASENG));
+    
+    // wall vertical
+    map_obj_list.push_back(new Map_brick(Point2f(-40.0f, -40.0f), Vector2f(40.f,580.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(500.0f, 200.0f), Vector2f(40.f,340.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(700.0f - 40.f, 200.0f), Vector2f(40.f,540.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(1100.0f, -40.0f), Vector2f(40.f, 540.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(1300.0f - 40.f, -40.0f), Vector2f(40.f, 540.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(1600.0f, 300.0f), Vector2f(40.f, 440.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(1800.0f -40.f, 300.0f), Vector2f(40.f, 600.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(2000.0f, -40.0f), Vector2f(40.f, 1280.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(600.0f, 600.0f - 40.f), Vector2f(40.f, 340.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(-40.0f, 600.0f-40.0f), Vector2f(40.f, 1180.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(1800.0f - 40.f, 1700.0f), Vector2f(40.f, 100.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(2000.0f, 1500.0f - 40.f), Vector2f(40.f, 580.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(400.0f, 1200.0f), Vector2f(40.f, 300.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(-40.0f, 1800.0f - 40.f), Vector2f(40.f, 280.0f), 20.0f, 20.f, String("rock")));
 
-    // wall on left
-    map_obj_list.push_back(new Map_brick(Point2f(-20.0f, -20.0f), Vector2f(20.0f,620.0f), 20.0f, 20.f, String("rock")));
+    // wall horizontal
+    map_obj_list.push_back(new Map_brick(Point2f(0.0f, -40.0f), Vector2f(1100.f, 40.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(1300.0f, -40.0f), Vector2f(700.f, 40.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(0.0f, 500.0f), Vector2f(500.f, 40.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(500.0f, 200.0f), Vector2f(200.f, 40.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(1100.0f, 500.0f-40.0f), Vector2f(200.f, 40.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(1300.0f, -40.0f), Vector2f(700.f, 40.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(1600.0f, 300.0f-40.0f), Vector2f(200.f, 40.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(400.0f, 1200.f), Vector2f(1600.f, 40.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(400.0f, 1500.0f - 40.f), Vector2f(1600.f, 40.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(0.0f, 1800.0f-40.0f), Vector2f(1800.f, 40.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(0.0f, 2000.0f), Vector2f(2000.f, 40.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(0.0f, 600-40.0f), Vector2f(600.f, 40.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(600.0f, 900.f-40.0f), Vector2f(1200.f, 40.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(700.0f, 700.f), Vector2f(900.f, 40.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(0.0f, 1700.f), Vector2f(1800.f, 40.0f), 20.0f, 20.f, String("rock")));
 
-    // wall on right
-    map_obj_list.push_back(new Map_brick(Point2f(800.0f, -20.0f), Vector2f(20.0f,640.0f), 20.0f, 20.f, String("rock")));  
-
-    // rec structure
-    map_obj_list.push_back(new Map_structure_rec(Point2f(200.0f, 200.0f), Vector2f(50.0f, 50.0f), Point2f(200.0f, 200.0f),
-                                                 Vector2f(50.0f, 50.0f), String("rock")));
-
-    // rec half block half through
-    map_obj_list.push_back(new Map_structure_rec(Point2f(400.0f, 400.0f), Vector2f(50.0f, 50.0f), Point2f(400.0f, 410.0f),
-                                                 Vector2f(50.0f, 40.0f), String("house")));
-
+    // transmission gate
+    map_obj_list.push_back(new Map_transmission_gate(Point2f(800.0f,200.0f), Point2f(200.f, 1500.f), Vector2f(20.f, 20.f), "clock"));
     // illuminate floor
     map_obj_list.push_back(new Map_floor_illuminate(Point2f(320.0f, 400.0f), Point2f(20.f, 20.f), "floor", "ifloor"));
 
@@ -99,21 +116,21 @@ namespace Flame {
 
   void Model_state::update_scale_and_center()
   {
-    scale = 5.f;
+    scale = 3.f;
     // calculate scale
     for(int i = 0; i < int(player_list.size()); ++i)
       for(int j = 1; j < int(player_list.size()); ++j) {
-        float dis_x = abs(player_list[(i + j) % 4]->get_location().x - player_list[i]->get_location().x);
-        float dis_y = abs(player_list[(i + j) % 4]->get_location().y - player_list[i]->get_location().y);
+        float dis_x = abs(player_list[(i + j) % int(player_list.size())]->get_location().x - player_list[i]->get_location().x);
+        float dis_y = abs(player_list[(i + j) % int(player_list.size())]->get_location().y - player_list[i]->get_location().y);
         float frac = dis_x / dis_y;
         if (dis_y != 0. && frac < 4.f / 3.f) {
-          if (200.f / dis_y < 1.f) {
-            if (scale > 1.f)
-              scale = 1.f;
+          if (200.f / dis_y < 0.5f) {
+            if (scale > 0.5f)
+              scale = 0.5f;
           }
-          else if (200.0f / dis_y > 5.f) {
-            if (scale > 5.f)
-              scale = 5.f;
+          else if (200.0f / dis_y > 3.f) {
+            if (scale > 3.f)
+              scale = 3.f;
           }
           else {
             if (scale > 200.f / dis_y)
@@ -121,13 +138,13 @@ namespace Flame {
             }
         }
         else {
-          if (800.f / 3 / dis_x < 1.f) {
-            if (scale > 1.f)
-              scale = 1.f;
+          if (800.f / 3 / dis_x < 0.5f) {
+            if (scale > 0.5f)
+              scale = 0.5f;
           }
-          else if (800.0f / 3 / dis_x > 5.f) {
-            if (scale > 5.f)
-              scale = 5.f;
+          else if (800.0f / 3 / dis_x > 3.f) {
+            if (scale > 3.f)
+              scale = 3.f;
           }
           else {
             if (scale > 800.f / 3 / dis_x)
@@ -141,8 +158,8 @@ namespace Flame {
     float center_x = 0.f;
     float center_y = 0.f;
     for (vector<Player *>::iterator it = player_list.begin(); it != player_list.end(); ++it) {
-      center_x += (*it)->get_location().x / 4;
-      center_y += (*it)->get_location().y / 4;
+      center_x += (*it)->get_location().x / int(player_list.size());
+      center_y += (*it)->get_location().y / int(player_list.size());
     }
 
     center_location = Point2f(center_x, center_y);
