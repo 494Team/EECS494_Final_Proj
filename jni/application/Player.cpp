@@ -11,7 +11,7 @@ Player::Player(
   const Zeni::Point2f &location_,
   const kPlayer_type player_type_)
 : Agent(health_, speed_, radius_, location_),
-  crazy(false),
+  berserked(false),
   normal_attack(false),
   running_status(false),
   ptype(player_type_),
@@ -22,14 +22,12 @@ Player::Player(
   spell1_active(false),
   spell2_active(false),
   spell3_active(false),
+  last_htime(0.0f),
   last_spell1(0.0f),
   last_spell2(0.0f),
-  last_spell3(0.0f)
+  last_spell3(0.0f),
+  render_clock(0.0f)
 {
-  const Zeni::Time_HQ current_time = Zeni::get_Timer_HQ().get_time();
-  render_clock = current_time;
-  last_htime = current_time;
-
   switch (ptype) {
     case SANZANG:
       spell1_CD = kSpell1_CD;
@@ -84,23 +82,25 @@ void Player::update(float time) {
   rel_loc = (get_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
 
   // local spell removing
-  const Zeni::Time_HQ current_time = Zeni::get_Timer_HQ().get_time();
-  float passed_time = float(current_time.get_seconds_since(last_htime));
-  if (normal_attack && passed_time > kAttack_show_time) {
+  float current_time = game_time->seconds();
+  if (normal_attack && (current_time - last_htime) > kAttack_show_time) {
     normal_attack = false;
   }
 
-  if (ptype == BAJIE && spell1_active && float(current_time.get_seconds_since(last_spell1)) > kShield_last) {
+  if (ptype == BAJIE && spell1_active && (current_time - last_spell1) > kShield_last) {
     spell1_active = false;
     set_armor(backup_armor);
   }
-  if (ptype == BAJIE && spell3_active && float(current_time.get_seconds_since(last_spell3)) > kBloodsuck_last) {
+  if (ptype == BAJIE && spell3_active && (current_time - last_spell3) > kBloodsuck_last) {
     spell3_active = false;
+  }
+  if (ptype == WUKONG && spell3_active && (current_time - last_spell3) > kBerserk_last) {
+    berserk_end();
   }
 
   //
 
-  float render_passed_time = float(current_time.get_seconds_since(render_clock));
+  float render_passed_time = current_time - render_clock;
   if (render_passed_time > kRun_render_gap) {
     running_status = !running_status;
     render_clock = current_time;
@@ -150,15 +150,23 @@ void Player::render() {
   render_image(player_texture,
          Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
          Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
-  if (spell1_active) {
-    render_image("shield",
-           Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
-           Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
-  }
-  if (spell3_active) {
-    render_image("bloodsuck",
-           Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
-           Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
+  if (ptype == BAJIE) {
+    if (spell1_active) {
+      render_image("shield",
+             Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
+             Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
+    }
+    if (spell3_active) {
+      render_image("bloodsuck",
+             Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
+             Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
+    }
+  } else if (ptype == WUKONG) {
+    if (spell3_active) {
+      render_image("berserk_mode",
+             Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
+             Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
+    }
   }
 
   //render the orientation arrow
@@ -208,18 +216,16 @@ void Player::fire(kKey_type type) {
   if (!game_time->is_running()) {
     return;
   }
-
-  const Zeni::Time_HQ current_time = Zeni::get_Timer_HQ().get_time();
-  float passed_time = float(current_time.get_seconds_since(last_htime));
+  float current_time = game_time->seconds();
+  float passed_time = current_time - last_htime;
   if (passed_time > PLAYER_ATTACK_INTERVAL) {
     last_htime = current_time;
-
     switch (type) {
       case A1:
       case A2:
       case A3:
       case A4:
-        try_normal_attack(current_time);
+        try_normal_attack();
 
         /*
             Attack_spell(const Zeni::Point2f& location_ = Zeni::Point2f(),
@@ -260,11 +266,18 @@ void Player::fire(kKey_type type) {
   }
 }
 
-void Player::get_crazy() {
-  crazy = true;
+void Player::berserk() {
+  spell3_active = true;
+  size *= kBerserk_enlarge;
+  berserked = true;
   attack_buff = 2.0f;
 }
 
+void Player::berserk_end() {
+  size /= kBerserk_enlarge;
+  attack_buff = kInit_buff;
+  spell3_active = false;
+}
 
 
 void Player::shield() {
@@ -283,7 +296,7 @@ void Player::bloodsuck() {
   spell3_active = true;
 }
 
-void Player::try_normal_attack(const Zeni::Time_HQ current_time) {
+void Player::try_normal_attack() {
   Spell* new_spell;
   if (ptype == SHASENG) {
     new_spell = new Arrow_attack(get_location(), get_current_orientation());
@@ -303,7 +316,6 @@ void Player::try_normal_attack(const Zeni::Time_HQ current_time) {
   
 }
 void Player::try_spell1() {
-  //float passed_time = float(current_time.get_seconds_since(last_spell1));
   float current_time = game_time->seconds();
   float passed_time = current_time - last_spell1;
   Spell* new_spell;
@@ -366,6 +378,7 @@ void Player::try_spell3() {
       case SANZANG: //all_healing
         break;
       case WUKONG: //Berserk
+        berserk();
         break;
       case SHASENG: //Magic Arrow
         new_spell = new Magic_arrow(get_location(), get_current_orientation());

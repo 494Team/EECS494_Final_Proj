@@ -41,7 +41,9 @@ namespace Flame {
   //WUKONG
   const float kCudge_fury_CD = 2.0f;
   const float kCharge_CD = 2.0f;
+  const float kBerserk_last = 1.0f;
   const float kBerserk_CD = 2.0f;
+  const float kBerserk_enlarge = 1.5f;
   //SHASENG
   const float kStrafe_CD = 2.0f;
   const float kTrap_CD = 2.0f;
@@ -74,7 +76,7 @@ namespace Flame {
     Control ctrl;
     kPlayer_type ptype;
     void fire(kKey_type type);
-    void try_normal_attack(const Zeni::Time_HQ current_time);
+    void try_normal_attack();
     void try_spell1();
     void try_spell2();
     void try_spell3();
@@ -111,7 +113,8 @@ namespace Flame {
 
     //attack
     bool normal_attack;
-    Zeni::Time_HQ last_htime;
+    //Zeni::Time_HQ last_htime;
+    float last_htime;
     float attack_buff; //range: [1, +INF]; initial:1.0f
 
     //spell status
@@ -131,8 +134,10 @@ namespace Flame {
 
     //SANZANG
     //WUKONG
-    void get_crazy();
-    bool crazy;
+    //float backup_size;
+    void berserk();
+    void berserk_end();
+    bool berserked;
     //SHASENG
     //BAJIE
     //1
@@ -146,7 +151,7 @@ namespace Flame {
 
     //running renderer
     bool running_status;
-    Zeni::Time_HQ render_clock;
+    float render_clock;
   
   //vector<Agent*>* Monsters;
     int attack_strength;

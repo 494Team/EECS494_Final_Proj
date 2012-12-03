@@ -325,6 +325,11 @@ The following things are unsupported:
     <filepath>textures/magic_arrow_ice.png</filepath>
     <tile>0</tile>
   </magic_arrow_ice>
+  <berserk_mode>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/berserk_mode.png</filepath>
+    <tile>0</tile>
+  </berserk_mode>
   <!-- Players skill end................................-->
 
   <dialog_box>
