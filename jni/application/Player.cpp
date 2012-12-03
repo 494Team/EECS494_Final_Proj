@@ -15,8 +15,6 @@ Player::Player(
   normal_attack(false),
   running_status(false),
   ptype(player_type_),
-//size(Zeni::Vector2f(radius_ * 2, radius_ * 2))
-  size(radius_),
   attack_buff(kInit_buff),
   game_time(game_t_),
   spell1_active(false),
@@ -50,33 +48,83 @@ Player::Player(
       spell3_CD = kBloodsuck_CD;
       break;
   }
+  set_moving(true);
+}
+
+void Player::hitback_move(float time) {
+  Point2f backup_position;
+  Zeni::Vector2f backup_ori = get_current_orientation();
+  float speed = get_current_speed();
+
+  bool move_x = true;
+  bool move_y = true;
+  
+  backup_position = get_location();
+  set_speed(speed * backup_ori.get_i().magnitude() / backup_ori.magnitude());
+  set_orientation(backup_ori.get_i());
+  update_location(time);
+  update_body();
+  if (!Model_state::get_instance()->can_move(get_body())) {
+      set_position(backup_position);
+      update_body();
+      move_x = false;
+  }
+
+  backup_position = get_location();
+  set_speed(speed * backup_ori.get_j().magnitude() / backup_ori.magnitude());
+  set_orientation(backup_ori.get_j());
+  update_location(time);
+  update_body();
+  if (!Model_state::get_instance()->can_move(get_body())) {
+      set_position(backup_position);
+      update_body();
+      move_y = false;
+  }
+
+  set_orientation(backup_ori);
+  set_speed(speed);
 }
 
 void Player::update(float time) {
-  Point2f backup_position = get_location();
-  float scale = Model_state::get_instance()->get_scale();
-  if (abs(ctrl.move_hori) + abs(ctrl.move_vert) > 0.3f) {
-    Vector2f dir(ctrl.move_hori, ctrl.move_vert);
-    set_orientation(dir);
+  Agent::update(time);
 
+  Point2f backup_position;
+  Point2f new_position;
+  float scale = Model_state::get_instance()->get_scale();
+
+  if (abs(ctrl.move_hori) + abs(ctrl.move_vert) > 0.3f) {
+    bool move_x = true;
+    bool move_y = true;
     if (!ctrl.l) {
-      Point2f new_position = backup_position + Point2f(ctrl.move_hori * time * get_current_speed(), 0.0f);
-      set_position(new_position);
+      backup_position = get_location();
+      set_speed(abs(ctrl.move_hori) * kSpeed_player);
+      set_orientation(Vector2f(ctrl.move_hori, 0.0f));
+      update_location(time);
       update_body();
       if (!Model_state::get_instance()->can_move(get_body())) {
           set_position(backup_position);
           update_body();
+          move_x = false;
       }
 
       backup_position = get_location();
-      new_position = backup_position + Point2f(0.0f, ctrl.move_vert * time * get_current_speed());
-      set_position(new_position);
+      set_speed(abs(ctrl.move_vert) * kSpeed_player);
+      set_orientation(Vector2f(0.0f, ctrl.move_vert));
+      update_location(time);
       update_body();
       if (!Model_state::get_instance()->can_move(get_body())) {
           set_position(backup_position);
           update_body();
+          move_y = false;
       }
     }
+    Vector2f dir(ctrl.move_hori, ctrl.move_vert);
+    set_orientation(dir);
+    set_speed(sqrt(pow(ctrl.move_hori * (int)move_x, 2) + pow(ctrl.move_vert * int(move_y), 2)));
+  }
+
+  if (is_hitback()) {
+    hitback_move(time);
   }
 
   rel_loc = (get_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
@@ -147,6 +195,10 @@ void Player::render() {
   
   player_texture = Zeni::String(ttype);//("monkey_king_front");
 
+  float size = get_radius();
+  if (ptype == WUKONG && spell3_active) {
+    size *= kBerserk_enlarge;
+  }
   render_image(player_texture,
          Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
          Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
@@ -268,13 +320,13 @@ void Player::fire(kKey_type type) {
 
 void Player::berserk() {
   spell3_active = true;
-  size *= kBerserk_enlarge;
+  //set_radius(get_radius() * kBerserk_enlarge);
   berserked = true;
   attack_buff = 2.0f;
 }
 
 void Player::berserk_end() {
-  size /= kBerserk_enlarge;
+  //set_radius(get_radius() / kBerserk_enlarge);
   attack_buff = kInit_buff;
   spell3_active = false;
 }

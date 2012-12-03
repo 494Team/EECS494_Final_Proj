@@ -127,44 +127,60 @@ private:
   }
 
   void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
+    bool control_enable[4]; // = {true, true, true, true};
+    for (int i=0; i<4; i++) {
+      control_enable[i] = !(*Model_state::get_instance()->get_player_list_ptr())[i]->is_hitback();
+    }
     switch(action) {
       case HORI1:
+        if (control_enable[0])
         (*Model_state::get_instance()->get_player_list_ptr())[0]->ctrl.move_hori = confidence / 2;
         break;
       case VERT1:
+        if (control_enable[0])
         (*Model_state::get_instance()->get_player_list_ptr())[0]->ctrl.move_vert = confidence / 2;
         break;
       case L1:
+        if (control_enable[0])
         (*Model_state::get_instance()->get_player_list_ptr())[0]->ctrl.l = confidence > 0.5 ? true : false;
         break;
 
       case HORI2:
+        if (control_enable[1])
         (*Model_state::get_instance()->get_player_list_ptr())[1]->ctrl.move_hori = confidence / 2;
         break;
       case VERT2:
+        if (control_enable[1])
         (*Model_state::get_instance()->get_player_list_ptr())[1]->ctrl.move_vert = confidence / 2;
         break;
       case L2:
+        if (control_enable[1])
         (*Model_state::get_instance()->get_player_list_ptr())[1]->ctrl.l = confidence > 0.5 ? true : false;
         break;
 
       case HORI3:
+        if (control_enable[2])
         (*Model_state::get_instance()->get_player_list_ptr())[2]->ctrl.move_hori = confidence / 2;
         break;
       case VERT3:
+        if (control_enable[2])
         (*Model_state::get_instance()->get_player_list_ptr())[2]->ctrl.move_vert = confidence / 2;
         break;
       case L3:
+        if (control_enable[2])
         (*Model_state::get_instance()->get_player_list_ptr())[2]->ctrl.l = confidence > 0.5 ? true : false;
         break;
 
       case HORI4:
+        if (control_enable[3])
         (*Model_state::get_instance()->get_player_list_ptr())[3]->ctrl.move_hori = confidence / 2;
         break;
       case VERT4:
+        if (control_enable[3])
         (*Model_state::get_instance()->get_player_list_ptr())[3]->ctrl.move_vert = confidence / 2;
         break;
       case L4:
+        if (control_enable[3])
         (*Model_state::get_instance()->get_player_list_ptr())[3]->ctrl.l = confidence > 0.5 ? true : false;
         break;
 
@@ -179,6 +195,7 @@ private:
           game.push_state(new Popup_Menu_State);
           break;
         }
+        //(is_hitback)
         case A1:
           if (dialog.is_goingon()) {
             dialog.proceed();
@@ -563,26 +580,31 @@ private:
   }
 
   void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
+    bool control_enable[4] = {true, true, true, true};
     switch(action) {
       case HORI1:
-        if (confidence >= 1.0f)
-          move_cursor(0, true);
-        else if (confidence <= -1.0f)
-          move_cursor(0, false);
+        if (control_enable[0])
+          if (confidence >= 1.0f)
+            move_cursor(0, true);
+          else if (confidence <= -1.0f)
+            move_cursor(0, false);
         break;
       case HORI2:
+        if (control_enable[1])
         if (confidence >= 1.0f)
           move_cursor(1, true);
         else if (confidence <= -1.0f)
           move_cursor(1, false);
         break;
       case HORI3:
+        if (control_enable[2])
         if (confidence >= 1.0f)
           move_cursor(2, true);
         else if (confidence <= -1.0f)
           move_cursor(2, false);
         break;
       case HORI4:
+        if (control_enable[3])
         if (confidence >= 1.0f)
           move_cursor(3, true);
         else if (confidence <= -1.0f)

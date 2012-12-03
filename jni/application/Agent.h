@@ -50,6 +50,13 @@ namespace Flame {
     void dec_health(const float &damage);
 
     virtual void get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker=NULL);
+
+    float get_radius() {
+      return radius;
+    }
+    void set_radius(const float radius_) {
+      radius = radius_;
+    }
   
   private:
     std::map<attack_effect, float> effect_timers;

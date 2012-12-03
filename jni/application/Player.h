@@ -20,6 +20,8 @@ namespace Flame {
   const float kSpell2_CD = 1.0f;
   const float kSpell3_CD = 1.0f;
 
+  const float kSpeed_player = 200.0f;
+
   const float kAttack_show_time = 0.2f;
 
   #define PLAYER_SPELL1_CD 1.0f
@@ -106,6 +108,8 @@ namespace Flame {
   private:
     Chronometer<Time>* game_time;
 
+    void hitback_move(float time);
+
     float orient_vec_to_radians(Vector2f vec) {
       float radians = atan2(vec.i, vec.j);
       return radians;
@@ -153,13 +157,13 @@ namespace Flame {
     bool running_status;
     float render_clock;
   
-  //vector<Agent*>* Monsters;
+    //vector<Agent*>* Monsters;
     int attack_strength;
     double attack_range;
 
-  //relative location;
-  Zeni::Point2f rel_loc;
-  float size;
+    //relative location;
+    Zeni::Point2f rel_loc;
+    float size;
   };
 }
 
