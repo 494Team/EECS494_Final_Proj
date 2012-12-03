@@ -43,8 +43,10 @@ namespace Flame {
   //WUKONG
   const float kCudge_fury_CD = 2.0f;
   const float kCharge_CD = 2.0f;
-  const float kBerserk_last = 1.0f;
+  const float kCharge_last = 3.0f;
+  const float kCharge_speed = 5000.0f;
   const float kBerserk_CD = 2.0f;
+  const float kBerserk_last = 1.0f;
   const float kBerserk_enlarge = 1.5f;
   //SHASENG
   const float kStrafe_CD = 2.0f;
@@ -82,6 +84,10 @@ namespace Flame {
     void try_spell1();
     void try_spell2();
     void try_spell3();
+        
+    bool is_charging() {
+      return (ptype == WUKONG && spell2_active);
+    }
     
     kPlayer_type get_player_type() {
       return ptype;
@@ -138,10 +144,12 @@ namespace Flame {
 
     //SANZANG
     //WUKONG
+    void charge();
+    void charge_end();
+
     //float backup_size;
     void berserk();
     void berserk_end();
-    bool berserked;
     //SHASENG
     //BAJIE
     //1

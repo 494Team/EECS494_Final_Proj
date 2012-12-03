@@ -128,45 +128,63 @@ private:
   }
 
   void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
+    bool control_enable[4]; // = {true, true, true, true};
+    Player* p_ptr;
+    for (int i=0; i<4; i++) {
+      p_ptr = (*Model_state::get_instance()->get_player_list_ptr())[i];
+      control_enable[i] = ((!p_ptr->is_hitback()) && (!p_ptr->is_charging()));
+    }
     switch(action) {
       case HORI1:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->ctrl.move_hori = confidence / 2;
+        if (control_enable[0])
+          (*Model_state::get_instance()->get_player_list_ptr())[0]->ctrl.move_hori = confidence / 2;
         break;
       case VERT1:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->ctrl.move_vert = confidence / 2;
+        if (control_enable[0])
+          (*Model_state::get_instance()->get_player_list_ptr())[0]->ctrl.move_vert = confidence / 2;
         break;
       case L1:
-        (*Model_state::get_instance()->get_player_list_ptr())[0]->ctrl.l = confidence > 0.5 ? true : false;
+        if (control_enable[0])
+          (*Model_state::get_instance()->get_player_list_ptr())[0]->ctrl.l = confidence > 0.5 ? true : false;
         break;
 
       case HORI2:
-        (*Model_state::get_instance()->get_player_list_ptr())[1]->ctrl.move_hori = confidence / 2;
+        if (control_enable[1])
+          (*Model_state::get_instance()->get_player_list_ptr())[1]->ctrl.move_hori = confidence / 2;
         break;
       case VERT2:
-        (*Model_state::get_instance()->get_player_list_ptr())[1]->ctrl.move_vert = confidence / 2;
+        if (control_enable[1])
+          (*Model_state::get_instance()->get_player_list_ptr())[1]->ctrl.move_vert = confidence / 2;
         break;
       case L2:
-        (*Model_state::get_instance()->get_player_list_ptr())[1]->ctrl.l = confidence > 0.5 ? true : false;
+        if (control_enable[1])
+          (*Model_state::get_instance()->get_player_list_ptr())[1]->ctrl.l = confidence > 0.5 ? true : false;
         break;
 
       case HORI3:
-        (*Model_state::get_instance()->get_player_list_ptr())[2]->ctrl.move_hori = confidence / 2;
+        if (control_enable[2])
+          (*Model_state::get_instance()->get_player_list_ptr())[2]->ctrl.move_hori = confidence / 2;
         break;
       case VERT3:
-        (*Model_state::get_instance()->get_player_list_ptr())[2]->ctrl.move_vert = confidence / 2;
+        if (control_enable[2])
+          (*Model_state::get_instance()->get_player_list_ptr())[2]->ctrl.move_vert = confidence / 2;
         break;
       case L3:
-        (*Model_state::get_instance()->get_player_list_ptr())[2]->ctrl.l = confidence > 0.5 ? true : false;
+        if (control_enable[2])
+          (*Model_state::get_instance()->get_player_list_ptr())[2]->ctrl.l = confidence > 0.5 ? true : false;
         break;
 
       case HORI4:
-        (*Model_state::get_instance()->get_player_list_ptr())[3]->ctrl.move_hori = confidence / 2;
+        if (control_enable[3])
+          (*Model_state::get_instance()->get_player_list_ptr())[3]->ctrl.move_hori = confidence / 2;
         break;
       case VERT4:
-        (*Model_state::get_instance()->get_player_list_ptr())[3]->ctrl.move_vert = confidence / 2;
+        if (control_enable[3])
+          (*Model_state::get_instance()->get_player_list_ptr())[3]->ctrl.move_vert = confidence / 2;
         break;
       case L4:
-        (*Model_state::get_instance()->get_player_list_ptr())[3]->ctrl.l = confidence > 0.5 ? true : false;
+        if (control_enable[3])
+          (*Model_state::get_instance()->get_player_list_ptr())[3]->ctrl.l = confidence > 0.5 ? true : false;
         break;
 
       default:
@@ -181,71 +199,87 @@ private:
           break;
         }
         case A1:
-          if (dialog.is_goingon()) {
-            dialog.proceed();
-          } else {
-            (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(A1);
-          }
+          if (control_enable[0])
+            if (dialog.is_goingon()) {
+              dialog.proceed();
+            } else {
+              (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(A1);
+            }
           break;
         case B1:
-          (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(B1);
+          if (control_enable[0])
+            (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(B1);
           break;
         case X1:
-          (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(X1);
+          if (control_enable[0])
+            (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(X1);
           break;
         case Y1:
-          (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(Y1);
+          if (control_enable[0])
+            (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(Y1);
           break;
 
         case A2:
-          if (dialog.is_goingon()) {
-            dialog.proceed();
-          } else {
-            (*Model_state::get_instance()->get_player_list_ptr())[1]->fire(A2);
-          }
+          if (control_enable[1])
+            if (dialog.is_goingon()) {
+              dialog.proceed();
+            } else {
+              (*Model_state::get_instance()->get_player_list_ptr())[1]->fire(A2);
+            }
           break;
         case B2:
-          (*Model_state::get_instance()->get_player_list_ptr())[1]->fire(B2);
+          if (control_enable[1])
+            (*Model_state::get_instance()->get_player_list_ptr())[1]->fire(B2);
           break;
         case X2:
-          (*Model_state::get_instance()->get_player_list_ptr())[1]->fire(X2);
+          if (control_enable[1])
+            (*Model_state::get_instance()->get_player_list_ptr())[1]->fire(X2);
           break;
         case Y2:
-          (*Model_state::get_instance()->get_player_list_ptr())[1]->fire(Y2);
+          if (control_enable[1])
+            (*Model_state::get_instance()->get_player_list_ptr())[1]->fire(Y2);
           break;
 
         case A3:
-          if (dialog.is_goingon()) {
-            dialog.proceed();
-          } else {
-            (*Model_state::get_instance()->get_player_list_ptr())[2]->fire(A3);
-          }
+          if (control_enable[2])
+            if (dialog.is_goingon()) {
+              dialog.proceed();
+            } else {
+              (*Model_state::get_instance()->get_player_list_ptr())[2]->fire(A3);
+            }
           break;
         case B3:
-          (*Model_state::get_instance()->get_player_list_ptr())[2]->fire(B3);
+          if (control_enable[2])
+            (*Model_state::get_instance()->get_player_list_ptr())[2]->fire(B3);
           break;
         case X3:
-          (*Model_state::get_instance()->get_player_list_ptr())[2]->fire(X3);
+          if (control_enable[2])
+            (*Model_state::get_instance()->get_player_list_ptr())[2]->fire(X3);
           break;
         case Y3:
-          (*Model_state::get_instance()->get_player_list_ptr())[2]->fire(Y3);
+          if (control_enable[2])
+            (*Model_state::get_instance()->get_player_list_ptr())[2]->fire(Y3);
           break;
 
         case A4:
-          if (dialog.is_goingon()) {
-            dialog.proceed();
-          } else {
-            (*Model_state::get_instance()->get_player_list_ptr())[3]->fire(A4);
-          }
+          if (control_enable[3])
+            if (dialog.is_goingon()) {
+              dialog.proceed();
+            } else {
+              (*Model_state::get_instance()->get_player_list_ptr())[3]->fire(A4);
+            }
           break;
         case B4:
-          (*Model_state::get_instance()->get_player_list_ptr())[3]->fire(B4);
+          if (control_enable[3])
+            (*Model_state::get_instance()->get_player_list_ptr())[3]->fire(B4);
           break;
         case X4:
-          (*Model_state::get_instance()->get_player_list_ptr())[3]->fire(X4);
+          if (control_enable[3])
+            (*Model_state::get_instance()->get_player_list_ptr())[3]->fire(X4);
           break;
         case Y4:
-          (*Model_state::get_instance()->get_player_list_ptr())[3]->fire(Y4);
+          if (control_enable[3])
+            (*Model_state::get_instance()->get_player_list_ptr())[3]->fire(Y4);
           break;
 
         default:

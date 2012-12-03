@@ -11,7 +11,6 @@ Player::Player(
   const Zeni::Point2f &location_,
   const kPlayer_type player_type_)
 : Agent(health_, speed_, radius_, location_),
-  berserked(false),
   normal_attack(false),
   running_status(false),
   ptype(player_type_),
@@ -28,14 +27,14 @@ Player::Player(
 {
   switch (ptype) {
     case SANZANG:
-      spell1_CD = kSpell1_CD;
-      spell2_CD = kSpell2_CD;
-      spell3_CD = kSpell3_CD;
+      spell1_CD = kConfusing_CD;
+      spell2_CD = kHealing_CD;
+      spell3_CD = kAll_healing_CD;
       break;
     case WUKONG:
-      spell1_CD = kSpell1_CD;
-      spell2_CD = kSpell2_CD;
-      spell3_CD = kSpell3_CD;
+      spell1_CD = kCudge_fury_CD;
+      spell2_CD = kCharge_CD;
+      spell3_CD = kBerserk_CD;
       break;
     case SHASENG:
       spell1_CD = kStrafe_CD;
@@ -122,9 +121,14 @@ void Player::update(float time) {
     set_orientation(dir);
     set_speed(sqrt(pow(ctrl.move_hori * (int)move_x, 2) + pow(ctrl.move_vert * int(move_y), 2)));
   }
-
+  if (is_hitback() && is_charging()) {
+    charge_end();
+  }
   if (is_hitback()) {
     hitback_move(time);
+  }
+  if (is_charging()) {
+    
   }
 
   rel_loc = (get_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
@@ -141,6 +145,9 @@ void Player::update(float time) {
   }
   if (ptype == BAJIE && spell3_active && (current_time - last_spell3) > kBloodsuck_last) {
     spell3_active = false;
+  }
+  if (ptype == WUKONG && spell2_active && (current_time - last_spell2) > kCharge_last) {
+    charge_end();
   }
   if (ptype == WUKONG && spell3_active && (current_time - last_spell3) > kBerserk_last) {
     berserk_end();
@@ -321,7 +328,6 @@ void Player::fire(kKey_type type) {
 void Player::berserk() {
   spell3_active = true;
   //set_radius(get_radius() * kBerserk_enlarge);
-  berserked = true;
   attack_buff = 2.0f;
 }
 
@@ -346,6 +352,16 @@ void Player::taunt() {
 
 void Player::bloodsuck() {
   spell3_active = true;
+}
+
+void Player::charge() {
+  spell2_active = true;
+  set_speed(kCharge_speed);
+}
+
+void Player::charge_end() {
+  //set_speed(get_current_speed() / kCharge_speed_multiplier);
+  spell2_active = false;
 }
 
 void Player::try_normal_attack() {
@@ -406,6 +422,7 @@ void Player::try_spell2() {
       case SANZANG: //healing_spell
         break;
       case WUKONG: //Charge
+        charge();
         break;
       case SHASENG: //Trap
         new_spell = new Trap(get_location());
