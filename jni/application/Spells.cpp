@@ -117,13 +117,82 @@ namespace Flame {
   void Arrow_attack::render()
   {Moving_spell::render("arrow");}
 
-  Magic_arrow::Magic_arrow(const Point2f& location_, const Vector2f& orientation_)
-  : Arrow_attack(location_, orientation_)
+  Magic_arrow_ice::Magic_arrow_ice(const Point2f& location_, const Vector2f& orientation_) :
+    Moving_spell_rectangle(location_, orientation_, kMagic_arrow_size,
+                           kMagic_arrow_speed, kMagic_arrow_life_time)
+  {}
+
+  void Magic_arrow_ice::update(float time)
   {
+    Moving_spell_rectangle::update(time);
+    if (is_active()) {
+      vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
+      for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
+        if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
+          vector<attack_effect> effects;
+          effects.push_back(HITBACK);
+          (*it)->get_hit(kMagic_arrow_damage, effects, nullptr);
+          Magic_arrow_ice_effect effect(get_center_location());
+          disable_spell();
+          break;
+        }
+    }
   }
 
-  void Magic_arrow::render()
+  void Magic_arrow_ice::render()
   {Moving_spell::render("magic_arrow_ice");}
+
+  Magic_arrow_fire::Magic_arrow_fire(const Point2f& location_, const Vector2f& orientation_) :
+    Moving_spell_rectangle(location_, orientation_, kMagic_arrow_size,
+                           kMagic_arrow_speed, kMagic_arrow_life_time)
+  {}
+
+  void Magic_arrow_fire::update(float time)
+  {
+    Moving_spell_rectangle::update(time);
+    if (is_active()) {
+      vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
+      for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
+        if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
+          vector<attack_effect> effects;
+          effects.push_back(HITBACK);
+          (*it)->get_hit(kMagic_arrow_damage, effects, nullptr);
+          Model_state::get_instance()->add_spell(new Magic_arrow_fire_effect(get_center_location()));
+          disable_spell();
+          break;
+        }
+    }
+  }
+
+  void Magic_arrow_fire::render()
+  {Moving_spell::render("magic_arrow_ice");}
+
+  Magic_arrow_ice_effect::Magic_arrow_ice_effect(const Point2f& location_) :
+    Resizable_spell(location_, kMagic_arrow_effect_size, Vector2f(), 0.f)
+  {
+    vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
+    vector<attack_effect> effects;
+    effects.push_back(FREEZE);
+    for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
+      if (get_body().intersects((*it)->get_body()) && (*it)->is_alive())
+        (*it)->get_hit(0.f, effects, nullptr);
+  }
+    
+  Magic_arrow_fire_effect::Magic_arrow_fire_effect(const Point2f& location_) :
+    Resizable_spell(location_, kMagic_arrow_effect_size, Vector2f(), kMagic_arrow_effect_life_time)
+  {}
+
+  void Magic_arrow_fire_effect::update(float time)
+  {
+    Resizable_spell::update(time);
+    vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
+    for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
+      if (get_body().intersects((*it)->get_body()) && (*it)->is_alive())
+        (*it)->dec_health(kMagic_arrow_effect_damage);
+  }
+
+  void Magic_arrow_fire_effect::render()
+  {Resizable_spell::render("hell_spikes");}
 
   Strafe::Strafe(const Point2f& location_, const Vector2f& orientation_) :
     Spell(kArrow_life_time),
@@ -184,12 +253,12 @@ namespace Flame {
       timer -= time;
       return;
     }
-    srand( std::time(NULL) );
+    srand(int(std::time(NULL)));
     vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
     for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
       if (Resizable_spell::get_body().intersects((*it)->get_body())) {
         for (int i = 0; i < 10; i++) {
-          float dir_scale = 1.2 * (rand() % 3 - 1) * (rand() % 201 - 100) / 100.f;
+          float dir_scale = 1.2f * (rand() % 3 - 1) * (rand() % 201 - 100) / 100.f;
           float speed = rand() % 50 + kTrap_attack_speed;
           Vector2f orientation = (*it)->get_location() - get_center_location();
           Vector2f counter_orientation = Vector2f(orientation.y, orientation.x);
@@ -227,7 +296,7 @@ namespace Flame {
     if (time_counter < 0.f) {
       is_left = -is_left;
       time_counter = kTrap_attack_period;
-      set_orientation(orientation + 0.1 * is_left * counter_orientation);
+      set_orientation(orientation + 0.1f * is_left * counter_orientation);
     }
     vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
     for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)

@@ -26,6 +26,14 @@ namespace Flame {
   const float kArrow_life_time = 5.f;
   const float kArrow_damage = 50.f;
 
+  const Zeni::Vector2f kMagic_arrow_size = Zeni::Vector2f(4.f, 16.f);
+  const float kMagic_arrow_speed = 200.f;
+  const float kMagic_arrow_life_time = 5.f;
+  const float kMagic_arrow_damage = 50.f;
+  const Zeni::Vector2f kMagic_arrow_effect_size = Zeni::Vector2f(50.f, 50.f);
+  const float kMagic_arrow_effect_life_time = 5.f;
+  const float kMagic_arrow_effect_damage = 1.f;
+
   const Zeni::Vector2f kTrap_size = Zeni::Vector2f(100.f, 100.f);
   const float kTrap_life_time = 30.f;
   const float kTrap_damage = 50.f;
@@ -99,11 +107,33 @@ namespace Flame {
     virtual void render();
   };
 
-  class Magic_arrow: public Arrow_attack {
+  class Magic_arrow_ice : public Moving_spell_rectangle {
   public:
-    Magic_arrow(const Zeni::Point2f& location_ = Zeni::Point2f(),
-                 const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
-    //virtual void update(float time = 0.f);
+    Magic_arrow_ice(const Zeni::Point2f& location_ = Zeni::Point2f(),
+                    const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
+    virtual void update(float time = 0.f);
+    virtual void render();
+  };
+
+  class Magic_arrow_fire : public Moving_spell_rectangle {
+  public:
+    Magic_arrow_fire(const Zeni::Point2f& locatioin_ = Zeni::Point2f(),
+                      const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
+    virtual void update(float time = 0.f);
+    virtual void render();
+  };
+
+  class Magic_arrow_ice_effect : public Resizable_spell {
+  public:
+    Magic_arrow_ice_effect(const Zeni::Point2f& location_ = Zeni::Point2f());
+    virtual void update(float) {}
+    virtual void render() {};
+  };
+
+  class Magic_arrow_fire_effect : public Resizable_spell {
+  public:
+    Magic_arrow_fire_effect(const Zeni::Point2f& location_ = Zeni::Point2f());
+    virtual void update(float time = 0.f);
     virtual void render();
   };
 
