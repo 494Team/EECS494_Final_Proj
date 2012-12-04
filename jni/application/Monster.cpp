@@ -126,7 +126,7 @@ void Monster::update(float time) {
 }
 
 void Monster::get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker, Zeni::Vector2f coming_ori) {
-  Agent::get_hit(damage, effects);
+  Agent::get_hit(damage, effects, attacker);
   increase_hatred(damage, attacker);
 }
 
@@ -134,10 +134,20 @@ void Monster::get_render_params(float render_radius, Zeni::Point2f &ul, Zeni::Po
   float scale = Model_state::get_instance()->get_scale();
   ul = rel_loc - Zeni::Vector2f(render_radius, render_radius) * scale;
   lr = ul + Zeni::Vector2f(render_radius * 2.0f, render_radius * 2.0f) * scale;
-  radians_ccw = calc_angle_between(get_current_orientation(), Zeni::Vector2f(1.0f, 0.0f));
-  if (get_current_orientation().y < 0.0f) {
-    radians_ccw = Zeni::Global::pi * 2.0f - radians_ccw;
-  } 
+  if (is_hitback()) {
+    radians_ccw = calc_angle_between(ori_before_hitback, Zeni::Vector2f(1.0f, 0.0f));
+  } else {
+    radians_ccw = calc_angle_between(get_current_orientation(), Zeni::Vector2f(1.0f, 0.0f));
+  }
+  if (is_hitback()) {
+    if (ori_before_hitback. y < 0.0f) {
+      radians_ccw = Zeni::Global::pi * 2.0f - radians_ccw;
+    }
+  } else {
+    if (get_current_orientation().y < 0.0f) {
+      radians_ccw = Zeni::Global::pi * 2.0f - radians_ccw;
+    } 
+  }
 }
 
 void Monster::update_render_suffix() {

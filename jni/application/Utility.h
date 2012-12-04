@@ -66,9 +66,10 @@ namespace Flame{
   const float REDBOY_FIRE_CHARGE_DAMAGE = 500.0f;
 
   // attack effect time
-  extern const float HITBACK_TIME;
-  extern const float SLOWDOWN_TIME;
-  extern const float FREEZE_TIME;
+  const float NORMAL_HITBACK_TIME = 0.1f;
+  const float BOSS_CHARGE_HITBACK_TIME = 0.5f;
+  const float SLOWDOWN_TIME = 2.0f;
+  const float FREEZE_TIME = 2.0f;
   
   //spells written in/related to Player.cpp
   const float kCudge_fury_CD = 5.0f;

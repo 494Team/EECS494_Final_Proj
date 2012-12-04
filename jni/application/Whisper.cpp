@@ -134,7 +134,7 @@ void Whisper::render() {
     1.0f,
     rel_loc
   );
-  if (is_attacking) {
+  if (!is_hitback() && !is_freeze() && is_attacking) {
     Zeni::render_image("sword_attack",
       ul + scale * Zeni::Vector2f(2.0f * get_body().get_radius(), 0.0f),
       lr + scale * Zeni::Vector2f(2.0f * get_body().get_radius(), 0.0f),

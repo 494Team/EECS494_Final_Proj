@@ -171,12 +171,15 @@ namespace Flame {
   {Resizable_spell::render("brick");}
 
   // Friar Sand
-  Arrow_attack::Arrow_attack(const Point2f& location_, const Vector2f& orientation_) :
+  Arrow_attack::Arrow_attack(const Point2f& location_,
+                             const Vector2f& orientation_,
+                             Player * player_ptr_) :
     Moving_spell_rectangle(location_, 
                            orientation_,
                            kArrow_size,
                            kArrow_speed,
-                           kArrow_life_time)
+                           kArrow_life_time),
+    player_ptr(player_ptr_)
     {}
 
   void Arrow_attack::update(float time)
@@ -188,7 +191,7 @@ namespace Flame {
         if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
           vector<attack_effect> effects;
           effects.push_back(HITBACK);
-          (*it)->get_hit(kArrow_damage, effects, nullptr, get_orientation());
+          (*it)->get_hit(kArrow_damage, effects, player_ptr, get_orientation());
           disable_spell();
           break;
         }

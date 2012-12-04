@@ -57,7 +57,9 @@ namespace Flame {
     void set_radius(const float radius_) {
       radius = radius_;
     }
-  
+
+  protected:
+    Zeni::Vector2f ori_before_hitback;  
   private:
     std::map<attack_effect, float> effect_timers;
     Zeni::Collision::Capsule body;

@@ -29,12 +29,14 @@ void Agent::dec_health(const float &damage) {
 
 void Agent::update(float time) {
   for (std::map<attack_effect, float>::iterator it = effect_timers.begin(); it != effect_timers.end(); ++it) {
-    it->second -= time;
+    if (it->second > 0.0f)
+      it->second -= time;
     if (it->second < 0.0f) {
       it->second = 0.0f;
       switch (it->first) {
         case HITBACK:
           hitback = false;
+          set_orientation(ori_before_hitback);
           recover_speed();
           break;
         case SLOWDOWN:
@@ -63,7 +65,7 @@ void Agent::render() {
 }
 
 void Agent::get_hit(
-  const float &damage, 
+  const float &damage,
   const std::vector<attack_effect> &effects = std::vector<attack_effect>(),
   Player* attacker,
   Zeni::Vector2f coming_ori) {
@@ -72,9 +74,17 @@ void Agent::get_hit(
   for (int i = 0; i < (int) effects.size(); ++i) {
     switch (effects[i]) {
       case HITBACK:
-        //set_hitback_orientation(hitback
+        if (!is_hitback()) {
+          ori_before_hitback = get_current_orientation();
+          set_speed(get_current_speed() * 2.0f);
+        }
+        set_orientation(coming_ori);
         hitback = true;
-        effect_timers[effects[i]] = HITBACK_TIME;
+        if (attacker == 0) {
+          effect_timers[effects[i]] = BOSS_CHARGE_HITBACK_TIME;
+        } else {
+          effect_timers[effects[i]] = NORMAL_HITBACK_TIME;
+        }
         break;
       case SLOWDOWN:
         set_speed(get_current_speed() * 0.5f);

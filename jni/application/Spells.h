@@ -121,9 +121,12 @@ namespace Flame {
   class Arrow_attack : public Moving_spell_rectangle {
   public:
     Arrow_attack(const Zeni::Point2f& location_ = Zeni::Point2f(),
-                 const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
+                 const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
+                 Player * player_ptr_ = nullptr);
     virtual void update(float time = 0.f);
     virtual void render();
+  private:
+    Player * player_ptr;
   };
 
   class Magic_arrow_ice : public Moving_spell_rectangle {

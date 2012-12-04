@@ -431,7 +431,7 @@ void Player::charge_end() {
 void Player::try_normal_attack() {
   Spell* new_spell;
   if (ptype == SHASENG) {
-    new_spell = new Arrow_attack(get_location(), get_current_orientation());
+    new_spell = new Arrow_attack(get_location(), get_current_orientation(), this);
     Model_state::get_instance()->add_spell(new_spell);
   } else {
     bool heal_self = (ptype == BAJIE) && spell3_active;
