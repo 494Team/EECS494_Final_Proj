@@ -42,7 +42,6 @@ namespace Flame {
   const float kHealing_CD = 2.0f;
   const float kAll_healing_CD = 2.0f;
   //WUKONG
-  const float kCudge_fury_CD = 2.0f;
   const float kCharge_CD = 2.0f;
   const float kCharge_last = 0.5f;
   const float kCharge_speed = 200.0f;
@@ -118,11 +117,15 @@ namespace Flame {
     Zeni::Point2f get_rel_loc() {
       return rel_loc;
     }
-
+    
+    void cudgel_fury_begin();
+    void cudgel_fury_end();
   private:
     Chronometer<Time>* game_time;
     std::vector<Monster *> * monster_list_ptr;
     void static_move(float time);
+
+    bool render_player;
 
     float orient_vec_to_radians(Vector2f vec) {
       float radians = atan2(vec.i, vec.j);
@@ -152,8 +155,6 @@ namespace Flame {
 
     //SANZANG
     //WUKONG
-    void cudgel_fury_begin();
-    void cudgel_fury_end();
 
     void charge();
     void charge_update(float time);

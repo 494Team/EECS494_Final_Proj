@@ -25,7 +25,8 @@ Player::Player(
   last_spell3(0.0f),
   last_charge_attack(0.0f),
   charge_attacking(false),
-  render_clock(0.0f)
+  render_clock(0.0f),
+  render_player(true)
 {
   switch (ptype) {
     case SANZANG:
@@ -216,9 +217,11 @@ void Player::render() {
   if (ptype == WUKONG && spell3_active) {
     size *= kBerserk_enlarge;
   }
-  render_image(player_texture,
-         Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
-         Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
+  if (render_player) {
+    render_image(player_texture,
+                 Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
+                 Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
+  }
   if (ptype == BAJIE) {
     if (spell1_active) {
       render_image("shield",
@@ -365,6 +368,21 @@ void Player::berserk_end() {
   spell3_active = false;
 }
 
+void Player::cudgel_fury_begin() {
+  if (render_player) {
+    render_player = false;
+    Spell* new_spell = new Cudgel_fury(get_location(),
+                                       get_current_orientation(),
+                                       get_radius(),
+                                       this,
+                                       game_time);
+    Model_state::get_instance()->add_spell(new_spell);
+  }
+}
+void Player::cudgel_fury_end() {
+  render_player = true;
+}
+
 
 void Player::shield() {
   spell1_active = true;
@@ -444,6 +462,7 @@ void Player::try_spell1() {
         Model_state::get_instance()->add_spell(new_spell);
         break;
       case WUKONG: //Cudgel Fury
+        cudgel_fury_begin();
         break;
       case SHASENG: //Strafe
         new_spell = new Strafe(get_location(), get_current_orientation());

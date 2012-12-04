@@ -69,6 +69,13 @@ namespace Flame{
   extern const float HITBACK_TIME;
   extern const float SLOWDOWN_TIME;
   extern const float FREEZE_TIME;
+  
+  //spells written in/related to Player.cpp
+  const float kCudge_fury_CD = 5.0f;
+  const float kCudgelfury_last = 3.0f;
+  const float kCudgelfury_render_gap = 0.02f;
+  const int kCudgelfury_render_max = 3;
+  const float kCudgelfury_damage = 2.0f;
 
   //others
   const float kHpbar_width = 3.0f;

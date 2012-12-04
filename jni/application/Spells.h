@@ -59,11 +59,6 @@ namespace Flame {
   const float kHell_spikes_life_time = 5.f;
   const float kHell_spikes_damage = 50.f;
 
-  const float kCudgelfury_last = 3.0f;
-  const float kCudgelfury_render_gap = 0.02f;
-  const int kCudgelfury_render_max = 3;
-  const float kCudgelfury_damage = 2.0f;
-
   class Attack_spell : public Spell {
   public:
     Attack_spell(const Zeni::Point2f& location_ = Zeni::Point2f(),

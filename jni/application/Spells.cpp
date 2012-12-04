@@ -92,6 +92,7 @@ namespace Flame {
 
   void Cudgel_fury::update(float time)
   {
+
     //Moving_spell_circle::update(time);
     set_location(player_ptr->get_location());
     Moving_spell_circle::update_body();
@@ -113,6 +114,8 @@ namespace Flame {
           //disable_spell();
           break;
         }
+    } else {
+      player_ptr->cudgel_fury_end();
     }
     
   }
