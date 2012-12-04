@@ -474,6 +474,36 @@ The following things are unsupported:
     <tile>0</tile>
   </redboy_back_attack>
   <!-- Redboy texture ends-->
+  <!-- Minimap texture starts-->
+  <minimap>
+    <filepath>textures/open_door.png</filepath>
+    <tile>0</tile>
+  </minimap>
+  <mini_player0>
+    <filepath>textures/mini_player1.png</filepath>
+    <tile>0</tile>
+  </mini_player0>
+  <mini_player1>
+    <filepath>textures/mini_player2.png</filepath>
+    <tile>0</tile>
+  </mini_player1>
+  <mini_player2>
+    <filepath>textures/mini_player3.png</filepath>
+    <tile>0</tile>
+  </mini_player2>
+  <mini_player3>
+    <filepath>textures/mini_player4.png</filepath>
+    <tile>0</tile>
+  </mini_player3>
+  <mini_monster>
+    <filepath>textures/mini_monster.png</filepath>
+    <tile>0</tile>
+  </mini_monster>
+  <mini_boss>
+    <filepath>textures/mini_boss.png</filepath>
+    <tile>0</tile>
+  </mini_boss>
+  <!-- Minimap texture ends-->
   <!--
   <one>
     <is_sprite>0</is_sprite>
