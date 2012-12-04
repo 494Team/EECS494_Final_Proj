@@ -119,7 +119,6 @@ void Redboy::update(float time) {
 }
 
 void Redboy::render() {
-  float scale = Model_state::get_instance()->get_scale();
   Zeni::Point2f ul, lr;
   float radians_ccw;
   get_render_params(get_body().get_radius() * 1.8f, ul, lr, radians_ccw);

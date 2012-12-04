@@ -44,7 +44,7 @@ namespace Flame {
 
     void update(float time);
 
-    void get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker);
+    void get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker, Zeni::Vector2f coming_ori = Zeni::Vector2f());
 
     void get_render_params(float render_radius, Zeni::Point2f &ul, Zeni::Point2f &lr, float &radians_ccw);
     

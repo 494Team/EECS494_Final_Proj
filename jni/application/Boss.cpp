@@ -89,7 +89,7 @@ float Boss::get_random_cooldown(float cooldown) {
   return (cooldown + loc_rand.frand_lte() * 0.5f * cooldown);
 }
 
-void Boss::get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker) {
+void Boss::get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker, Zeni::Vector2f coming_ori) {
   dec_health(damage);
   increase_hatred(damage, attacker);
 }
