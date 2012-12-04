@@ -35,7 +35,7 @@ namespace Flame {
         if (body.intersect((*it)->get_body())) {
           vector<attack_effect> effects;
           effects.push_back(HITBACK);
-          (*it)->get_hit(attack_strength, effects, nullptr, orientation);
+          (*it)->get_hit(attack_strength, effects, player_ptr, orientation);
           if (heal_self)
             player_ptr->dec_health(-.5f * attack_strength);
         }
