@@ -10,6 +10,7 @@
 #include "Model_state.h"
 #include "Collision.h"
 #include "Spells.h"
+#include "Monster.h"
 
 using namespace Zeni;
 
@@ -43,8 +44,12 @@ namespace Flame {
   //WUKONG
   const float kCudge_fury_CD = 2.0f;
   const float kCharge_CD = 2.0f;
-  const float kCharge_last = 0.1f;
-  const float kCharge_speed = 500.0f;
+  const float kCharge_last = 0.5f;
+  const float kCharge_speed = 200.0f;
+  const float kCharge_attack_damage = 200.0f;
+  const float kCharge_attack_last = 0.3f;
+  const float kCharge_attack_CD = 0.3f;
+  const int kCharge_attack_max = 3;
   const float kBerserk_CD = 2.0f;
   const float kBerserk_last = 1.0f;
   const float kBerserk_enlarge = 1.5f;
@@ -113,7 +118,7 @@ namespace Flame {
 
   private:
     Chronometer<Time>* game_time;
-
+    std::vector<Monster *> * monster_list_ptr;
     void static_move(float time);
 
     float orient_vec_to_radians(Vector2f vec) {
@@ -145,7 +150,11 @@ namespace Flame {
     //SANZANG
     //WUKONG
     void charge();
+    void charge_update(float time);
     void charge_end();
+    float last_charge_attack;
+    bool charge_attacking;
+    bool is_charge_attacking() { return charge_attacking;}
 
     //float backup_size;
     void berserk();

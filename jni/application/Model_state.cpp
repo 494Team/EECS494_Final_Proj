@@ -47,7 +47,7 @@ namespace Flame {
     player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(400.f, 300.f), BAJIE));
     player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(500.f, 200.f), SHASENG));
     player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(300.f, 300.f), SHASENG));
-    
+    /*
     // wall vertical
     map_obj_list.push_back(new Map_brick(Point2f(-40.0f, -40.0f), Vector2f(40.f,580.0f), 20.0f, 20.f, String("rock")));
     map_obj_list.push_back(new Map_brick(Point2f(500.0f, 200.0f), Vector2f(40.f,340.0f), 20.0f, 20.f, String("rock")));
@@ -81,6 +81,7 @@ namespace Flame {
     map_obj_list.push_back(new Map_brick(Point2f(700.0f, 700.f), Vector2f(900.f, 40.0f), 20.0f, 20.f, String("rock")));
     map_obj_list.push_back(new Map_brick(Point2f(0.0f, 1700.f), Vector2f(1800.f, 40.0f), 20.0f, 20.f, String("rock")));
 
+    */
     // transmission gate
     map_obj_list.push_back(new Map_transmission_gate(Point2f(800.0f,200.0f), Point2f(200.f, 1500.f), Vector2f(20.f, 20.f), "clock"));
     // illuminate floor

@@ -23,6 +23,8 @@ Player::Player(
   last_spell1(0.0f),
   last_spell2(0.0f),
   last_spell3(0.0f),
+  last_charge_attack(0.0f),
+  charge_attacking(false),
   render_clock(0.0f)
 {
   switch (ptype) {
@@ -48,6 +50,8 @@ Player::Player(
       break;
   }
   set_moving(true);
+  set_orientation(Vector2f());
+  monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
 }
 
 void Player::static_move(float time) {
@@ -128,19 +132,19 @@ void Player::update(float time) {
   if (is_hitback()) {
     static_move(time);
   }
-  float sp;
   if (is_charging()) {
-    static_move(time);
-    get_current_speed();
+    charge_update(time);
   }
-  if (is_charging()) {
-    
-  }
+
 
   rel_loc = (get_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
 
   // local spell removing
   float current_time = game_time->seconds();
+  if (is_charge_attacking() && (current_time - last_charge_attack) > kCharge_attack_last) {
+    charge_attacking = false;
+  }
+
   if (normal_attack && (current_time - last_htime) > kAttack_show_time) {
     normal_attack = false;
   }
@@ -227,6 +231,24 @@ void Player::render() {
              Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
     }
   } else if (ptype == WUKONG) {
+    if (spell2_active) {
+      render_image("charge_mode",
+                   Point2f(rel_loc.x - size, (rel_loc.y - size - 50.0f)),
+                   Point2f(rel_loc.x + size, (rel_loc.y + size)),
+                   rad,
+                   scale,
+                   rel_loc,
+                   false);
+      if (is_charge_attacking()) {
+        render_image("charge_attack",
+             Point2f(rel_loc.x - size, rel_loc.y - size),
+             Point2f(rel_loc.x + size, rel_loc.y + size),
+             rad,
+             scale,
+             rel_loc,
+             false);
+      }
+    }
     if (spell3_active) {
       render_image("berserk_mode",
              Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
@@ -365,8 +387,26 @@ void Player::charge() {
   set_speed(kCharge_speed);
 }
 
+void Player::charge_update(float time) {
+  static_move(time);
+  float current_time = game_time->seconds();
+  float passed_time = current_time - last_charge_attack;
+
+  if (passed_time > kCharge_attack_CD) {
+    last_charge_attack = current_time;
+    for (std::vector<Monster *>::iterator it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it) {
+      if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
+        (*it)->dec_health(kCharge_attack_damage);
+        charge_attacking = true;
+        break;
+      }
+    }
+  }
+}
+
 void Player::charge_end() {
   //set_speed(get_current_speed() / kCharge_speed_multiplier);
+  //charge_attacking = false;
   spell2_active = false;
 }
 
