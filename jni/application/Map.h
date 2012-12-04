@@ -22,6 +22,8 @@ namespace Flame {
       virtual void reset() = 0;
       virtual void add_trigger(Flame::Map *trigger_) = 0;
 		  Zeni::Point2f get_center(){return location + size / 2;};
+      //is this OK?
+      Zeni::Vector2f get_size() {return size;}
 		protected:
       virtual void render() = 0;
       Zeni::Point2f location;

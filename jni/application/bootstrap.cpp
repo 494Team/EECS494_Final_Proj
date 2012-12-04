@@ -21,6 +21,7 @@
 #include "Whisper.h"
 #include "Dialog_box.h"
 #include "Redboy.h"
+#include "Minimap.h"
 #include <iostream>
 
 #if defined(_DEBUG) && defined(_WINDOWS)
@@ -406,6 +407,7 @@ private:
       render_status_helper(p_x++, *it);
     }
 
+    render_minimap();
     dialog.render();
   }
 
