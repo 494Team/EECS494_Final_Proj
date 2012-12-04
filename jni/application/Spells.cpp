@@ -75,6 +75,83 @@ namespace Flame {
   void Healing_spell::render()
   {Moving_spell::render("healing_spell");}
 
+  // Monkey King
+  Cudgel_fury::Cudgel_fury(const Point2f& location_,
+                           const Vector2f& orientation_,
+                           const float size_,
+                           Player * player_ptr_,
+                           Chronometer<Time>* game_time_)
+  : Moving_spell_circle(location_, orientation_, Zeni::Vector2f(size_*5, size_*5), 0.0f, kCudgelfury_last),
+    player_ptr(player_ptr_),
+    render_flag(0),
+    last_render_time(0.0f),
+    game_time(game_time_)
+  {
+    monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
+  }
+
+  void Cudgel_fury::update(float time)
+  {
+    //Moving_spell_circle::update(time);
+    set_location(player_ptr->get_location());
+    Moving_spell_circle::update_body();
+    Spell::update(time);
+
+    float current_time = game_time->seconds();
+    float passed_time = current_time - last_render_time;
+    if (passed_time > kCudgelfury_render_gap) {
+      last_render_time = current_time;
+      render_flag = (render_flag + 1) % (kCudgelfury_render_max+1);
+    }
+    
+    if (is_active()) {
+      for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
+        if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
+          vector<attack_effect> effects;
+          //effects.push_back(HITBACK);
+          (*it)->get_hit(kCudgelfury_damage, effects, player_ptr);
+          //disable_spell();
+          break;
+        }
+    }
+    
+  }
+
+  void Cudgel_fury::render()
+  {
+    Zeni::String texture;// = "cudgel_fury";
+    Zeni::Point2f center = get_center_location();//player_ptr->get_location();
+    float scale = Model_state::get_instance()->get_scale();
+    Zeni::Point2f rel_loc = player_ptr->get_rel_loc();
+    float size = player_ptr->get_radius();
+    //Vector2f orient = get_current_orientation();
+    //float rad = orient_vec_to_radians(orient);
+    Zeni::Point2f ul, dr;
+    ul = Point2f(rel_loc.x - size*3.0f, (rel_loc.y - size*3.0f));
+    dr = Point2f(rel_loc.x + size*3.0f, (rel_loc.y + size*3.0f));
+    switch (render_flag) {
+      case 0:
+        texture = "cudgel_fury0";
+        break;
+      case 1:
+        texture = "cudgel_fury1";
+        break;
+      case 2:
+        texture = "cudgel_fury2";
+        break;
+      default: //case 3
+        texture = "cudgel_fury3";
+        break;
+    }
+    render_image(texture,
+                   ul,
+                   dr,
+                   0.0f,
+                   scale,
+                   rel_loc,
+                   false);
+  }
+
   // Pigsy
   Taunt::Taunt(const Point2f& location_,
                Player * player_ptr_) :

@@ -57,6 +57,8 @@ namespace Flame {
       {return get_current_orientation();}
     Zeni::Vector2f get_size() const
       {return size;}
+    void set_location(const Zeni::Point2f& location_)
+    {Moving_object::set_position(location_);}
 
     virtual void update_body() = 0;
     virtual void update(float time = 0.f);

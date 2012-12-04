@@ -398,6 +398,38 @@ The following things are unsupported:
     <filepath>textures/sword_attack.png</filepath>
     <tile>0</tile>
   </sword_attack>
+
+  <cudgel_fury_tornado>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/cudgel_fury_tornado.png</filepath>
+    <tile>0</tile>
+  </cudgel_fury_tornado>
+
+  <cudgel_fury0>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/cudgel_fury0.png</filepath>
+    <tile>0</tile>
+  </cudgel_fury0>
+  <cudgel_fury1>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/cudgel_fury1.png</filepath>
+    <tile>0</tile>
+  </cudgel_fury1>
+  <cudgel_fury2>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/cudgel_fury2.png</filepath>
+    <tile>0</tile>
+  </cudgel_fury2>
+  <cudgel_fury3>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/cudgel_fury3.png</filepath>
+    <tile>0</tile>
+  </cudgel_fury3>
+  <cudgel_fury>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/cudgel_fury.png</filepath>
+    <tile>0</tile>
+  </cudgel_fury>
   <!-- Boss skills ............................................-->
   <hell_spikes_pre>
     <filepath>textures/hell_spikes_pre.png</filepath>

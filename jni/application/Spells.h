@@ -59,6 +59,11 @@ namespace Flame {
   const float kHell_spikes_life_time = 5.f;
   const float kHell_spikes_damage = 50.f;
 
+  const float kCudgelfury_last = 3.0f;
+  const float kCudgelfury_render_gap = 0.02f;
+  const int kCudgelfury_render_max = 3;
+  const float kCudgelfury_damage = 2.0f;
+
   class Attack_spell : public Spell {
   public:
     Attack_spell(const Zeni::Point2f& location_ = Zeni::Point2f(),
@@ -88,6 +93,24 @@ namespace Flame {
                   const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
     virtual void update(float time = 0.f);
     virtual void render();
+  };
+
+  // Monkey King
+  class Cudgel_fury : public Moving_spell_circle {
+  public:
+    Cudgel_fury(const Zeni::Point2f& location_ = Zeni::Point2f(),
+                const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
+                const float size_ = 50.0f,
+                Player * player_ptr_ = nullptr,
+                Zeni::Chronometer<Zeni::Time>* game_time = nullptr);
+    virtual void update(float time = 0.f);
+    virtual void render();
+  private:
+    Player * player_ptr;
+    std::vector<Monster *> * monster_list_ptr;
+    int render_flag;
+    Zeni::Chronometer<Zeni::Time>* game_time;
+    float last_render_time;
   };
 
   // Pigsy

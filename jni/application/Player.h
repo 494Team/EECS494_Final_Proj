@@ -115,6 +115,9 @@ namespace Flame {
       float percent = passed_time > spell1_CD ? 1.0f : passed_time/spell3_CD;
       return percent;
     }
+    Zeni::Point2f get_rel_loc() {
+      return rel_loc;
+    }
 
   private:
     Chronometer<Time>* game_time;
@@ -149,6 +152,9 @@ namespace Flame {
 
     //SANZANG
     //WUKONG
+    void cudgel_fury_begin();
+    void cudgel_fury_end();
+
     void charge();
     void charge_update(float time);
     void charge_end();
