@@ -3,8 +3,14 @@
 
 #include "Spell.h"
 #include "Player.h"
+#include "Utility.h"
+#include <vector>
 
 namespace Flame {
+
+  // forward declaration
+  class Agent;
+  class Player;
 
   const float kHealing_size = 16.f;
   const float kHealing_speed = 50.f;
@@ -20,9 +26,15 @@ namespace Flame {
   const float kArrow_life_time = 5.f;
   const float kArrow_damage = 50.f;
 
-  const Zeni::Vector2f kTrap_size = Zeni::Vector2f(16.f, 16.f);
+  const Zeni::Vector2f kTrap_size = Zeni::Vector2f(100.f, 100.f);
   const float kTrap_life_time = 30.f;
   const float kTrap_damage = 50.f;
+
+  const Zeni::Vector2f kTrap_attack_size = Zeni::Vector2f(12.f, 12.f);
+  const float kTrap_attack_speed = 50.f;
+  const float kTrap_attack_life_time = 5.f;
+  const float kTrap_attack_damage = 10.f;
+  const float kTrap_attack_period = .1f;
 
   const float kFireball_size = 16.0f;
   const float kFireball_speed = 50.0f;
@@ -116,9 +128,50 @@ namespace Flame {
 
   class Trap : public Resizable_spell {
   public:
-    Trap(const Zeni::Point2f& location_ = Zeni::Point2f());
+    Trap(const Zeni::Point2f& location_ = Zeni::Point2f(), Player * player_ptr_ = nullptr);
     virtual void update(float time = 0.f);
     virtual void render();
+  private:
+    std::vector<Sim_object *> target_list;
+    Player * player_ptr;
+    int remain_times;
+    float timer;
+  };
+
+  class Trap_attack : public Moving_spell_circle {
+  public:
+    Trap_attack(const Zeni::Point2f& location_ = Zeni::Point2f(),
+                const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
+                float speed_ = kTrap_attack_speed,
+                Player * player_ptr_ = nullptr);
+    virtual void update(float time = 0.f);
+    virtual void render();
+  private:
+    Zeni::Vector2f orientation;
+    Zeni::Vector2f counter_orientation;
+    int is_left;
+    float time_counter;
+    Player * player_ptr;
+  };
+
+  class Track_attack : public Moving_spell_circle {
+  public:
+    Track_attack(const Zeni::Point2f& location_ = Zeni::Point2f(),
+                 const Zeni::Vector2f& size_ = Zeni::Vector2f(),
+                 float speed_ = 0.f,
+                 float damage_ = 0.f,
+                 float life_time_ = 0.f,
+                 std::vector<Flame::attack_effect> attack_effect_ = std::vector<Flame::attack_effect>(),
+                 Agent * target_ptr_ = nullptr,
+                 Player * player_ptr_ = nullptr);
+    virtual void update(float time = 0.f);
+    virtual void render();
+
+  private:
+    float damage;
+    std::vector<attack_effect> attack_effect;
+    Agent * target_ptr;
+    Player * player_ptr;
   };
 
   // Boss1

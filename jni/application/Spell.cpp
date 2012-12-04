@@ -27,7 +27,6 @@ namespace Flame {
     scale = Model_state::get_instance()->get_scale();
     Moving_object::set_orientation(orientation_);
     Moving_object::set_moving(true);
-    size = size_;
     relative_location = (get_center_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
   }
 
@@ -62,7 +61,7 @@ namespace Flame {
     Vector2f size = get_size();
     body = Collision::Capsule(Point3f(location.x, location.y, 0.f),
                               Point3f(location.x, location.y, kCollision_object_height),
-                              size.x);
+                              size.x / 2);
   }
 
   void Moving_spell_circle::update(float time)
@@ -77,7 +76,7 @@ namespace Flame {
   {
     Vector2f size = get_size();
     Point2f location = get_center_location() - size / 2;
-    body = Collision::Parallelepiped(Point3f(location.x, location.y, 0.f),
+    body = Collision::Parallelepiped(Point3f(location.x - size.x / 2, location.y - size.y / 2, 0.f),
                                      Vector3f(size.x, 0.f, 0.f),
                                      Vector3f(0.f, size.y, 0.f),
                                      Vector3f(0.f, 0.f, kCollision_object_height));
@@ -99,16 +98,16 @@ namespace Flame {
     location(location_),
     size(size_),
     resize_speed(resize_speed_),
-    body(Point3f(location_.x + size_.x / 2, location_.y + size_.y / 2, 0.f),
-         Point3f(location_.x + size_.x / 2, location_.y + size_.y / 2, kCollision_object_height),
-         size_.x)
+    body(Point3f(location_.x, location_.y, 0.f),
+         Point3f(location_.x, location_.y, kCollision_object_height),
+         size_.x / 2)
   {}
 
   void Resizable_spell::update_body()
   {
-    body = Collision::Capsule(Point3f(location.x + size.x / 2, location.y + size.y / 2, 0.f),
-                              Point3f(location.x + size.x / 2, location.y + size.y / 2, kCollision_object_height),
-                              size.x);
+    body = Collision::Capsule(Point3f(location.x, location.y, 0.f),
+                              Point3f(location.x, location.y, kCollision_object_height),
+                              size.x / 2);
   }
 
   void Resizable_spell::update(float time)

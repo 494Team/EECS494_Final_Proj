@@ -1,7 +1,10 @@
 #include "Spells.h"
 #include "Model_state.h"
+#include "Agent.h"
 #include "Monster.h"
 #include <vector>
+#include <ctime>
+#include <cstdlib>
 
 using std::vector;
 
@@ -167,24 +170,118 @@ namespace Flame {
       arrow4.render();
   }
 
-  Trap::Trap(const Zeni::Point2f& location_) :
-    Resizable_spell(location_, kTrap_size, Vector2f(), kTrap_life_time)
+  Trap::Trap(const Zeni::Point2f& location_, Player * player_ptr_) :
+    Resizable_spell(location_, kTrap_size, Vector2f(), kTrap_life_time),
+    player_ptr(player_ptr_),
+    remain_times(5),
+    timer(0.f)
     {}
 
   void Trap::update(float time)
   {
     Resizable_spell::update(time);
+    if (timer > 0.f) {
+      timer -= time;
+      return;
+    }
+    srand( std::time(NULL) );
     vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
     for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
       if (Resizable_spell::get_body().intersects((*it)->get_body())) {
-        (*it)->dec_health(kTrap_damage);
-        Spell::disable_spell();
+        for (int i = 0; i < 10; i++) {
+          float dir_scale = 1.2 * (rand() % 3 - 1) * (rand() % 201 - 100) / 100.f;
+          float speed = rand() % 50 + kTrap_attack_speed;
+          Vector2f orientation = (*it)->get_location() - get_center_location();
+          Vector2f counter_orientation = Vector2f(orientation.y, orientation.x);
+          Spell * new_spell = new Trap_attack(get_center_location(),
+                                              orientation + dir_scale * counter_orientation,
+                                              speed,
+                                              player_ptr);
+          Model_state::get_instance()->add_spell(new_spell);
+        }
+        timer = 3.f;
+        if (!--remain_times)
+          disable_spell();
         break;
       }
   }
 
   void Trap::render()
-  {Resizable_spell::render("brick");}
+  {Resizable_spell::render("trap");}
+
+  Trap_attack::Trap_attack(const Point2f& location_, const Vector2f& orientation_, float speed_, Player * player_ptr_) :
+    Moving_spell_circle(location_,
+                        orientation_,
+                        kTrap_attack_size, speed_, kTrap_attack_life_time),
+    orientation(orientation_),
+    counter_orientation(Vector2f(-orientation_.y, orientation_.x)),
+    is_left(-1),
+    time_counter(kTrap_attack_period),
+    player_ptr(player_ptr_)
+    {}
+
+  void Trap_attack::update(float time)
+  {
+    Moving_spell_circle::update(time);
+    time_counter -= time;
+    if (time_counter < 0.f) {
+      is_left = -is_left;
+      time_counter = kTrap_attack_period;
+      set_orientation(orientation + 0.1 * is_left * counter_orientation);
+    }
+    vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
+    for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
+      if (get_body().intersects((*it)->get_body())) {
+        (*it)->get_hit(kTrap_attack_damage, vector<attack_effect>(), player_ptr);
+        Spell::disable_spell();
+        break;
+      }
+  }
+
+  void Trap_attack::render()
+  {
+    if (is_left)
+      Moving_spell::render("lightning");
+    else
+      Moving_spell::render("ligntning1");
+  }
+
+  Track_attack::Track_attack(const Point2f& location_,
+                             const Vector2f& size_,
+                             float speed_,
+                             float damage_,
+                             float life_time_,
+                             vector<Flame::attack_effect> attack_effect_,
+                             Agent * target_ptr_,
+                             Player * player_ptr_) :
+    Moving_spell_circle(location_,
+                        target_ptr_->get_location() - location_,
+                        size_,
+                        speed_,
+                        life_time_),
+    damage(damage_),
+    attack_effect(attack_effect_),
+    target_ptr(target_ptr_),
+    player_ptr(player_ptr_)
+    {}
+
+  void Track_attack::update(float time)
+  {
+    Render_list_t * render_list_ptr = Model_state::get_instance()->get_render_list_ptr();
+    if (render_list_ptr->find(target_ptr) == render_list_ptr->end()) {
+      disable_spell();
+      return;
+    }
+    set_orientation(target_ptr->get_location() - get_location());
+    Moving_spell_circle::update(time);
+    if (get_body().intersects(target_ptr->get_body())) {
+        target_ptr->get_hit(damage, attack_effect, player_ptr);
+        disable_spell();
+    }
+  }
+
+  void Track_attack::render()
+  {Moving_spell::render("brick");}
 
   // Boss1
   Fire_ball::Fire_ball(const Point2f& location_, const Vector2f& orientation_) :

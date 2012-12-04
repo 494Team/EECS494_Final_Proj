@@ -65,7 +65,7 @@ namespace Flame {
     void render(const Zeni::String& texture) const;
 
     void set_orientation(const Zeni::Vector2f& orientation_)
-      {set_orientation(orientation_);}
+      {Moving_object::set_orientation(orientation_);}
     void set_size(const Zeni::Vector2f& size_)
       {size = size_;}
 
@@ -85,9 +85,9 @@ namespace Flame {
                         float speed_ = 0.f,
                         float life_time_ = 0.f) :
       Moving_spell(location_, orientation_, size_, speed_, life_time_),
-      body(Zeni::Point3f(location_.x + size_.x / 2, location_.y + size_.y / 2, 0.f),
-           Zeni::Point3f(location_.x + size_.x / 2, location_.y + size_.y / 2, kCollision_object_height),
-           size_.x)
+      body(Zeni::Point3f(location_.x, location_.y, 0.f),
+           Zeni::Point3f(location_.x, location_.y, kCollision_object_height),
+           size_.x / 2)
     {}
 
     virtual void update_body();
@@ -111,7 +111,7 @@ namespace Flame {
                            float speed_ = 0.f,
                            float life_time_ = 0.f) :
       Moving_spell(location_, orientation_, size_, speed_, life_time_),
-      body(Zeni::Point3f(location_.x, location_.y, 0.f),
+      body(Zeni::Point3f(location_.x - size_.x / 2, location_.y - size_.y / 2, 0.f),
            Zeni::Vector3f(size_.x, 0.f, 0.f),
            Zeni::Vector3f(0.f, size_.y, 0.f),
            Zeni::Vector3f(0.f, 0.f, kCollision_object_height))

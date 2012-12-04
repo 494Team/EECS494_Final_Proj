@@ -344,6 +344,18 @@ The following things are unsupported:
     <filepath>textures/charge_mode.png</filepath>
     <tile>0</tile>
   </charge_mode>
+  <lightning>
+    <filepath>textures/lightning.png</filepath>
+    <tile>0</tile>
+  </lightning>
+  <lightning1>
+    <filepath>textures/lightning1.png</filepath>
+    <tile>0</tile>
+  </lightning1>
+  <trap>
+    <filepath>textures/trap.png</filepath>
+    <tile>0</tile>
+  </trap>
   <!-- Players skill end................................-->
 
   <dialog_box>
