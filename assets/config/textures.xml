@@ -334,6 +334,16 @@ The following things are unsupported:
     <filepath>textures/berserk_mode.png</filepath>
     <tile>0</tile>
   </berserk_mode>
+  <charge_attack>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/charge_attack.png</filepath>
+    <tile>0</tile>
+  </charge_attack>
+  <charge_mode>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/charge_mode.png</filepath>
+    <tile>0</tile>
+  </charge_mode>
   <!-- Players skill end................................-->
 
   <dialog_box>
