@@ -496,7 +496,7 @@ void Player::try_spell3() {
         berserk();
         break;
       case SHASENG: //Magic Arrow
-        new_spell = new Magic_arrow(get_location(), get_current_orientation());
+        new_spell = new Magic_arrow_ice(get_location(), get_current_orientation());
         Model_state::get_instance()->add_spell(new_spell);
         break;
       default: // case BAJIE:  Life Trap
