@@ -20,10 +20,11 @@ namespace Flame {
                              bool heal_self_,
                              Player * player_ptr_) :
     body(location_, orientation_, radius_),
+    player_ptr(player_ptr_),
     attack_strength(attack_strength_),
     is_player(is_player_),
     heal_self(heal_self_),
-    player_ptr(player_ptr_)
+    orientation(orientation_)
     {}
 
   void Attack_spell::update(float)
@@ -34,7 +35,7 @@ namespace Flame {
         if (body.intersect((*it)->get_body())) {
           vector<attack_effect> effects;
           effects.push_back(HITBACK);
-          (*it)->get_hit(attack_strength, effects, nullptr);
+          (*it)->get_hit(attack_strength, effects, nullptr, orientation);
           if (heal_self)
             player_ptr->dec_health(-.5f * attack_strength);
         }
@@ -107,7 +108,7 @@ namespace Flame {
         if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
           vector<attack_effect> effects;
           effects.push_back(HITBACK);
-          (*it)->get_hit(kArrow_damage, effects, nullptr);
+          (*it)->get_hit(kArrow_damage, effects, nullptr, get_orientation());
           disable_spell();
           break;
         }
@@ -117,9 +118,12 @@ namespace Flame {
   void Arrow_attack::render()
   {Moving_spell::render("arrow");}
 
-  Magic_arrow_ice::Magic_arrow_ice(const Point2f& location_, const Vector2f& orientation_) :
+  Magic_arrow_ice::Magic_arrow_ice(const Point2f& location_,
+                                   const Vector2f& orientation_,
+                                   Player * player_ptr_) :
     Moving_spell_rectangle(location_, orientation_, kMagic_arrow_size,
-                           kMagic_arrow_speed, kMagic_arrow_life_time)
+                           kMagic_arrow_speed, kMagic_arrow_life_time),
+    player_ptr(player_ptr_)
   {}
 
   void Magic_arrow_ice::update(float time)
@@ -131,7 +135,7 @@ namespace Flame {
         if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
           vector<attack_effect> effects;
           effects.push_back(HITBACK);
-          (*it)->get_hit(kMagic_arrow_damage, effects, nullptr);
+          (*it)->get_hit(kMagic_arrow_damage, effects, nullptr, get_orientation());
           Magic_arrow_ice_effect effect(get_center_location());
           disable_spell();
           break;
@@ -142,9 +146,12 @@ namespace Flame {
   void Magic_arrow_ice::render()
   {Moving_spell::render("magic_arrow_ice");}
 
-  Magic_arrow_fire::Magic_arrow_fire(const Point2f& location_, const Vector2f& orientation_) :
+  Magic_arrow_fire::Magic_arrow_fire(const Point2f& location_,
+                                     const Vector2f& orientation_,
+                                     Player * player_ptr_) :
     Moving_spell_rectangle(location_, orientation_, kMagic_arrow_size,
-                           kMagic_arrow_speed, kMagic_arrow_life_time)
+                           kMagic_arrow_speed, kMagic_arrow_life_time),
+    player_ptr(player_ptr_)
   {}
 
   void Magic_arrow_fire::update(float time)
@@ -156,7 +163,7 @@ namespace Flame {
         if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
           vector<attack_effect> effects;
           effects.push_back(HITBACK);
-          (*it)->get_hit(kMagic_arrow_damage, effects, nullptr);
+          (*it)->get_hit(kMagic_arrow_damage, effects, nullptr, get_orientation());
           Model_state::get_instance()->add_spell(new Magic_arrow_fire_effect(get_center_location()));
           disable_spell();
           break;
@@ -167,19 +174,21 @@ namespace Flame {
   void Magic_arrow_fire::render()
   {Moving_spell::render("magic_arrow_ice");}
 
-  Magic_arrow_ice_effect::Magic_arrow_ice_effect(const Point2f& location_) :
-    Resizable_spell(location_, kMagic_arrow_effect_size, Vector2f(), 0.f)
+  Magic_arrow_ice_effect::Magic_arrow_ice_effect(const Point2f& location_, Player * player_ptr_) :
+    Resizable_spell(location_, kMagic_arrow_effect_size, Vector2f(), 0.f),
+    player_ptr(player_ptr_)
   {
     vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
     vector<attack_effect> effects;
     effects.push_back(FREEZE);
     for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
       if (get_body().intersects((*it)->get_body()) && (*it)->is_alive())
-        (*it)->get_hit(0.f, effects, nullptr);
+        (*it)->get_hit(0.f, effects, player_ptr);
   }
     
-  Magic_arrow_fire_effect::Magic_arrow_fire_effect(const Point2f& location_) :
-    Resizable_spell(location_, kMagic_arrow_effect_size, Vector2f(), kMagic_arrow_effect_life_time)
+  Magic_arrow_fire_effect::Magic_arrow_fire_effect(const Point2f& location_, Player * player_ptr_) :
+    Resizable_spell(location_, kMagic_arrow_effect_size, Vector2f(), kMagic_arrow_effect_life_time),
+    player_ptr(player_ptr_)
   {}
 
   void Magic_arrow_fire_effect::update(float time)
@@ -188,7 +197,7 @@ namespace Flame {
     vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
     for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
       if (get_body().intersects((*it)->get_body()) && (*it)->is_alive())
-        (*it)->dec_health(kMagic_arrow_effect_damage);
+        (*it)->get_hit(kMagic_arrow_effect_damage, vector<attack_effect>(), player_ptr);
   }
 
   void Magic_arrow_fire_effect::render()

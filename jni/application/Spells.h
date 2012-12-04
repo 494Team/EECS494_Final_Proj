@@ -78,6 +78,7 @@ namespace Flame {
     float attack_strength;
     bool is_player;
     bool heal_self;
+    Zeni::Vector2f orientation;
   };
 
   // Tripitaka
@@ -110,31 +111,43 @@ namespace Flame {
   class Magic_arrow_ice : public Moving_spell_rectangle {
   public:
     Magic_arrow_ice(const Zeni::Point2f& location_ = Zeni::Point2f(),
-                    const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
+                    const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
+                    Player * player_ptr_ = nullptr);
     virtual void update(float time = 0.f);
     virtual void render();
+  private:
+    Player * player_ptr;
   };
 
   class Magic_arrow_fire : public Moving_spell_rectangle {
   public:
     Magic_arrow_fire(const Zeni::Point2f& locatioin_ = Zeni::Point2f(),
-                      const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
+                      const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
+                      Player * player_ptr_ = nullptr);
     virtual void update(float time = 0.f);
     virtual void render();
+  private:
+    Player * player_ptr;
   };
 
   class Magic_arrow_ice_effect : public Resizable_spell {
   public:
-    Magic_arrow_ice_effect(const Zeni::Point2f& location_ = Zeni::Point2f());
+    Magic_arrow_ice_effect(const Zeni::Point2f& location_ = Zeni::Point2f(),
+                           Player * player_ptr_ = nullptr);
     virtual void update(float) {}
     virtual void render() {};
+  private:
+    Player * player_ptr;
   };
 
   class Magic_arrow_fire_effect : public Resizable_spell {
   public:
-    Magic_arrow_fire_effect(const Zeni::Point2f& location_ = Zeni::Point2f());
+    Magic_arrow_fire_effect(const Zeni::Point2f& location_ = Zeni::Point2f(),
+                            Player * player_ptr_ = nullptr);
     virtual void update(float time = 0.f);
     virtual void render();
+  private:
+    Player * player_ptr;
   };
 
   class Strafe : public Spell{
