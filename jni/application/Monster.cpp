@@ -125,7 +125,7 @@ void Monster::update(float time) {
   update_rel_loc();
 }
 
-void Monster::get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker) {
+void Monster::get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker, Zeni::Vector2f coming_ori) {
   Agent::get_hit(damage, effects);
   increase_hatred(damage, attacker);
 }

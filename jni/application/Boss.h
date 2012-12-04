@@ -36,7 +36,7 @@ namespace Flame {
     virtual void skill3() = 0;
     virtual void attack() = 0;
 
-    void get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker);
+    void get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker, Zeni::Vector2f coming_ori = Zeni::Vector2f());
 
     static float get_random_cooldown(float cooldown);
 

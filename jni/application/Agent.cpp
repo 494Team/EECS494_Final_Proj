@@ -65,13 +65,14 @@ void Agent::render() {
 void Agent::get_hit(
   const float &damage, 
   const std::vector<attack_effect> &effects = std::vector<attack_effect>(),
-  Player* attacker) {
+  Player* attacker,
+  Zeni::Vector2f coming_ori) {
 
   dec_health(damage);
   for (int i = 0; i < (int) effects.size(); ++i) {
     switch (effects[i]) {
       case HITBACK:
-        set_speed(-get_current_speed());
+        //set_hitback_orientation(hitback
         hitback = true;
         effect_timers[effects[i]] = HITBACK_TIME;
         break;

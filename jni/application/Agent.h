@@ -49,7 +49,7 @@ namespace Flame {
     // decrease health (if damage is negative, then increase)
     void dec_health(const float &damage);
 
-    virtual void get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker=NULL);
+    virtual void get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker=NULL, Zeni::Vector2f coming_ori = Zeni::Vector2f());
 
     float get_radius() {
       return radius;
