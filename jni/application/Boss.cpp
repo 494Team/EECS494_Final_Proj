@@ -7,7 +7,7 @@ Boss::Boss(
   float skill_1_cooldown_, float skill_2_cooldown_, float skill_3_cooldown_,
   const Zeni::Point2f &location_
 )
-  : Monster(health_, speed_, radius_, attack_gap_, location_),
+  : Monster(health_, speed_, radius_, attack_gap_, BOSS_VIEW_RANGE, location_),
   i_skill_1_cooldown(skill_1_cooldown_), i_skill_2_cooldown(skill_2_cooldown_), i_skill_3_cooldown(skill_3_cooldown_),
   skill_1_cooldown(skill_1_cooldown_), skill_2_cooldown(skill_2_cooldown_), skill_3_cooldown(skill_3_cooldown_),
   status(IDLE),

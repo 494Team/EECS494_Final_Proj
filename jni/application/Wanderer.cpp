@@ -5,9 +5,10 @@ using namespace Flame;
 
 Wanderer::Wanderer(
   const Zeni::Point2f &location_)
-: Monster(WANDERER_HEALTH, WANDERER_SPEED, WANDERER_RADIUS, WANDERER_ATTACK_GAP, location_),
+: Monster(WANDERER_HEALTH, WANDERER_SPEED, WANDERER_RADIUS, WANDERER_ATTACK_GAP, WANDERER_VIEW_RANGE, location_),
   damage(WANDERER_DAMAGE),
-  attack_radius(WANDERER_ATTACK_RADIUS)
+  attack_radius(WANDERER_ATTACK_RADIUS),
+  decision_time(1.0f)
 {}
 
 void Wanderer::attack() {
@@ -31,6 +32,24 @@ void Wanderer::update(float time) {
 
   // move
   target = highest_hatred();
+  if (target == NULL) {
+    is_attacking = false;
+    decision_time += time;
+    if (decision_time > 0.5f) {
+      decision_time = 0.0f;
+    } else {
+      make_move(time);
+      return;
+    }
+    if (!is_currently_moving()) {
+      set_moving(true);
+      set_orientation(Zeni::Vector2f(rand_inst.frand_lte() * 2.0f - 1.0f, rand_inst.frand_lte() * 2.0f - 1.0f));
+    } else {
+      set_moving(false);
+    }
+    return;
+  }
+
   set_orientation(target->get_location() - get_location());
   if (is_currently_moving()) {
     make_move(time);

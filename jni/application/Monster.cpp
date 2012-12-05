@@ -8,11 +8,13 @@ Monster::Monster(
   const float &speed_,
   const float &radius_,
   const float &attack_gap_,
+  const float &view_range_,
   const Zeni::Point2f &location_)
 : Agent(health_, speed_, radius_, location_),
   players((*Model_state::get_instance()->get_player_list_ptr())),
   current_time(0.0f),
   attack_gap(attack_gap_),
+  view_range(view_range_),
   is_attacking(false),
   last_render_change_time(0.0f),
   render_suffix("0")
@@ -24,15 +26,17 @@ Monster::Monster(
 
   set_orientation(Zeni::Vector2f(1.0f, 0.0f));
   float min_dist = INFINITY;
-  int idx = 0;
+  int idx = -1;
   for (int i = 0; i < (int)players.size(); ++i) {
     float dist = (players[i]->get_location() - get_location()).magnitude();
-    if (dist < min_dist) {
+    if (dist <= view_range && dist < min_dist) {
       min_dist = dist;
       idx = i;
     }
   }
-  hatred[players[idx]] += INITIAL_HATRED;
+  if (idx != -1) {
+    hatred[players[idx]] += INITIAL_HATRED;
+  }
   set_moving(true); 
 }
 
@@ -40,8 +44,12 @@ void Monster::increase_hatred(const float &hate_, Player* player) {
   hatred[player] += hate_;
 }
 
+void Monster::clear_hatred(Player* player) {
+  hatred[player] = 0;
+}
+
 Player * Monster::highest_hatred() {
-  float max_hatred = -1.0f;
+  float max_hatred = 0.0f;
   Player* target_player = NULL;
   for (int i = 0; i < int(players.size()); ++i) {
     if (hatred[players[i]] > max_hatred) {
@@ -49,7 +57,6 @@ Player * Monster::highest_hatred() {
       target_player = players[i];
     }
   }
-  assert(target_player != NULL);
   return target_player;
 }
 
@@ -84,6 +91,8 @@ void Monster::update_rel_loc() {
 }
 
 void Monster::make_move(float time) {
+  if (!is_currently_moving())
+    return;
   Zeni::Vector2f ori = get_current_orientation();
   Zeni::Point2f backup_loc = get_location();
   Zeni::Point2f attemp_loc;
@@ -123,6 +132,18 @@ void Monster::update(float time) {
   Agent::update(time);
   update_current_time(time);
   update_rel_loc();
+  for (int i = 0; i < (int)players.size(); ++i) {
+    if ((players[i]->get_location() - get_location()).magnitude() > view_range) {
+      clear_hatred(players[i]);
+    }
+  }
+  if (highest_hatred() == NULL) {
+    for (int i = 0; i < (int)players.size(); ++i) {
+      if ((players[i]->get_location() - get_location()).magnitude() <= view_range) {
+        increase_hatred(INITIAL_HATRED, players[i]);
+      }
+    }
+  }
 }
 
 void Monster::get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker, Zeni::Vector2f coming_ori) {

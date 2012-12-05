@@ -18,6 +18,8 @@ namespace Flame {
   private:
     float damage;
     float attack_radius;
+    float decision_time;
+    Random rand_inst;
   };
 }
 

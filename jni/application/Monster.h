@@ -14,10 +14,13 @@ namespace Flame {
       const float &speed_ = 0.0f,
       const float &radius_ = 0.0f,
       const float &attack_gap_ = 0.0f,
+      const float &view_range_ = 0.0f,
       const Zeni::Point2f &location_ = Zeni::Point2f());
 
     // increase hatred for a specific player
     void increase_hatred(const float &hate_, Player* player);
+    // clear hatred for a player
+    void clear_hatred(Player* player);
 
     // find player with the highest hatred
     Player * highest_hatred();
@@ -61,11 +64,11 @@ namespace Flame {
     bool is_attacking;
     float attack_gap;
     Zeni::String render_suffix;
+    float view_range;
   private:
     float current_time;
     float prev_attack_time;
     float last_render_change_time;
-
   };
 }
 

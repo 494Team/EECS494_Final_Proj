@@ -34,23 +34,28 @@ namespace Flame{
   extern const float ATTACK_DURATION;
 
   // Wanderer constants
-  extern const float WANDERER_RADIUS;
-  extern const float WANDERER_SPEED;
-  extern const float WANDERER_DAMAGE;
-  extern const float WANDERER_HEALTH;
-  extern const float WANDERER_ATTACK_GAP;
-  extern const float WANDERER_ATTACK_RADIUS;
-  extern const float WANDERER_MIN_DIST;
+  const float WANDERER_RADIUS = 16.0f;
+  const float WANDERER_SPEED = 50.0f;
+  const float WANDERER_DAMAGE = 100.0f;
+  const float WANDERER_HEALTH = 500.0f;
+  const float WANDERER_ATTACK_GAP = 1.0f;
+  const float WANDERER_ATTACK_RADIUS = 16.0f;
+  const float WANDERER_MIN_DIST = 20.0f;
+  const float WANDERER_VIEW_RANGE = 800.0f;
 
   // Whisper constants
-  extern const float WHISPER_RADIUS;
-  extern const float WHISPER_SPEED;
-  extern const float WHISPER_DAMAGE;
-  extern const float WHISPER_HEALTH;
-  extern const float WHISPER_ATTACK_GAP;
-  extern const float WHISPER_SPELL_RADIUS;
-  extern const float WHISPER_MIN_DIST;
-  extern const float WHISPER_MAX_DIST;
+  const float WHISPER_RADIUS = 16.0f;
+  const float WHISPER_SPEED = 40.0f;
+  const float WHISPER_DAMAGE = 150.0f;
+  const float WHISPER_HEALTH = 300.0f;
+  const float WHISPER_ATTACK_GAP = 1.5f;
+  const float WHISPER_SPELL_RADIUS = 16.0f;
+  const float WHISPER_MIN_DIST = 100.0f;
+  const float WHISPER_MAX_DIST = 500.0f;
+  const float WHISPER_VIEW_RANGE = 800.0f;
+
+  // Boss general constants
+  const float BOSS_VIEW_RANGE = 2000.0f;
 
   // Redboy constants
   const float REDBOY_RADIUS = 20.0f;

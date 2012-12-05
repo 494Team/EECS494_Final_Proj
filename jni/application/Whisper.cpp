@@ -4,10 +4,9 @@
 using namespace Flame;
 
 Whisper::Whisper(const Zeni::Point2f &location_) 
-: Monster(WHISPER_HEALTH, WHISPER_SPEED, WHISPER_RADIUS, WHISPER_ATTACK_GAP, location_),
+: Monster(WHISPER_HEALTH, WHISPER_SPEED, WHISPER_RADIUS, WHISPER_ATTACK_GAP, WHISPER_VIEW_RANGE, location_),
   damage(WHISPER_DAMAGE),
   spell_radius(WHISPER_SPELL_RADIUS),
-  made_decision(false),
   decision_time(1.0f)
 {}
 
@@ -60,6 +59,17 @@ void Whisper::update(float time) {
   }
 
   target = highest_hatred();
+  if (target == NULL) {
+    is_attacking = false;
+    if (!is_currently_moving()) {
+      set_moving(true);
+      set_orientation(Zeni::Vector2f(rand_inst.frand_lte() * 2.0f - 1.0f, rand_inst.frand_lte() * 2.0f - 1.0f));
+    } else {
+      set_moving(false);
+    }
+    make_move(time);
+    return;
+  }
 
   if (can_attack()) {
     Zeni::Point3f my_loc = Zeni::Point3f(get_location().x, get_location().y, 0.0f);
@@ -88,36 +98,38 @@ void Whisper::update(float time) {
       }
       make_move(time);
     } else {
+      set_orientation(target->get_location() - get_location());
+      set_moving(false);
       attack();
-      made_decision = false;
     }
   } else {
-    if (get_current_time() - get_prev_attack_time() > ATTACK_DURATION && !made_decision) {
-      made_decision = true;
-      is_attacking = false;
-      // if can not yet do another attack, move around
-      Player* nearest_p = nearest_player();
-      Zeni::Point2f nearest_p_loc = nearest_p->get_location();
-      if ((nearest_p_loc - get_location()).magnitude() < WHISPER_MIN_DIST) {
-        // too close! move back
-        set_orientation(get_location() - nearest_p_loc);
-      } else if ((target->get_location() - get_location()).magnitude() > WHISPER_MAX_DIST) {
-        // too far to target! go forward
-        set_orientation(target->get_location() - get_location());
-      } else {
-        // move left/right
-        Zeni::Vector2f tar_ori_2 = target->get_location() - get_location();
-        Zeni::Vector3f tar_ori_3 = Zeni::Vector3f(tar_ori_2.x, tar_ori_2.y, 0.0f);
-        Zeni::Vector3f left_ori_3 = Zeni::Vector3f(0.0f, 0.0f, 1.0f) % tar_ori_3;
-        Zeni::Vector2f left_ori_2 = Zeni::Vector2f(left_ori_3.x, left_ori_3.y);
-        Zeni::Vector2f ori = left_ori_2;
-        if (rand_inst.frand_lte() < 0.5f) {
-          ori = -ori;
+    if (get_current_time() - get_prev_attack_time() > ATTACK_DURATION) {
+        set_moving(true);
+        is_attacking = false;
+        // if can not yet do another attack, move around
+        Player* nearest_p = nearest_player();
+        Zeni::Point2f nearest_p_loc = nearest_p->get_location();
+        if ((nearest_p_loc - get_location()).magnitude() < WHISPER_MIN_DIST) {
+          // too close! move back
+          set_orientation(get_location() - nearest_p_loc);
+        } else if ((target->get_location() - get_location()).magnitude() > WHISPER_MAX_DIST) {
+          // too far to target! go forward
+          set_orientation(target->get_location() - get_location());
+        } else {
+          // move left/right
+          Zeni::Vector2f tar_ori_2 = target->get_location() - get_location();
+          Zeni::Vector3f tar_ori_3 = Zeni::Vector3f(tar_ori_2.x, tar_ori_2.y, 0.0f);
+          Zeni::Vector3f left_ori_3 = Zeni::Vector3f(0.0f, 0.0f, 1.0f) % tar_ori_3;
+          Zeni::Vector2f left_ori_2 = Zeni::Vector2f(left_ori_3.x, left_ori_3.y);
+          Zeni::Vector2f ori = left_ori_2;
+          if (rand_inst.frand_lte() < 0.5f) {
+            ori = -ori;
+          }
+          set_orientation(ori);
         }
-        set_orientation(ori);
-      }
+      make_move(time);
     }
-    make_move(time);
+    //do nothing
   }
 }
 

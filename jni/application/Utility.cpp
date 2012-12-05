@@ -28,23 +28,6 @@ namespace Flame {
 
   const float ATTACK_DURATION = 0.5f;
 
-  const float WANDERER_RADIUS = 16.0f;
-  const float WANDERER_SPEED = 50.0f;
-  const float WANDERER_DAMAGE = 100.0f;
-  const float WANDERER_HEALTH = 500.0f;
-  const float WANDERER_ATTACK_GAP = 1.0f;
-  const float WANDERER_ATTACK_RADIUS = 16.0f;
-  const float WANDERER_MIN_DIST = 20.0f;
-
-  const float WHISPER_RADIUS = 16.0f;
-  const float WHISPER_SPEED = 40.0f;
-  const float WHISPER_DAMAGE = 150.0f;
-  const float WHISPER_HEALTH = 300.0f;
-  const float WHISPER_ATTACK_GAP = 1.5f;
-  const float WHISPER_SPELL_RADIUS = 16.0f;
-  const float WHISPER_MIN_DIST = 100.0f;
-  const float WHISPER_MAX_DIST = 500.0f;
-
   bool Less_than::operator() (const Sim_object * lhs, const Sim_object * rhs)
   {
     if (lhs->get_location().y < rhs->get_location().y)
