@@ -456,10 +456,6 @@ void Player::try_spell1() {
     //create spell based on character type
     switch (ptype) {
       case SANZANG: //stopping
-        //new_spell = new Healing_spell(get_location(), get_current_orientation());
-        //new_spell = new Arrow_attack(get_location(), get_current_orientation());
-        new_spell = new Fire_ball(get_location(), get_current_orientation());
-        Model_state::get_instance()->add_spell(new_spell);
         break;
       case WUKONG: //Cudgel Fury
         cudgel_fury_begin();
@@ -485,6 +481,10 @@ void Player::try_spell2() {
     //create spell based on character type
     switch (ptype) {
       case SANZANG: //healing_spell
+        new_spell = new Healing_spell(get_location(), get_current_orientation());
+        //new_spell = new Arrow_attack(get_location(), get_current_orientation());
+        //new_spell = new Fire_ball(get_location(), get_current_orientation());
+        Model_state::get_instance()->add_spell(new_spell);
         break;
       case WUKONG: //Charge
         charge();

@@ -41,13 +41,18 @@ namespace Flame {
 
   void Model_state::init(int level, Chronometer<Time> * timer_)
   {
+    // enter game for the first time
+    if (level==0) {
+      money = 0;
+    }
+
     clear();
     timer = timer_;
-    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(540.f, 1980.f), WUKONG));
-    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(580.f, 1980.f), BAJIE));
-    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(620.f, 1980.f), SHASENG));
-    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(660.f, 1980.f), SHASENG));
-
+    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(300.f, 200.f), WUKONG));
+    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(400.f, 300.f), BAJIE));
+    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(500.f, 200.f), SANZANG));
+    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(300.f, 300.f), SHASENG));
+    
     // wall vertical
     map_obj_list.push_back(new Map_brick(Point2f(-40.f, 0.f), Vector2f(40.f, 2000.f), 20.f, 20.f, "rock"));
     map_obj_list.push_back(new Map_brick(Point2f(1000.f, 0.f), Vector2f(40.f, 2000.f), 20.f, 20.f, "rock"));

@@ -105,13 +105,13 @@ namespace Flame {
     float get_CD2_percent() {
       float current_time = game_time->seconds();
       float passed_time = current_time - last_spell2;
-      float percent = passed_time > spell1_CD ? 1.0f : passed_time/spell2_CD;
+      float percent = passed_time > spell2_CD ? 1.0f : passed_time/spell2_CD;
       return percent;
     }
     float get_CD3_percent() {
       float current_time = game_time->seconds();
       float passed_time = current_time - last_spell3;
-      float percent = passed_time > spell1_CD ? 1.0f : passed_time/spell3_CD;
+      float percent = passed_time > spell3_CD ? 1.0f : passed_time/spell3_CD;
       return percent;
     }
     Zeni::Point2f get_rel_loc() {
