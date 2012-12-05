@@ -22,7 +22,7 @@ namespace Flame {
 
 
   const float INFINITY = 1E+20f;
-  const float EPSILON = 1E-10f;
+  const float EPSILON = 0.0000001f;
 
   const float INITIAL_HATRED = 100.0f;
 

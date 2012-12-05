@@ -90,7 +90,7 @@ void Monster::update_rel_loc() {
   rel_loc = (get_location() - Model_state::get_instance()->get_center_location()) * scale + RENDER_CENTER;
 }
 
-void Monster::make_move(float time) {
+void Monster::make_move(float time, bool force_move) {
   if (!is_currently_moving())
     return;
   Zeni::Vector2f ori = get_current_orientation();
@@ -100,18 +100,32 @@ void Monster::make_move(float time) {
   attemp_loc = get_location() + time * get_current_speed() * ori.get_i();
   set_position(attemp_loc);
   update_body();
-  if (!Model_state::get_instance()->can_move(get_body())) {
-    set_position(backup_loc);
-    update_body();
+  if (force_move) {
+    if (!Model_state::get_instance()->can_move(get_body())) {
+      set_position(backup_loc);
+      update_body();
+    }
+  } else {
+    if (!Model_state::get_instance()->can_monster_move(get_body())) {
+      set_position(backup_loc);
+      update_body();
+    }
   }
   // move y
   backup_loc = get_location();
   attemp_loc = get_location() + time * get_current_speed() * ori.get_j();
   set_position(attemp_loc);
   update_body();
-  if (!Model_state::get_instance()->can_move(get_body())) {
-    set_position(backup_loc);
-    update_body();
+  if (force_move) {
+    if (!Model_state::get_instance()->can_move(get_body())) {
+      set_position(backup_loc);
+      update_body();
+    }
+  } else {
+    if (!Model_state::get_instance()->can_monster_move(get_body())) {
+      set_position(backup_loc);
+      update_body();
+    }
   }
 }
 

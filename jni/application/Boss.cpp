@@ -37,6 +37,7 @@ void Boss::update(float time) {
     case IDLE:
       break;
   }
+  target = highest_hatred();
 }
 
 void Boss::decide_attack_type() {
@@ -79,7 +80,6 @@ void Boss::use_skill3() {
 }
 
 void Boss::use_attack() {
-  Monster::attack();
   last_skill_starts_time = get_current_time();
   attack();
 }

@@ -68,7 +68,7 @@ void Player::static_move(float time) {
   set_orientation(backup_ori.get_i());
   update_location(time);
   update_body();
-  if (!Model_state::get_instance()->can_move(get_body())) {
+  if (!Model_state::get_instance()->can_player_move(get_body())) {
       set_position(backup_position);
       update_body();
       move_x = false;
@@ -79,7 +79,7 @@ void Player::static_move(float time) {
   set_orientation(backup_ori.get_j());
   update_location(time);
   update_body();
-  if (!Model_state::get_instance()->can_move(get_body())) {
+  if (!Model_state::get_instance()->can_player_move(get_body())) {
       set_position(backup_position);
       update_body();
       move_y = false;
@@ -105,7 +105,7 @@ void Player::update(float time) {
       set_orientation(Vector2f(ctrl.move_hori, 0.0f));
       update_location(time);
       update_body();
-      if (!Model_state::get_instance()->can_move(get_body())) {
+      if (!Model_state::get_instance()->can_player_move(get_body())) {
           set_position(backup_position);
           update_body();
           move_x = false;
@@ -116,7 +116,7 @@ void Player::update(float time) {
       set_orientation(Vector2f(0.0f, ctrl.move_vert));
       update_location(time);
       update_body();
-      if (!Model_state::get_instance()->can_move(get_body())) {
+      if (!Model_state::get_instance()->can_player_move(get_body())) {
           set_position(backup_position);
           update_body();
           move_y = false;

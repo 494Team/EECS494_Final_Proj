@@ -91,7 +91,7 @@ public:
     Model_state::get_instance()->add_monster(wanderer);
     Whisper* whisper_1 = new Whisper(Zeni::Point2f(400, 100));
     Model_state::get_instance()->add_monster(whisper_1);
-    Redboy* redboy_inst = new Redboy(Zeni::Point2f(300, 300));
+    Redboy* redboy_inst = new Redboy(Zeni::Point2f(200, 300));
     Model_state::get_instance()->add_monster(redboy_inst);
 
     //!!! test

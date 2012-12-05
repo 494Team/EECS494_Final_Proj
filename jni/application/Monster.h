@@ -43,7 +43,7 @@ namespace Flame {
 
     void update_rel_loc();
 
-    void make_move(float time);
+    void make_move(float time, bool false_move = false);
 
     void update(float time);
 

@@ -299,6 +299,29 @@ namespace Flame {
     return true;
   }
 
+  bool Model_state::can_monster_move(const Zeni::Collision::Capsule& collision_body) {
+    if (!can_move(collision_body)) {
+      return false;
+    }
+    for (int i = 0; i < (int)player_list.size(); ++i) {
+      if (player_list[i]->get_body().intersects(collision_body)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  bool Model_state::can_player_move(const Zeni::Collision::Capsule& collision_body) {
+    if (!can_move(collision_body)) {
+      return false;
+    }
+    for (int i = 0; i < (int)monster_list.size(); ++i) {
+      if (monster_list[i]->get_body().intersects(collision_body)) {
+        return false;
+      }
+    }
+  }
+
   bool Model_state::can_move_player(const Zeni::Collision::Capsule& collision_body)
   {
     bool can_move = true;

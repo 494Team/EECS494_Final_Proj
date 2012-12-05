@@ -77,6 +77,9 @@ namespace Flame {
     bool can_move(const Zeni::Collision::Capsule& collision_body);
     bool can_move(const Zeni::Collision::Parallelepiped& collision_body);
 
+    bool can_monster_move(const Zeni::Collision::Capsule& collision_body);
+    bool can_player_move(const Zeni::Collision::Capsule& collision_body);
+
     // check if a player can move to the specific location, and trigger the map object to change
     bool can_move_player(const Zeni::Collision::Capsule& collision_body);
 

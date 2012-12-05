@@ -18,7 +18,7 @@ void Redboy::attack() {
     - get_body().get_radius() - target->get_body().get_radius();
   if (dist < REDBOY_MIN_DIST) {
     //TODO: perform attack
-
+    Monster::attack();
   } else {
     status = IDLE;
   }
@@ -55,7 +55,6 @@ void Redboy::skill3() {
 
 void Redboy::update(float time) {
   Boss::update(time);
-  target = highest_hatred();
 
   set_moving(false);
   switch (status) {
@@ -76,14 +75,30 @@ void Redboy::update(float time) {
           status = IDLE;
         } else {
           set_moving(true);
-          make_move(time);
+          Zeni::Point2f redboy_backup_loc = get_location();
+          make_move(time, true);
           for (int i = 0; i < (int)players.size(); ++i) {
             if (players[i]->get_body().intersects(get_body())) {
+              // make effects to player
               std::vector<attack_effect> effects;
               effects.push_back(HITBACK);
               players[i]->get_hit(REDBOY_FIRE_CHARGE_DAMAGE, effects);
-              players[i]->set_orientation(players[i]->get_location() - get_location());
-              players[i]->set_speed(get_current_speed() * 1.5f);
+              Zeni::Vector2f hitback_ori = players[i]->get_location() - get_location();
+              hitback_ori.normalize();
+              players[i]->set_orientation(hitback_ori);
+              players[i]->set_speed(get_current_speed() * 2.0f);
+              // move player so that there is no intersection
+              Zeni::Point2f player_backup_loc = players[i]->get_location();
+              players[i]->set_position(get_location() + hitback_ori * (get_body().get_radius() + players[i]->get_body().get_radius() + EPSILON));
+              // check if player's move is safe
+              if (!Model_state::get_instance()->can_player_move(players[i]->get_body())) {
+                // not possible to move any further. go back and stop this skill
+                players[i]->set_position(player_backup_loc);
+                set_position(redboy_backup_loc);
+                recover_speed();
+                set_orientation(target->get_location());
+                status = IDLE;
+              }
             }
           }
         }
@@ -114,6 +129,10 @@ void Redboy::update(float time) {
         make_move(time);
       }
       decide_attack_type();
+      // if haven't attacked target for a long time (8 secs for now). clear hatred 
+      if (get_current_time() - get_prev_attack_time() > 8.0f) {
+        clear_hatred(target);
+      }
       //std::cout << "IDLE\n";
   }
 }
