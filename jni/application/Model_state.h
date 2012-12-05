@@ -89,7 +89,12 @@ namespace Flame {
     {return center_location;}
 
     friend class Model_state_destroyer;
+    
+    int get_money_amount() {
+      return money;
+    }
   private:
+    int money;
     void clear();
 
     // constructor is private thus nobody else can create one

@@ -313,7 +313,22 @@ private:
 
   void render_status_helper(int p_x, Player* p_ptr) {
     Zeni::String player_texture;
-    Point2f loc(20.0f + p_x*200.0f, 20.0f);
+    Point2f loc;
+    switch (p_x) {
+      case 0:
+        loc = Point2f(20.0f, 20.0f);
+        break;
+      case 1:
+        loc = Point2f(20.0f + 180.0f, 20.0f);
+        break;
+      case 2:
+        loc = Point2f(20.0f + 460.0f, 20.0f);
+        break;
+      default: //case 3:
+        loc = Point2f(20.0f + 620.0f, 20.0f);
+        break;
+    }
+
     Point2f head_size(50.0f, 50.0f);
     switch (p_ptr->get_player_type()) {
       case SANZANG:
@@ -336,7 +351,7 @@ private:
     float CD1percent = p_ptr->get_CD1_percent();
     float CD2percent = p_ptr->get_CD2_percent();
     float CD3percent = p_ptr->get_CD3_percent();
-    float kCDbar_length = 50.0f;
+    float kCDbar_length = 30.0f;
     float kCDbar_width = 10.0f;
     Zeni::String kCDbar_color = "blue";
 
@@ -344,6 +359,7 @@ private:
     Zeni::Video &vr = Zeni::get_Video();
     Zeni::Colors &cr = Zeni::get_Colors();
 
+    //hpbar
     Point2f CDbar_loc(loc.x, loc.y + head_size.y + 5.0f);
     Zeni::Vertex2f_Color p00(CDbar_loc, cr[kCDbar_color]);
     Zeni::Vertex2f_Color p01(CDbar_loc + Zeni::Point2f(0.0f, kCDbar_width), cr[kCDbar_color]);
@@ -401,11 +417,34 @@ private:
 
     /* render the PLAYER STATUS */
     std::vector<Player *> * plist = Model_state::get_instance()->get_player_list_ptr();
-
     int p_x = 0;
     for (vector<Player *>::iterator it = plist->begin(); it != plist->end(); it++) {
       render_status_helper(p_x++, *it);
     }
+
+    /* render level status */
+    char* str = new char[10];
+    sprintf(str, "%d", lvl);
+    Zeni::String text_buf = "Level ";
+    text_buf += str;
+    Zeni::Font &fr = get_Fonts()["money_ft"];
+    fr.render_text(text_buf,
+                   Point2f(400.0f, 35.0f - 0.5f * fr.get_text_height()),
+                   get_Colors()["orange"],
+                   ZENI_CENTER);
+
+    /* render money amount */
+    
+
+    sprintf(str, "%d", Model_state::get_instance()->get_money_amount());
+    text_buf = "$ ";
+    text_buf += str;
+    fr.render_text(text_buf,
+                   Point2f(400.0f, 75.0f - 0.5f * fr.get_text_height()),
+                   get_Colors()["orange"],
+                   ZENI_CENTER);
+    delete [] str;
+
 
     render_minimap();
     dialog.render();
