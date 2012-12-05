@@ -316,20 +316,20 @@ private:
     Point2f loc;
     switch (p_x) {
       case 0:
-        loc = Point2f(20.0f, 20.0f);
+        loc = Point2f(20.0f, 10.0f);
         break;
       case 1:
-        loc = Point2f(20.0f + 180.0f, 20.0f);
+        loc = Point2f(20.0f + 180.0f, 10.0f);
         break;
       case 2:
-        loc = Point2f(20.0f + 460.0f, 20.0f);
+        loc = Point2f(20.0f + 460.0f, 10.0f);
         break;
       default: //case 3:
-        loc = Point2f(20.0f + 620.0f, 20.0f);
+        loc = Point2f(20.0f + 620.0f, 10.0f);
         break;
     }
 
-    Point2f head_size(50.0f, 50.0f);
+    Point2f head_size(40.0f, 40.0f);
     switch (p_ptr->get_player_type()) {
       case SANZANG:
         player_texture = "tripitaka_head";
@@ -415,6 +415,16 @@ private:
 
     Model_state::get_instance()->render();
 
+    /* render top panel */
+    Zeni::Colors &cr = Zeni::get_Colors();
+    const Zeni::String kToppanel_color = "white_light";
+    Zeni::Vertex2f_Color p00(Zeni::Point2f(0.0f, 0.0f), cr[kToppanel_color]);
+    Zeni::Vertex2f_Color p01(Zeni::Point2f(0.0f, 75.0f), cr[kToppanel_color]);
+    Zeni::Vertex2f_Color p02(Zeni::Point2f(800.0f, 75.0f), cr[kToppanel_color]);
+    Zeni::Vertex2f_Color p03(Zeni::Point2f(800.0f, 0.0f), cr[kToppanel_color]);
+    Zeni::Quadrilateral<Zeni::Vertex2f_Color> toppanel(p00, p01, p02, p03);
+    vr.render(toppanel);
+
     /* render the PLAYER STATUS */
     std::vector<Player *> * plist = Model_state::get_instance()->get_player_list_ptr();
     int p_x = 0;
@@ -424,23 +434,22 @@ private:
 
     /* render level status */
     char* str = new char[10];
-    sprintf(str, "%d", lvl);
+    sprintf(str, "%d", lvl+1);
     Zeni::String text_buf = "Level ";
     text_buf += str;
-    Zeni::Font &fr = get_Fonts()["money_ft"];
-    fr.render_text(text_buf,
-                   Point2f(400.0f, 35.0f - 0.5f * fr.get_text_height()),
-                   get_Colors()["orange"],
+    Zeni::Font &l_ft = get_Fonts()["lvl_ft"];
+    l_ft.render_text(text_buf,
+                   Point2f(400.0f, 25.0f - 0.5f * l_ft.get_text_height()),
+                   get_Colors()["black"],
                    ZENI_CENTER);
 
     /* render money amount */
-    
-
     sprintf(str, "%d", Model_state::get_instance()->get_money_amount());
     text_buf = "$ ";
     text_buf += str;
-    fr.render_text(text_buf,
-                   Point2f(400.0f, 75.0f - 0.5f * fr.get_text_height()),
+    Zeni::Font &m_ft = get_Fonts()["money_ft"];
+    m_ft.render_text(text_buf,
+                   Point2f(400.0f, 60.0f - 0.5f * m_ft.get_text_height()),
                    get_Colors()["orange"],
                    ZENI_CENTER);
     delete [] str;
