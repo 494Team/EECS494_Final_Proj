@@ -48,7 +48,7 @@ namespace Flame {
                  float life_time_ = 0.f);
 
     virtual Zeni::Point2f get_location() const
-      {return get_current_location() - size / 2;}
+      {return get_current_location();}
     Zeni::Point2f get_center_location() const
       {return get_current_location();}
     Zeni::Point2f get_relative_location() const
@@ -140,7 +140,7 @@ namespace Flame {
                     float life_time_ = 0.f);
 
     virtual Zeni::Point2f get_location() const
-      {return location - size / 2;}
+      {return location;}
     Zeni::Point2f get_center_location() const
       {return location;}
 

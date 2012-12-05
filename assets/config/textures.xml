@@ -309,6 +309,10 @@ The following things are unsupported:
   <!-- Players texture end................................-->
 
   <!-- Players skill start..............................-->
+  <get_hit>
+    <filepath>textures/get_hit.png</filepath>
+    <tile>0</tile>
+  </get_hit>
   <fire_ball>
     <is_sprite>0</is_sprite>
     <filepath>textures/fire_ball.png</filepath>
@@ -329,6 +333,18 @@ The following things are unsupported:
     <filepath>textures/magic_arrow_ice.png</filepath>
     <tile>0</tile>
   </magic_arrow_ice>
+  <magic_arrow_fire>
+    <filepath>textures/magic_arrow_fire.png</filepath>
+    <tile>0</tile>
+  </magic_arrow_fire>
+  <fire_effect0>
+    <filepath>textures/fire_effect0.png</filepath>
+    <tile>0</tile>
+  </fire_effect0>
+  <fire_effect1>
+    <filepath>textures/fire_effect1.png</filepath>
+    <tile>0</tile>
+  </fire_effect1>
   <berserk_mode>
     <is_sprite>0</is_sprite>
     <filepath>textures/berserk_mode.png</filepath>

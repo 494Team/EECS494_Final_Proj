@@ -7,7 +7,6 @@
 #include <cstdlib>
 
 using std::vector;
-
 using namespace Zeni;
 
 namespace Flame {
@@ -38,13 +37,16 @@ namespace Flame {
           (*it)->get_hit(attack_strength, effects, player_ptr, orientation);
           if (heal_self)
             player_ptr->dec_health(-.5f * attack_strength);
+          Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
         }
     }
     else {
       vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
       for (auto it = player_list_ptr->begin(); it != player_list_ptr->end(); ++it)
-        if (body.intersect((*it)->get_body()))
+        if (body.intersect((*it)->get_body())) {
           (*it)->get_hit(attack_strength, vector<attack_effect>(), player_ptr);
+          Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
+        }
     }
     disable_spell();
   }
@@ -192,6 +194,7 @@ namespace Flame {
           vector<attack_effect> effects;
           effects.push_back(HITBACK);
           (*it)->get_hit(kArrow_damage, effects, player_ptr, get_orientation());
+          Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
           disable_spell();
           break;
         }
@@ -220,6 +223,7 @@ namespace Flame {
           effects.push_back(HITBACK);
           (*it)->get_hit(kMagic_arrow_damage, effects, nullptr, get_orientation());
           Magic_arrow_ice_effect effect(get_center_location());
+          Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
           disable_spell();
           break;
         }
@@ -248,6 +252,7 @@ namespace Flame {
           effects.push_back(HITBACK);
           (*it)->get_hit(kMagic_arrow_damage, effects, nullptr, get_orientation());
           Model_state::get_instance()->add_spell(new Magic_arrow_fire_effect(get_center_location()));
+          Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
           disable_spell();
           break;
         }
@@ -255,7 +260,7 @@ namespace Flame {
   }
 
   void Magic_arrow_fire::render()
-  {Moving_spell::render("magic_arrow_ice");}
+  {Moving_spell::render("magic_arrow_fire");}
 
   Magic_arrow_ice_effect::Magic_arrow_ice_effect(const Point2f& location_, Player * player_ptr_) :
     Resizable_spell(location_, kMagic_arrow_effect_size, Vector2f(), 0.f),
@@ -271,12 +276,14 @@ namespace Flame {
     
   Magic_arrow_fire_effect::Magic_arrow_fire_effect(const Point2f& location_, Player * player_ptr_) :
     Resizable_spell(location_, kMagic_arrow_effect_size, Vector2f(), kMagic_arrow_effect_life_time),
-    player_ptr(player_ptr_)
+    player_ptr(player_ptr_),
+    timer(0.f)
   {}
 
   void Magic_arrow_fire_effect::update(float time)
   {
     Resizable_spell::update(time);
+    timer += time;
     vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
     for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
       if (get_body().intersects((*it)->get_body()) && (*it)->is_alive())
@@ -284,7 +291,12 @@ namespace Flame {
   }
 
   void Magic_arrow_fire_effect::render()
-  {Resizable_spell::render("hell_spikes");}
+  {
+    if (timer - int(timer) < 0.25f || (timer - int(timer) > 0.5f && timer - int(timer) < 0.75f))
+      Resizable_spell::render("fire_effect0");
+    else
+      Resizable_spell::render("fire_effect1");
+  }
 
   Strafe::Strafe(const Point2f& location_, const Vector2f& orientation_) :
     Spell(kArrow_life_time),
@@ -470,6 +482,7 @@ namespace Flame {
       for (auto it = player_list_ptr->begin(); it != player_list_ptr->end(); ++it)
         if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
           (*it)->dec_health(kFireball_damage);
+          Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
           disable_spell();
           break;
         }
@@ -501,6 +514,7 @@ namespace Flame {
       for (auto it = player_list_ptr->begin(); it != player_list_ptr->end(); ++it)
         if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
           (*it)->dec_health(kFireball_damage);
+          Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
           disable_spell();
           break;
         }

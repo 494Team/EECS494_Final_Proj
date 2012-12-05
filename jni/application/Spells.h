@@ -12,6 +12,9 @@ namespace Flame {
   class Agent;
   class Player;
 
+  const Zeni::Vector2f kGet_hit_size = Zeni::Vector2f(48.f, 48.f);
+  const float kGet_hit_life_time = 0.25f;
+
   const float kHealing_size = 16.f;
   const float kHealing_speed = 50.f;
   const float kHealing_life_time = 3.f;
@@ -26,7 +29,7 @@ namespace Flame {
   const float kArrow_life_time = 5.f;
   const float kArrow_damage = 50.f;
 
-  const Zeni::Vector2f kMagic_arrow_size = Zeni::Vector2f(4.f, 16.f);
+  const Zeni::Vector2f kMagic_arrow_size = Zeni::Vector2f(8.f, 32.f);
   const float kMagic_arrow_speed = 200.f;
   const float kMagic_arrow_life_time = 5.f;
   const float kMagic_arrow_damage = 50.f;
@@ -79,6 +82,15 @@ namespace Flame {
     bool is_player;
     bool heal_self;
     Zeni::Vector2f orientation;
+  };
+
+  class Get_hit : public Resizable_spell {
+  public:
+    Get_hit(const Zeni::Point2f& location_ = Zeni::Point2f()) :
+      Resizable_spell(location_, kGet_hit_size, Zeni::Vector2f(), kGet_hit_life_time)
+      {}
+    virtual void render()
+      {Resizable_spell::render("get_hit");}
   };
 
   // Tripitaka
@@ -168,6 +180,7 @@ namespace Flame {
     virtual void update(float time = 0.f);
     virtual void render();
   private:
+    float timer;
     Player * player_ptr;
   };
 
