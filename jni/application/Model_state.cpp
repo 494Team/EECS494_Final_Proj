@@ -43,12 +43,17 @@ namespace Flame {
   {
     clear();
     timer = timer_;
-    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(300.f, 200.f), WUKONG));
-    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(400.f, 300.f), BAJIE));
-    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(500.f, 200.f), SHASENG));
-    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(300.f, 300.f), SHASENG));
-    /*
+    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(540.f, 1980.f), WUKONG));
+    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(580.f, 1980.f), BAJIE));
+    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(620.f, 1980.f), SHASENG));
+    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(660.f, 1980.f), SHASENG));
+
     // wall vertical
+    map_obj_list.push_back(new Map_brick(Point2f(-40.f, 0.f), Vector2f(40.f, 2000.f), 20.f, 20.f, "rock"));
+    map_obj_list.push_back(new Map_brick(Point2f(1000.f, 0.f), Vector2f(40.f, 2000.f), 20.f, 20.f, "rock"));
+    map_obj_list.push_back(new Map_brick(Point2f(2040.f, 0.f), Vector2f(40.f, 2000.f), 20.f, 20.f, "rock"));
+    map_obj_list.push_back(new Map_brick(Point2f(3080.f, 0.f), Vector2f(40.f, 2000.f), 20.f, 20.f, "rock"));
+    /*
     map_obj_list.push_back(new Map_brick(Point2f(-40.0f, -40.0f), Vector2f(40.f,580.0f), 20.0f, 20.f, String("rock")));
     map_obj_list.push_back(new Map_brick(Point2f(500.0f, 200.0f), Vector2f(40.f,340.0f), 20.0f, 20.f, String("rock")));
     map_obj_list.push_back(new Map_brick(Point2f(700.0f - 40.f, 200.0f), Vector2f(40.f,540.0f), 20.0f, 20.f, String("rock")));
@@ -63,8 +68,12 @@ namespace Flame {
     map_obj_list.push_back(new Map_brick(Point2f(2000.0f, 1500.0f - 40.f), Vector2f(40.f, 580.0f), 20.0f, 20.f, String("rock")));
     map_obj_list.push_back(new Map_brick(Point2f(400.0f, 1200.0f), Vector2f(40.f, 300.0f), 20.0f, 20.f, String("rock")));
     map_obj_list.push_back(new Map_brick(Point2f(-40.0f, 1800.0f - 40.f), Vector2f(40.f, 280.0f), 20.0f, 20.f, String("rock")));
+    */
 
     // wall horizontal
+    map_obj_list.push_back(new Map_brick(Point2f(-40.0f, -40.0f), Vector2f(3160.f, 40.0f), 20.0f, 20.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(-40.0f, 2000.0f), Vector2f(3160.f, 40.0f), 20.0f, 20.f, String("rock")));
+    /*
     map_obj_list.push_back(new Map_brick(Point2f(0.0f, -40.0f), Vector2f(1100.f, 40.0f), 20.0f, 20.f, String("rock")));
     map_obj_list.push_back(new Map_brick(Point2f(1300.0f, -40.0f), Vector2f(700.f, 40.0f), 20.0f, 20.f, String("rock")));
     map_obj_list.push_back(new Map_brick(Point2f(0.0f, 500.0f), Vector2f(500.f, 40.0f), 20.0f, 20.f, String("rock")));
