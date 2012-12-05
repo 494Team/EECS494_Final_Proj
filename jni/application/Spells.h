@@ -215,6 +215,7 @@ namespace Flame {
     Zeni::Vector2f counter_orientation;
     int is_left;
     float time_counter;
+    float render_timer;
     Player * player_ptr;
   };
 

@@ -344,18 +344,26 @@ The following things are unsupported:
     <filepath>textures/charge_mode.png</filepath>
     <tile>0</tile>
   </charge_mode>
-  <lightning>
-    <filepath>textures/lightning.png</filepath>
+  <lightning0>
+    <filepath>textures/lightning0.png</filepath>
     <tile>0</tile>
-  </lightning>
+  </lightning0>
   <lightning1>
     <filepath>textures/lightning1.png</filepath>
     <tile>0</tile>
   </lightning1>
-  <trap>
-    <filepath>textures/trap.png</filepath>
+  <lightning2>
+    <filepath>textures/lightning2.png</filepath>
     <tile>0</tile>
-  </trap>
+  </lightning2>
+  <trap_inactive>
+    <filepath>textures/trap_inactive.png</filepath>
+    <tile>0</tile>
+  </trap_inactive>
+  <trap_active>
+    <filepath>textures/trap_active.png</filepath>
+    <tile>0</tile>
+  </trap_active>
   <!-- Players skill end................................-->
 
   <dialog_box>
@@ -536,6 +544,16 @@ The following things are unsupported:
     <tile>0</tile>
   </mini_boss>
   <!-- Minimap texture ends-->
+  <!-- attack effects -->
+  <freeze>
+    <filepath>textures/freeze.png</filepath>
+    <tile>0</tile>
+  </freeze>
+  <exclamatory_mark>
+    <filepath>textures/exclamatory_mark.png</filepath>
+    <tile>0</tile>
+  </exclamatory_mark>
+  <!-- attack effects ends-->
   <!--
   <one>
     <is_sprite>0</is_sprite>

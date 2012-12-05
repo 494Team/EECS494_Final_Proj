@@ -368,7 +368,12 @@ namespace Flame {
   }
 
   void Trap::render()
-  {Resizable_spell::render("trap");}
+  {
+    if (timer > 2.5f)
+      Resizable_spell::render("trap_active");
+    else
+      Resizable_spell::render("trap_inactive");
+  }
 
   Trap_attack::Trap_attack(const Point2f& location_, const Vector2f& orientation_, float speed_, Player * player_ptr_) :
     Moving_spell_circle(location_,
@@ -378,6 +383,7 @@ namespace Flame {
     counter_orientation(Vector2f(-orientation_.y, orientation_.x)),
     is_left(-1),
     time_counter(kTrap_attack_period),
+    render_timer(0.f),
     player_ptr(player_ptr_)
     {}
 
@@ -385,6 +391,7 @@ namespace Flame {
   {
     Moving_spell_circle::update(time);
     time_counter -= time;
+    render_timer += time;
     if (time_counter < 0.f) {
       is_left = -is_left;
       time_counter = kTrap_attack_period;
@@ -401,10 +408,12 @@ namespace Flame {
 
   void Trap_attack::render()
   {
-    if (is_left)
-      Moving_spell::render("lightning");
-    else
-      Moving_spell::render("ligntning1");
+    if (render_timer - int(render_timer) < 0.25f)
+      Moving_spell::render("lightning0");
+    else if (render_timer - int(render_timer) < 0.5f || render_timer - int(render_timer) > 0.75f)
+      Moving_spell::render("lightning1");
+    else if (render_timer - int(render_timer) < 0.75f)
+      Moving_spell::render("lightning2");
   }
 
   Track_attack::Track_attack(const Point2f& location_,
