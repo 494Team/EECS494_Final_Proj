@@ -90,5 +90,26 @@ Only TrueType fonts are supported.
       <height>600</height>
     </virtual_screen>
   </lvl_ft>
+  
+  <shop_title>
+    <filepath>fonts/FORGOTTE.TTF</filepath>
+    <height>40</height>
+    <bold>1</bold>
+    <italics>0</italics>
+    <virtual_screen>
+      <width>800</width>
+      <height>600</height>
+    </virtual_screen>
+  </shop_title>
+  <shop_ft>
+    <filepath>fonts/FORGOTTE.TTF</filepath>
+    <height>25</height>
+    <bold>1</bold>
+    <italics>0</italics>
+    <virtual_screen>
+      <width>800</width>
+      <height>600</height>
+    </virtual_screen>
+  </shop_ft>
 
 </Fonts>

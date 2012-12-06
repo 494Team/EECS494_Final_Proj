@@ -381,7 +381,21 @@ The following things are unsupported:
     <tile>0</tile>
   </trap_active>
   <!-- Players skill end................................-->
-
+  <plus1_button>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/plus1_button.png</filepath>
+    <tile>0</tile>
+  </plus1_button>
+  <plus_button>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/plus_button.png</filepath>
+    <tile>0</tile>
+  </plus_button>
+  <highlight>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/highlight.png</filepath>
+    <tile>0</tile>
+  </highlight>
   <dialog_box>
     <is_sprite>0</is_sprite>
     <filepath>textures/dialog_box.png</filepath>

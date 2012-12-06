@@ -26,7 +26,12 @@ Player::Player(
   last_charge_attack(0.0f),
   charge_attacking(false),
   render_clock(0.0f),
-  render_player(true)
+  render_player(true),
+  skill_point(0),
+  attack(0),
+  defense(0),
+  strength(0),
+  speed(0)
 {
   switch (ptype) {
     case SANZANG:

@@ -120,7 +120,20 @@ namespace Flame {
     
     void cudgel_fury_begin();
     void cudgel_fury_end();
+
+    int get_skill_point() {
+      return skill_point;
+    }
+    void set_skill_point(int point) {
+      skill_point = point;
+    }
+    int attack;
+    int defense;
+    int strength;
+    int speed;
   private:
+    int skill_point;
+
     Chronometer<Time>* game_time;
     std::vector<Monster *> * monster_list_ptr;
     void static_move(float time);
