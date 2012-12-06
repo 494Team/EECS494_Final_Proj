@@ -48,10 +48,14 @@ namespace Flame {
 
     clear();
     timer = timer_;
-    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(300.f, 200.f), WUKONG));
+    //for (std::vector<kPlayer_type>::iterator it = character_list.begin(); it != character_list.end(); it++) {
+      player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(300.f, 200.f), *character_list.begin()));
+    //}
     player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(400.f, 300.f), BAJIE));
     player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(500.f, 200.f), SANZANG));
     player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(300.f, 300.f), SHASENG));
+
+    character_list.clear(); //temp
     
     // wall vertical
     map_obj_list.push_back(new Map_brick(Point2f(-40.f, 0.f), Vector2f(40.f, 2000.f), 20.f, 20.f, "rock"));

@@ -986,7 +986,15 @@ private:
     get_Game().joy_mouse.enabled = false;
   }
 
+  void save_chosen_characters() {
+    std::vector<kPlayer_type> * char_list = Model_state::get_instance()->get_character_list_ptr();
+    for (int i=0; i<kPlayer_num; i++) {
+      char_list->push_back(chosen_char[i]);
+    }
+  }
+
   void on_pop() {
+    save_chosen_characters();
     //get_Window().mouse_grab(false);
     get_Window().mouse_hide(false);
     get_Game().joy_mouse.enabled = true;
