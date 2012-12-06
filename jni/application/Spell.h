@@ -48,7 +48,7 @@ namespace Flame {
                  float life_time_ = 0.f);
 
     virtual Zeni::Point2f get_location() const
-      {return get_current_location();}
+      {return get_current_location() - size / 2;}
     Zeni::Point2f get_center_location() const
       {return get_current_location();}
     Zeni::Point2f get_relative_location() const
@@ -64,7 +64,7 @@ namespace Flame {
     virtual void update(float time = 0.f);
     virtual void render() = 0;
   protected:
-    void render(const Zeni::String& texture) const;
+    void render(const Zeni::String& texture, Zeni::Color filter = Zeni::Color()) const;
 
     void set_orientation(const Zeni::Vector2f& orientation_)
       {Moving_object::set_orientation(orientation_);}
@@ -140,7 +140,7 @@ namespace Flame {
                     float life_time_ = 0.f);
 
     virtual Zeni::Point2f get_location() const
-      {return location;}
+      {return location - size / 2;}
     Zeni::Point2f get_center_location() const
       {return location;}
 
@@ -151,7 +151,7 @@ namespace Flame {
     virtual void render() = 0;
 
   protected:
-    void render(const Zeni::String& texture) const;
+    void render(const Zeni::String& texture, Zeni::Color filter = Zeni::Color()) const;
 
   private:
     Zeni::Point2f location;

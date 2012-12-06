@@ -40,7 +40,7 @@ namespace Flame {
     relative_location = (get_center_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
   }
 
-  void Moving_spell::render(const String& texture) const
+  void Moving_spell::render(const String& texture, Color filter) const
   {
     Vector2f orientation = get_current_orientation();
     float theta = orientation.angle_between(Vector2f(0.f, 1.f));
@@ -52,7 +52,9 @@ namespace Flame {
                  relative_location + scale * size / 2, // lower-right corner
                  theta, // rotation in radians
                  1.f, // scaling factor
-                 relative_location); // point to rotate & scale about
+                 relative_location, // point to rotate & scale about
+                 false,
+                 filter);
   }
 
   void Moving_spell_circle::update_body()
@@ -120,13 +122,18 @@ namespace Flame {
     Resizable_spell::update_body();
   }
 
-  void Resizable_spell::render(const String& texture) const
+  void Resizable_spell::render(const String& texture, Color filter) const
   {
     float scale = Model_state::get_instance()->get_scale();
     Point2f relative_location = (get_center_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
     render_image(texture, // which texture to use
                  relative_location - scale * size / 2, // upper-left corner
-                 relative_location + scale * size / 2); // lower-right corner
+                 relative_location + scale * size / 2, // lower-right corner
+                 0.f, // rotation in radians
+                 1.f, // scaling factor
+                 relative_location, // point to rotate & scale about
+                 false,
+                 filter);
   }
 
 }

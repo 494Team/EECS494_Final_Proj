@@ -309,6 +309,26 @@ The following things are unsupported:
   <!-- Players texture end................................-->
 
   <!-- Players skill start..............................-->
+  <disintegrate0>
+    <filepath>textures/disintegrate0.png</filepath>
+    <tile>0</tile>
+  </disintegrate0>
+  <disintegrate_short0>
+    <filepath>textures/disintegrate_short0.png</filepath>
+    <tile>0</tile>
+  </disintegrate_short0>
+  <disintegrate1>
+    <filepath>textures/disintegrate1.png</filepath>
+    <tile>0</tile>
+  </disintegrate1>
+  <disintegrate_short1>
+    <filepath>textures/disintegrate_short1.png</filepath>
+    <tile>0</tile>
+  </disintegrate_short1>
+  <ding>
+    <filepath>textures/ding.png</filepath>
+    <tile>0</tile>
+  </ding>
   <get_hit>
     <filepath>textures/get_hit.png</filepath>
     <tile>0</tile>

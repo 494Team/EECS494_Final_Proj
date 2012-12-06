@@ -15,6 +15,13 @@ namespace Flame {
   const Zeni::Vector2f kGet_hit_size = Zeni::Vector2f(48.f, 48.f);
   const float kGet_hit_life_time = 0.25f;
 
+  const float kDisintegrate_length = 384.f;
+  const float kDisintegrate_radius = 8.f;
+
+  const Zeni::Vector2f kDing_size = Zeni::Vector2f(100.f, 100.f);
+  const float kDing_life_time = 3.f;
+  const float kDing_damage = 5.f;
+
   const float kHealing_size = 16.f;
   const float kHealing_speed = 50.f;
   const float kHealing_life_time = 3.f;
@@ -94,12 +101,41 @@ namespace Flame {
   };
 
   // Tripitaka
+  class Disintegrate : public Spell {
+  public:
+    Disintegrate(Player * player_ptr_ = nullptr, float damage_ = 0.f);
+    virtual Zeni::Point2f get_location() const;
+    virtual void update_body();
+    virtual void update(float time = 0.f);
+    virtual void render();
+  private:
+    Player * player_ptr;
+    Zeni::Collision::Capsule body;
+    float length;
+    float render_time;
+    float damage;
+  };
+
+  class Ding : public Resizable_spell {
+  public:
+    Ding(const Zeni::Point2f& location_ = Zeni::Point2f(), Player * player_ptr_ = nullptr, float damage_ = 0.f);
+    virtual void update(float time = 0.f);
+    virtual void render();
+  private:
+    Player * player_ptr;
+    float render_time;
+    float damage;
+  };
+
   class Healing_spell : public Moving_spell_circle {
   public:
     Healing_spell(const Zeni::Point2f& location_ = Zeni::Point2f(),
-                  const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
+                  const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
+                  float damage_ = 0.f);
     virtual void update(float time = 0.f);
     virtual void render();
+  private:
+    float damage;
   };
 
   // Monkey King
@@ -109,7 +145,8 @@ namespace Flame {
                 const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
                 const float size_ = 50.0f,
                 Player * player_ptr_ = nullptr,
-                Zeni::Chronometer<Zeni::Time>* game_time = nullptr);
+                Zeni::Chronometer<Zeni::Time>* game_time = nullptr,
+                float damage_ = 0.f);
     virtual void update(float time = 0.f);
     virtual void render();
   private:
@@ -118,6 +155,7 @@ namespace Flame {
     int render_flag;
     Zeni::Chronometer<Zeni::Time>* game_time;
     float last_render_time;
+    float damage;
   };
 
   // Pigsy
@@ -134,33 +172,39 @@ namespace Flame {
   public:
     Arrow_attack(const Zeni::Point2f& location_ = Zeni::Point2f(),
                  const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
-                 Player * player_ptr_ = nullptr);
+                 Player * player_ptr_ = nullptr,
+                 float damage_ = 0.f);
     virtual void update(float time = 0.f);
     virtual void render();
   private:
     Player * player_ptr;
+    float damage;
   };
 
   class Magic_arrow_ice : public Moving_spell_rectangle {
   public:
     Magic_arrow_ice(const Zeni::Point2f& location_ = Zeni::Point2f(),
                     const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
-                    Player * player_ptr_ = nullptr);
+                    Player * player_ptr_ = nullptr,
+                    float damage_ = 0.f);
     virtual void update(float time = 0.f);
     virtual void render();
   private:
     Player * player_ptr;
+    float damage;
   };
 
   class Magic_arrow_fire : public Moving_spell_rectangle {
   public:
     Magic_arrow_fire(const Zeni::Point2f& locatioin_ = Zeni::Point2f(),
                       const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
-                      Player * player_ptr_ = nullptr);
+                      Player * player_ptr_ = nullptr,
+                      float damage_ = 0.f);
     virtual void update(float time = 0.f);
     virtual void render();
   private:
     Player * player_ptr;
+    float damage;
   };
 
   class Magic_arrow_ice_effect : public Resizable_spell {
@@ -187,7 +231,9 @@ namespace Flame {
   class Strafe : public Spell{
   public:
     Strafe(const Zeni::Point2f& location_ = Zeni::Point2f(),
-           const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
+           const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
+           Player * player_ptr_ = nullptr,
+           float damage_ = 0.f);
     virtual Zeni::Point2f get_location() const
       {return location;}
     virtual void update_body() {}
@@ -205,7 +251,7 @@ namespace Flame {
 
   class Trap : public Resizable_spell {
   public:
-    Trap(const Zeni::Point2f& location_ = Zeni::Point2f(), Player * player_ptr_ = nullptr);
+    Trap(const Zeni::Point2f& location_ = Zeni::Point2f(), Player * player_ptr_ = nullptr, float damage_ = 0.f);
     virtual void update(float time = 0.f);
     virtual void render();
   private:
@@ -213,6 +259,7 @@ namespace Flame {
     Player * player_ptr;
     int remain_times;
     float timer;
+    float damage;
   };
 
   class Trap_attack : public Moving_spell_circle {
@@ -220,7 +267,8 @@ namespace Flame {
     Trap_attack(const Zeni::Point2f& location_ = Zeni::Point2f(),
                 const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
                 float speed_ = kTrap_attack_speed,
-                Player * player_ptr_ = nullptr);
+                Player * player_ptr_ = nullptr,
+                float damage_ = 0.f);
     virtual void update(float time = 0.f);
     virtual void render();
   private:
@@ -230,6 +278,7 @@ namespace Flame {
     float time_counter;
     float render_timer;
     Player * player_ptr;
+    float damage;
   };
 
   class Track_attack : public Moving_spell_circle {

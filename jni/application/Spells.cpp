@@ -52,12 +52,105 @@ namespace Flame {
   }
 
   // Tripitaka
-  Healing_spell::Healing_spell(const Point2f& location_, const Vector2f& orientation_) :
+
+  Disintegrate::Disintegrate(Player * player_ptr_, float damage_) :
+    Spell(99999.9f),
+    player_ptr(player_ptr_),
+    length(kDisintegrate_length),
+    render_time(0.f),
+    damage(damage_)
+    {Disintegrate::update_body();}
+
+  Point2f Disintegrate::get_location() const
+    {return player_ptr->get_current_location();}
+
+  void Disintegrate::update_body()
+  {
+      Point3f endpoint_a = Point3f(player_ptr->get_current_location().x, player_ptr->get_current_location().y, kCollision_object_height);
+      Vector3f orientation = Vector3f(player_ptr->get_current_orientation().x, player_ptr->get_current_orientation().y, 0.f).normalized();
+      orientation *= kDisintegrate_length;
+      Point3f endpoint_b = endpoint_a + orientation;
+      body = Collision::Capsule(endpoint_a, endpoint_b, kDisintegrate_radius);
+  }
+
+  void Disintegrate::update(float time)
+  {
+    render_time += time;
+    vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
+    vector<attack_effect> effects;
+    Monster * target_ptr = nullptr;
+    update_body();
+    for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
+      if (body.intersects((*it)->get_body()))
+        if (!target_ptr || (
+              (*it)->get_location() - player_ptr->get_current_location()).magnitude() <
+                (target_ptr->get_current_location() - player_ptr->get_current_location()).magnitude())
+          target_ptr = *it;
+    if (target_ptr) {
+      target_ptr->get_hit(damage, vector<attack_effect>(), player_ptr);
+      length = (target_ptr->get_current_location() - player_ptr->get_current_location()).magnitude();
+    }
+    else
+      length = kDisintegrate_length;
+  }
+
+  void Disintegrate::render()
+  {
+    float scale = Model_state::get_instance()->get_scale();
+    Point2f location = (player_ptr->get_current_location() - Model_state::get_instance()->get_center_location())
+                        * scale + Point2f(400.f, 300.f);
+    location -= scale * Vector2f(kDisintegrate_radius, length);
+    float theta = player_ptr->get_current_orientation().angle_between(Vector2f(0.f, 1.f));
+    if (player_ptr->get_current_orientation().x < 0.f)
+      theta = 2 * Global::pi - theta;
+    theta += Global::pi;
+    String texture = "disintegrate0";
+    if (int((render_time - int(render_time)) * 10) % 2)
+      texture = "disintegrate1";
+    if (length < 256.f) {
+      texture = "disintegrate_short0";
+        if (int((render_time - int(render_time)) * 10) % 2)
+          texture = "disintegrate_short1";
+    }
+    render_image(texture,
+                 location,
+                 location + scale * Vector2f(2 * kDisintegrate_radius, length),
+                 theta,
+                 1.f,
+                 location + scale * Vector2f(kDisintegrate_radius, length));
+  }
+
+  Ding::Ding(const Point2f& location_, Player * player_ptr_, float damage_) :
+    Resizable_spell(location_, kDing_size, Vector2f(), kDing_life_time),
+    player_ptr(player_ptr_),
+    render_time(0.f),
+    damage(damage_)
+    {}
+
+  void Ding::update(float time)
+  {
+    Resizable_spell::update(time);
+    render_time += time;
+    if (render_time > 1.f)
+      render_time = 1.f;
+    vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
+    vector<attack_effect> effects;
+    effects.push_back(FREEZE);
+    for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
+      if (get_body().intersects((*it)->get_body()))
+        (*it)->get_hit(damage, effects, player_ptr);
+  }
+
+  void Ding::render()
+  {Resizable_spell::render("ding", Color(render_time, 0.89f, 0.78f, 0.04f));}
+
+  Healing_spell::Healing_spell(const Point2f& location_, const Vector2f& orientation_, float damage_) :
     Moving_spell_circle(location_ + 50.f * orientation_.normalized(),
                         orientation_,
                         Vector2f(kHealing_size, kHealing_size),
                         kHealing_speed,
-                        kHealing_life_time)
+                        kHealing_life_time),
+    damage(damage_)
     {}
 
   void Healing_spell::update(float time)
@@ -67,7 +160,7 @@ namespace Flame {
       vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
       for (auto it = player_list_ptr->begin(); it != player_list_ptr->end(); ++it)
         if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
-          (*it)->dec_health(kHealing_healing_amount);
+          (*it)->dec_health(damage);
           disable_spell();
           break;
         }
@@ -82,15 +175,15 @@ namespace Flame {
                            const Vector2f& orientation_,
                            const float size_,
                            Player * player_ptr_,
-                           Chronometer<Time>* game_time_)
+                           Chronometer<Time>* game_time_,
+                           float damage_)
   : Moving_spell_circle(location_, orientation_, Zeni::Vector2f(size_*5, size_*5), 0.0f, kCudgelfury_last),
     player_ptr(player_ptr_),
     render_flag(0),
     last_render_time(0.0f),
-    game_time(game_time_)
-  {
-    monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
-  }
+    game_time(game_time_),
+    damage(damage_)
+  {monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();}
 
   void Cudgel_fury::update(float time)
   {
@@ -112,7 +205,7 @@ namespace Flame {
         if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
           vector<attack_effect> effects;
           //effects.push_back(HITBACK);
-          (*it)->get_hit(kCudgelfury_damage, effects, player_ptr);
+          (*it)->get_hit(damage, effects, player_ptr);
           //disable_spell();
           break;
         }
@@ -175,13 +268,15 @@ namespace Flame {
   // Friar Sand
   Arrow_attack::Arrow_attack(const Point2f& location_,
                              const Vector2f& orientation_,
-                             Player * player_ptr_) :
+                             Player * player_ptr_,
+                             float damage_) :
     Moving_spell_rectangle(location_, 
                            orientation_,
                            kArrow_size,
                            kArrow_speed,
                            kArrow_life_time),
-    player_ptr(player_ptr_)
+    player_ptr(player_ptr_),
+    damage(damage_)
     {}
 
   void Arrow_attack::update(float time)
@@ -193,7 +288,7 @@ namespace Flame {
         if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
           vector<attack_effect> effects;
           effects.push_back(HITBACK);
-          (*it)->get_hit(kArrow_damage, effects, player_ptr, get_orientation());
+          (*it)->get_hit(damage, effects, player_ptr, get_orientation());
           Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
           disable_spell();
           break;
@@ -206,10 +301,12 @@ namespace Flame {
 
   Magic_arrow_ice::Magic_arrow_ice(const Point2f& location_,
                                    const Vector2f& orientation_,
-                                   Player * player_ptr_) :
+                                   Player * player_ptr_,
+                                   float damage_) :
     Moving_spell_rectangle(location_, orientation_, kMagic_arrow_size,
                            kMagic_arrow_speed, kMagic_arrow_life_time),
-    player_ptr(player_ptr_)
+    player_ptr(player_ptr_),
+    damage(damage_)
   {}
 
   void Magic_arrow_ice::update(float time)
@@ -221,7 +318,7 @@ namespace Flame {
         if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
           vector<attack_effect> effects;
           effects.push_back(HITBACK);
-          (*it)->get_hit(kMagic_arrow_damage, effects, nullptr, get_orientation());
+          (*it)->get_hit(damage, effects, player_ptr, get_orientation());
           Magic_arrow_ice_effect effect(get_center_location());
           Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
           disable_spell();
@@ -235,10 +332,12 @@ namespace Flame {
 
   Magic_arrow_fire::Magic_arrow_fire(const Point2f& location_,
                                      const Vector2f& orientation_,
-                                     Player * player_ptr_) :
+                                     Player * player_ptr_,
+                                     float damage_) :
     Moving_spell_rectangle(location_, orientation_, kMagic_arrow_size,
                            kMagic_arrow_speed, kMagic_arrow_life_time),
-    player_ptr(player_ptr_)
+    player_ptr(player_ptr_),
+    damage(damage_)
   {}
 
   void Magic_arrow_fire::update(float time)
@@ -250,7 +349,7 @@ namespace Flame {
         if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
           vector<attack_effect> effects;
           effects.push_back(HITBACK);
-          (*it)->get_hit(kMagic_arrow_damage, effects, nullptr, get_orientation());
+          (*it)->get_hit(damage, effects, player_ptr, get_orientation());
           Model_state::get_instance()->add_spell(new Magic_arrow_fire_effect(get_center_location()));
           Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
           disable_spell();
@@ -298,7 +397,7 @@ namespace Flame {
       Resizable_spell::render("fire_effect1");
   }
 
-  Strafe::Strafe(const Point2f& location_, const Vector2f& orientation_) :
+  Strafe::Strafe(const Point2f& location_, const Vector2f& orientation_, Player * player_ptr_, float damage_) :
     Spell(kArrow_life_time),
     location(location_),
     arrow0(location_, orientation_)
@@ -308,10 +407,10 @@ namespace Flame {
     Vector3f orientation2 = Quaternion::Axis_Angle(Vector3f(0.f, 0.f, 1.f), Global::pi / 4) * orientation0;
     Vector3f orientation3 = Quaternion::Axis_Angle(Vector3f(0.f, 0.f, 1.f), -Global::pi / 8) * orientation0;
     Vector3f orientation4 = Quaternion::Axis_Angle(Vector3f(0.f, 0.f, 1.f), -Global::pi / 4) * orientation0;
-    arrow1 = Arrow_attack(location_, Vector2f(orientation1.x, orientation1.y));
-    arrow2 = Arrow_attack(location_, Vector2f(orientation2.x, orientation2.y));
-    arrow3 = Arrow_attack(location_, Vector2f(orientation3.x, orientation3.y));
-    arrow4 = Arrow_attack(location_, Vector2f(orientation4.x, orientation4.y));
+    arrow1 = Arrow_attack(location_, Vector2f(orientation1.x, orientation1.y), player_ptr_, damage_);
+    arrow2 = Arrow_attack(location_, Vector2f(orientation2.x, orientation2.y), player_ptr_, damage_);
+    arrow3 = Arrow_attack(location_, Vector2f(orientation3.x, orientation3.y), player_ptr_, damage_);
+    arrow4 = Arrow_attack(location_, Vector2f(orientation4.x, orientation4.y), player_ptr_, damage_);
   }
 
   void Strafe::update(float time)
@@ -343,11 +442,12 @@ namespace Flame {
       arrow4.render();
   }
 
-  Trap::Trap(const Zeni::Point2f& location_, Player * player_ptr_) :
+  Trap::Trap(const Zeni::Point2f& location_, Player * player_ptr_, float damage_) :
     Resizable_spell(location_, kTrap_size, Vector2f(), kTrap_life_time),
     player_ptr(player_ptr_),
     remain_times(5),
-    timer(0.f)
+    timer(0.f),
+    damage(damage_)
     {}
 
   void Trap::update(float time)
@@ -369,7 +469,8 @@ namespace Flame {
           Spell * new_spell = new Trap_attack(get_center_location(),
                                               orientation + dir_scale * counter_orientation,
                                               speed,
-                                              player_ptr);
+                                              player_ptr,
+                                              damage);
           Model_state::get_instance()->add_spell(new_spell);
         }
         timer = 3.f;
@@ -387,7 +488,11 @@ namespace Flame {
       Resizable_spell::render("trap_inactive");
   }
 
-  Trap_attack::Trap_attack(const Point2f& location_, const Vector2f& orientation_, float speed_, Player * player_ptr_) :
+  Trap_attack::Trap_attack(const Point2f& location_,
+                           const Vector2f& orientation_,
+                           float speed_,
+                           Player * player_ptr_,
+                           float damage_) :
     Moving_spell_circle(location_,
                         orientation_,
                         kTrap_attack_size, speed_, kTrap_attack_life_time),
@@ -396,7 +501,8 @@ namespace Flame {
     is_left(-1),
     time_counter(kTrap_attack_period),
     render_timer(0.f),
-    player_ptr(player_ptr_)
+    player_ptr(player_ptr_),
+    damage(damage_)
     {}
 
   void Trap_attack::update(float time)
@@ -412,7 +518,7 @@ namespace Flame {
     vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
     for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
       if (get_body().intersects((*it)->get_body())) {
-        (*it)->get_hit(kTrap_attack_damage, vector<attack_effect>(), player_ptr);
+        (*it)->get_hit(damage, vector<attack_effect>(), player_ptr);
         Spell::disable_spell();
         break;
       }
@@ -554,7 +660,8 @@ namespace Flame {
   void Hell_spikes::render()
   {
     if (pre_time > 0.f)
-      Resizable_spell::render("hell_spikes_pre");
+      Resizable_spell::render("hell_spikes_pre",
+        Color((kHell_spikes_pre_time - pre_time) / kHell_spikes_pre_time, 0.89f, 0.78f, 0.04f));
     else
       Resizable_spell::render("hell_spikes");
   }
