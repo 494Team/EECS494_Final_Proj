@@ -33,6 +33,7 @@ Player::Player(
   strength(0),
   speed(0)
 {
+  set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
   switch (ptype) {
     case SANZANG:
       spell1_CD = kConfusing_CD;
@@ -97,16 +98,25 @@ void Player::static_move(float time) {
 void Player::update(float time) {
   Agent::update(time);
 
+  bool shielding = ptype == BAJIE && spell1_active;
+  float shield_buff = shielding ? kShield_effect : 1.0f;
+  
+  //update buff
+  set_armor((1.0f - defense * kDefense_lv5/kDefense_max) * shield_buff);
+  set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
+
   Point2f backup_position;
   Point2f new_position;
   float scale = Model_state::get_instance()->get_scale();
 
+  //moving
+  float backup_speed = get_current_speed();
   if (!is_hitback() && !is_charging() && abs(ctrl.move_hori) + abs(ctrl.move_vert) > 0.3f) {
     bool move_x = true;
     bool move_y = true;
     if (!ctrl.l) {
       backup_position = get_location();
-      set_speed(abs(ctrl.move_hori) * kSpeed_player);
+      set_speed(abs(ctrl.move_hori) * backup_speed);
       set_orientation(Vector2f(ctrl.move_hori, 0.0f));
       update_location(time);
       update_body();
@@ -117,7 +127,7 @@ void Player::update(float time) {
       }
 
       backup_position = get_location();
-      set_speed(abs(ctrl.move_vert) * kSpeed_player);
+      set_speed(abs(ctrl.move_vert) * backup_speed);
       set_orientation(Vector2f(0.0f, ctrl.move_vert));
       update_location(time);
       update_body();
@@ -129,7 +139,7 @@ void Player::update(float time) {
     }
     Vector2f dir(ctrl.move_hori, ctrl.move_vert);
     set_orientation(dir);
-    set_speed(sqrt(pow(ctrl.move_hori * (int)move_x, 2) + pow(ctrl.move_vert * int(move_y), 2)));
+    set_speed(sqrt(pow(ctrl.move_hori * (int)move_x, 2) + pow(ctrl.move_vert * int(move_y), 2)) * backup_speed);
   }
 
   if (is_hitback() && is_charging()) {
@@ -138,10 +148,10 @@ void Player::update(float time) {
   if (is_hitback()) {
     static_move(time);
   }
+
   if (is_charging()) {
     charge_update(time);
   }
-
 
   rel_loc = (get_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
 
@@ -157,7 +167,6 @@ void Player::update(float time) {
 
   if (ptype == BAJIE && spell1_active && (current_time - last_spell1) > kShield_last) {
     spell1_active = false;
-    set_armor(backup_armor);
   }
   if (ptype == BAJIE && spell3_active && (current_time - last_spell3) > kBloodsuck_last) {
     spell3_active = false;
@@ -391,8 +400,6 @@ void Player::cudgel_fury_end() {
 
 void Player::shield() {
   spell1_active = true;
-  backup_armor = get_armor();
-  set_armor(backup_armor * kShield_effect);
 }
 
 void Player::taunt() {

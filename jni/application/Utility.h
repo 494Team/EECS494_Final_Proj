@@ -89,6 +89,8 @@ namespace Flame{
   const int kDefense_max = 5;
   const int kStrength_max = 5;
   const int kSpeed_max = 5;
+  const float kSpeed_maxbuff = 200.0f;
+  const float kDefense_lv5 = 0.8;
 
   //others
   const float kHpbar_width = 3.0f;
@@ -131,7 +133,7 @@ namespace Flame{
   };
 
   enum kKey_type {
-    MENU=1,
+    MENU=1, BACK,
     L1, L2, L3, L4,
     HORI1, HORI2, HORI3, HORI4,
     VERT1, VERT2, VERT3, VERT4,

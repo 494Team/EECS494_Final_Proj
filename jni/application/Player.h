@@ -21,7 +21,7 @@ namespace Flame {
   const float kSpell2_CD = 1.0f;
   const float kSpell3_CD = 1.0f;
 
-  const float kSpeed_player = 200.0f;
+  const float kPlayer_init_speed = 200.0f;
 
   const float kAttack_show_time = 0.2f;
 
@@ -131,6 +131,7 @@ namespace Flame {
     int defense;
     int strength;
     int speed;
+
   private:
     int skill_point;
 
@@ -182,7 +183,6 @@ namespace Flame {
     //SHASENG
     //BAJIE
     //1
-    float backup_armor;
     void shield();
     //2
     void taunt();
