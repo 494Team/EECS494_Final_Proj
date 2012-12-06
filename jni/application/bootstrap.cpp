@@ -515,20 +515,81 @@ public:
 
 
     Model_state::get_instance()->init(lvl, &m_set);
-    Wanderer* wanderer = new Wanderer(Zeni::Point2f(100, 200));
-    Model_state::get_instance()->add_monster(wanderer);
-    Whisper* whisper_1 = new Whisper(Zeni::Point2f(400, 100));
-    Model_state::get_instance()->add_monster(whisper_1);
-    Redboy* redboy_inst = new Redboy(Zeni::Point2f(200, 300));
-    Model_state::get_instance()->add_monster(redboy_inst);
-
+    set_level(lvl);
     //!!! test
     //dialog.start(lvl);
     begin_dialog(&dialog, lvl);
   }
 
 private:
-
+    void set_level(const int lvl){
+        if (lvl == 0){
+            float x = 350;
+            for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
+                it != Model_state::get_instance()->get_player_list_ptr()->end();
+                ++it){
+                (*it)->set_position(Point2f(x,3000));
+                x += 100.f;
+            }
+            Wanderer* wanderer = new Wanderer(Zeni::Point2f(100, 2500));
+            Model_state::get_instance()->add_monster(wanderer);
+            wanderer = new Wanderer(Zeni::Point2f(150, 2500));
+            Model_state::get_instance()->add_monster(wanderer);
+            wanderer = new Wanderer(Zeni::Point2f(200, 2500));
+            Model_state::get_instance()->add_monster(wanderer);
+            wanderer = new Wanderer(Zeni::Point2f(250, 2500));
+            Model_state::get_instance()->add_monster(wanderer);
+            
+            Whisper* whisper_1 = new Whisper(Zeni::Point2f(400, 2500));
+            Model_state::get_instance()->add_monster(whisper_1);
+            whisper_1 = new Whisper(Zeni::Point2f(450, 2500));
+            Model_state::get_instance()->add_monster(whisper_1);
+            whisper_1 = new Whisper(Zeni::Point2f(500, 2500));
+            Model_state::get_instance()->add_monster(whisper_1);
+            whisper_1 = new Whisper(Zeni::Point2f(550, 2500));
+            Model_state::get_instance()->add_monster(whisper_1);
+        }
+        else if (lvl == 1){
+            float x = 350;
+            for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
+                it != Model_state::get_instance()->get_player_list_ptr()->end();
+                ++it){
+                (*it)->set_position(Point2f(x,1900));
+                x += 100.f;
+            }
+            Wanderer* wanderer = new Wanderer(Zeni::Point2f(100, 1500));
+            Model_state::get_instance()->add_monster(wanderer);
+            wanderer = new Wanderer(Zeni::Point2f(150, 1500));
+            Model_state::get_instance()->add_monster(wanderer);
+            wanderer = new Wanderer(Zeni::Point2f(200, 1500));
+            Model_state::get_instance()->add_monster(wanderer);
+            wanderer = new Wanderer(Zeni::Point2f(250, 1500));
+            Model_state::get_instance()->add_monster(wanderer);
+            
+            Whisper* whisper_1 = new Whisper(Zeni::Point2f(400, 1500));
+            Model_state::get_instance()->add_monster(whisper_1);
+            whisper_1 = new Whisper(Zeni::Point2f(450, 1500));
+            Model_state::get_instance()->add_monster(whisper_1);
+            whisper_1 = new Whisper(Zeni::Point2f(500, 1500));
+            Model_state::get_instance()->add_monster(whisper_1);
+            whisper_1 = new Whisper(Zeni::Point2f(550, 1500));
+            Model_state::get_instance()->add_monster(whisper_1);
+        }else if (lvl == 2){
+            float x = 350;
+            for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
+                it != Model_state::get_instance()->get_player_list_ptr()->end();
+                ++it){
+                (*it)->set_position(Point2f(x,900));
+                x += 100.f;
+            }
+            Redboy* redboy_inst = new Redboy(Zeni::Point2f(300, 300));
+            Model_state::get_instance()->add_monster(redboy_inst);
+            Whisper* whisper_1 = new Whisper(Zeni::Point2f(400, 500));
+            Model_state::get_instance()->add_monster(whisper_1);
+        }
+        
+    }
+    
   void begin_dialog(Dialog_box* dialog_ptr, int lvl) {
     //m_set.pause_all();
     dialog_ptr->start(lvl);
@@ -835,13 +896,13 @@ private:
     Quadrilateral<Vertex2f_Texture> map;
     Point2f Map_center(400.0f,300.0f);
     Point2f Map_p0 = (Point2f(0.0f, 0.0f) - center_location) * scale + Map_center;
-    Point2f Map_p1 = (Point2f(0.0f, 600.0f) - center_location) * scale + Map_center;
-    Point2f Map_p2 = (Point2f(800.0f, 600.0f) - center_location) * scale + Map_center;
-    Point2f Map_p3 = (Point2f(800.0f, 0.0f) - center_location) * scale+ Map_center;
+    Point2f Map_p1 = (Point2f(0.0f, 3080.0f) - center_location) * scale + Map_center;
+    Point2f Map_p2 = (Point2f(1000.0f, 3080.0f) - center_location) * scale + Map_center;
+    Point2f Map_p3 = (Point2f(1000.0f, 0.0f) - center_location) * scale+ Map_center;
     Vertex2f_Texture text_p0(Map_p0, Point2f(0.0f,0.0f));
-    Vertex2f_Texture text_p1(Map_p1, Point2f(0.0f, 30.0f));
-    Vertex2f_Texture text_p2(Map_p2, Point2f(40.0f, 30.0f));
-    Vertex2f_Texture text_p3(Map_p3, Point2f(40.0f, 0.0f));
+    Vertex2f_Texture text_p1(Map_p1, Point2f(0.0f, 154.0f));
+    Vertex2f_Texture text_p2(Map_p2, Point2f(50.0f, 154.0f));
+    Vertex2f_Texture text_p3(Map_p3, Point2f(50.0f, 0.0f));
     map[0] = text_p0;
     map[1] = text_p1;
     map[2] = text_p2;

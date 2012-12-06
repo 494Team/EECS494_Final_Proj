@@ -49,20 +49,17 @@ namespace Flame {
     clear();
     timer = timer_;
     //for (std::vector<kPlayer_type>::iterator it = character_list.begin(); it != character_list.end(); it++) {
-      player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(300.f, 200.f), *character_list.begin()));
-    //}
-    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(400.f, 300.f), BAJIE));
-    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(500.f, 200.f), SANZANG));
-    player_list.push_back(new Player(timer, 100.f, 200.f, 16.f, Point2f(300.f, 300.f), SHASENG));
+      player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(300.f, 3000.f), SHASENG));
+      player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(400.f, 3000.f), BAJIE));
+      player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(500.f, 3000.f), SANZANG));
+      player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(600.f, 3000.f), SHASENG));
 
     character_list.clear(); //temp
     
     // wall vertical
-    map_obj_list.push_back(new Map_brick(Point2f(-40.f, 0.f), Vector2f(40.f, 2000.f), 20.f, 20.f, "rock"));
-    map_obj_list.push_back(new Map_brick(Point2f(1000.f, 0.f), Vector2f(40.f, 2000.f), 20.f, 20.f, "rock"));
-    map_obj_list.push_back(new Map_brick(Point2f(2040.f, 0.f), Vector2f(40.f, 2000.f), 20.f, 20.f, "rock"));
-    map_obj_list.push_back(new Map_brick(Point2f(3080.f, 0.f), Vector2f(40.f, 2000.f), 20.f, 20.f, "rock"));
-    /*
+      map_obj_list.push_back(new Map_brick(Point2f(-40.f, -40.f), Vector2f(40.f, 3160.f), 20.f, 20.f, "rock"));
+      map_obj_list.push_back(new Map_brick(Point2f(1000.f, -40.f), Vector2f(40.f, 3160.f), 20.f, 20.f, "rock"));
+      /*
     map_obj_list.push_back(new Map_brick(Point2f(-40.0f, -40.0f), Vector2f(40.f,580.0f), 20.0f, 20.f, String("rock")));
     map_obj_list.push_back(new Map_brick(Point2f(500.0f, 200.0f), Vector2f(40.f,340.0f), 20.0f, 20.f, String("rock")));
     map_obj_list.push_back(new Map_brick(Point2f(700.0f - 40.f, 200.0f), Vector2f(40.f,540.0f), 20.0f, 20.f, String("rock")));
@@ -80,8 +77,10 @@ namespace Flame {
     */
 
     // wall horizontal
-    map_obj_list.push_back(new Map_brick(Point2f(-40.0f, -40.0f), Vector2f(3160.f, 40.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(-40.0f, 2000.0f), Vector2f(3160.f, 40.0f), 20.0f, 20.f, String("rock")));
+      map_obj_list.push_back(new Map_brick(Point2f(0.0f, -40.0f), Vector2f(1000.f, 40.0f), 20.0f, 20.f, String("rock")));
+      map_obj_list.push_back(new Map_brick(Point2f(0.0f, 1000.0f), Vector2f(1000.f, 40.0f), 20.0f, 20.f, String("rock")));
+      map_obj_list.push_back(new Map_brick(Point2f(0.0f, 2040.0f), Vector2f(1000.f, 40.0f), 20.0f, 20.f, String("rock")));
+      map_obj_list.push_back(new Map_brick(Point2f(0.0f, 3080.0f), Vector2f(1000.f, 40.0f), 20.0f, 20.f, String("rock")));
     /*
     map_obj_list.push_back(new Map_brick(Point2f(0.0f, -40.0f), Vector2f(1100.f, 40.0f), 20.0f, 20.f, String("rock")));
     map_obj_list.push_back(new Map_brick(Point2f(1300.0f, -40.0f), Vector2f(700.f, 40.0f), 20.0f, 20.f, String("rock")));
@@ -101,16 +100,19 @@ namespace Flame {
 
     */
     // transmission gate
-    map_obj_list.push_back(new Map_transmission_gate(Point2f(800.0f,200.0f), Point2f(200.f, 1500.f), Vector2f(20.f, 20.f), "clock"));
-    // illuminate floor
+      map_obj_list.push_back(new Map_transmission_gate(Point2f(800.0f,200.0f), Point2f(200.f, 500.f), Vector2f(40.f, 40.f), "door"));
+      map_obj_list.push_back(new Map_transmission_gate(Point2f(200.0f,550.0f), Point2f(800.f, 350.f), Vector2f(40.f, 40.f), "door"));
+      // illuminate floor
     map_obj_list.push_back(new Map_floor_illuminate(Point2f(320.0f, 400.0f), Point2f(20.f, 20.f), "floor", "ifloor"));
 
-    map_door_obj_list.push_back(new Map_door(Point2f(300.f, -20.f), Vector2f(50.f, 50.f), "close_door", "open_door"));
-    (*map_door_obj_list.back()).add_trigger(map_obj_list.back());
-
+    
     map_puzzle_obj_list.push_back(new Map_light_beam(Point2f(3.0f, 100.0f), Vector2f(1.0f, 0.0f), 0, "light_beam"));
-    map_puzzle_obj_list.push_back(new Map_laser(Point2f(3.f, 500.f), Vector2f(1.f, 0.f), "laser"));
-
+      map_puzzle_obj_list.push_back(new Map_laser(Point2f(3.f, 500.f), Vector2f(1.f, 0.f), "laser"));
+      map_puzzle_obj_list.push_back(new Map_laser(Point2f(997.f, 1500.f), Vector2f(-1.f, 0.f), "laser"));
+      map_puzzle_obj_list.push_back(new Map_laser(Point2f(3.f, 2500.f), Vector2f(1.f, 0.f), "laser"));
+      map_puzzle_obj_list.push_back(new Map_laser(Point2f(200.f, 3.f), Vector2f(0.f, 1.f), "laser"));
+      map_puzzle_obj_list.push_back(new Map_laser(Point2f(800.f, 3.f), Vector2f(0.f, 1.f), "laser"));
+      
     for (auto it = player_list.begin(); it != player_list.end(); ++it) {
       sim_obj_list.push_back(*it);
       render_list.insert(*it);

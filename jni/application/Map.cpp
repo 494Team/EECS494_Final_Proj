@@ -401,11 +401,13 @@ namespace Flame {
     for (vector<Player *>::iterator it = player_list->begin();
       it != player_list->end();
      ++it){
-       if(!(*it)->get_body().intersects(collision_body)){
+       if((*it)->get_body().intersects(collision_body)){
          all_here = false;
-         break;
+           (*it)->set_position(target_position);
+       //  break;
        }
     }
+      /*
     if(all_here){
       for (vector<Player *>::iterator it = player_list->begin();
           it != player_list->end();
@@ -414,6 +416,7 @@ namespace Flame {
         (*it)->set_position(target_position);
       }
     }
+       */
     render_image(open_texture, rel_location, rel_location + rel_size);
 
   };

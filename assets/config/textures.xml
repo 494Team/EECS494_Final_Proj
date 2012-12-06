@@ -53,6 +53,10 @@ The following things are unsupported:
         <filepath>textures/open_door.png</filepath>
         <tile>0</tile>
     </open_door>
+    <door>
+        <filepath>textures/door.png</filepath>
+        <tile>0</tile>
+    </door>
     <close_door>
         <filepath>textures/closed_door.png</filepath>
         <tile>0</tile>
