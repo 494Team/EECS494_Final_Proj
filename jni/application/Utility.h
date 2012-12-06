@@ -86,9 +86,9 @@ namespace Flame{
   //player abilities
   const int kShop_cursor_max = 7;
   const int kAttack_max = 5;
-  const int kDefence_max = 5;
+  const int kDefense_max = 5;
   const int kStrength_max = 5;
-  const int kAgility_max = 3;
+  const int kSpeed_max = 5;
 
   //others
   const float kHpbar_width = 3.0f;

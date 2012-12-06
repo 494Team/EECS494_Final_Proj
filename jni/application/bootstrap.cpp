@@ -44,13 +44,15 @@ private:
   int speed_tmp[kPlayer_num];
   bool confirmed[kPlayer_num];
   std::vector<Player *> * player_list_ptr;
+  int player_number;
+  Chronometer<Time>* game_time;
 public:
-  Upgrade_state()
-  : chosen_num(0)
+  Upgrade_state(Chronometer<Time>* game_time_)
+  : chosen_num(0),
+    game_time(game_time_)
   {
     set_pausable(true);
-
-    set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), MENU);
+    //set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), MENU);
     //p1
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 0), MENU);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X /* x-axis */, 0), HORI1);
@@ -89,21 +91,15 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 3), L4);
 
     player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
-            
+    player_number = player_list_ptr->size();
+    load_abilities();
     for (int i=0; i<kPlayer_num; i++) {
-      skill_point_tmp[i] = (*player_list_ptr)[i]->get_skill_point();
-      attack_tmp[i] = (*player_list_ptr)[i]->attack;
-      defense_tmp[i] = (*player_list_ptr)[i]->defense;
-      strength_tmp[i] = (*player_list_ptr)[i]->strength;
-      speed_tmp[i] = (*player_list_ptr)[i]->speed;
       confirmed[i] = false;
-
       
       if ((*player_list_ptr)[i]->ptype == SHASENG)
         cursor_pos[i] = kCursor_min;
       else
         cursor_pos[i] = kCursor_min+1;
-      char_available[i] = true;
       p_confirmed[i] = false;
       p_color[i] = Color();
     }
@@ -111,16 +107,37 @@ public:
   }
 
 private:
+  void load_abilities() {
+    for (int i=0; i<kPlayer_num; i++) {
+      skill_point_tmp[i] = (*player_list_ptr)[i]->get_skill_point();
+      attack_tmp[i] = (*player_list_ptr)[i]->attack;
+      defense_tmp[i] = (*player_list_ptr)[i]->defense;
+      strength_tmp[i] = (*player_list_ptr)[i]->strength;
+      speed_tmp[i] = (*player_list_ptr)[i]->speed;
+    }
+  }
+  void store_abilities() {
+    for (int i=0; i<kPlayer_num; i++) {
+      (*player_list_ptr)[i]->set_skill_point(skill_point_tmp[i]);
+      (*player_list_ptr)[i]->attack = attack_tmp[i];
+      (*player_list_ptr)[i]->defense = defense_tmp[i];
+      (*player_list_ptr)[i]->strength = strength_tmp[i];
+      (*player_list_ptr)[i]->speed = speed_tmp[i];
+    }
+  }
   void on_push() {
     //get_Window().mouse_grab(true);
+    game_time->pause_all();
     get_Window().mouse_hide(true);
     get_Game().joy_mouse.enabled = false;
   }
 
   void on_pop() {
     //get_Window().mouse_grab(false);
+    store_abilities();
     get_Window().mouse_hide(false);
     get_Game().joy_mouse.enabled = true;
+    game_time->unpause_all();
   }
 
   void on_cover() {
@@ -156,45 +173,56 @@ private:
   SHASENG,
   BAJIE
   */
-  bool char_available[4];
   bool p_confirmed[4];
   kPlayer_type chosen_char[4];
   int cursor_pos[4];
   Color p_color[4];
   int chosen_num;
 
-  void choose_char(const int player_n) {
-    /*
-    if (!p_decided[player_n]) {
+  void click_a(const int player_n) {
+    if (!p_confirmed[player_n]) {
       int pos = cursor_pos[player_n];
-      if (char_available[pos]) {
-        switch (pos) {
-          case 0:
-            chosen_char[player_n] = SANZANG;
-            break;
-          case 1:
-            chosen_char[player_n] = WUKONG;
-            break;
-          case 2:
-            chosen_char[player_n] = SHASENG;
-            break;
-          case 3:
-            chosen_char[player_n] = BAJIE;
-            break;
-          default:
-            break;
-        }
-        chosen_num++;
-        p_decided[player_n] = true;
-        p_color[pos] = Color(1.0f, 0.3f, 0.3f, 0.3f);
-        char_available[pos] = false;
+      switch (pos) {
+        case 0: //switch arrow
+          if ((*player_list_ptr)[player_n]->ptype == SHASENG) {
+            //switch_magic_arrow();
+          }
+          break;
+        case 1:
+          if (attack_tmp[player_n] < kAttack_max) {
+            attack_tmp[player_n]++;
+          }
+          break;
+        case 2:
+          if (defense_tmp[player_n] < kDefense_max) {
+            defense_tmp[player_n]++;
+          }
+          break;
+        case 3:
+          if (strength_tmp[player_n] < kStrength_max) {
+            strength_tmp[player_n]++;
+          }
+          break;
+        case 4:
+          if (speed_tmp[player_n] < kSpeed_max) {
+            speed_tmp[player_n]++;
+          }
+          break;
+        case 5: //confirm
+          p_confirmed[player_n] = true;
+          chosen_num++;
+          break;
+        case 6: //cancel
+          load_abilities();
+          break;
+        default:
+          break;
       }
-      if (chosen_num == 1) { //4
+      if (chosen_num == 1) {//player_number) {
         get_Game().pop_state();
         //get_Game().push_state(new Play_State());
       }
     }
-    */
   }
 
   void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
@@ -236,16 +264,16 @@ private:
           break;
         }
         case A1:
-          choose_char(0);
+          click_a(0);
           break;
         case A2:
-          choose_char(1);
+          click_a(1);
           break;
         case A3:
-          choose_char(2);
+          click_a(2);
           break;
         case A4:
-          choose_char(3);
+          click_a(3);
           break;
         default:
           break;
@@ -321,7 +349,7 @@ private:
                      ZENI_LEFT);
     }
 
-    sprintf(str, "%d", 1);//speed_lvl);
+    sprintf(str, "%d", attack_tmp[p_x]);//speed_lvl);
     text_buf = "Attack: lvl ";
     text_buf += str;
     text_buf += "/5";
@@ -332,7 +360,7 @@ private:
 
     
     //loc += Point2f(0.0f, fr.get_text_height());
-    sprintf(str, "%d", 1);//speed_lvl);
+    sprintf(str, "%d", defense_tmp[p_x]);//speed_lvl);
     text_buf = "Defense: lvl ";
     text_buf += str;
     text_buf += "/5";
@@ -343,7 +371,7 @@ private:
     
 
     //loc += Point2f(0.0f, fr.get_text_height());
-    sprintf(str, "%d", 1);//speed_lvl);
+    sprintf(str, "%d", strength_tmp[p_x]);//speed_lvl);
     text_buf = "MAX HP: lvl ";
     text_buf += str;
     text_buf += "/5";
@@ -353,7 +381,7 @@ private:
                    ZENI_LEFT);
 
     //loc += Point2f(0.0f, fr.get_text_height());
-    sprintf(str, "%d", 1);//speed_lvl);
+    sprintf(str, "%d", speed_tmp[p_x]);//speed_lvl);
     text_buf = "Speed: lvl ";
     text_buf += str;
     text_buf += "/5";
@@ -423,6 +451,7 @@ public:
     m_set.start();
 
     set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), MENU);
+    set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), MENU);
     //p1
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 0), MENU);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X /* x-axis */, 0), HORI1);
@@ -459,6 +488,7 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_X, 3), X4);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 3), Y4);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 3), L4);
+
 
     Model_state::get_instance()->init(lvl, &m_set);
     Wanderer* wanderer = new Wanderer(Zeni::Point2f(100, 200));
@@ -503,7 +533,7 @@ private:
   }
 
   void get_into_upgradeshop() {
-    get_Game().push_state(new Upgrade_state());
+    get_Game().push_state(new Upgrade_state(&m_set));
   }
 
   void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
@@ -571,13 +601,11 @@ private:
         break;
     }
 
-    if(confidence == 1.0f) {
+    if (action == MENU) {
+      get_into_upgradeshop();
+    }
+    if(confidence >= 0.9f) {
       switch(action) {
-        case MENU: {
-          Game &game = get_Game();
-          game.push_state(new Popup_Menu_State);
-          break;
-        }
         case A1:
           if (control_enable[0])
             if (dialog.is_goingon()) {
@@ -594,11 +622,11 @@ private:
           if (control_enable[0])
             (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(X1);
           break;
-        case Y1:
-          get_into_upgradeshop();
+        case Y1: {
           if (control_enable[0])
             (*Model_state::get_instance()->get_player_list_ptr())[0]->fire(Y1);
           break;
+        }
 
         case A2:
           if (control_enable[1])
@@ -932,9 +960,9 @@ public:
     
     for (int i=0; i<4; i++) {
       cursor_pos[i] = kCursor_min;
-      char_available[i] = true;
       p_decided[i] = false;
       p_color[i] = Color();
+      char_available[i] = true;
     }
 
   }
