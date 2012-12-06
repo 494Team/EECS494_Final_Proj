@@ -132,6 +132,13 @@ namespace Flame {
     int strength;
     int speed;
 
+    bool is_fire_magic_arrow() {
+      return fire_magic_arrow;
+    }
+    void switch_magic_arrow() {
+      fire_magic_arrow = !fire_magic_arrow;
+    }
+
   private:
     int skill_point;
 
@@ -181,6 +188,7 @@ namespace Flame {
     void berserk();
     void berserk_end();
     //SHASENG
+    bool fire_magic_arrow;
     //BAJIE
     //1
     void shield();

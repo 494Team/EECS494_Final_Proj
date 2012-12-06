@@ -31,7 +31,8 @@ Player::Player(
   attack(0),
   defense(0),
   strength(0),
-  speed(0)
+  speed(0),
+  fire_magic_arrow(true)
 {
   set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
   switch (ptype) {
@@ -527,7 +528,11 @@ void Player::try_spell3() {
         berserk();
         break;
       case SHASENG: //Magic Arrow
-        new_spell = new Magic_arrow_ice(get_location(), get_current_orientation(), this);
+        if (fire_magic_arrow) {
+          new_spell = new Magic_arrow_fire(get_location(), get_current_orientation(), this);
+        } else {
+          new_spell = new Magic_arrow_ice(get_location(), get_current_orientation(), this);
+        }
         Model_state::get_instance()->add_spell(new_spell);
         break;
       default: // case BAJIE:  Life Trap

@@ -190,6 +190,7 @@ private:
         case 0: //switch arrow
           if ((*player_list_ptr)[player_n]->ptype == SHASENG) {
             //switch_magic_arrow();
+            (*player_list_ptr)[player_n]->switch_magic_arrow();
           }
           break;
         case 1:
@@ -345,9 +346,26 @@ private:
 
     if (p_ptr->get_player_type() == SHASENG) {
       text_buf = "Switch magic arrow:";
+      Zeni::String ice_button_color, fire_button_color;
+      //= "white";
+      if (p_ptr->is_fire_magic_arrow()) {
+        ice_button_color = "white_light";
+        fire_button_color = "red";
+      } else {
+        ice_button_color = "blue";
+        fire_button_color = "white_light";
+      }
       fr.render_text(text_buf,
                      Bar_loc[0],
                      get_Colors()["white"],
+                     ZENI_LEFT);
+      fr.render_text("ICE",
+                     Bar_loc[0] + Point2f(40.0f, fr.get_text_height()),
+                     get_Colors()[ice_button_color],
+                     ZENI_LEFT);
+      fr.render_text("FIRE",
+                     Bar_loc[0] + Point2f(120.0f, fr.get_text_height()),
+                     get_Colors()[fire_button_color],
                      ZENI_LEFT);
     }
 
