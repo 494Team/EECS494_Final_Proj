@@ -381,21 +381,7 @@ The following things are unsupported:
     <tile>0</tile>
   </trap_active>
   <!-- Players skill end................................-->
-  <plus1_button>
-    <is_sprite>0</is_sprite>
-    <filepath>textures/plus1_button.png</filepath>
-    <tile>0</tile>
-  </plus1_button>
-  <plus_button>
-    <is_sprite>0</is_sprite>
-    <filepath>textures/plus_button.png</filepath>
-    <tile>0</tile>
-  </plus_button>
-  <highlight>
-    <is_sprite>0</is_sprite>
-    <filepath>textures/highlight.png</filepath>
-    <tile>0</tile>
-  </highlight>
+
   <dialog_box>
     <is_sprite>0</is_sprite>
     <filepath>textures/dialog_box.png</filepath>
@@ -482,6 +468,106 @@ The following things are unsupported:
     <tile>0</tile>
   </ring_of_fire>
   <!-- Boss skills ends .......................................-->
+  <!-- Wanderer texture starts -->
+  <wanderer_front0>
+    <filepath>textures/skeleton_melee_front0.png</filepath>
+    <tile>0</tile>
+  </wanderer_front0>
+  <wanderer_front1>
+    <filepath>textures/skeleton_melee_front1.png</filepath>
+    <tile>0</tile>
+  </wanderer_front1>
+  <wanderer_left0>
+    <filepath>textures/skeleton_melee_left0.png</filepath>
+    <tile>0</tile>
+  </wanderer_left0>
+  <wanderer_left1>
+    <filepath>textures/skeleton_melee_left1.png</filepath>
+    <tile>0</tile>
+  </wanderer_left1>
+  <wanderer_right0>
+    <filepath>textures/skeleton_melee_right0.png</filepath>
+    <tile>0</tile>
+  </wanderer_right0>
+  <wanderer_right1>
+    <filepath>textures/skeleton_melee_right1.png</filepath>
+    <tile>0</tile>
+  </wanderer_right1>
+  <wanderer_back0>
+    <filepath>textures/skeleton_melee_back0.png</filepath>
+    <tile>0</tile>
+  </wanderer_back0>
+  <wanderer_back1>
+    <filepath>textures/skeleton_melee_back1.png</filepath>
+    <tile>0</tile>
+  </wanderer_back1>
+  <wanderer_front_attack>
+    <filepath>textures/skeleton_melee_front_attack.png</filepath>
+    <tile>0</tile>
+  </wanderer_front_attack>
+  <wanderer_left_attack>
+    <filepath>textures/skeleton_melee_left_attack.png</filepath>
+    <tile>0</tile>
+  </wanderer_left_attack>
+  <wanderer_right_attack>
+    <filepath>textures/skeleton_melee_right_attack.png</filepath>
+    <tile>0</tile>
+  </wanderer_right_attack>
+  <wanderer_back_attack>
+    <filepath>textures/skeleton_melee_back_attack.png</filepath>
+    <tile>0</tile>
+  </wanderer_back_attack>
+  <!-- Wanderer texture ends-->
+  <!-- Whisper texture starts -->
+  <whisper_front0>
+    <filepath>textures/skeleton_ranged_front0.png</filepath>
+    <tile>0</tile>
+  </whisper_front0>
+  <whisper_front1>
+    <filepath>textures/skeleton_ranged_front1.png</filepath>
+    <tile>0</tile>
+  </whisper_front1>
+  <whisper_left0>
+    <filepath>textures/skeleton_ranged_left0.png</filepath>
+    <tile>0</tile>
+  </whisper_left0>
+  <whisper_left1>
+    <filepath>textures/skeleton_ranged_left1.png</filepath>
+    <tile>0</tile>
+  </whisper_left1>
+  <whisper_right0>
+    <filepath>textures/skeleton_ranged_right0.png</filepath>
+    <tile>0</tile>
+  </whisper_right0>
+  <whisper_right1>
+    <filepath>textures/skeleton_ranged_right1.png</filepath>
+    <tile>0</tile>
+  </whisper_right1>
+  <whisper_back0>
+    <filepath>textures/skeleton_ranged_back0.png</filepath>
+    <tile>0</tile>
+  </whisper_back0>
+  <whisper_back1>
+    <filepath>textures/skeleton_ranged_back1.png</filepath>
+    <tile>0</tile>
+  </whisper_back1>
+  <whisper_front_attack>
+    <filepath>textures/skeleton_ranged_front_attack.png</filepath>
+    <tile>0</tile>
+  </whisper_front_attack>
+  <whisper_left_attack>
+    <filepath>textures/skeleton_ranged_left_attack.png</filepath>
+    <tile>0</tile>
+  </whisper_left_attack>
+  <whisper_right_attack>
+    <filepath>textures/skeleton_ranged_right_attack.png</filepath>
+    <tile>0</tile>
+  </whisper_right_attack>
+  <whisper_back_attack>
+    <filepath>textures/skeleton_ranged_back_attack.png</filepath>
+    <tile>0</tile>
+  </whisper_back_attack>
+  <!-- Whisper texture ends-->
   <!-- Redboy texture starts-->
   <redboy_right0>
     <filepath>textures/red_boy_right0.png</filepath>

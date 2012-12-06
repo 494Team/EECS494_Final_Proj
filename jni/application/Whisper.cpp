@@ -139,21 +139,20 @@ void Whisper::render() {
   float radians_ccw;
   get_render_params(get_body().get_radius(), ul, lr, radians_ccw);
 
-  Zeni::render_image("enemy",
-    ul,
-    lr,
-    -radians_ccw,
-    1.0f,
-    rel_loc
-  );
+  update_render_suffix();
+  if (!is_currently_moving())
+    render_suffix = "0";
   if (!is_hitback() && !is_freeze() && is_attacking) {
-    Zeni::render_image("sword_attack",
-      ul + scale * Zeni::Vector2f(2.0f * get_body().get_radius(), 0.0f),
-      lr + scale * Zeni::Vector2f(2.0f * get_body().get_radius(), 0.0f),
-      -radians_ccw,
-      1.0f,
-      rel_loc
-    );
+    render_suffix = "_attack";
+  }
+  if (radians_ccw < Zeni::Global::pi * 0.25f || radians_ccw >= Zeni::Global::pi *1.75f) {
+    Zeni::render_image("whisper_right" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
+  } else if (radians_ccw >= Zeni::Global::pi * 0.25f && radians_ccw < Zeni::Global::pi * 0.75f) {
+    Zeni::render_image("whisper_front" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
+  } else if (radians_ccw >= Zeni::Global::pi * 0.75f && radians_ccw < Zeni::Global::pi * 1.25f) {
+    Zeni::render_image("whisper_left" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
+  } else {
+    Zeni::render_image("whisper_back" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
   }
 
   Agent::render();
