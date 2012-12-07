@@ -40,7 +40,7 @@ namespace Flame {
     
     // alternative way to update the location of this Moving_object
     // being used in Player class
-    void set_position(Zeni::Point2f pos) {location = pos;}
+    virtual void set_position(Zeni::Point2f pos) {location = pos;}
 
   private:
     bool is_moving;

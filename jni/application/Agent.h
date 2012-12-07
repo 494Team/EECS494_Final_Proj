@@ -26,6 +26,7 @@ namespace Flame {
       radius(radius_),
       hitback(false),
       freeze(false),
+      get_wukong_charge(false),
       armor(1.0f)
     {}
 
@@ -36,6 +37,8 @@ namespace Flame {
     bool is_alive() const {return alive;}
     bool is_hitback() const {return hitback;}
     bool is_freeze() const {return freeze;}
+    bool is_get_wukong_charge() const {return get_wukong_charge;}
+    void relieve_from_wukong_charge() {get_wukong_charge = false;}
     float get_armor() const {return armor;}
 
     void set_armor(float armor_) { armor = armor_; }
@@ -58,6 +61,11 @@ namespace Flame {
       radius = radius_;
     }
 
+    void set_position(Zeni::Point2f pos_) {
+      Moving_object::set_position(pos_);
+      update_body();
+    }
+
   protected:
     Zeni::Vector2f ori_before_hitback;  
   private:
@@ -72,6 +80,7 @@ namespace Flame {
     // effects
     bool hitback;
     bool freeze;
+    bool get_wukong_charge;
   };
 
 }

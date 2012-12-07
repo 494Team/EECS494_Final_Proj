@@ -45,9 +45,9 @@ namespace Flame {
   const float kCharge_CD = 2.0f;
   const float kCharge_last = 0.5f;
   const float kCharge_speed = 200.0f;
-  const float kCharge_attack_damage = 200.0f;
-  const float kCharge_attack_last = 0.3f;
-  const float kCharge_attack_CD = 0.3f;
+  const float kCharge_attack_damage = 50.0f;
+  const float kCharge_attack_last = 0.2f;
+  const float kCharge_attack_CD = 0.15f;
   const int kCharge_attack_max = 3;
   const float kBerserk_CD = 2.0f;
   const float kBerserk_last = 1.0f;
@@ -144,7 +144,7 @@ namespace Flame {
 
     Chronometer<Time>* game_time;
     std::vector<Monster *> * monster_list_ptr;
-    void static_move(float time);
+    void static_move(float time, bool force_move = false);
 
     bool render_player;
 
@@ -182,6 +182,8 @@ namespace Flame {
     void charge_end();
     float last_charge_attack;
     bool charge_attacking;
+    std::vector<Monster *> charged_monsters;
+    bool charge_no_hit_before;
     bool is_charge_attacking() { return charge_attacking;}
 
     //float backup_size;

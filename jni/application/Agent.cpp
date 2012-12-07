@@ -74,6 +74,9 @@ void Agent::get_hit(
   for (int i = 0; i < (int) effects.size(); ++i) {
     switch (effects[i]) {
       case HITBACK:
+        if (is_freeze()) {
+          break;
+        }
         if (!is_hitback()) {
           ori_before_hitback = get_current_orientation();
           set_speed(get_current_speed() * 2.0f);
@@ -87,12 +90,18 @@ void Agent::get_hit(
         }
         break;
       case SLOWDOWN:
+        if (is_freeze()) {
+          break;
+        }
         set_speed(get_current_speed() * 0.5f);
         effect_timers[effects[i]] = SLOWDOWN_TIME;
         break;
       case FREEZE:
         freeze = true;
         effect_timers[effects[i]] = FREEZE_TIME;
+        break;
+      case GET_WUKONG_CHARGE:
+        get_wukong_charge = true;
         break;
     }
   }

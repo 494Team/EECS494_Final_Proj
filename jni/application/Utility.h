@@ -129,7 +129,8 @@ namespace Flame{
   enum attack_effect {
     HITBACK,
     SLOWDOWN,
-    FREEZE
+    FREEZE,
+    GET_WUKONG_CHARGE
   };
 
   enum kKey_type {

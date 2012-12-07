@@ -41,7 +41,8 @@ bool Whisper::is_path_clear(const Zeni::Collision::Parallelepiped &path_obj) {
 
 void Whisper::update(float time) {
   Monster::update(time);
-  if (is_freeze()) {
+  if (is_get_wukong_charge() || is_freeze()) {
+    is_attacking = false;
     return;
   }
   if (is_hitback()) {

@@ -25,6 +25,7 @@ Player::Player(
   last_spell3(0.0f),
   last_charge_attack(0.0f),
   charge_attacking(false),
+  charge_no_hit_before(true),
   render_clock(0.0f),
   render_player(true),
   skill_point(0),
@@ -62,7 +63,7 @@ Player::Player(
   monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
 }
 
-void Player::static_move(float time) {
+void Player::static_move(float time, bool force_move) {
   Point2f backup_position;
   Zeni::Vector2f backup_ori = get_current_orientation();
   float speed = get_current_speed();
@@ -75,10 +76,18 @@ void Player::static_move(float time) {
   set_orientation(backup_ori.get_i());
   update_location(time);
   update_body();
-  if (!Model_state::get_instance()->can_player_move(get_body())) {
-      set_position(backup_position);
-      update_body();
-      move_x = false;
+  if (force_move) {
+    if (!Model_state::get_instance()->can_move(get_body())) {
+        set_position(backup_position);
+        update_body();
+        move_x = false;
+    }
+  } else {
+    if (!Model_state::get_instance()->can_player_move(get_body())) {
+        set_position(backup_position);
+        update_body();
+        move_x = false;
+    }
   }
 
   backup_position = get_location();
@@ -86,10 +95,18 @@ void Player::static_move(float time) {
   set_orientation(backup_ori.get_j());
   update_location(time);
   update_body();
-  if (!Model_state::get_instance()->can_player_move(get_body())) {
-      set_position(backup_position);
-      update_body();
-      move_y = false;
+  if (force_move) {
+    if (!Model_state::get_instance()->can_move(get_body())) {
+        set_position(backup_position);
+        update_body();
+        move_y = false;
+    }
+  } else {
+    if (!Model_state::get_instance()->can_player_move(get_body())) {
+        set_position(backup_position);
+        update_body();
+        move_y = false;
+    }
   }
 
   set_orientation(backup_ori);
@@ -419,26 +436,106 @@ void Player::charge() {
 }
 
 void Player::charge_update(float time) {
-  static_move(time);
-  float current_time = game_time->seconds();
-  float passed_time = current_time - last_charge_attack;
+  //game_time->pause_all();
+  Zeni::Vector2f p_backup_loc = get_location();
+  static_move(time, true);
 
-  if (passed_time > kCharge_attack_CD) {
-    last_charge_attack = current_time;
-    for (std::vector<Monster *>::iterator it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it) {
-      if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
-        (*it)->dec_health(kCharge_attack_damage);
-        charge_attacking = true;
+  // move wukong and monsters caught by charge
+  Zeni::Vector2f *m_backup_locs = new Zeni::Vector2f[charged_monsters.size()];
+  charge_attacking = false;
+  for (int i = 0; i < (int)charged_monsters.size(); ++i) {
+    charge_attacking = true;
+    m_backup_locs[i] = charged_monsters[i]->get_location();
+    charged_monsters[i]->make_move(time, true);
+    // can't intersects with walls
+    if (!Model_state::get_instance()->can_move(charged_monsters[i]->get_body())) {
+      for (int j = 0; j <= i; ++j) {
+        charged_monsters[j]->set_position(m_backup_locs[j]);
+      }
+      set_position(p_backup_loc);
+      break;
+    }
+    // intersects with WUKONG is okay.
+    std::vector<Player *> *players_ptr = Model_state::get_instance()->get_player_list_ptr();
+    for (std::vector<Player *>::iterator it = players_ptr->begin(); it != players_ptr->end(); ++it) {
+      if (((*it)->ptype != WUKONG) && (*it)->get_body().intersects(charged_monsters[i]->get_body())) {
+        for (int j = 0; j <= i; ++j) {
+          charged_monsters[j]->set_position(m_backup_locs[j]);
+        }
+        set_position(p_backup_loc);
         break;
       }
     }
   }
+  delete [] m_backup_locs;
+
+  // check if any monster is caught by charge
+  for (std::vector<Monster *>::iterator it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it) {
+    if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
+      if (charge_no_hit_before) {
+        set_speed(get_current_speed() * 0.5f);
+        charge_no_hit_before = false;
+      }
+      bool m_exists = false;
+      for (int i = 0; i < (int)charged_monsters.size(); ++i) {
+        if (charged_monsters[i] == (*it)) {
+          m_exists = true;
+          break;
+        }
+      }
+      if (!m_exists) {
+        charged_monsters.push_back(*it);
+      }
+      // make damage and effect
+      std::vector<attack_effect> effects;
+      effects.push_back(GET_WUKONG_CHARGE);
+      (*it)->get_hit(0.0f, effects, this);
+      //resolve collision
+      Zeni::Vector2f hitback_ori = (*it)->get_location() - get_location();
+      hitback_ori.normalize();
+      (*it)->set_position(get_location() + hitback_ori * (get_body().get_radius() + (*it)->get_body().get_radius() + 0.001f));
+      (*it)->set_orientation(-get_current_orientation());
+      (*it)->set_speed(-get_current_speed());
+      (*it)->set_moving(true);
+    }
+  }
+
+
+  float current_time = game_time->seconds();
+  float passed_time = current_time - last_charge_attack;
+
+  if (passed_time > kCharge_attack_CD) {
+    if (charged_monsters.size() > 0) {
+      //charge_no_hit_before = false;
+      last_charge_attack = current_time;
+      p_backup_loc = get_location();
+      set_position(get_location() + get_current_orientation() * (-get_current_speed()) * 0.1f);
+      if (!Model_state::get_instance()->can_player_move(get_body())) {
+        set_position(p_backup_loc);
+      }
+      for (int i = 0; i < (int) charged_monsters.size(); ++i) {
+        charged_monsters[i]->set_moving(false);
+        std::vector<attack_effect> effects;
+        effects.push_back(GET_WUKONG_CHARGE);
+        charged_monsters[i]->get_hit(kCharge_attack_damage, effects, this);
+      }
+    }
+  }
+  //game_time->unpause_all();
 }
 
 void Player::charge_end() {
   //set_speed(get_current_speed() / kCharge_speed_multiplier);
-  //charge_attacking = false;
+  set_speed(0.0f);
+  charge_attacking = false;
   spell2_active = false;
+  for (int i = 0; i < (int) charged_monsters.size(); ++i) {
+    charged_monsters[i]->set_moving(true);
+    charged_monsters[i]->recover_speed();
+    charged_monsters[i]->relieve_from_wukong_charge();
+  }
+  charged_monsters.clear();
+  charge_no_hit_before = true;
 }
 
 void Player::try_normal_attack() {
