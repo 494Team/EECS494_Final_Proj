@@ -48,11 +48,15 @@ namespace Flame {
 
     clear();
     timer = timer_;
+    for (std::vector<kPlayer_type>::iterator it = character_list.begin(); it != character_list.end(); it++)
+      player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(300.f, 3000.f), *it));
+    /*
     //for (std::vector<kPlayer_type>::iterator it = character_list.begin(); it != character_list.end(); it++) {
       player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(300.f, 3000.f), WUKONG));
-      player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(400.f, 3000.f), BAJIE));
-      player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(500.f, 3000.f), SANZANG));
-      player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(600.f, 3000.f), SHASENG));
+       player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(400.f, 3000.f), BAJIE));
+       player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(500.f, 3000.f), SANZANG));
+       player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(600.f, 3000.f), SHASENG));
+-      */
 
     character_list.clear(); //temp
     
@@ -144,7 +148,7 @@ namespace Flame {
 
   void Model_state::update_scale_and_center()
   {
-    scale = 3.f;
+    scale = 2.f;
     // calculate scale
     for(int i = 0; i < int(player_list.size()); ++i)
       for(int j = 1; j < int(player_list.size()); ++j) {
@@ -333,6 +337,7 @@ namespace Flame {
         return false;
       }
     }
+    return true;
   }
 
   bool Model_state::can_move_player(const Zeni::Collision::Capsule& collision_body)

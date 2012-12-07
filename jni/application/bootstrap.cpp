@@ -37,21 +37,28 @@ class Upgrade_state :public Gamestate_II { //public Widget_Gamestate,
   Upgrade_state(const Upgrade_state &);
   Upgrade_state operator=(const Upgrade_state &);
 private:
-  int skill_point_tmp[kPlayer_num];
-  int attack_tmp[kPlayer_num];
-  int defense_tmp[kPlayer_num];
-  int strength_tmp[kPlayer_num];
-  int speed_tmp[kPlayer_num];
-  bool confirmed[kPlayer_num];
+  int skill_point_tmp[4];
+  int attack_tmp[4];
+  int defense_tmp[4];
+  int strength_tmp[4];
+  int speed_tmp[4];
+  bool confirmed[4];
   std::vector<Player *> * player_list_ptr;
   int player_number;
   Chronometer<Time>* game_time;
+  Time_HQ last_highlight_move;
 public:
   Upgrade_state(Chronometer<Time>* game_time_)
   : chosen_num(0),
     game_time(game_time_)
   {
     set_pausable(true);
+    /*
+    highlight_move_clock = new Chronometer<Time>;
+    highlight_move_clock->start();
+    last_highlight_move = highlight_move_clock->seconds() - kHighlight_move_CD;
+    */
+    last_highlight_move = Zeni::get_Timer_HQ().get_time();
     //set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), MENU);
     //p1
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 0), MENU);
@@ -97,7 +104,7 @@ public:
     player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
     player_number = player_list_ptr->size();
     load_abilities();
-    for (int i=0; i<kPlayer_num; i++) {
+    for (int i=0; i < Model_state::get_instance()->get_player_num(); i++) {
       confirmed[i] = false;
       
       if ((*player_list_ptr)[i]->ptype == SHASENG)
@@ -112,7 +119,7 @@ public:
 
 private:
   void load_abilities() {
-    for (int i=0; i<kPlayer_num; i++) {
+    for (int i=0; i < Model_state::get_instance()->get_player_num(); i++) {
       skill_point_tmp[i] = (*player_list_ptr)[i]->get_skill_point();
       attack_tmp[i] = (*player_list_ptr)[i]->attack;
       defense_tmp[i] = (*player_list_ptr)[i]->defense;
@@ -121,7 +128,7 @@ private:
     }
   }
   void store_abilities() {
-    for (int i=0; i<kPlayer_num; i++) {
+    for (int i=0; i < Model_state::get_instance()->get_player_num(); i++) {
       (*player_list_ptr)[i]->set_skill_point(skill_point_tmp[i]);
       (*player_list_ptr)[i]->attack = attack_tmp[i];
       (*player_list_ptr)[i]->defense = defense_tmp[i];
@@ -160,14 +167,18 @@ private:
   }
   
   void highlight_move(const int player_n, const bool is_down) {
-    if (!p_confirmed[player_n]) {
-      if (is_down && cursor_pos[player_n] < kShop_cursor_max-1) {
-        cursor_pos[player_n]++;
-      } else if (!is_down && cursor_pos[player_n] > 1) {
-        cursor_pos[player_n]--;
-      } else if (!is_down && (*player_list_ptr)[player_n]->ptype == SHASENG && cursor_pos[player_n] > 0) {
-        cursor_pos[player_n]--;
-      }
+    const Zeni::Time_HQ current_time = Zeni::get_Timer_HQ().get_time();
+    if (float(current_time.get_seconds_since(last_highlight_move) > kHighlight_move_CD)) {
+       last_highlight_move = current_time;
+        if (!p_confirmed[player_n]) {
+          if (is_down && cursor_pos[player_n] < kShop_cursor_max-1) {
+            cursor_pos[player_n]++;
+          } else if (!is_down && cursor_pos[player_n] > 1) {
+            cursor_pos[player_n]--;
+          } else if (!is_down && (*player_list_ptr)[player_n]->ptype == SHASENG && cursor_pos[player_n] > 0) {
+            cursor_pos[player_n]--;
+          }
+        }
     }
   }
 
@@ -231,29 +242,30 @@ private:
   }
 
   void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
+    float high_conf = 0.9f;
     switch(action) {
       case VERT1:
-        if (confidence >= 1.0f)
+        if (confidence >= high_conf)
           highlight_move(0, true);
-        else if (confidence <= -1.0f)
+        else if (confidence <= -high_conf)
           highlight_move(0, false);
         break;
       case VERT2:
-        if (confidence >= 1.0f)
+        if (confidence >= high_conf)
           highlight_move(1, true);
-        else if (confidence <= -1.0f)
+        else if (confidence <= -high_conf)
           highlight_move(1, false);
         break;
       case VERT3:
-        if (confidence >= 1.0f)
+        if (confidence >= high_conf)
           highlight_move(2, true);
-        else if (confidence <= -1.0f)
+        else if (confidence <= -high_conf)
           highlight_move(2, false);
         break;
       case VERT4:
-        if (confidence >= 1.0f)
+        if (confidence >= high_conf)
           highlight_move(3, true);
-        else if (confidence <= -1.0f)
+        else if (confidence <= -high_conf)
           highlight_move(3, false);
         break;
       default:
@@ -531,6 +543,9 @@ private:
                 (*it)->set_position(Point2f(x,3000));
                 x += 100.f;
             }
+            Redboy* redboy_inst = new Redboy(Zeni::Point2f(100, 2500));
+            Model_state::get_instance()->add_monster(redboy_inst);
+            /*
             Wanderer* wanderer = new Wanderer(Zeni::Point2f(100, 2500));
             Model_state::get_instance()->add_monster(wanderer);
             wanderer = new Wanderer(Zeni::Point2f(150, 2500));
@@ -548,6 +563,7 @@ private:
             Model_state::get_instance()->add_monster(whisper_1);
             whisper_1 = new Whisper(Zeni::Point2f(550, 2500));
             Model_state::get_instance()->add_monster(whisper_1);
+            */
         }
         else if (lvl == 1){
             float x = 350;
@@ -624,10 +640,12 @@ private:
   void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
     bool control_enable[4]; // = {true, true, true, true};
     Player* p_ptr;
-    for (int i=0; i<4; i++) {
-      p_ptr = (*Model_state::get_instance()->get_player_list_ptr())[i];
-      control_enable[i] = ((!p_ptr->is_hitback()) && (!p_ptr->is_charging()));
-      //if (!control_enable[i])
+    for (int i=0; i < 4; i++) {
+      if (i < Model_state::get_instance()->get_player_num())
+          p_ptr = (*Model_state::get_instance()->get_player_list_ptr())[i];
+      control_enable[i] = i < Model_state::get_instance()->get_player_num() &&
+                          !p_ptr->is_hitback() &&
+                          !p_ptr->is_charging();
     }
     switch(action) {
       case BACK: {
@@ -792,6 +810,9 @@ private:
     const float time_passed = m_set.seconds();
     float processing_time = time_passed - m_time_passed;
     m_time_passed = time_passed;
+
+    if (Model_state::get_instance()->get_monster_list_ptr()->empty() && lvl < 2)
+      set_level(++lvl);
 
     float time_step = 0.005f;
     while (processing_time > 0.0f + EPSILON) {
@@ -1012,6 +1033,7 @@ public:
     //: Widget_Gamestate(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)))
   {
     set_pausable(true);
+    Model_state::get_instance()->set_player_num(1);
     //m_widgets.lend_Widget(play_button);
     //m_widgets.lend_Widget(menu_button);
 
@@ -1022,40 +1044,28 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 0), VERT1);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 0), A1);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 0), B1);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_X, 0), X1);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 0), Y1);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 0), L1);
     //p2
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 1), MENU);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X /* x-axis */, 1), HORI2);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 1), VERT2);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 1), A2);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 1), B2);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_X, 1), X2);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 1), Y2);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 1), L2);
     //p3
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 2), MENU);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X /* x-axis */, 2), HORI3);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 2), VERT3);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 2), A3);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 2), B3);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_X, 2), X3);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 2), Y3);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 2), L3);
     //p4
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 3), MENU);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X /* x-axis */, 3), HORI4);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 3), VERT4);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 3), A4);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 3), B4);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_X, 3), X4);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 3), Y4);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 3), L4);
 
 
     
-    for (int i=0; i<4; i++) {
+    for (int i=0; i < Model_state::get_instance()->get_player_num(); i++) {
       cursor_pos[i] = kCursor_min;
       p_decided[i] = false;
       p_color[i] = Color();
@@ -1073,7 +1083,7 @@ private:
 
   void save_chosen_characters() {
     std::vector<kPlayer_type> * char_list = Model_state::get_instance()->get_character_list_ptr();
-    for (int i=0; i<kPlayer_num; i++) {
+    for (int i=0; i < Model_state::get_instance()->get_player_num(); i++) {
       char_list->push_back(chosen_char[i]);
     }
   }
@@ -1153,7 +1163,7 @@ private:
         p_color[pos] = Color(1.0f, 0.3f, 0.3f, 0.3f);
         char_available[pos] = false;
       }
-      if (chosen_num == 1) { //4
+      if (chosen_num == Model_state::get_instance()->get_player_num()) {
         get_Game().pop_state();
         //get_Game().push_state(new Upgrade_state());
         get_Game().push_state(new Play_State());
@@ -1246,21 +1256,23 @@ private:
          Point2f(pos[cursor_pos[0]]+50.0f, 200.0f),
          false,
          p_color[cursor_pos[0]]);
-      render_image("p2cursor",
-         Point2f(pos[cursor_pos[1]], 200.0f),
-         Point2f(pos[cursor_pos[1]]+50.0f, 300.0f),
-         false,
-         p_color[cursor_pos[1]]);
-      render_image("p3cursor",
-         Point2f(pos[cursor_pos[2]], 300.0f),
-         Point2f(pos[cursor_pos[2]]+50.0f, 400.0f),
-         false,
-         p_color[cursor_pos[2]]);
-      render_image("p4cursor",
-         Point2f(pos[cursor_pos[3]], 400.0f),
-         Point2f(pos[cursor_pos[3]]+50.0f, 500.0f),
-         false,
-         p_color[cursor_pos[3]]);
+      if (Model_state::get_instance()->get_player_num() > 1) {
+        render_image("p2cursor",
+           Point2f(pos[cursor_pos[1]], 200.0f),
+          Point2f(pos[cursor_pos[1]]+50.0f, 300.0f),
+          false,
+          p_color[cursor_pos[1]]);
+        render_image("p3cursor",
+          Point2f(pos[cursor_pos[2]], 300.0f),
+          Point2f(pos[cursor_pos[2]]+50.0f, 400.0f),
+          false,
+          p_color[cursor_pos[2]]);
+        render_image("p4cursor",
+          Point2f(pos[cursor_pos[3]], 400.0f),
+          Point2f(pos[cursor_pos[3]]+50.0f, 500.0f),
+          false,
+          p_color[cursor_pos[3]]);
+      }
   }
 };
 
