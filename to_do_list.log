@@ -1,4 +1,9 @@
-#Please write things to do and notes in this document.
+﻿#Please write things to do and notes in this document.
 
 #地板（陷阱亮地板）不用按顺序render,否则可能发生地板盖在人身上的情况。
 #直接在最开始render就行。
+
+
+Dec 7
+Bug:
+stage3; SANZANG; Before killing Redboy
