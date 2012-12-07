@@ -98,7 +98,14 @@ namespace Flame {
     int get_money_amount() {
       return money;
     }
+    int get_player_num() {
+      return player_num;
+    }
+    void set_player_num(const int num) {
+      player_num = num;
+    }
   private:
+    int player_num;
     int money;
     void clear();
 

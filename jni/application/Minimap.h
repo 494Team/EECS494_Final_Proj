@@ -74,26 +74,28 @@ namespace Flame {
         player0_pos + Zeni::Vector2f(4.0f, 4.0f)
       );
     }
-    if (get_mini_pos(players[1]->get_location(), player1_pos)) {
-      render_image(
-        "mini_player1",
-        player1_pos - Zeni::Vector2f(4.0f, 4.0f),
-        player1_pos + Zeni::Vector2f(4.0f, 4.0f)
-      );
-    }
-    if (get_mini_pos(players[2]->get_location(), player2_pos)) {
-      render_image(
-        "mini_player2",
-        player2_pos - Zeni::Vector2f(4.0f, 4.0f),
-        player2_pos + Zeni::Vector2f(4.0f, 4.0f)
-      );
-    }
-    if (get_mini_pos(players[3]->get_location(), player3_pos)) {
-      render_image(
-        "mini_player3",
-        player3_pos - Zeni::Vector2f(4.0f, 4.0f),
-        player3_pos + Zeni::Vector2f(4.0f, 4.0f)
-      );
+    if (Model_state::get_instance()->get_player_num() > 1) {
+        if (get_mini_pos(players[1]->get_location(), player1_pos)) {
+          render_image(
+            "mini_player1",
+            player1_pos - Zeni::Vector2f(4.0f, 4.0f),
+            player1_pos + Zeni::Vector2f(4.0f, 4.0f)
+          );
+        }
+        if (get_mini_pos(players[2]->get_location(), player2_pos)) {
+          render_image(
+            "mini_player2",
+            player2_pos - Zeni::Vector2f(4.0f, 4.0f),
+            player2_pos + Zeni::Vector2f(4.0f, 4.0f)
+          );
+        }
+        if (get_mini_pos(players[3]->get_location(), player3_pos)) {
+          render_image(
+            "mini_player3",
+            player3_pos - Zeni::Vector2f(4.0f, 4.0f),
+            player3_pos + Zeni::Vector2f(4.0f, 4.0f)
+          );
+        }
     }
 
     // mini_monsters

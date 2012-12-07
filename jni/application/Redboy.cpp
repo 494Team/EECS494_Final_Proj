@@ -26,9 +26,12 @@ void Redboy::attack() {
 
 // fire charge
 void Redboy::skill1() {
-  int player_num = randomer.rand_lt(4);
-  while (players[player_num] == target) {
-    player_num = randomer.rand_lt(4);
+  int total_p_num = Model_state::get_instance()->get_player_num();
+  int player_num = randomer.rand_lt(total_p_num);
+  if (total_p_num > 1) {
+      while (players[player_num] == target) {
+        player_num = randomer.rand_lt(total_p_num);
+      }
   }
   fire_charge_tar_loc = players[player_num]->get_location();
   set_orientation(fire_charge_tar_loc - get_location());
@@ -49,7 +52,8 @@ void Redboy::skill2() {
 
 // fire spikes
 void Redboy::skill3() {
-  int player_num = randomer.rand_lt(4);
+  int total_p_num = Model_state::get_instance()->get_player_num();
+  int player_num = randomer.rand_lt(total_p_num);
   Model_state::get_instance()->add_spell(new Hell_spikes(players[player_num]->get_location()));
 }
 
