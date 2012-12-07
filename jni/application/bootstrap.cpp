@@ -45,13 +45,21 @@ private:
   bool confirmed[4];
   std::vector<Player *> * player_list_ptr;
   int player_number;
-  Chronometer<Time>* game_time;
+  Chronometer<Time>* game_time;  Time_HQ last_highlight_move;
+  //Chronometer<Time>* highlight_move_clock;
+  //float last_highlight_move;
 public:
   Upgrade_state(Chronometer<Time>* game_time_)
   : chosen_num(0),
     game_time(game_time_)
   {
     set_pausable(true);
+    /*
+    highlight_move_clock = new Chronometer<Time>;
+    highlight_move_clock->start();
+    last_highlight_move = highlight_move_clock->seconds() - kHighlight_move_CD;
+    */
+    last_highlight_move = Zeni::get_Timer_HQ().get_time();
     //set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), MENU);
     //p1
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 0), MENU);
@@ -148,14 +156,18 @@ private:
   }
   
   void highlight_move(const int player_n, const bool is_down) {
-    if (!p_confirmed[player_n]) {
-      if (is_down && cursor_pos[player_n] < kShop_cursor_max-1) {
-        cursor_pos[player_n]++;
-      } else if (!is_down && cursor_pos[player_n] > 1) {
-        cursor_pos[player_n]--;
-      } else if (!is_down && (*player_list_ptr)[player_n]->ptype == SHASENG && cursor_pos[player_n] > 0) {
-        cursor_pos[player_n]--;
-      }
+    const Zeni::Time_HQ current_time = Zeni::get_Timer_HQ().get_time();
+    if (float(current_time.get_seconds_since(last_highlight_move) > kHighlight_move_CD)) {
+        last_highlight_move = current_time;
+        if (!p_confirmed[player_n]) {
+          if (is_down && cursor_pos[player_n] < kShop_cursor_max-1) {
+            cursor_pos[player_n]++;
+          } else if (!is_down && cursor_pos[player_n] > 1) {
+            cursor_pos[player_n]--;
+          } else if (!is_down && (*player_list_ptr)[player_n]->ptype == SHASENG && cursor_pos[player_n] > 0) {
+            cursor_pos[player_n]--;
+          }
+        }
     }
   }
 
@@ -219,7 +231,7 @@ private:
   }
 
   void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
-    float high_conf = 0.99f;
+    float high_conf = 0.90f;
     switch(action) {
       case VERT1:
         if (confidence >= high_conf)
