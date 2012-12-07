@@ -40,6 +40,7 @@ void Agent::update(float time) {
           recover_speed();
           break;
         case SLOWDOWN:
+          slowdown = false;
           recover_speed();
           break;
         case FREEZE:
@@ -74,7 +75,7 @@ void Agent::get_hit(
   for (int i = 0; i < (int) effects.size(); ++i) {
     switch (effects[i]) {
       case HITBACK:
-        if (is_freeze()) {
+        if (is_freeze() || is_get_wukong_charge()) {
           break;
         }
         if (!is_hitback()) {
@@ -90,9 +91,10 @@ void Agent::get_hit(
         }
         break;
       case SLOWDOWN:
-        if (is_freeze()) {
+        if (is_get_wukong_charge()) {
           break;
         }
+        slowdown = true;
         set_speed(get_current_speed() * 0.5f);
         effect_timers[effects[i]] = SLOWDOWN_TIME;
         break;

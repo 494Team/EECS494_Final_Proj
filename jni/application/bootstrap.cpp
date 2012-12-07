@@ -543,14 +543,13 @@ private:
                 (*it)->set_position(Point2f(x,3000));
                 x += 100.f;
             }
-            Redboy* redboy_inst = new Redboy(Zeni::Point2f(100, 2500));
-            Model_state::get_instance()->add_monster(redboy_inst);
-            /*
-            Wanderer* wanderer = new Wanderer(Zeni::Point2f(100, 2500));
+            /*Redboy* redboy_inst = new Redboy(Zeni::Point2f(100, 2500));
+            Model_state::get_instance()->add_monster(redboy_inst);*/
+            Wanderer* wanderer = new Wanderer(Zeni::Point2f(200, 2500));
+            Model_state::get_instance()->add_monster(wanderer);
+            wanderer = new Wanderer(Zeni::Point2f(100, 2500));
             Model_state::get_instance()->add_monster(wanderer);
             wanderer = new Wanderer(Zeni::Point2f(150, 2500));
-            Model_state::get_instance()->add_monster(wanderer);
-            wanderer = new Wanderer(Zeni::Point2f(200, 2500));
             Model_state::get_instance()->add_monster(wanderer);
             wanderer = new Wanderer(Zeni::Point2f(250, 2500));
             Model_state::get_instance()->add_monster(wanderer);
@@ -563,7 +562,6 @@ private:
             Model_state::get_instance()->add_monster(whisper_1);
             whisper_1 = new Whisper(Zeni::Point2f(550, 2500));
             Model_state::get_instance()->add_monster(whisper_1);
-            */
         }
         else if (lvl == 1){
             float x = 350;

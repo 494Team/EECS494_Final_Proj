@@ -76,6 +76,9 @@ namespace Flame{
   const float BOSS_CHARGE_HITBACK_TIME = 0.5f;
   const float SLOWDOWN_TIME = 2.0f;
   const float FREEZE_TIME = 2.0f;
+
+  // slow down effect color
+  const Zeni::Color SLOWDOWN_COLOR = Zeni::Color(1.0f, 0.3f, 0.6f, 1.0f);
   
   //spells written in/related to Player.cpp
   const float kCudge_fury_CD = 5.0f;

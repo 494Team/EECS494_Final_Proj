@@ -21,7 +21,7 @@ void Wanderer::attack() {
 
 void Wanderer::update(float time) {
   Monster::update(time);
-  if (is_get_wukong_charge() || is_freeze()) {
+  if (is_get_wukong_charge() || is_freeze() || (is_slowdown() && effect_timers[SLOWDOWN] > 1.5f)) {
     is_attacking = false;
     return;
   }
@@ -94,14 +94,21 @@ void Wanderer::render() {
     );
     render_suffix = "_attack";
   }
+  Zeni::Color color_filter;
+  if (is_slowdown()) {
+    color_filter = SLOWDOWN_COLOR;
+  }
   if (radians_ccw < Zeni::Global::pi * 0.25f || radians_ccw >= Zeni::Global::pi *1.75f) {
-    Zeni::render_image("wanderer_right" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
+    Zeni::render_image("wanderer_right" + render_suffix, ul, lr, false, color_filter);
   } else if (radians_ccw >= Zeni::Global::pi * 0.25f && radians_ccw < Zeni::Global::pi * 0.75f) {
-    Zeni::render_image("wanderer_front" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
+    Zeni::render_image("wanderer_front" + render_suffix, ul, lr, false, color_filter);
   } else if (radians_ccw >= Zeni::Global::pi * 0.75f && radians_ccw < Zeni::Global::pi * 1.25f) {
-    Zeni::render_image("wanderer_left" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
+    Zeni::render_image("wanderer_left" + render_suffix, ul, lr, false, color_filter);
   } else {
-    Zeni::render_image("wanderer_back" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
+    Zeni::render_image("wanderer_back" + render_suffix, ul, lr, false, color_filter);
+  }
+  if (is_slowdown() && effect_timers[SLOWDOWN] > 1.5f) {
+    Zeni::render_image("slowdown_effect", ul, lr);
   }
 
   Agent::render();

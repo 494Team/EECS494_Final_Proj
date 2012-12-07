@@ -317,7 +317,6 @@ namespace Flame {
       for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
         if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
           vector<attack_effect> effects;
-          effects.push_back(HITBACK);
           (*it)->get_hit(damage, effects, player_ptr, get_orientation());
           Magic_arrow_ice_effect effect(get_center_location());
           Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
@@ -367,7 +366,7 @@ namespace Flame {
   {
     vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
     vector<attack_effect> effects;
-    effects.push_back(FREEZE);
+    effects.push_back(SLOWDOWN);
     for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
       if (get_body().intersects((*it)->get_body()) && (*it)->is_alive())
         (*it)->get_hit(0.f, effects, player_ptr);

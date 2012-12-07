@@ -41,8 +41,9 @@ bool Whisper::is_path_clear(const Zeni::Collision::Parallelepiped &path_obj) {
 
 void Whisper::update(float time) {
   Monster::update(time);
-  if (is_get_wukong_charge() || is_freeze()) {
+  if (is_get_wukong_charge() || is_freeze() || (is_slowdown() && effect_timers[SLOWDOWN] > 1.5f)) {
     is_attacking = false;
+    set_moving(false);
     return;
   }
   if (is_hitback()) {
@@ -97,6 +98,7 @@ void Whisper::update(float time) {
           set_orientation(Zeni::Vector2f(rand_inst.frand_lte() * 2.0f - 1.0f, rand_inst.frand_lte() * 2.0f - 1.0f));
         }
       }
+      set_moving(true);
       make_move(time);
     } else {
       set_orientation(target->get_location() - get_location());
@@ -146,14 +148,21 @@ void Whisper::render() {
   if (!is_hitback() && !is_freeze() && is_attacking) {
     render_suffix = "_attack";
   }
+  Zeni::Color color_filter;
+  if (is_slowdown()) {
+    color_filter = SLOWDOWN_COLOR;
+  }
   if (radians_ccw < Zeni::Global::pi * 0.25f || radians_ccw >= Zeni::Global::pi *1.75f) {
-    Zeni::render_image("whisper_right" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
+    Zeni::render_image("whisper_right" + render_suffix, ul, lr, false, color_filter);
   } else if (radians_ccw >= Zeni::Global::pi * 0.25f && radians_ccw < Zeni::Global::pi * 0.75f) {
-    Zeni::render_image("whisper_front" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
+    Zeni::render_image("whisper_front" + render_suffix, ul, lr, false, color_filter);
   } else if (radians_ccw >= Zeni::Global::pi * 0.75f && radians_ccw < Zeni::Global::pi * 1.25f) {
-    Zeni::render_image("whisper_left" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
+    Zeni::render_image("whisper_left" + render_suffix, ul, lr, false, color_filter);
   } else {
-    Zeni::render_image("whisper_back" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
+    Zeni::render_image("whisper_back" + render_suffix, ul, lr, false, color_filter);
+  }
+  if (is_slowdown() && effect_timers[SLOWDOWN] > 1.5f) {
+    Zeni::render_image("slowdown_effect", ul, lr);
   }
 
   Agent::render();

@@ -26,6 +26,7 @@ namespace Flame {
       radius(radius_),
       hitback(false),
       freeze(false),
+      slowdown(false),
       get_wukong_charge(false),
       armor(1.0f)
     {}
@@ -37,6 +38,7 @@ namespace Flame {
     bool is_alive() const {return alive;}
     bool is_hitback() const {return hitback;}
     bool is_freeze() const {return freeze;}
+    bool is_slowdown() const {return slowdown;}
     bool is_get_wukong_charge() const {return get_wukong_charge;}
     void relieve_from_wukong_charge() {get_wukong_charge = false;}
     float get_armor() const {return armor;}
@@ -68,8 +70,8 @@ namespace Flame {
 
   protected:
     Zeni::Vector2f ori_before_hitback;  
-  private:
     std::map<attack_effect, float> effect_timers;
+  private:
     Zeni::Collision::Capsule body;
     float armor; // armor is between 0.0 and 1.0
     float initial_health;
@@ -80,6 +82,7 @@ namespace Flame {
     // effects
     bool hitback;
     bool freeze;
+    bool slowdown;
     bool get_wukong_charge;
   };
 
