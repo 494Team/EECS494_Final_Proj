@@ -39,8 +39,8 @@ namespace Flame{
   const float WANDERER_DAMAGE = 100.0f;
   const float WANDERER_HEALTH = 500.0f;
   const float WANDERER_ATTACK_GAP = 1.0f;
-  const float WANDERER_ATTACK_RADIUS = 16.0f;
-  const float WANDERER_MIN_DIST = 20.0f;
+  const float WANDERER_ATTACK_RADIUS = 20.0f;
+  const float WANDERER_MIN_DIST = 5.0f;
   const float WANDERER_VIEW_RANGE = 800.0f;
 
   // Whisper constants
@@ -64,7 +64,7 @@ namespace Flame{
   const float REDBOY_HEALTH = 10000.0f;
   const float REDBOY_ATTACK_GAP = 1.5f;
   const float REDBOY_ATTACK_RADIUS = 32.0f;
-  const float REDBOY_MIN_DIST = 30.0f;
+  const float REDBOY_MIN_DIST = 10.0f;
   const float REDBOY_FIRE_CHARGE_COOLDOWN = 10.0f;
   const float REDBOY_RING_OF_FIRE_COOLDOWN = 15.0f;
   const float REDBOY_FIRE_SPIKES_COOLDOWN = 20.0f;

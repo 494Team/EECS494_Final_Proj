@@ -17,8 +17,10 @@ void Redboy::attack() {
   float dist = (get_location() - target->get_location()).magnitude()
     - get_body().get_radius() - target->get_body().get_radius();
   if (dist < REDBOY_MIN_DIST) {
-    //TODO: perform attack
     Monster::attack();
+    Zeni::Point2f attack_location = get_location() + get_current_orientation() * 0.5f * get_radius();
+    Attack_spell *attack_spell = new Attack_spell(attack_location, get_current_orientation(), attack_radius, damage);
+    Model_state::get_instance()->add_spell(attack_spell);
   } else {
     status = IDLE;
   }
@@ -72,7 +74,7 @@ void Redboy::update(float time) {
   set_moving(false);
   switch (status) {
     case ATTACK:
-      if (get_current_time() - last_skill_starts_time > attack_gap) {
+      if (get_current_time() - last_skill_starts_time > ATTACK_DURATION) {
         is_attacking = false;
         status = IDLE;
       }

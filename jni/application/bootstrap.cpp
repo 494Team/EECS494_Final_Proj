@@ -543,8 +543,8 @@ private:
                 (*it)->set_position(Point2f(x,3000));
                 x += 100.f;
             }
-            /*Redboy* redboy_inst = new Redboy(Zeni::Point2f(100, 2500));
-            Model_state::get_instance()->add_monster(redboy_inst);*/
+            Redboy* redboy_inst = new Redboy(Zeni::Point2f(100, 2500));
+            Model_state::get_instance()->add_monster(redboy_inst);
             Wanderer* wanderer = new Wanderer(Zeni::Point2f(200, 2500));
             Model_state::get_instance()->add_monster(wanderer);
             wanderer = new Wanderer(Zeni::Point2f(100, 2500));

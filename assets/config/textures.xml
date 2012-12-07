@@ -832,10 +832,10 @@ The following things are unsupported:
   </mini_boss>
   <!-- Minimap texture ends-->
   <!-- attack effects -->
-  <freeze>
+  <slowdown_effect>
     <filepath>textures/freeze.png</filepath>
     <tile>0</tile>
-  </freeze>
+  </slowdown_effect>
   <exclamatory_mark>
     <filepath>textures/exclamatory_mark.png</filepath>
     <tile>0</tile>

@@ -44,7 +44,7 @@ namespace Flame {
       vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
       for (auto it = player_list_ptr->begin(); it != player_list_ptr->end(); ++it)
         if (body.intersect((*it)->get_body())) {
-          (*it)->get_hit(attack_strength, vector<attack_effect>(), player_ptr);
+          (*it)->get_hit(attack_strength, vector<attack_effect>(), NULL);
           Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
         }
     }

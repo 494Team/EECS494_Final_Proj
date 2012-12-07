@@ -12,11 +12,10 @@ Wanderer::Wanderer(
 {}
 
 void Wanderer::attack() {
-  //Collision_sector attack_sector(get_location(), get_current_orientation(), attack_radius);
   Monster::attack();
-
-  // TODO: add attack sector to spell vector
-  //Model_state::get_instance()->get_spell_list_ptr()->push_back(
+  Zeni::Point2f attack_location = get_location() + get_current_orientation() * 0.5f * get_radius();
+  Attack_spell *attack_spell = new Attack_spell(attack_location, get_current_orientation(), attack_radius, damage);
+  Model_state::get_instance()->add_spell(attack_spell);
 }
 
 void Wanderer::update(float time) {
