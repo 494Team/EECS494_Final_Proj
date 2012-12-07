@@ -205,13 +205,19 @@ namespace Flame {
       render_list.insert(*it);
     }
     for (auto it = spell_list.begin(); it != spell_list.end();)
-      if (!(*it)->is_active())
+      if (!(*it)->is_active()) {
+        Spell * s_ptr = *it;
         it = remove_spell(*it);
+        delete s_ptr;
+      }
       else
         ++it;
     for (auto it = monster_list.begin(); it != monster_list.end();)
-      if (!(*it)->is_alive())
+      if (!(*it)->is_alive()) {
+        Monster * m_ptr = *it;
         it = remove_monster(*it);
+        delete m_ptr;
+      }
       else
         ++it;
     for (auto it = next_loop_update_list.begin(); it != next_loop_update_list.end(); ++it)
@@ -276,7 +282,11 @@ namespace Flame {
   vector<Spell *>::iterator Model_state::remove_spell(Spell * spell_ptr)
   {
     auto it = spell_list.erase(find(spell_list.begin(), spell_list.end(), spell_ptr));
-    sim_obj_list.erase(find(sim_obj_list.begin(), sim_obj_list.end(), spell_ptr));
+    auto it1 = find(sim_obj_list.begin(), sim_obj_list.end(), spell_ptr);
+    if (it1 != sim_obj_list.end())
+      sim_obj_list.erase(it1);
+    else
+      next_loop_update_list.erase(find(next_loop_update_list.begin(), next_loop_update_list.end(), spell_ptr));
     render_list.erase(spell_ptr);
     return it;
   }
@@ -292,10 +302,11 @@ namespace Flame {
   vector<Map *>::iterator Model_state::remove_map_puzzle_obj(Map * map_obj_ptr)
   {
     auto it = map_puzzle_obj_list.erase(find(map_puzzle_obj_list.begin(), map_puzzle_obj_list.end(), map_obj_ptr));
-    sim_obj_list.erase(find(sim_obj_list.begin(), sim_obj_list.end(), map_obj_ptr));
-    auto it1 = find(next_loop_update_list.begin(), next_loop_update_list.end(), map_obj_ptr);
-    if (it1 != next_loop_update_list.end())
-      next_loop_update_list.erase(it1);
+    auto it1 = find(sim_obj_list.begin(), sim_obj_list.end(), map_obj_ptr);
+    if (it1 != sim_obj_list.end())
+      sim_obj_list.erase(it1);
+    else
+      next_loop_update_list.erase(find(next_loop_update_list.begin(), next_loop_update_list.end(), map_obj_ptr));
     render_list.erase(map_obj_ptr);
     return it;
   }

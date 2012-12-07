@@ -90,8 +90,10 @@ namespace Flame{
   const int kDefense_max = 5;
   const int kStrength_max = 5;
   const int kSpeed_max = 5;
+
   const float kSpeed_maxbuff = 200.0f;
   const float kDefense_lv5 = 0.8f;
+  const float kAttack_maxbuff = 1.0f;
 
   //others
   const float kHpbar_width = 3.0f;

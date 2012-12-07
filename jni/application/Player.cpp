@@ -14,7 +14,6 @@ Player::Player(
   normal_attack(false),
   running_status(false),
   ptype(player_type_),
-  attack_buff(kInit_buff),
   game_time(game_t_),
   spell1_active(false),
   spell2_active(false),
@@ -33,14 +32,17 @@ Player::Player(
   defense(0),
   strength(0),
   speed(0),
-  fire_magic_arrow(true)
+  fire_magic_arrow(true),
+  mp(kMp_max),
+  disintegrate_ptr(nullptr),
+  attack_buff(kInit_attack_buff)
 {
   set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
   switch (ptype) {
     case SANZANG:
-      spell1_CD = kConfusing_CD;
+      spell1_CD = kDing_CD;
       spell2_CD = kHealing_CD;
-      spell3_CD = kAll_healing_CD;
+      spell3_CD = kDisintegrate_CD;
       break;
     case WUKONG:
       spell1_CD = kCudge_fury_CD;
@@ -116,10 +118,12 @@ void Player::static_move(float time, bool force_move) {
 void Player::update(float time) {
   Agent::update(time);
 
+  float berserk_buff = is_berserk() ? kBerserk_attack_buff : 1.0f;
   bool shielding = ptype == BAJIE && spell1_active;
   float shield_buff = shielding ? kShield_effect : 1.0f;
   
   //update buff
+  set_attack_buff((1.0f + attack * kAttack_maxbuff/kAttack_max) * berserk_buff);
   set_armor((1.0f - defense * kDefense_lv5/kDefense_max) * shield_buff);
   set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
 
@@ -194,6 +198,12 @@ void Player::update(float time) {
   }
   if (ptype == WUKONG && spell3_active && (current_time - last_spell3) > kBerserk_last) {
     berserk_end();
+  }
+  if (is_disintegrate()) {
+    cost_mp(kDisintegrate_mp_cost);
+    if (mp == 0.0f) {
+      disintegrate_end();
+    }
   }
 
   //
@@ -348,16 +358,6 @@ void Player::fire(kKey_type type) {
       case A3:
       case A4:
         try_normal_attack();
-
-        /*
-            Attack_spell(const Zeni::Point2f& location_ = Zeni::Point2f(),
-                 const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
-                 float radius_ = 0.f,
-                 float attack_strength_ = 0.f,
-                 bool is_player_ = false,
-                 bool heal_self_ = false,
-                 Player * player_ptr_ = nullptr);
-                 */
         break;
       case B1:
       case B2:
@@ -391,12 +391,12 @@ void Player::fire(kKey_type type) {
 void Player::berserk() {
   spell3_active = true;
   //set_radius(get_radius() * kBerserk_enlarge);
-  attack_buff = 2.0f;
+  //attack_buff = 2.0f;
 }
 
 void Player::berserk_end() {
   //set_radius(get_radius() / kBerserk_enlarge);
-  attack_buff = kInit_buff;
+  //attack_buff = kInit_buff;
   spell3_active = false;
 }
 
@@ -407,7 +407,8 @@ void Player::cudgel_fury_begin() {
                                        get_current_orientation(),
                                        get_radius(),
                                        this,
-                                       game_time);
+                                       game_time,
+                                       kCudgel_fury_dam * attack_buff);
     Model_state::get_instance()->add_spell(new_spell);
   }
 }
@@ -422,7 +423,7 @@ void Player::shield() {
 
 void Player::taunt() {
   spell2_active = true;
-  Taunt* new_spell = new Taunt(get_location(), this);
+  Spell* new_spell = new Taunt(get_location(), this);
   Model_state::get_instance()->add_spell(new_spell);
 }
 
@@ -434,6 +435,42 @@ void Player::charge() {
   spell2_active = true;
   set_speed(kCharge_speed);
 }
+
+bool Player::is_disintegrate() {
+  return (ptype==SANZANG && spell1_active);
+}
+
+void Player::disintegrate_begin() {
+  spell1_active = true;
+  disintegrate_ptr = new Disintegrate(this, kDisintegrate_dam * attack_buff);
+  Model_state::get_instance()->add_spell(disintegrate_ptr);
+}
+
+void Player::disintegrate_end() {
+  spell1_active = false;
+  if (disintegrate_ptr) {
+    disintegrate_ptr->disable_spell();
+    disintegrate_ptr = nullptr;
+  }
+}
+
+//bool Player::is_disintegrate() {
+//  return (ptype==SANZANG && spell1_active);
+//}
+
+void Player::ding_begin() {
+  spell3_active = true;
+  Spell* new_spell = new Ding(get_location(), this, kDing_dam * attack_buff);
+  Model_state::get_instance()->add_spell(new_spell);
+}
+
+//void Player::disintegrate_end() {
+//  spell1_active = false;
+//  if (disintegrate_ptr) {
+//    disintegrate_ptr->disable_spell();
+//    disintegrate_ptr = nullptr;
+//  }
+//}
 
 void Player::charge_update(float time) {
   //game_time->pause_all();
@@ -517,7 +554,7 @@ void Player::charge_update(float time) {
         charged_monsters[i]->set_moving(false);
         std::vector<attack_effect> effects;
         effects.push_back(GET_WUKONG_CHARGE);
-        charged_monsters[i]->get_hit(kCharge_attack_damage, effects, this);
+        charged_monsters[i]->get_hit(kCharge_attack_damage * attack_buff, effects, this);
       }
     }
   }
@@ -565,13 +602,14 @@ void Player::try_spell1() {
     last_spell1 = current_time;
     //create spell based on character type
     switch (ptype) {
-      case SANZANG: //stopping
+      case SANZANG: //disintegrate
+        disintegrate_begin();
         break;
       case WUKONG: //Cudgel Fury
         cudgel_fury_begin();
         break;
       case SHASENG: //Strafe
-        new_spell = new Strafe(get_location(), get_current_orientation());
+        new_spell = new Strafe(get_location(), get_current_orientation(), this, kStrafe_dam * attack_buff);
         Model_state::get_instance()->add_spell(new_spell);
         break;
       default: // case BAJIE: Shield
@@ -591,16 +629,14 @@ void Player::try_spell2() {
     //create spell based on character type
     switch (ptype) {
       case SANZANG: //healing_spell
-        new_spell = new Healing_spell(get_location(), get_current_orientation());
-        //new_spell = new Arrow_attack(get_location(), get_current_orientation());
-        //new_spell = new Fire_ball(get_location(), get_current_orientation());
+        new_spell = new Healing_spell(get_location(), get_current_orientation(), kHealing_amount * attack_buff);
         Model_state::get_instance()->add_spell(new_spell);
         break;
       case WUKONG: //Charge
         charge();
         break;
       case SHASENG: //Trap
-        new_spell = new Trap(get_location());
+        new_spell = new Trap(get_location(), this, kTrap_dam * attack_buff);
         Model_state::get_instance()->add_spell(new_spell);
         break;
       default: // case BAJIE: Taunt
@@ -619,16 +655,23 @@ void Player::try_spell3() {
     last_spell3 = current_time;
     //create spell based on character type
     switch (ptype) {
-      case SANZANG: //all_healing
+      case SANZANG: //Ding
+        ding_begin();
         break;
       case WUKONG: //Berserk
         berserk();
         break;
       case SHASENG: //Magic Arrow
         if (fire_magic_arrow) {
-          new_spell = new Magic_arrow_fire(get_location(), get_current_orientation(), this);
+          new_spell = new Magic_arrow_fire(get_location(),
+                                           get_current_orientation(),
+                                           this,
+                                           kMagicarrow_dam * attack_buff);
         } else {
-          new_spell = new Magic_arrow_ice(get_location(), get_current_orientation(), this);
+          new_spell = new Magic_arrow_ice(get_location(),
+                                          get_current_orientation(),
+                                          this,
+                                          kMagicarrow_dam * attack_buff);
         }
         Model_state::get_instance()->add_spell(new_spell);
         break;

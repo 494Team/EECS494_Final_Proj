@@ -16,6 +16,7 @@ using namespace Zeni;
 
 namespace Flame {
   #define PLAYER_ATTACK_INTERVAL 0.5f
+  const float kMp_max = 100.0f;
   //temp
   const float kSpell1_CD = 1.0f;
   const float kSpell2_CD = 1.0f;
@@ -34,14 +35,19 @@ namespace Flame {
   const float kPlayer_attack_range = 40.0f;
   const float kPlayer_attack_strengh = 100.0f;
 
-  const float kInit_buff = 1.0f;
+  const float kInit_attack_buff = 1.0f;
 
   // spells
   //SANZANG
-  const float kConfusing_CD = 2.0f;
+  const float kDisintegrate_CD = 2.0f;
+  const float kDisintegrate_dam = 10.0f;
+  const float kDisintegrate_mp_cost = 0.2f;
   const float kHealing_CD = 2.0f;
-  const float kAll_healing_CD = 2.0f;
+  const float kHealing_amount = 30.0f;
+  const float kDing_CD = 2.0f;
+  const float kDing_dam = 5.0f;
   //WUKONG
+  const float kCudgel_fury_dam = 10.0f;
   const float kCharge_CD = 2.0f;
   const float kCharge_last = 0.5f;
   const float kCharge_speed = 200.0f;
@@ -51,11 +57,16 @@ namespace Flame {
   const int kCharge_attack_max = 3;
   const float kBerserk_CD = 2.0f;
   const float kBerserk_last = 1.0f;
-  const float kBerserk_enlarge = 1.5f;
+  const float kBerserk_enlarge = 2.0f;
+  const float kBerserk_attack_buff = 1.5f;
   //SHASENG
+  const float kArrow_dam = 20.0f;
   const float kStrafe_CD = 2.0f;
+  const float kStrafe_dam = 30.0f;
   const float kTrap_CD = 2.0f;
+  const float kTrap_dam = 5.0f;
   const float kMagicarrow_CD = 2.0f;
+  const float kMagicarrow_dam = 50.0f;
   //BAJIE
   const float kShield_last = 0.5f;
   const float kShield_CD = 1.0f;
@@ -139,9 +150,19 @@ namespace Flame {
       fire_magic_arrow = !fire_magic_arrow;
     }
 
+    void set_attack_buff(float buff) {
+      attack_buff = buff;
+    }
   private:
+    float mp;
+    float attack_buff; //range: [1, +INF]; initial:1.0f
     int skill_point;
 
+    void cost_mp(const float cost) {
+      mp -= cost;
+      if (mp < 0.0f)
+        mp = 0.0f;
+    }
     Chronometer<Time>* game_time;
     std::vector<Monster *> * monster_list_ptr;
     void static_move(float time, bool force_move = false);
@@ -157,7 +178,6 @@ namespace Flame {
     bool normal_attack;
     //Zeni::Time_HQ last_htime;
     float last_htime;
-    float attack_buff; //range: [1, +INF]; initial:1.0f
 
     //spell status
     float spell1_CD;
@@ -175,6 +195,13 @@ namespace Flame {
     //timer_end
 
     //SANZANG
+    bool is_disintegrate();
+    void disintegrate_begin();
+    void disintegrate_end();
+    Spell* disintegrate_ptr;
+
+    void ding_begin();
+
     //WUKONG
 
     void charge();
@@ -189,6 +216,9 @@ namespace Flame {
     //float backup_size;
     void berserk();
     void berserk_end();
+    bool is_berserk() {
+      return (ptype==WUKONG && spell3_active);
+    }
     //SHASENG
     bool fire_magic_arrow;
     //BAJIE
