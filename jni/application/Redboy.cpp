@@ -35,7 +35,13 @@ void Redboy::skill1() {
   }
   fire_charge_tar_loc = players[player_num]->get_location();
   set_orientation(fire_charge_tar_loc - get_location());
-  set_speed(get_current_speed() * 2.0f);
+  set_speed(REDBOY_FIRE_CHARGE_SPEED);
+  fire_charge_render_list.clear();
+  fire_charge_last_shadow_time = 0.0f;
+  fire_charge_main_body_stop = false;
+  fire_charge_speed = get_current_speed();
+  fire_charge_ori = get_current_orientation();
+  fire_charge_start_loc = get_location();
 }
 
 // ring of fire : 8 fire balls
@@ -72,41 +78,64 @@ void Redboy::update(float time) {
       }
       //std::cout<<"ATTACK\n";
       break;
-    case SKILL1:
+    case SKILL1: {
       // fire charge is special.
+      Zeni::Point2f redboy_backup_loc = get_location();
       if (get_current_time() - last_skill_starts_time > ATTACK_DURATION) {
-        if ((get_location() - fire_charge_tar_loc).magnitude() < get_body().get_radius()) {
-          // if ends
-          recover_speed();
-          set_orientation(target->get_location());
-          status = IDLE;
-        } else {
-          set_moving(true);
-          Zeni::Point2f redboy_backup_loc = get_location();
-          make_move(time, true);
-          for (int i = 0; i < (int)players.size(); ++i) {
-            if (players[i]->get_body().intersects(get_body())) {
-              // make effects to player
-              std::vector<attack_effect> effects;
-              effects.push_back(HITBACK);
-              players[i]->get_hit(REDBOY_FIRE_CHARGE_DAMAGE, effects);
-              Zeni::Vector2f hitback_ori = players[i]->get_location() - get_location();
-              hitback_ori.normalize();
-              players[i]->set_orientation(hitback_ori);
-              players[i]->set_speed(get_current_speed() * 2.0f);
-              // move player so that there is no intersection
-              Zeni::Point2f player_backup_loc = players[i]->get_location();
-              players[i]->set_position(get_location() + hitback_ori * (get_body().get_radius() + players[i]->get_body().get_radius() + EPSILON));
-              // check if player's move is safe
-              if (!Model_state::get_instance()->can_player_move(players[i]->get_body())) {
-                // not possible to move any further. go back and stop this skill
-                players[i]->set_position(player_backup_loc);
-                set_position(redboy_backup_loc);
-                recover_speed();
-                set_orientation(target->get_location());
-                status = IDLE;
+        if (get_current_time() - fire_charge_last_shadow_time > 0.1f && fire_charge_render_list.size() < 4) {
+          fire_charge_render_list.push_back(fire_charge_start_loc);
+          fire_charge_last_shadow_time = get_current_time();
+        }
+        if (!fire_charge_main_body_stop) {
+          // main body not yet stop
+          if ((get_location() - fire_charge_tar_loc).magnitude() < get_body().get_radius()) {
+            // main body stop
+            fire_charge_main_body_stop = true;
+          } else {
+            set_moving(true);
+            make_move(time, true);
+            for (int i = 0; i < (int)players.size(); ++i) {
+              if (players[i]->get_body().intersects(get_body())) {
+                // make effects to player
+                std::vector<attack_effect> effects;
+                effects.push_back(HITBACK);
+                players[i]->get_hit(REDBOY_FIRE_CHARGE_DAMAGE, effects);
+                Zeni::Vector2f hitback_ori = players[i]->get_location() - get_location();
+                hitback_ori.normalize();
+                players[i]->set_orientation(hitback_ori);
+                players[i]->set_speed(get_current_speed() * 2.0f);
+                // move player so that there is no intersection
+                Zeni::Point2f player_backup_loc = players[i]->get_location();
+                players[i]->set_position(get_location() + hitback_ori * (get_body().get_radius() + players[i]->get_body().get_radius() + EPSILON));
+                // check if player's move is safe
+                if (!Model_state::get_instance()->can_player_move(players[i]->get_body())) {
+                  // not possible to move any further. go back and stop this skill
+                  players[i]->set_position(player_backup_loc);
+                  set_position(redboy_backup_loc);
+                  fire_charge_main_body_stop = true;
+                  break;
+                }
               }
             }
+          }
+          for (int i = 0; i < (int)fire_charge_render_list.size(); ++i) {
+            fire_charge_render_list[i] += (get_location() - redboy_backup_loc);
+          }
+        } else {
+          // main body already stopped
+          bool still_moving = false;
+          // move shadow
+          for (int i = 0; i < (int)fire_charge_render_list.size(); ++i) {
+            if ((fire_charge_render_list[i] - get_location()).magnitude() >= get_body().get_radius()) {
+              still_moving = true;
+              fire_charge_render_list[i] += (fire_charge_ori * time * fire_charge_speed);
+            }
+          }
+          if (!still_moving) {
+            // no shadow moving, stop skill
+            recover_speed();
+            set_orientation(target->get_location());
+            status = IDLE;
           }
         }
       }
@@ -115,6 +144,7 @@ void Redboy::update(float time) {
       std::cout << "tar_pos: " << fire_charge_tar_loc.x << ' ' << fire_charge_tar_loc.y <<std::endl;*/
       //std::cout << "SKILL1\n";
       break;
+    }
     case SKILL2:
       if (get_current_time() - last_skill_starts_time > attack_gap) {
         status = IDLE;
@@ -148,6 +178,7 @@ void Redboy::render() {
   float scale = Model_state::get_instance()->get_scale();
   Zeni::Point2f ul, lr;
   float radians_ccw;
+  // image is 1.8x real size
   get_render_params(get_body().get_radius() * 1.8f, ul, lr, radians_ccw);
 
   update_render_suffix();
@@ -156,15 +187,22 @@ void Redboy::render() {
   switch (status) {
     case SKILL1:
       if (get_current_time() - last_skill_starts_time > ATTACK_DURATION) {
-        if (radians_ccw < Zeni::Global::pi * 0.25f || radians_ccw >= Zeni::Global::pi *1.75f) {
-          Zeni::render_image("redboy_right" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
-        } else if (radians_ccw >= Zeni::Global::pi * 0.25f && radians_ccw < Zeni::Global::pi * 0.75f) {
-          Zeni::render_image("redboy_front" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
-        } else if (radians_ccw >= Zeni::Global::pi * 0.75f && radians_ccw < Zeni::Global::pi * 1.25f) {
-          Zeni::render_image("redboy_left" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
-        } else {
-          Zeni::render_image("redboy_back" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
+        Zeni::Vector2f backup_loc = get_location();
+        for (int i = (int)fire_charge_render_list.size() - 1; i >= 0; --i) {
+          set_position(fire_charge_render_list[i]);
+          get_render_params(get_body().get_radius() * 1.8f, ul, lr, radians_ccw);
+          Zeni::Color color_filter((4 - i) * 0.25f, 1.0f, 1.0f, 1.0f);
+          if (radians_ccw < Zeni::Global::pi * 0.25f || radians_ccw >= Zeni::Global::pi *1.75f) {
+            Zeni::render_image("redboy_right1", ul, lr, false, color_filter);
+          } else if (radians_ccw >= Zeni::Global::pi * 0.25f && radians_ccw < Zeni::Global::pi * 0.75f) {
+            Zeni::render_image("redboy_front1", ul, lr, false, color_filter);
+          } else if (radians_ccw >= Zeni::Global::pi * 0.75f && radians_ccw < Zeni::Global::pi * 1.25f) {
+            Zeni::render_image("redboy_left1", ul, lr, false, color_filter);
+          } else {
+            Zeni::render_image("redboy_back1", ul, lr, false, color_filter);
+          }
         }
+        set_position(backup_loc);
 
       } else {
         Zeni::render_image("redboy_casting0", ul, lr, 0, 1.0f, rel_loc);

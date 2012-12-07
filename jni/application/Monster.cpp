@@ -171,6 +171,7 @@ void Monster::get_hit(const float &damage, const std::vector<attack_effect> &eff
 }
 
 void Monster::get_render_params(float render_radius, Zeni::Point2f &ul, Zeni::Point2f &lr, float &radians_ccw) {
+  update_rel_loc();
   float scale = Model_state::get_instance()->get_scale();
   ul = rel_loc - Zeni::Vector2f(render_radius, render_radius) * scale;
   lr = ul + Zeni::Vector2f(render_radius * 2.0f, render_radius * 2.0f) * scale;

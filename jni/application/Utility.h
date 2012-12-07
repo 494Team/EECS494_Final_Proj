@@ -69,6 +69,7 @@ namespace Flame{
   const float REDBOY_RING_OF_FIRE_COOLDOWN = 15.0f;
   const float REDBOY_FIRE_SPIKES_COOLDOWN = 20.0f;
   const float REDBOY_FIRE_CHARGE_DAMAGE = 500.0f;
+  const float REDBOY_FIRE_CHARGE_SPEED = 200.0f;
 
   // attack effect time
   const float NORMAL_HITBACK_TIME = 0.1f;

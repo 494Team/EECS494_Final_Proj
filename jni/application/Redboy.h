@@ -26,6 +26,12 @@ namespace Flame {
 
   private:
     Zeni::Point2f fire_charge_tar_loc;
+    std::vector<Zeni::Point2f> fire_charge_render_list;
+    float fire_charge_last_shadow_time;
+    float fire_charge_speed;
+    bool fire_charge_main_body_stop;
+    Zeni::Vector2f fire_charge_ori;
+    Zeni::Vector2f fire_charge_start_loc;
     float damage;
     float attack_radius;
   };

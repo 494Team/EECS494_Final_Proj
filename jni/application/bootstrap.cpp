@@ -553,6 +553,8 @@ private:
             whisper_1 = new Whisper(Zeni::Point2f(550, 2500));
             Model_state::get_instance()->add_monster(whisper_1);
             */
+            Redboy* redboy_inst = new Redboy(Zeni::Point2f(200, 2600));
+            Model_state::get_instance()->add_monster(redboy_inst);
         }
         else if (lvl == 1){
             float x = 350;
