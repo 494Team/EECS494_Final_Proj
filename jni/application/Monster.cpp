@@ -158,6 +158,11 @@ void Monster::update(float time) {
       }
     }
   }
+  last_target = target;
+  target = highest_hatred();
+  if (last_target != target) {
+    increase_hatred(INITIAL_HATRED, target);
+  }
 }
 
 void Monster::get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker, Zeni::Vector2f coming_ori) {

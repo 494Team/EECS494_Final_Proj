@@ -55,6 +55,9 @@ void Redboy::skill3() {
 
 void Redboy::update(float time) {
   Boss::update(time);
+  if (target == 0) {
+    return;
+  }
 
   set_moving(false);
   switch (status) {

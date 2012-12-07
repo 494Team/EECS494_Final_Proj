@@ -57,6 +57,7 @@ namespace Flame {
     float calc_angle_between(const Zeni::Vector2f &a, const Zeni::Vector2f &b);
 
     Player* target;
+    Player* last_target;
     std::vector<Player *> players;
     std::map<Player *, float> hatred;
     Zeni::Point2f rel_loc;

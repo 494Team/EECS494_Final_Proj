@@ -37,7 +37,6 @@ void Boss::update(float time) {
     case IDLE:
       break;
   }
-  target = highest_hatred();
 }
 
 void Boss::decide_attack_type() {
