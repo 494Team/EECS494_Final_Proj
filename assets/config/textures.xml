@@ -509,7 +509,7 @@ The following things are unsupported:
   <ring_of_fire1>
     <filepath>textures/ring_of_fire1.png</filepath>
     <tile>0</tile>
-  </ring_of_fire>
+  </ring_of_fire1>
   <!-- Boss skills ends .......................................-->
   <!-- Wanderer texture starts -->
   <wanderer_front0>
