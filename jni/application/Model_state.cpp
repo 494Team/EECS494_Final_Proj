@@ -49,7 +49,7 @@ namespace Flame {
     clear();
     timer = timer_;
     for (std::vector<kPlayer_type>::iterator it = character_list.begin(); it != character_list.end(); it++)
-      player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(300.f, 3000.f), *it));
+      player_list.push_back(new Player(timer, kHp_max, 400.f, 16.f, Point2f(300.f, 3000.f), *it));
     /*
     //for (std::vector<kPlayer_type>::iterator it = character_list.begin(); it != character_list.end(); it++) {
       player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(300.f, 3000.f), WUKONG));

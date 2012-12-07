@@ -126,6 +126,8 @@ void Player::update(float time) {
   set_attack_buff((1.0f + attack * kAttack_maxbuff/kAttack_max) * berserk_buff);
   set_armor((1.0f - defense * kDefense_lv5/kDefense_max) * shield_buff);
   set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
+  
+  hpmp_regenerate();
 
   Point2f backup_position;
   Point2f new_position;
@@ -578,7 +580,7 @@ void Player::charge_end() {
 void Player::try_normal_attack() {
   Spell* new_spell;
   if (ptype == SHASENG) {
-    new_spell = new Arrow_attack(get_location(), get_current_orientation(), this);
+    new_spell = new Arrow_attack(get_location(), get_current_orientation(), this, kArrow_dam * attack_buff);
     Model_state::get_instance()->add_spell(new_spell);
   } else {
     bool heal_self = (ptype == BAJIE) && spell3_active;

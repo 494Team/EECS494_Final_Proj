@@ -16,13 +16,10 @@ using namespace Zeni;
 
 namespace Flame {
   #define PLAYER_ATTACK_INTERVAL 0.5f
-  const float kMp_max = 100.0f;
-  //temp
-  const float kSpell1_CD = 1.0f;
-  const float kSpell2_CD = 1.0f;
-  const float kSpell3_CD = 1.0f;
-
   const float kPlayer_init_speed = 200.0f;
+  const float kHp_regenerate_rate = 0.0f; //1.0f;
+  const float kMp_regenerate_rate = 1.0f;
+  const float kRegenerate_CD = 1.0f;
 
   const float kAttack_show_time = 0.2f;
 
@@ -41,7 +38,7 @@ namespace Flame {
   //SANZANG
   const float kDisintegrate_CD = 2.0f;
   const float kDisintegrate_dam = 10.0f;
-  const float kDisintegrate_mp_cost = 0.2f;
+  const float kDisintegrate_mp_cost = 2.0f;
   const float kHealing_CD = 2.0f;
   const float kHealing_amount = 30.0f;
   const float kDing_CD = 2.0f;
@@ -153,15 +150,39 @@ namespace Flame {
     void set_attack_buff(float buff) {
       attack_buff = buff;
     }
+    float get_hp() {
+      return get_current_health();
+    }
+    float get_mp() {
+      return mp;
+    }
+
+    void button_b_release() {
+      if (is_disintegrate())
+        disintegrate_end();
+
+    }
+
   private:
     float mp;
     float attack_buff; //range: [1, +INF]; initial:1.0f
     int skill_point;
 
-    void cost_mp(const float cost) {
+    bool cost_mp(const float cost) {
+      bool result = true;
       mp -= cost;
-      if (mp < 0.0f)
+      if (mp < 0.0f) {
         mp = 0.0f;
+        result = false;
+      }
+      return result;
+    }
+    void hpmp_regenerate() {
+      dec_health(-kHp_regenerate_rate);
+      mp += kMp_regenerate_rate;
+      if (mp > kMp_max) {
+        mp = kMp_max;
+      }
     }
     Chronometer<Time>* game_time;
     std::vector<Monster *> * monster_list_ptr;

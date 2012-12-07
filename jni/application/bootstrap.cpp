@@ -545,7 +545,7 @@ private:
             }
             Redboy* redboy_inst = new Redboy(Zeni::Point2f(100, 2500));
             Model_state::get_instance()->add_monster(redboy_inst);
-            Wanderer* wanderer = new Wanderer(Zeni::Point2f(200, 2500));
+            Wanderer* wanderer = new Wanderer(Zeni::Point2f(100, 2500));
             Model_state::get_instance()->add_monster(wanderer);
             wanderer = new Wanderer(Zeni::Point2f(100, 2500));
             Model_state::get_instance()->add_monster(wanderer);
@@ -710,6 +710,16 @@ private:
     if (action == MENU) {
       get_into_upgradeshop();
     }
+    
+    switch(action) {
+      case B1:
+        if (confidence < 0.1f) {
+          (*Model_state::get_instance()->get_player_list_ptr())[0]->button_b_release();
+        }
+        break;
+      default:
+        break;
+    }
 
     if(confidence >= 0.9f) {
       switch(action) {
@@ -868,6 +878,8 @@ private:
     float CD1percent = p_ptr->get_CD1_percent();
     float CD2percent = p_ptr->get_CD2_percent();
     float CD3percent = p_ptr->get_CD3_percent();
+    float hp_percent = p_ptr->get_hp()/kHp_max;
+    float mp_percent = p_ptr->get_mp()/kMp_max;
     float kCDbar_length = 30.0f;
     float kCDbar_width = 10.0f;
     Zeni::String kCDbar_color = "blue";
@@ -875,6 +887,22 @@ private:
     
     Zeni::Video &vr = Zeni::get_Video();
     Zeni::Colors &cr = Zeni::get_Colors();
+
+    Point2f Hpbar_loc(loc.x + 80.0f, loc.y);
+    const float kHpmpbar_width = 10.0f;
+    const float kHpmpbar_length = 100.0f;
+    Zeni::Vertex2f_Color hp00(Hpbar_loc, cr["red"]);
+    Zeni::Vertex2f_Color hp01(Hpbar_loc + Zeni::Point2f(0.0f, kHpmpbar_width), cr["red"]);
+    Zeni::Vertex2f_Color hp02(Hpbar_loc + Zeni::Point2f(hp_percent * kHpmpbar_length, kHpmpbar_width), cr["red"]);
+    Zeni::Vertex2f_Color hp03(Hpbar_loc + Zeni::Point2f(hp_percent * kHpmpbar_length, 0.0f), cr["red"]);
+    Zeni::Quadrilateral<Zeni::Vertex2f_Color> hpbar(hp00, hp01, hp02, hp03);
+
+    Hpbar_loc += Point2f(0.0f, 20.0f);
+    Zeni::Vertex2f_Color mp00(Hpbar_loc, cr["blue"]);
+    Zeni::Vertex2f_Color mp01(Hpbar_loc + Zeni::Point2f(0.0f, kHpmpbar_width), cr["blue"]);
+    Zeni::Vertex2f_Color mp02(Hpbar_loc + Zeni::Point2f(mp_percent * kHpmpbar_length, kHpmpbar_width), cr["blue"]);
+    Zeni::Vertex2f_Color mp03(Hpbar_loc + Zeni::Point2f(mp_percent * kHpmpbar_length, 0.0f), cr["blue"]);
+    Zeni::Quadrilateral<Zeni::Vertex2f_Color> mpbar(mp00, mp01, mp02, mp03);
 
     //CDbar
     Point2f CDbar_loc(loc.x, loc.y + head_size.y + 5.0f);
@@ -901,6 +929,8 @@ private:
     vr.render(bar1);
     vr.render(bar2);
     vr.render(bar3);
+    vr.render(hpbar);
+    vr.render(mpbar);
   }
 
   void render()

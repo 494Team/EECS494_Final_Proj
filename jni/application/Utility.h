@@ -101,6 +101,11 @@ namespace Flame{
   //others
   const float kHpbar_width = 3.0f;
   const float kHighlight_move_CD = 0.2f;
+
+
+  //player setting
+  const float kHp_max = 1000.0f;
+  const float kMp_max = 1000.0f;
   
   //choosing character page "Preparation State"
   const int kCursor_max = 3;
