@@ -90,10 +90,11 @@ namespace Flame{
   const int kStrength_max = 5;
   const int kSpeed_max = 5;
   const float kSpeed_maxbuff = 200.0f;
-  const float kDefense_lv5 = 0.8;
+  const float kDefense_lv5 = 0.8f;
 
   //others
   const float kHpbar_width = 3.0f;
+  const float kHighlight_move_CD = 0.2f;
   
   //choosing character page "Preparation State"
   const int kCursor_max = 3;
