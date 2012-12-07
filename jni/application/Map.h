@@ -234,23 +234,32 @@ namespace Flame {
         const Zeni::Vector2f &size_ = Zeni::Point2f(),
         const Zeni::String &texture_ = Zeni::String());
       void render();
-      bool can_move(const Zeni::Collision::Capsule& other)
+      bool can_move(const Zeni::Collision::Capsule&)
       {
         return true;
       };
-      bool can_move(const Zeni::Collision::Parallelepiped& other){
+      bool can_move(const Zeni::Collision::Parallelepiped&){
         return true;
       };
-      bool can_move_player(const Zeni::Collision::Capsule& other){
+      bool can_move_player(const Zeni::Collision::Capsule&){
         return true;
       };
     private:
       Zeni::Point2f target_position;
     };
 
-
-
-
+    class Map_lava : public Map_brick {
+    public:
+      Map_lava(const Zeni::Point2f& location_ = Zeni::Point2f(),
+               const Zeni::Vector2f& size_ = Zeni::Vector2f(),
+               float texture_size_x_ = 0.f,
+               float texture_size_y_ = 0.f);
+      virtual Zeni::Point2f get_location() const
+      {return Map_brick::get_location() + Zeni::Vector2f(0.f, -500.f);}
+      virtual void update(float time = 0.f);
+    private:
+      float render_timer;
+    };
 
 }
 

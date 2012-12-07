@@ -1,5 +1,6 @@
 #include <zenilib.h>
 #include <vector>
+#include <sstream>
 #include "Player.h"
 #include "Map.h"
 
@@ -420,5 +421,23 @@ namespace Flame {
     render_image(open_texture, rel_location, rel_location + rel_size);
 
   };
+
+  Map_lava::Map_lava(const Point2f& location_,
+                     const Vector2f& size_,
+                     float texture_size_x_,
+                     float texture_size_y_) :
+    Map_brick(location_, size_, texture_size_x_, texture_size_y_, "lava0"),
+    render_timer(0.f)
+    {}
+
+  void Map_lava::update(float time)
+  {
+    Map_brick::update(time);
+    render_timer += time;
+    int n = int((render_timer - (int(render_timer) / 3 * 3)) * 10);
+    stringstream ss;
+    ss << "lava" << n;
+    Brick_texture = ss.str();
+  }
 
 }

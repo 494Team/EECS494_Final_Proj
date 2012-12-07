@@ -48,20 +48,17 @@ namespace Flame {
 
     clear();
     timer = timer_;
-    for (std::vector<kPlayer_type>::iterator it = character_list.begin(); it != character_list.end(); it++) {
-      player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(300.f, 3000.f), *it));
-    }
-    /*
+    //for (std::vector<kPlayer_type>::iterator it = character_list.begin(); it != character_list.end(); it++) {
+      player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(300.f, 3000.f), WUKONG));
       player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(400.f, 3000.f), BAJIE));
       player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(500.f, 3000.f), SANZANG));
       player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(600.f, 3000.f), SHASENG));
-      */
 
     character_list.clear(); //temp
     
     // wall vertical
-      map_obj_list.push_back(new Map_brick(Point2f(-40.f, -40.f), Vector2f(40.f, 3160.f), 20.f, 20.f, "rock"));
-      map_obj_list.push_back(new Map_brick(Point2f(1000.f, -40.f), Vector2f(40.f, 3160.f), 20.f, 20.f, "rock"));
+      map_obj_list.push_back(new Map_brick(Point2f(-40.f, -40.f), Vector2f(40.f, 3160.f), 40.f, 40.f, "rock"));
+      map_obj_list.push_back(new Map_brick(Point2f(1000.f, -40.f), Vector2f(40.f, 3160.f), 40.f, 40.f, "rock"));
       /*
     map_obj_list.push_back(new Map_brick(Point2f(-40.0f, -40.0f), Vector2f(40.f,580.0f), 20.0f, 20.f, String("rock")));
     map_obj_list.push_back(new Map_brick(Point2f(500.0f, 200.0f), Vector2f(40.f,340.0f), 20.0f, 20.f, String("rock")));
@@ -80,10 +77,10 @@ namespace Flame {
     */
 
     // wall horizontal
-      map_obj_list.push_back(new Map_brick(Point2f(0.0f, -40.0f), Vector2f(1000.f, 40.0f), 20.0f, 20.f, String("rock")));
-      map_obj_list.push_back(new Map_brick(Point2f(0.0f, 1000.0f), Vector2f(1000.f, 40.0f), 20.0f, 20.f, String("rock")));
-      map_obj_list.push_back(new Map_brick(Point2f(0.0f, 2040.0f), Vector2f(1000.f, 40.0f), 20.0f, 20.f, String("rock")));
-      map_obj_list.push_back(new Map_brick(Point2f(0.0f, 3080.0f), Vector2f(1000.f, 40.0f), 20.0f, 20.f, String("rock")));
+      map_obj_list.push_back(new Map_brick(Point2f(0.0f, -40.0f), Vector2f(1000.f, 40.0f), 40.0f, 40.f, String("rock")));
+      map_obj_list.push_back(new Map_brick(Point2f(0.0f, 1000.0f), Vector2f(1000.f, 40.0f), 40.0f, 40.f, String("rock")));
+      map_obj_list.push_back(new Map_brick(Point2f(0.0f, 2040.0f), Vector2f(1000.f, 40.0f), 40.0f, 40.f, String("rock")));
+      map_obj_list.push_back(new Map_brick(Point2f(0.0f, 3080.0f), Vector2f(1000.f, 40.0f), 40.0f, 40.f, String("rock")));
     /*
     map_obj_list.push_back(new Map_brick(Point2f(0.0f, -40.0f), Vector2f(1100.f, 40.0f), 20.0f, 20.f, String("rock")));
     map_obj_list.push_back(new Map_brick(Point2f(1300.0f, -40.0f), Vector2f(700.f, 40.0f), 20.0f, 20.f, String("rock")));
@@ -102,6 +99,13 @@ namespace Flame {
     map_obj_list.push_back(new Map_brick(Point2f(0.0f, 1700.f), Vector2f(1800.f, 40.0f), 20.0f, 20.f, String("rock")));
 
     */
+
+    map_obj_list.push_back(new Map_brick(Point2f(260.0f, 2440.0f), Vector2f(40.f, 280.0f), 40.0f, 40.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(300.0f, 2440.0f), Vector2f(400.f, 40.0f), 40.0f, 40.f, String("rock")));
+    map_obj_list.push_back(new Map_lava(Point2f(280.f, 2460.f), Vector2f(440.f, 240.f), 80.f, 80.f));
+    map_obj_list.push_back(new Map_brick(Point2f(700.0f, 2440.0f), Vector2f(40.f, 280.0f), 40.0f, 40.f, String("rock")));
+    map_obj_list.push_back(new Map_brick(Point2f(300.0f, 2680.0f), Vector2f(400.f, 40.0f), 40.0f, 40.f, String("rock")));
+
     // transmission gate
       map_obj_list.push_back(new Map_transmission_gate(Point2f(800.0f,200.0f), Point2f(200.f, 500.f), Vector2f(40.f, 40.f), "door"));
       map_obj_list.push_back(new Map_transmission_gate(Point2f(200.0f,550.0f), Point2f(800.f, 350.f), Vector2f(40.f, 40.f), "door"));
@@ -140,7 +144,7 @@ namespace Flame {
 
   void Model_state::update_scale_and_center()
   {
-    scale = 2.f;
+    scale = 3.f;
     // calculate scale
     for(int i = 0; i < int(player_list.size()); ++i)
       for(int j = 1; j < int(player_list.size()); ++j) {
