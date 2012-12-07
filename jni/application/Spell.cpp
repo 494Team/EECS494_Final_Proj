@@ -77,11 +77,12 @@ namespace Flame {
   void Moving_spell_rectangle::update_body()
   {
     Vector2f size = get_size();
-    Point2f location = get_center_location() - size / 2;
-    body = Collision::Parallelepiped(Point3f(location.x - size.x / 2, location.y - size.y / 2, 0.f),
-                                     Vector3f(size.x, 0.f, 0.f),
-                                     Vector3f(0.f, size.y, 0.f),
-                                     Vector3f(0.f, 0.f, kCollision_object_height));
+    Vector2f orientation = get_orientation().normalized();
+    Point2f endpoint_a_2f = get_center_location() + orientation * size.y / 2;
+    Point2f endpoint_b_2f = get_center_location() - orientation * size.y / 2;
+    Point3f endpoint_a = Point3f(endpoint_a_2f.x, endpoint_a_2f.y, kCollision_object_height);
+    Point3f endpoint_b = Point3f(endpoint_b_2f.x, endpoint_b_2f.y, kCollision_object_height);
+    body = Collision::Capsule(endpoint_a, endpoint_b, size.x / 2);
   }
 
   void Moving_spell_rectangle::update(float time)

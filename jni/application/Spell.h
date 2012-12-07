@@ -112,22 +112,18 @@ namespace Flame {
                            const Zeni::Vector2f& size_ = Zeni::Vector2f(),
                            float speed_ = 0.f,
                            float life_time_ = 0.f) :
-      Moving_spell(location_, orientation_, size_, speed_, life_time_),
-      body(Zeni::Point3f(location_.x - size_.x / 2, location_.y - size_.y / 2, 0.f),
-           Zeni::Vector3f(size_.x, 0.f, 0.f),
-           Zeni::Vector3f(0.f, size_.y, 0.f),
-           Zeni::Vector3f(0.f, 0.f, kCollision_object_height))
-    {}
+      Moving_spell(location_, orientation_, size_, speed_, life_time_)//,
+    {Moving_spell_rectangle::update_body();}
 
     virtual void update_body();
     virtual void update(float time = 0.f);
     virtual void render() = 0;
     
-    Zeni::Collision::Parallelepiped get_body() const
-    {return body;}
+    Zeni::Collision::Capsule get_body() const
+      {return body;}
 
   private:
-    Zeni::Collision::Parallelepiped body;
+    Zeni::Collision::Capsule body;
   };
 
   // all spell that is resizable

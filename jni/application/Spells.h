@@ -59,7 +59,7 @@ namespace Flame {
   const float kFireball_life_time = 3.0f;
   const float kFireball_damage = 50.0f;
 
-  const Zeni::Vector2f kRing_of_fire_size = Zeni::Vector2f(16.0f, 16.f);
+  const Zeni::Vector2f kRing_of_fire_size = Zeni::Vector2f(8.f, 16.f);
   const float kRing_of_fire_speed = 50.0f;
   const float kRing_of_fire_life_time = 5.0f;
   const float kRing_of_fire_damage = 50.0f;
@@ -94,10 +94,15 @@ namespace Flame {
   class Get_hit : public Resizable_spell {
   public:
     Get_hit(const Zeni::Point2f& location_ = Zeni::Point2f()) :
-      Resizable_spell(location_, kGet_hit_size, Zeni::Vector2f(), kGet_hit_life_time)
+      Resizable_spell(location_, kGet_hit_size, Zeni::Vector2f(), kGet_hit_life_time),
+      m_location(location_)
       {}
+    virtual Zeni::Point2f get_location() const
+      {return m_location + Zeni::Vector2f(0.f, 5.f);}
     virtual void render()
       {Resizable_spell::render("get_hit");}
+  private:
+    Zeni::Point2f m_location;
   };
 
   // Tripitaka
@@ -310,12 +315,14 @@ namespace Flame {
     virtual void render();
   };
 
-  class Ring_of_fire : public Moving_spell_circle {
+  class Ring_of_fire : public Moving_spell_rectangle {
   public:
     Ring_of_fire(const Zeni::Point2f& location_ = Zeni::Point2f(),
                  const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
     virtual void update(float time = 0.f);
     virtual void render();
+  private:
+    float render_time;
   };
 
   class Hell_spikes : public Resizable_spell {

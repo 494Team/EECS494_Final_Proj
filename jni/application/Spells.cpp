@@ -605,16 +605,18 @@ namespace Flame {
   {}
 
   Ring_of_fire::Ring_of_fire(const Point2f& location_, const Vector2f& orientation_) :
-    Moving_spell_circle(location_ + 50.f * orientation_.normalized(),
-                        orientation_,
-                        kRing_of_fire_size,
-                        kRing_of_fire_speed,
-                        kRing_of_fire_life_time)
+    Moving_spell_rectangle(location_ + 50.f * orientation_.normalized(),
+                           orientation_,
+                           kRing_of_fire_size,
+                           kRing_of_fire_speed,
+                           kRing_of_fire_life_time),
+    render_time(0.f)
     {}
 
   void Ring_of_fire::update(float time)
   {
-    Moving_spell_circle::update(time);
+    Moving_spell_rectangle::update(time);
+    render_time += time;
     if (is_active()) {
       vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
       for (auto it = player_list_ptr->begin(); it != player_list_ptr->end(); ++it)
@@ -636,7 +638,10 @@ namespace Flame {
     if (orientation.x < 0.f)
       theta = 2 * Global::pi - theta;
     theta += Global::pi;
-    render_image("ring_of_fire",
+    String texture = "ring_of_fire0";
+    if (int(10 * (render_time - int(render_time))) % 2)
+      texture = "ring_of_fire1";
+    render_image(texture,
                  get_relative_location() - scale * size / 2 - Vector2f(size.x / 4, 0.f),
                  get_relative_location() + scale * size / 2 + Vector2f(size.x / 4, size.y),
                  theta,
