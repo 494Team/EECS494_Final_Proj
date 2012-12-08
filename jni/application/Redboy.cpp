@@ -91,11 +91,15 @@ void Redboy::update(float time) {
         if (!fire_charge_main_body_stop) {
           // main body not yet stop
           if ((get_location() - fire_charge_tar_loc).magnitude() < get_body().get_radius()) {
-            // main body stop
+            // cause main body stop
             fire_charge_main_body_stop = true;
           } else {
             set_moving(true);
             make_move(time, true);
+            if ((redboy_backup_loc - get_location()).magnitude() == 0.0f) {
+              fire_charge_main_body_stop = true;
+              return;
+            }
             for (int i = 0; i < (int)players.size(); ++i) {
               if (players[i]->get_body().intersects(get_body())) {
                 // make effects to player
