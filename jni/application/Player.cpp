@@ -545,11 +545,16 @@ void Player::charge_update(float time) {
       if (!Model_state::get_instance()->can_player_move(get_body())) {
         set_position(p_backup_loc);
       }
-      for (int i = 0; i < (int) charged_monsters.size(); ++i) {
-        charged_monsters[i]->set_moving(false);
+      for (std::vector<Monster *>::iterator it = charged_monsters.begin(); it != charged_monsters.end();) {
+        (*it)->set_moving(false);
         std::vector<attack_effect> effects;
         effects.push_back(GET_WUKONG_CHARGE);
-        charged_monsters[i]->get_hit(kCharge_attack_damage * attack_buff, effects, this);
+        (*it)->get_hit(kCharge_attack_damage * attack_buff, effects, this);
+        if (!(*it)->is_alive()) {
+          it = charged_monsters.erase(it);
+        } else {
+          it++;
+        }
       }
     }
   }
