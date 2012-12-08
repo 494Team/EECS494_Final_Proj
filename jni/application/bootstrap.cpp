@@ -1068,7 +1068,7 @@ private:
 
   void render() {
     Widget_Gamestate::render();
-
+    /*
     Zeni::Font &fr = get_Fonts()["title"];
 
     fr.render_text(
@@ -1083,6 +1083,8 @@ private:
                    Point2f(400.0f, 300.0f - 0.5f * fr.get_text_height()),
                    get_Colors()["title_text"],
                    ZENI_CENTER);
+                   */
+   Zeni::render_image("instr", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
   }
 };
 
