@@ -185,20 +185,20 @@ void Player::update(float time) {
     charge_attacking = false;
   }
 
-  if (normal_attack && (current_time - last_htime) > kAttack_show_time) {
+  if (is_normal_attack() && (current_time - last_htime) > kAttack_show_time) {
     normal_attack = false;
   }
 
-  if (ptype == BAJIE && spell1_active && (current_time - last_spell1) > kShield_last) {
+  if (is_shield() && (current_time - last_spell1) > kShield_last) {
     spell1_active = false;
   }
-  if (ptype == BAJIE && spell3_active && (current_time - last_spell3) > kBloodsuck_last) {
+  if (is_bloodsuck() && (current_time - last_spell3) > kBloodsuck_last) {
     spell3_active = false;
   }
-  if (ptype == WUKONG && spell2_active && (current_time - last_spell2) > kCharge_last) {
+  if (is_charge() && (current_time - last_spell2) > kCharge_last) {
     charge_end();
   }
-  if (ptype == WUKONG && spell3_active && (current_time - last_spell3) > kBerserk_last) {
+  if (is_berserk() && (current_time - last_spell3) > kBerserk_last) {
     berserk_end();
   }
   if (is_disintegrate()) {
@@ -207,13 +207,14 @@ void Player::update(float time) {
       disintegrate_end();
     }
   }
-
-  //
-
+  //render the player image run
   float render_passed_time = current_time - render_clock;
   if (render_passed_time > kRun_render_gap) {
     running_status = !running_status;
     render_clock = current_time;
+  }
+  if (!is_moving()) {
+    running_status = false;
   }
 
   Model_state::get_instance()->can_move_player(get_body());
@@ -352,7 +353,7 @@ void Player::fire(kKey_type type) {
   }
   float current_time = game_time->seconds();
   float passed_time = current_time - last_htime;
-  if (passed_time > PLAYER_ATTACK_INTERVAL) {
+  if (passed_time > PLAYER_ATTACK_INTERVAL && !doing_action()) {
     last_htime = current_time;
     switch (type) {
       case A1:
@@ -413,9 +414,11 @@ void Player::cudgel_fury_begin() {
                                        kCudgel_fury_dam * attack_buff);
     Model_state::get_instance()->add_spell(new_spell);
   }
+  spell1_active = true;
 }
 void Player::cudgel_fury_end() {
   render_player = true;
+  spell1_active = false;
 }
 
 
@@ -438,10 +441,6 @@ void Player::charge() {
   set_speed(kCharge_speed);
 }
 
-bool Player::is_disintegrate() {
-  return (ptype==SANZANG && spell1_active);
-}
-
 void Player::disintegrate_begin() {
   spell1_active = true;
   disintegrate_ptr = new Disintegrate(this, kDisintegrate_dam * attack_buff);
@@ -459,12 +458,6 @@ void Player::disintegrate_end() {
 //bool Player::is_disintegrate() {
 //  return (ptype==SANZANG && spell1_active);
 //}
-
-void Player::ding_begin() {
-  spell3_active = true;
-  Spell* new_spell = new Ding(get_location(), this, kDing_dam * attack_buff);
-  Model_state::get_instance()->add_spell(new_spell);
-}
 
 //void Player::disintegrate_end() {
 //  spell1_active = false;
@@ -594,8 +587,8 @@ void Player::try_normal_attack() {
     normal_attack = true;
     Model_state::get_instance()->add_spell(new_spell);
   }
-  
 }
+
 void Player::try_spell1() {
   float current_time = game_time->seconds();
   float passed_time = current_time - last_spell1;
@@ -631,7 +624,7 @@ void Player::try_spell2() {
     //create spell based on character type
     switch (ptype) {
       case SANZANG: //healing_spell
-        new_spell = new Healing_spell(get_location(), get_current_orientation(), kHealing_amount * attack_buff);
+        new_spell = new Healing_spell(get_location(), get_current_orientation(), -kHealing_amount * attack_buff);
         Model_state::get_instance()->add_spell(new_spell);
         break;
       case WUKONG: //Charge
@@ -658,7 +651,8 @@ void Player::try_spell3() {
     //create spell based on character type
     switch (ptype) {
       case SANZANG: //Ding
-        ding_begin();
+        new_spell = new Ding(get_location(), this, kDing_dam * attack_buff);
+        Model_state::get_instance()->add_spell(new_spell);
         break;
       case WUKONG: //Berserk
         berserk();

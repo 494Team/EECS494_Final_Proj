@@ -154,6 +154,7 @@ namespace Flame{
     B1, B2, B3, B4,
     X1, X2, X3, X4,
     Y1, Y2, Y3, Y4,
+    CONFIRM1, CONFIRM2, CONFIRM3, CONFIRM4,
   };
 
   enum kPlayer_type {

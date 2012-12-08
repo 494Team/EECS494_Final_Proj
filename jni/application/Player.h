@@ -52,9 +52,9 @@ namespace Flame {
   const float kCharge_attack_last = 0.2f;
   const float kCharge_attack_CD = 0.15f;
   const int kCharge_attack_max = 3;
-  const float kBerserk_CD = 2.0f;
-  const float kBerserk_last = 1.0f;
-  const float kBerserk_enlarge = 2.0f;
+  const float kBerserk_CD = 5.0f;
+  const float kBerserk_last = 3.0f;
+  const float kBerserk_enlarge = 1.5f;
   const float kBerserk_attack_buff = 1.5f;
   //SHASENG
   const float kArrow_dam = 20.0f;
@@ -100,7 +100,7 @@ namespace Flame {
     bool is_charging() {
       return (ptype == WUKONG && spell2_active);
     }
-    
+
     kPlayer_type get_player_type() {
       return ptype;
     }
@@ -168,6 +168,9 @@ namespace Flame {
     float attack_buff; //range: [1, +INF]; initial:1.0f
     int skill_point;
 
+    bool is_moving() {
+      return (!is_hitback() && !is_charging() && abs(ctrl.move_hori) + abs(ctrl.move_vert) > 0.3f);
+    }
     bool cost_mp(const float cost) {
       bool result = true;
       mp -= cost;
@@ -215,16 +218,31 @@ namespace Flame {
     float last_spell3;
     //timer_end
 
+    //status judgement
+    bool doing_action() {
+      bool result = is_normal_attack() ||
+                    is_disintegrate() ||
+                    is_cudgel_fury() ||
+                    is_shield() ||
+                    is_charge() ||
+                    is_berserk() ||
+                    is_bloodsuck();
+      return result;
+    }
+    bool is_normal_attack() {return normal_attack;}
+    bool is_disintegrate() {return (ptype==SANZANG && spell1_active);}
+    bool is_cudgel_fury() {return (ptype==WUKONG && spell1_active);}
+    bool is_shield() {return (ptype==BAJIE && spell1_active);}
+    bool is_charge() {return (ptype==WUKONG && spell2_active);}
+    bool is_berserk() {return (ptype==WUKONG && spell3_active);}
+    bool is_bloodsuck() {return (ptype== BAJIE && spell3_active);}
+
     //SANZANG
-    bool is_disintegrate();
     void disintegrate_begin();
     void disintegrate_end();
     Spell* disintegrate_ptr;
 
-    void ding_begin();
-
     //WUKONG
-
     void charge();
     void charge_update(float time);
     void charge_end();
@@ -237,9 +255,6 @@ namespace Flame {
     //float backup_size;
     void berserk();
     void berserk_end();
-    bool is_berserk() {
-      return (ptype==WUKONG && spell3_active);
-    }
     //SHASENG
     bool fire_magic_arrow;
     //BAJIE
@@ -249,7 +264,6 @@ namespace Flame {
     void taunt();
     //3
     void bloodsuck();
-
 
     //running renderer
     bool running_status;
