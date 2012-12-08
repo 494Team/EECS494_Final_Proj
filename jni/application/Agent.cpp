@@ -110,7 +110,7 @@ void Agent::get_hit(
         break;
       case TAUNT:
         taunt = true;
-        effect_timers[effects[i]] = ATTACK_DURATION;
+        effect_timers[effects[i]] = TAUNT_EFFECT_RENDER_TIME;
         break;
     }
   }

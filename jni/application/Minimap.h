@@ -50,10 +50,9 @@ namespace Flame {
       if (brick_lr.y > mini_lr.y)
         brick_lr.y = mini_lr.y;
       if (brick_lr.x > brick_ul.x && brick_lr.y > brick_ul.y) {
-        Map_brick* brick_ptr = dynamic_cast<Map_brick*>(maps[i]);
         Zeni::Point2f brick_ur = Zeni::Point2f(brick_lr.x, brick_ul.y);
         Zeni::Point2f brick_ll = Zeni::Point2f(brick_ul.x, brick_lr.y);
-        if (brick_ptr != 0) {
+        if (!maps[i]->walk_thru()) {
           Zeni::Vertex2f_Color ul_vertex = Zeni::Vertex2f_Color(brick_ul, cr["blue"]);
           Zeni::Vertex2f_Color lr_vertex = Zeni::Vertex2f_Color(brick_lr, cr["blue"]);
           Zeni::Vertex2f_Color ur_vertex = Zeni::Vertex2f_Color(brick_ur, cr["blue"]);

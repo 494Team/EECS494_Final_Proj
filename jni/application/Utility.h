@@ -71,13 +71,12 @@ namespace Flame{
   const float REDBOY_FIRE_CHARGE_DAMAGE = 500.0f;
   const float REDBOY_FIRE_CHARGE_SPEED = 200.0f;
 
-  // attack effect time
+  // attack effect
   const float NORMAL_HITBACK_TIME = 0.1f;
   const float BOSS_CHARGE_HITBACK_TIME = 0.5f;
   const float SLOWDOWN_TIME = 2.0f;
   const float FREEZE_TIME = 2.0f;
-
-  // slow down effect color
+  const float TAUNT_EFFECT_RENDER_TIME = 1.0f;
   const Zeni::Color SLOWDOWN_COLOR = Zeni::Color(1.0f, 0.3f, 0.6f, 1.0f);
   
   //spells written in/related to Player.cpp

@@ -91,4 +91,29 @@ float Boss::get_random_cooldown(float cooldown) {
 void Boss::get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker, Zeni::Vector2f coming_ori) {
   dec_health(damage);
   increase_hatred(damage, attacker);
+  for (int i = 0; i < (int) effects.size(); ++i) {
+    switch (effects[i]) {
+      case SLOWDOWN:
+        if (is_get_wukong_charge()) {
+          break;
+        }
+        if (status == SKILL1 || status == SKILL2 || status == SKILL3) {
+          return;
+        }
+        slowdown = true;
+        set_speed(get_current_speed() * 0.5f);
+        effect_timers[effects[i]] = SLOWDOWN_TIME * 0.5f;
+        break;
+      case GET_WUKONG_CHARGE:
+        get_wukong_charge = true;
+        if (status == SKILL1 || status == SKILL2 || status == SKILL3) {
+          status = IDLE;
+        }
+        break;
+      case TAUNT:
+        taunt = true;
+        effect_timers[effects[i]] = ATTACK_DURATION;
+        break;
+    }
+  }
 }

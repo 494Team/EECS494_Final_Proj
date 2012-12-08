@@ -37,7 +37,7 @@ void Redboy::skill1() {
   }
   fire_charge_tar_loc = players[player_num]->get_location();
   set_orientation(fire_charge_tar_loc - get_location());
-  set_speed(REDBOY_FIRE_CHARGE_SPEED);
+  set_speed((fire_charge_tar_loc - get_location()).magnitude() / 0.5f);
   fire_charge_render_list.clear();
   fire_charge_last_shadow_time = 0.0f;
   fire_charge_main_body_stop = false;
@@ -68,6 +68,11 @@ void Redboy::skill3() {
 void Redboy::update(float time) {
   Boss::update(time);
   if (target == 0) {
+    return;
+  }
+  if (is_get_wukong_charge()) {
+    is_attacking = false;
+    set_moving(false);
     return;
   }
 
@@ -222,29 +227,35 @@ void Redboy::render() {
       Zeni::render_image("redboy_casting2", ul, lr, 0, 1.0f, rel_loc);
       break;
     case ATTACK:
-      Zeni::render_image(
-        "sword_attack", 
-        ul + scale * Zeni::Vector2f(get_body().get_radius(), 0.0f), 
-        lr + scale * Zeni::Vector2f(get_body().get_radius(), 0.0f), 
-        -radians_ccw, 
-        1.0f, 
-        rel_loc
-      );
-      render_suffix = "_attack";
+      if (is_attacking) {
+        Zeni::render_image(
+          "sword_attack", 
+          ul + scale * Zeni::Vector2f(get_body().get_radius(), 0.0f), 
+          lr + scale * Zeni::Vector2f(get_body().get_radius(), 0.0f), 
+          -radians_ccw, 
+          1.0f, 
+          rel_loc
+        );
+        render_suffix = "_attack";
+      }
     case IDLE: {
-
+      Zeni::Color color_filter;
+      if (is_slowdown()) {
+        color_filter = SLOWDOWN_COLOR;
+      }
       if (radians_ccw < Zeni::Global::pi * 0.25f || radians_ccw >= Zeni::Global::pi *1.75f) {
-        Zeni::render_image("redboy_right" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
+        Zeni::render_image("redboy_right" + render_suffix, ul, lr, false, color_filter);
       } else if (radians_ccw >= Zeni::Global::pi * 0.25f && radians_ccw < Zeni::Global::pi * 0.75f) {
-        Zeni::render_image("redboy_front" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
+        Zeni::render_image("redboy_front" + render_suffix, ul, lr, false, color_filter);
       } else if (radians_ccw >= Zeni::Global::pi * 0.75f && radians_ccw < Zeni::Global::pi * 1.25f) {
-        Zeni::render_image("redboy_left" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
+        Zeni::render_image("redboy_left" + render_suffix, ul, lr, false, color_filter);
       } else {
-        Zeni::render_image("redboy_back" + render_suffix, ul, lr, 0, 1.0f, rel_loc);
+        Zeni::render_image("redboy_back" + render_suffix, ul, lr, false, color_filter);
       }
       break;
     }
   }
+
   if (is_taunt()) {
     float taunt_render_radius = get_radius() * 0.6f;
     Zeni::Point2f taunt_pos = rel_loc + scale * (get_radius() + taunt_render_radius) * Zeni::Vector2f(0.0f, -1.0f);

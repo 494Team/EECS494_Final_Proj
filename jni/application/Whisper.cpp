@@ -41,7 +41,7 @@ bool Whisper::is_path_clear(const Zeni::Collision::Parallelepiped &path_obj) {
 
 void Whisper::update(float time) {
   Monster::update(time);
-  if (is_get_wukong_charge() || is_freeze() || (is_slowdown() && effect_timers[SLOWDOWN] > 1.5f)) {
+  if (is_get_wukong_charge() || is_freeze() || (is_slowdown() && effect_timers[SLOWDOWN] > 0.75f * SLOWDOWN_TIME)) {
     is_attacking = false;
     set_moving(false);
     return;
@@ -162,7 +162,7 @@ void Whisper::render() {
   } else {
     Zeni::render_image("whisper_back" + render_suffix, ul, lr, false, color_filter);
   }
-  if (is_slowdown() && effect_timers[SLOWDOWN] > 1.5f) {
+  if (is_slowdown() && effect_timers[SLOWDOWN] > SLOWDOWN_TIME * 0.75f) {
     Zeni::render_image("slowdown_effect", ul, lr);
   }
   if (is_taunt()) {

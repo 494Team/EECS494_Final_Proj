@@ -73,6 +73,12 @@ namespace Flame {
   protected:
     Zeni::Vector2f ori_before_hitback;  
     std::map<attack_effect, float> effect_timers;
+    // effects
+    bool hitback;
+    bool freeze;
+    bool slowdown;
+    bool get_wukong_charge;
+    bool taunt;
   private:
     Zeni::Collision::Capsule body;
     float armor; // armor is between 0.0 and 1.0
@@ -81,12 +87,6 @@ namespace Flame {
     bool alive;
     float radius;
 
-    // effects
-    bool hitback;
-    bool freeze;
-    bool slowdown;
-    bool get_wukong_charge;
-    bool taunt;
   };
 
 }
