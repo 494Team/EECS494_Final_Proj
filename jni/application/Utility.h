@@ -37,7 +37,7 @@ namespace Flame{
   const float WANDERER_RADIUS = 16.0f;
   const float WANDERER_SPEED = 50.0f;
   const float WANDERER_DAMAGE = 100.0f;
-  const float WANDERER_HEALTH = 500.0f;
+  const float WANDERER_HEALTH = 2500.0f;
   const float WANDERER_ATTACK_GAP = 1.0f;
   const float WANDERER_ATTACK_RADIUS = 20.0f;
   const float WANDERER_MIN_DIST = 5.0f;
@@ -47,7 +47,7 @@ namespace Flame{
   const float WHISPER_RADIUS = 16.0f;
   const float WHISPER_SPEED = 40.0f;
   const float WHISPER_DAMAGE = 150.0f;
-  const float WHISPER_HEALTH = 300.0f;
+  const float WHISPER_HEALTH = 1500.0f;
   const float WHISPER_ATTACK_GAP = 1.5f;
   const float WHISPER_SPELL_RADIUS = 16.0f;
   const float WHISPER_MIN_DIST = 100.0f;
@@ -61,7 +61,7 @@ namespace Flame{
   const float REDBOY_RADIUS = 20.0f;
   const float REDBOY_SPEED = 50.0f;
   const float REDBOY_DAMAGE = 300.0f;
-  const float REDBOY_HEALTH = 10000.0f;
+  const float REDBOY_HEALTH = 50000.0f;
   const float REDBOY_ATTACK_GAP = 1.5f;
   const float REDBOY_ATTACK_RADIUS = 32.0f;
   const float REDBOY_MIN_DIST = 10.0f;
@@ -95,7 +95,7 @@ namespace Flame{
   const int kSpeed_max = 5;
 
   const float kSpeed_maxbuff = 200.0f;
-  const float kDefense_lv5 = 0.8f;
+  const float kDefense_maxbuff = 0.5f;
   const float kAttack_maxbuff = 1.0f;
 
   //others

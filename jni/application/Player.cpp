@@ -40,9 +40,9 @@ Player::Player(
   set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
   switch (ptype) {
     case SANZANG:
-      spell1_CD = kDing_CD;
+      spell1_CD = kDisintegrate_CD;
       spell2_CD = kHealing_CD;
-      spell3_CD = kDisintegrate_CD;
+      spell3_CD = kDing_CD;
       break;
     case WUKONG:
       spell1_CD = kCudge_fury_CD;
@@ -124,7 +124,7 @@ void Player::update(float time) {
   
   //update buff
   set_attack_buff((1.0f + attack * kAttack_maxbuff/kAttack_max) * berserk_buff);
-  set_armor((1.0f - defense * kDefense_lv5/kDefense_max) * shield_buff);
+  set_armor((1.0f - defense * kDefense_maxbuff/kDefense_max) * shield_buff);
   set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
   
   hpmp_regenerate();
@@ -353,7 +353,7 @@ void Player::fire(kKey_type type) {
   }
   float current_time = game_time->seconds();
   float passed_time = current_time - last_htime;
-  if (passed_time > PLAYER_ATTACK_INTERVAL && !doing_action()) {
+  if (passed_time > kPlayer_action_gap && !doing_action()) {
     last_htime = current_time;
     switch (type) {
       case A1:
@@ -408,7 +408,7 @@ void Player::cudgel_fury_begin() {
     render_player = false;
     Spell* new_spell = new Cudgel_fury(get_location(),
                                        get_current_orientation(),
-                                       get_radius(),
+                                       1.5f*get_radius(),
                                        this,
                                        game_time,
                                        kCudgel_fury_dam * attack_buff);
@@ -676,7 +676,7 @@ void Player::try_spell3() {
         }
         Model_state::get_instance()->add_spell(new_spell);
         break;
-      default: // case BAJIE:  Life Trap
+      default: // case BAJIE: Bloodsuck
         bloodsuck();
         break;
     }

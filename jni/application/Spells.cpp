@@ -207,7 +207,7 @@ namespace Flame {
           //effects.push_back(HITBACK);
           (*it)->get_hit(damage, effects, player_ptr);
           //disable_spell();
-          break;
+          //break;
         }
     } else {
       player_ptr->cudgel_fury_end();

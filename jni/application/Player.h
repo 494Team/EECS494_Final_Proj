@@ -15,64 +15,64 @@
 using namespace Zeni;
 
 namespace Flame {
-  #define PLAYER_ATTACK_INTERVAL 0.5f
-  const float kPlayer_init_speed = 200.0f;
-  const float kHp_regenerate_rate = 0.0f; //1.0f;
-  const float kMp_regenerate_rate = 1.0f;
-  const float kRegenerate_CD = 1.0f;
-
-  const float kAttack_show_time = 0.2f;
-
   #define PLAYER_SPELL1_CD 1.0f
   #define PLAYER_SPELL2_CD 1.0f
   #define PLAYER_SPELL3_CD 1.0f
   #define HURT_SHOWING_INTERVAL 0.2f
-  const float kMove_speed = 500.0f;
-  const float kRun_render_gap = 0.2f;
-  const float kPlayer_attack_range = 40.0f;
-  const float kPlayer_attack_strengh = 100.0f;
 
+  const float kPlayer_action_gap = 0.5f;  const float kPlayer_init_speed = 200.0f;
+  const float kHp_regenerate_rate = 0.0f; //1.0f;
+  const float kMp_regenerate_rate = 0.8f;
+  const float kRegenerate_CD = 1.0f;
   const float kInit_attack_buff = 1.0f;
 
-  // spells
+  const float kRun_render_gap = 0.2f;
+
+  /************** spells ******************/
+  const float kAttack_show_time = 0.2f;
+  const float kPlayer_attack_range = 40.0f;
+  const float kPlayer_attack_strengh = 300.0f;
   //SANZANG
-  const float kDisintegrate_CD = 2.0f;
-  const float kDisintegrate_dam = 10.0f;
+  const float kDisintegrate_CD = 0.0f;
+  const float kDisintegrate_dam = 5.0f;
+  //const float kDisintegrate_dam_gap = 0.2f;
   const float kDisintegrate_mp_cost = 2.0f;
   const float kHealing_CD = 2.0f;
   const float kHealing_amount = 30.0f;
-  const float kDing_CD = 2.0f;
-  const float kDing_dam = 5.0f;
+  const float kDing_CD = 8.0f;
+  const float kDing_dam = 0.5f;
+  //const float kDing_dam_gap = 0.2f;
   //WUKONG
-  const float kCudgel_fury_dam = 10.0f;
-  const float kCharge_CD = 2.0f;
+  const float kCudgel_fury_dam = 1.0f;
+  //const float kCudgel_fury_dam_gap = 0.2f;
+  const float kCharge_CD = 5.0f;
   const float kCharge_last = 0.5f;
   const float kCharge_speed = 200.0f;
-  const float kCharge_attack_damage = 50.0f;
+  const float kCharge_attack_damage = 600.0f;
   const float kCharge_attack_last = 0.2f;
   const float kCharge_attack_CD = 0.15f;
   const int kCharge_attack_max = 3;
-  const float kBerserk_CD = 5.0f;
-  const float kBerserk_last = 3.0f;
+  const float kBerserk_CD = 20.0f;
+  const float kBerserk_last = 5.0f;
   const float kBerserk_enlarge = 1.5f;
   const float kBerserk_attack_buff = 1.5f;
   //SHASENG
-  const float kArrow_dam = 20.0f;
-  const float kStrafe_CD = 2.0f;
-  const float kStrafe_dam = 30.0f;
-  const float kTrap_CD = 2.0f;
-  const float kTrap_dam = 5.0f;
-  const float kMagicarrow_CD = 2.0f;
-  const float kMagicarrow_dam = 50.0f;
+  const float kArrow_dam = kPlayer_attack_strengh * 1.2f;
+  const float kStrafe_CD = 3.0f;
+  const float kStrafe_dam = kArrow_dam;
+  const float kTrap_CD = 8.0f;
+  const float kTrap_dam = 200.0f;
+  const float kMagicarrow_CD = 3.0f;
+  const float kMagicarrow_dam = kArrow_dam * 1.2f;
   //BAJIE
-  const float kShield_last = 0.5f;
-  const float kShield_CD = 1.0f;
+  const float kShield_last = 5.0f;
+  const float kShield_CD = 8.0f;
   const float kShield_effect = 0.5f;
 
   const float kTaunt_CD = 3.0f;
 
-  const float kBloodsuck_last = 3.0f;
-  const float kBloodsuck_CD = 6.0f;
+  const float kBloodsuck_last = 5.0f;
+  const float kBloodsuck_CD = 10.0f;
   const float kBloodsuck_effect = 0.5f;
 
   class Player: public Agent {
@@ -223,10 +223,7 @@ namespace Flame {
       bool result = is_normal_attack() ||
                     is_disintegrate() ||
                     is_cudgel_fury() ||
-                    is_shield() ||
-                    is_charge() ||
-                    is_berserk() ||
-                    is_bloodsuck();
+                    is_charge();
       return result;
     }
     bool is_normal_attack() {return normal_attack;}

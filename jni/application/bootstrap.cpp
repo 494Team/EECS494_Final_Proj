@@ -656,11 +656,13 @@ private:
     bool control_enable[4]; // = {true, true, true, true};
     Player* p_ptr;
     for (int i=0; i < 4; i++) {
-      if (i < Model_state::get_instance()->get_player_num())
-          p_ptr = (*Model_state::get_instance()->get_player_list_ptr())[i];
-      control_enable[i] = i < Model_state::get_instance()->get_player_num() &&
-                          !p_ptr->is_hitback() &&
-                          !p_ptr->is_charging();
+      if (i < Model_state::get_instance()->get_player_num()) {
+        p_ptr = (*Model_state::get_instance()->get_player_list_ptr())[i];
+        control_enable[i] =              !p_ptr->is_hitback() &&
+                            !p_ptr->is_charging();
+      } else {
+        control_enable[i] = false;
+      }
     }
     switch(action) {
       case BACK: {
