@@ -20,6 +20,7 @@ namespace Flame {
       virtual bool can_move_player(const Zeni::Collision::Capsule&) = 0;
       virtual bool triggerred() = 0;
       virtual void reset() = 0;
+      virtual bool walk_thru() = 0;
       virtual void add_trigger(Flame::Map *trigger_) = 0;
 		  Zeni::Point2f get_center(){return location + size / 2;};
       //is this OK?
@@ -46,6 +47,7 @@ namespace Flame {
 		bool can_move(const Zeni::Collision::Parallelepiped&){return true;};
 		bool can_move_player(const Zeni::Collision::Capsule &){return true;};
 		void render();
+    bool walk_thru(){return true;};
     void set_location(const Zeni::Point2f &location_ = Zeni::Point2f())
     {render_start = location_;render_end = location_;};
 
@@ -94,6 +96,7 @@ namespace Flame {
         bool can_move_player(const Zeni::Collision::Capsule& other)
         { return !collision_body.intersects(other); }
         void reset(){};
+        bool walk_thru(){return false;};
         bool triggerred(){return true;};
 		    Zeni::Collision::Parallelepiped get_body(){return collision_body;};
 	  protected:
@@ -124,6 +127,7 @@ namespace Flame {
       { return !collision_body.intersects(other); }
       virtual bool can_move_player(const Zeni::Collision::Capsule& other)
       { return !collision_body.intersects(other); }
+      bool walk_thru(){return false;};
       void reset(){};
       bool triggerred(){return true;};
 	    Zeni::Collision::Parallelepiped get_body(){return collision_body;};
@@ -152,6 +156,7 @@ namespace Flame {
       bool can_move_player(const Zeni::Collision::Capsule& other)
       { return !collision_body.intersects(other); }
       void reset(){};
+      bool walk_thru(){return false;};
       bool triggerred(){return true;};
 	  	Zeni::Collision::Parallelepiped get_body()
       {return Zeni::Collision::Parallelepiped();};        
@@ -178,6 +183,7 @@ namespace Flame {
       bool can_move(const Zeni::Collision::Parallelepiped&)
       { return true; }
       bool triggerred(){return illuminated;};
+      bool walk_thru(){return true;};
       bool can_move_player(const Zeni::Collision::Capsule& other);
       void render();
 	    bool get_illuminated(){return illuminated;};		        
@@ -197,6 +203,7 @@ namespace Flame {
       virtual void add_trigger(Flame::Map *trigger_)
       {trigger_list.push_back(trigger_);};
       bool triggerred(){return true;};
+      bool walk_thru(){return false;};
       virtual bool can_move(const Zeni::Collision::Capsule& other)
       {
         if (open)
