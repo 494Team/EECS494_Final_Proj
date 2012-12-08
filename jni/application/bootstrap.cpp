@@ -1114,9 +1114,6 @@ public:
     //: Widget_Gamestate(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)))
   {
     set_pausable(true);
-    Model_state::get_instance()->set_player_num(1);
-    //m_widgets.lend_Widget(play_button);
-    //m_widgets.lend_Widget(menu_button);
 
     set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), MENU);
     //p1
@@ -1335,23 +1332,115 @@ private:
          Point2f(pos[cursor_pos[0]]+50.0f, 200.0f),
          false,
          p_color[cursor_pos[0]]);
-      if (Model_state::get_instance()->get_player_num() > 1) {
+      if (Model_state::get_instance()->get_player_num() >= 2) {
         render_image("p2cursor",
            Point2f(pos[cursor_pos[1]], 200.0f),
           Point2f(pos[cursor_pos[1]]+50.0f, 300.0f),
           false,
           p_color[cursor_pos[1]]);
+      }
+      if (Model_state::get_instance()->get_player_num() >= 3) {
         render_image("p3cursor",
           Point2f(pos[cursor_pos[2]], 300.0f),
           Point2f(pos[cursor_pos[2]]+50.0f, 400.0f),
           false,
           p_color[cursor_pos[2]]);
+      }
+      if (Model_state::get_instance()->get_player_num() >= 4) {
         render_image("p4cursor",
           Point2f(pos[cursor_pos[3]], 400.0f),
           Point2f(pos[cursor_pos[3]]+50.0f, 500.0f),
           false,
           p_color[cursor_pos[3]]);
       }
+  }
+};
+
+class Choose_Pnumber_State : public Widget_Gamestate {
+  Choose_Pnumber_State(const Choose_Pnumber_State &);
+  Choose_Pnumber_State operator=(const Choose_Pnumber_State &);
+
+  class Start_Button : public Text_Button {
+  public:
+    Start_Button(int* player_num_ptr_)
+      : Text_Button(Point2f(20.0f, 20.0f), Point2f(220.0f, 80.0f), "system_36_800x600", "Start Game!"),
+        player_num_ptr(player_num_ptr_)
+    {
+    }
+
+  private:
+    int* player_num_ptr;
+    void on_accept() {
+      Model_state::get_instance()->set_player_num(*player_num_ptr);
+      get_Game().pop_state();
+      get_Game().push_state(new Preparation_State());
+    }
+  };
+
+  class Plus_Player_Button : public Text_Button {
+  public:
+    Plus_Player_Button(int* player_num_ptr_)
+      : Text_Button(Point2f(520.0f, 320.0f), Point2f(720.0f, 380.0f), "system_36_800x600", "+1"),
+        player_num_ptr(player_num_ptr_)
+    {
+    }
+
+  private:
+    int* player_num_ptr;
+    void on_accept() {
+      if (*player_num_ptr < 4)
+        (*player_num_ptr)++;
+    }
+  };
+  class Minus_Player_Button: public Text_Button {
+  public:
+    Minus_Player_Button(int* player_num_ptr_)
+      : Text_Button(Point2f(120.0f, 320.0f), Point2f(320.0f, 380.0f), "system_36_800x600", "-1"),
+        player_num_ptr(player_num_ptr_)
+    {
+    }
+
+  private:
+    int* player_num_ptr;
+    void on_accept() {
+      if (*player_num_ptr > 1)
+        (*player_num_ptr)--;
+    }
+  };
+
+public:
+  Choose_Pnumber_State()
+    : Widget_Gamestate(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f))),
+      player_num(1)
+  {
+    Start_Button* start_button = new Start_Button(&player_num);
+    Plus_Player_Button* plus_player_button = new Plus_Player_Button(&player_num);
+    Minus_Player_Button* minus_player_button = new Minus_Player_Button(&player_num);
+    m_widgets.lend_Widget(*start_button);
+    m_widgets.lend_Widget(*plus_player_button);
+    m_widgets.lend_Widget(*minus_player_button);
+    
+    Zeni::Font &fr = get_Fonts()["shop_ft"];
+    char* str = new char[10];
+    sprintf(str, "%d", player_num);//speed_lvl);
+    String text_buf = "Player num: ";
+    text_buf += str;
+    fr.render_text(text_buf,
+                   Point2f(400.0f, 300.0f),
+                   get_Colors()["white"],
+                   ZENI_CENTER);
+
+  }
+
+private:
+  int player_num;
+  void on_key(const SDL_KeyboardEvent &event) {
+    if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED)
+      get_Game().pop_state();
+  }
+
+  void render() {
+    Widget_Gamestate::render();
   }
 };
 
@@ -1366,7 +1455,7 @@ class Bootstrap {
       get_Fonts();
       get_Sounds();
       get_Game().joy_mouse.enabled = true;
-      return new Title_State<Preparation_State, Instructions_State>("Zenipex Library\nApplication");
+      return new Title_State<Choose_Pnumber_State, Instructions_State>("Zenipex Library\nApplication");
       //return new Title_State<Play_level_one, Instructions_State>("Zenipex Library\nApplication");
     }
   } m_goi;
