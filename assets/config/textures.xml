@@ -41,57 +41,58 @@ The following things are unsupported:
         <filepath>textures/cd_mask.png</filepath>
         <tile>0</tile>
     </cd_mask>
- <shaseng_skill_1>
+ <shaseng_skill_3>
 	<filepath>textures/skill_icon_shaseng1.png</filepath>
+	<tile>0</tile>
+    </shaseng_skill_3>
+    <shaseng_skill_1>
+	<filepath>textures/skill_icon_shaseng2.png</filepath>
 	<tile>0</tile>
     </shaseng_skill_1>
     <shaseng_skill_2>
-	<filepath>textures/skill_icon_shaseng2.png</filepath>
-	<tile>0</tile>
-    </shaseng_skill_2>
-    <shaseng_skill_3>
 	<filepath>textures/skill_icon_shaseng3.png</filepath>
 	<tile>0</tile>
-    </shaseng_skill_3>
+    </shaseng_skill_2>
 
-    <sanzang_skill_1>
+    <sanzang_skill_2>
 	<filepath>textures/skill_icon_sanzang1.png</filepath>
 	<tile>0</tile>
-    </sanzang_skill_1>
-    <sanzang_skill_2>
+    </sanzang_skill_2>
+    <sanzang_skill_1>
 	<filepath>textures/skill_icon_sanzang2.png</filepath>
 	<tile>0</tile>
-    </sanzang_skill_2>
+    </sanzang_skill_1>
     <sanzang_skill_3>
 	<filepath>textures/skill_icon_sanzang3.png</filepath>
 	<tile>0</tile>
     </sanzang_skill_3>
 
-    <wukong_skill_1>
-	<filepath>textures/skill_icon_wukong1.png</filepath>
-	<tile>0</tile>
-    </wukong_skill_1>
     <wukong_skill_2>
-	<filepath>textures/skill_icon_wukong2.png</filepath>
+	<filepath>textures/skill_icon_wukong1.png</filepath>
 	<tile>0</tile>
     </wukong_skill_2>
     <wukong_skill_3>
-	<filepath>textures/skill_icon_wukong3.png</filepath>
+	<filepath>textures/skill_icon_wukong2.png</filepath>
 	<tile>0</tile>
     </wukong_skill_3>
+    <wukong_skill_1>
+	<filepath>textures/skill_icon_wukong3.png</filepath>
+	<tile>0</tile>
+    </wukong_skill_1>
 
-    <bajie_skill_1>
+    <bajie_skill_3>
 	<filepath>textures/skill_icon_bajie1.png</filepath>
 	<tile>0</tile>
-    </bajie_skill_1>
+    </bajie_skill_3>
     <bajie_skill_2>
 	<filepath>textures/skill_icon_bajie2.png</filepath>
 	<tile>0</tile>
     </bajie_skill_2>
-    <bajie_skill_3>
+    <bajie_skill_1>
 	<filepath>textures/skill_icon_bajie3.png</filepath>
 	<tile>0</tile>
-    </bajie_skill_3>
+    </bajie_skill_1>
+
     <light_beam>
         <filepath>textures/light_beam.png</filepath>
         <tile>1</tile>
