@@ -185,20 +185,20 @@ void Player::update(float time) {
     charge_attacking = false;
   }
 
-  if (is_normal_attack() && (current_time - last_htime) > kAttack_show_time) {
+  if (normal_attack && (current_time - last_htime) > kAttack_show_time) {
     normal_attack = false;
   }
 
-  if (is_shield() && (current_time - last_spell1) > kShield_last) {
+  if (ptype == BAJIE && spell1_active && (current_time - last_spell1) > kShield_last) {
     spell1_active = false;
   }
-  if (is_bloodsuck() && (current_time - last_spell3) > kBloodsuck_last) {
+  if (ptype == BAJIE && spell3_active && (current_time - last_spell3) > kBloodsuck_last) {
     spell3_active = false;
   }
-  if (is_charge() && (current_time - last_spell2) > kCharge_last) {
+  if (ptype == WUKONG && spell2_active && (current_time - last_spell2) > kCharge_last) {
     charge_end();
   }
-  if (is_berserk() && (current_time - last_spell3) > kBerserk_last) {
+  if (ptype == WUKONG && spell3_active && (current_time - last_spell3) > kBerserk_last) {
     berserk_end();
   }
   if (is_disintegrate()) {
@@ -207,14 +207,13 @@ void Player::update(float time) {
       disintegrate_end();
     }
   }
-  //render the player image run
+
+  //
+
   float render_passed_time = current_time - render_clock;
   if (render_passed_time > kRun_render_gap) {
     running_status = !running_status;
     render_clock = current_time;
-  }
-  if (!is_moving()) {
-    running_status = false;
   }
 
   Model_state::get_instance()->can_move_player(get_body());
@@ -274,9 +273,31 @@ void Player::render() {
              Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
     }
     if (spell3_active) {
+      /*
       render_image("bloodsuck",
              Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
              Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
+             */
+      float wing_size = size + 15.f;
+      if (rad <= 0.25f * Global::pi && rad > -0.25f * Global::pi) {
+        //ttype += "_front";
+        render_image("bloodsuck_fb",
+             Point2f(rel_loc.x - wing_size * scale, rel_loc.y - wing_size * scale),
+             Point2f(rel_loc.x + wing_size  * scale, rel_loc.y + wing_size * scale));
+      } else if (rad <= 0.75f * Global::pi && rad > 0.25f * Global::pi) {
+        render_image("bloodsuck_right",
+             Point2f(rel_loc.x - wing_size * scale, rel_loc.y - wing_size * scale),
+             Point2f(rel_loc.x + wing_size  * scale, rel_loc.y + wing_size * scale));
+      } else if ((rad <= Global::pi && rad > 0.75f * Global::pi) ||
+             (rad >= -Global::pi && rad < -0.75f * Global::pi)) {
+         render_image("bloodsuck_fb",
+             Point2f(rel_loc.x - wing_size * scale, rel_loc.y - wing_size * scale),
+             Point2f(rel_loc.x + wing_size  * scale, rel_loc.y + wing_size * scale));
+      } else {
+         render_image("bloodsuck_left",
+             Point2f(rel_loc.x - wing_size * scale, rel_loc.y - wing_size * scale),
+             Point2f(rel_loc.x + wing_size  * scale, rel_loc.y + wing_size * scale));
+      }
     }
   } else if (ptype == WUKONG) {
     if (spell2_active) {
@@ -390,11 +411,9 @@ void Player::cudgel_fury_begin() {
                                        kCudgel_fury_dam * attack_buff);
     Model_state::get_instance()->add_spell(new_spell);
   }
-  spell1_active = true;
 }
 void Player::cudgel_fury_end() {
   render_player = true;
-  spell1_active = false;
 }
 
 
@@ -417,6 +436,10 @@ void Player::charge() {
   set_speed(kCharge_speed);
 }
 
+bool Player::is_disintegrate() {
+  return (ptype==SANZANG && spell1_active);
+}
+
 void Player::disintegrate_begin() {
   spell1_active = true;
   disintegrate_ptr = new Disintegrate(this, kDisintegrate_dam * attack_buff);
@@ -430,6 +453,7 @@ void Player::disintegrate_end() {
     disintegrate_ptr = nullptr;
   }
 }
+
 
 void Player::charge_update(float time) {
   //game_time->pause_all();
@@ -509,16 +533,11 @@ void Player::charge_update(float time) {
       if (!Model_state::get_instance()->can_player_move(get_body())) {
         set_position(p_backup_loc);
       }
-      for (std::vector<Monster *>::iterator it = charged_monsters.begin(); it != charged_monsters.end();) {
-        (*it)->set_moving(false);
+      for (int i = 0; i < (int) charged_monsters.size(); ++i) {
+        charged_monsters[i]->set_moving(false);
         std::vector<attack_effect> effects;
         effects.push_back(GET_WUKONG_CHARGE);
-        (*it)->get_hit(kCharge_attack_damage * attack_buff, effects, this);
-        if (!(*it)->is_alive()) {
-          it = charged_monsters.erase(it);
-        } else {
-          it++;
-        }
+        charged_monsters[i]->get_hit(kCharge_attack_damage * attack_buff, effects, this);
       }
     }
   }
@@ -556,8 +575,8 @@ void Player::try_normal_attack() {
     normal_attack = true;
     Model_state::get_instance()->add_spell(new_spell);
   }
+  
 }
-
 void Player::try_spell1() {
   float current_time = game_time->seconds();
   float passed_time = current_time - last_spell1;
@@ -593,7 +612,7 @@ void Player::try_spell2() {
     //create spell based on character type
     switch (ptype) {
       case SANZANG: //healing_spell
-        new_spell = new Healing_spell(get_location(), get_current_orientation(), -kHealing_amount * attack_buff);
+        new_spell = new Healing_spell(get_location(), get_current_orientation(), kHealing_amount * attack_buff);
         Model_state::get_instance()->add_spell(new_spell);
         break;
       case WUKONG: //Charge
@@ -620,8 +639,7 @@ void Player::try_spell3() {
     //create spell based on character type
     switch (ptype) {
       case SANZANG: //Ding
-        new_spell = new Ding(get_location(), this, kDing_dam * attack_buff);
-        Model_state::get_instance()->add_spell(new_spell);
+        ding_begin();
         break;
       case WUKONG: //Berserk
         berserk();

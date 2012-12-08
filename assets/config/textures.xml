@@ -37,6 +37,18 @@ The following things are unsupported:
   4. Anything other than 8 bits per channel
 -->
 <Textures>
+<bloodsuck_left>
+<filepath>textures/bloodsuck_left.png</filepath>
+<tile>0</tile>
+</bloodsuck_left>
+<bloodsuck_right>
+<filepath>textures/bloodsuck_right.png</filepath>
+<tile>0</tile>
+</bloodsuck_right>
+<bloodsuck_fb>
+<filepath>textures/bloodsuck_front.png</filepath>
+<tile>0</tile>
+</bloodsuck_fb>
     <instr>
         <filepath>textures/instruction.png</filepath>
         <tile>0</tile>
@@ -622,7 +634,7 @@ The following things are unsupported:
   
   <healing_spell>
     <is_sprite>0</is_sprite>
-    <filepath>textures/healing_spell.png</filepath>
+    <filepath>textures/healing_spell1.png</filepath>
     <tile>0</tile>
   </healing_spell>
   <arrow>
