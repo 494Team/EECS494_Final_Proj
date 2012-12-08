@@ -543,24 +543,24 @@ private:
                 (*it)->set_position(Point2f(x,3000));
                 x += 100.f;
             }
-            Redboy* redboy_inst = new Redboy(Zeni::Point2f(100, 2500));
+            Redboy* redboy_inst = new Redboy(Zeni::Point2f(100, 2300));
             Model_state::get_instance()->add_monster(redboy_inst);
-            Wanderer* wanderer = new Wanderer(Zeni::Point2f(100, 2500));
+            Wanderer* wanderer = new Wanderer(Zeni::Point2f(100, 2300));
             Model_state::get_instance()->add_monster(wanderer);
-            wanderer = new Wanderer(Zeni::Point2f(100, 2500));
+            wanderer = new Wanderer(Zeni::Point2f(100, 2300));
             Model_state::get_instance()->add_monster(wanderer);
-            wanderer = new Wanderer(Zeni::Point2f(150, 2500));
+            wanderer = new Wanderer(Zeni::Point2f(150, 2300));
             Model_state::get_instance()->add_monster(wanderer);
-            wanderer = new Wanderer(Zeni::Point2f(250, 2500));
+            wanderer = new Wanderer(Zeni::Point2f(250, 2300));
             Model_state::get_instance()->add_monster(wanderer);
             
-            Whisper* whisper_1 = new Whisper(Zeni::Point2f(400, 2500));
+            Whisper* whisper_1 = new Whisper(Zeni::Point2f(400, 2300));
             Model_state::get_instance()->add_monster(whisper_1);
-            whisper_1 = new Whisper(Zeni::Point2f(450, 2500));
+            whisper_1 = new Whisper(Zeni::Point2f(450, 2300));
             Model_state::get_instance()->add_monster(whisper_1);
-            whisper_1 = new Whisper(Zeni::Point2f(500, 2500));
+            whisper_1 = new Whisper(Zeni::Point2f(500, 2300));
             Model_state::get_instance()->add_monster(whisper_1);
-            whisper_1 = new Whisper(Zeni::Point2f(550, 2500));
+            whisper_1 = new Whisper(Zeni::Point2f(550, 2300));
             Model_state::get_instance()->add_monster(whisper_1);
         }
         else if (lvl == 1){
@@ -839,7 +839,7 @@ private:
   }
 
   void render_status_helper(int p_x, Player* p_ptr) {
-    Zeni::String player_texture;
+    Zeni::String player_texture, player_skill_texture;
     Point2f loc;
     switch (p_x) {
       case 0:
@@ -860,15 +860,19 @@ private:
     switch (p_ptr->get_player_type()) {
       case SANZANG:
         player_texture = "tripitaka_head";
+        player_skill_texture = "sanzang_skill_";
         break;
       case WUKONG:
         player_texture = "monkey_king_head";
+        player_skill_texture = "wukong_skill_";
         break;
       case SHASENG:
         player_texture = "friar_sand_head";
+        player_skill_texture = "shaseng_skill_";
         break;
       case BAJIE:
         player_texture = "pigsy_head";
+        player_skill_texture = "bajie_skill_";
         break;
       default:
         break;
@@ -905,30 +909,43 @@ private:
     Zeni::Quadrilateral<Zeni::Vertex2f_Color> mpbar(mp00, mp01, mp02, mp03);
 
     //CDbar
+    
     Point2f CDbar_loc(loc.x, loc.y + head_size.y + 5.0f);
+    /*
     Zeni::Vertex2f_Color p00(CDbar_loc, cr[kCDbar_color]);
     Zeni::Vertex2f_Color p01(CDbar_loc + Zeni::Point2f(0.0f, kCDbar_width), cr[kCDbar_color]);
     Zeni::Vertex2f_Color p02(CDbar_loc + Zeni::Point2f(CD1percent * kCDbar_length, kCDbar_width), cr[kCDbar_color]);
     Zeni::Vertex2f_Color p03(CDbar_loc + Zeni::Point2f(CD1percent * kCDbar_length, 0.0f), cr[kCDbar_color]);
     Zeni::Quadrilateral<Zeni::Vertex2f_Color> bar1(p00, p01, p02, p03);
+    */
+    Zeni::render_image(player_skill_texture + "1",CDbar_loc, CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
+    Zeni::render_image("cd_mask", CDbar_loc + Zeni::Vector2f(0, kCDbar_length *(CD1percent)) ,CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
 
     CDbar_loc += Point2f(kCDbar_length + 5.0f, 0.0f);
+    /*
     Zeni::Vertex2f_Color p10(CDbar_loc, cr[kCDbar_color]);
     Zeni::Vertex2f_Color p11(CDbar_loc + Zeni::Point2f(0.0f, kCDbar_width), cr[kCDbar_color]);
     Zeni::Vertex2f_Color p12(CDbar_loc + Zeni::Point2f(CD2percent * kCDbar_length, kCDbar_width), cr[kCDbar_color]);
     Zeni::Vertex2f_Color p13(CDbar_loc + Zeni::Point2f(CD2percent * kCDbar_length, 0.0f), cr[kCDbar_color]);
     Zeni::Quadrilateral<Zeni::Vertex2f_Color> bar2(p10, p11, p12, p13);
+    */
+    Zeni::render_image(player_skill_texture + "2",CDbar_loc, CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
+    Zeni::render_image("cd_mask", CDbar_loc + Zeni::Vector2f(0, kCDbar_length *(CD2percent)) ,CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
 
     CDbar_loc += Point2f(kCDbar_length + 5.0f, 0.0f);
+    /*
     Zeni::Vertex2f_Color p20(CDbar_loc, cr[kCDbar_color]);
     Zeni::Vertex2f_Color p21(CDbar_loc + Zeni::Point2f(0.0f, kCDbar_width), cr[kCDbar_color]);
     Zeni::Vertex2f_Color p22(CDbar_loc + Zeni::Point2f(CD3percent * kCDbar_length, kCDbar_width), cr[kCDbar_color]);
     Zeni::Vertex2f_Color p23(CDbar_loc + Zeni::Point2f(CD3percent * kCDbar_length, 0.0f), cr[kCDbar_color]);
     Zeni::Quadrilateral<Zeni::Vertex2f_Color> bar3(p20, p21, p22, p23);
+    */
+    Zeni::render_image(player_skill_texture + "3",CDbar_loc, CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
+    Zeni::render_image("cd_mask", CDbar_loc + Zeni::Vector2f(0, kCDbar_length *(CD3percent)) ,CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
 
-    vr.render(bar1);
-    vr.render(bar2);
-    vr.render(bar3);
+//    vr.render(bar1);
+  //  vr.render(bar2);
+   // vr.render(bar3);
     vr.render(hpbar);
     vr.render(mpbar);
   }
