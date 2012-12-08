@@ -74,6 +74,7 @@ void Wanderer::update(float time) {
 }
 
 void Wanderer::render() {
+  Agent::render();
   float scale = Model_state::get_instance()->get_scale();
   Zeni::Point2f ul, lr;
   float radians_ccw;
@@ -109,6 +110,12 @@ void Wanderer::render() {
   if (is_slowdown() && effect_timers[SLOWDOWN] > 1.5f) {
     Zeni::render_image("slowdown_effect", ul, lr);
   }
+  if (is_taunt()) {
+    float taunt_render_radius = get_radius() * 0.6f;
+    Zeni::Point2f taunt_pos = rel_loc + scale * (get_radius() + taunt_render_radius) * Zeni::Vector2f(0.0f, -1.0f);
+    Zeni::Point2f taunt_ul = taunt_pos - scale * taunt_render_radius * Zeni::Vector2f(1.0f, 1.0f);
+    Zeni::Point2f taunt_lr = taunt_pos + scale * taunt_render_radius * Zeni::Vector2f(1.0f, 1.0f);
+    Zeni::render_image("taunt_effect", taunt_ul, taunt_lr);
+  }
 
-  Agent::render();
 }

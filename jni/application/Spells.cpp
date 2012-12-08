@@ -258,8 +258,12 @@ namespace Flame {
     {
       vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
       for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
-        if (get_body().intersects((*it)->get_body()))
+        if (get_body().intersects((*it)->get_body())) {
           (*it)->increase_hatred(kTaunt_hatred, player_ptr);
+          std::vector<attack_effect> effects;
+          effects.push_back(TAUNT);
+          (*it)->get_hit(0.0f, effects, player_ptr);
+        }
     }
 
   void Taunt::render()

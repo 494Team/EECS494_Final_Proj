@@ -141,7 +141,8 @@ namespace Flame{
     HITBACK,
     SLOWDOWN,
     FREEZE,
-    GET_WUKONG_CHARGE
+    GET_WUKONG_CHARGE,
+    TAUNT
   };
 
   enum kKey_type {

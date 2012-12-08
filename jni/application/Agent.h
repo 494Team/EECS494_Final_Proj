@@ -28,6 +28,7 @@ namespace Flame {
       freeze(false),
       slowdown(false),
       get_wukong_charge(false),
+      taunt(false),
       armor(1.0f)
     {}
 
@@ -40,6 +41,7 @@ namespace Flame {
     bool is_freeze() const {return freeze;}
     bool is_slowdown() const {return slowdown;}
     bool is_get_wukong_charge() const {return get_wukong_charge;}
+    bool is_taunt() const {return taunt;}
     void relieve_from_wukong_charge() {get_wukong_charge = false;}
     float get_armor() const {return armor;}
 
@@ -84,6 +86,7 @@ namespace Flame {
     bool freeze;
     bool slowdown;
     bool get_wukong_charge;
+    bool taunt;
   };
 
 }

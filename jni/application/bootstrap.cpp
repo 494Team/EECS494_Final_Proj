@@ -554,13 +554,13 @@ private:
             wanderer = new Wanderer(Zeni::Point2f(250, 2300));
             Model_state::get_instance()->add_monster(wanderer);
             
-            Whisper* whisper_1 = new Whisper(Zeni::Point2f(400, 2300));
+            Whisper* whisper_1 = new Whisper(Zeni::Point2f(400, 2800));
             Model_state::get_instance()->add_monster(whisper_1);
-            whisper_1 = new Whisper(Zeni::Point2f(450, 2300));
+            whisper_1 = new Whisper(Zeni::Point2f(450, 2800));
             Model_state::get_instance()->add_monster(whisper_1);
-            whisper_1 = new Whisper(Zeni::Point2f(500, 2300));
+            whisper_1 = new Whisper(Zeni::Point2f(500, 2800));
             Model_state::get_instance()->add_monster(whisper_1);
-            whisper_1 = new Whisper(Zeni::Point2f(550, 2300));
+            whisper_1 = new Whisper(Zeni::Point2f(550, 2800));
             Model_state::get_instance()->add_monster(whisper_1);
         }
         else if (lvl == 1){

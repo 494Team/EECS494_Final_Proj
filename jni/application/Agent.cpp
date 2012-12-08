@@ -46,6 +46,9 @@ void Agent::update(float time) {
         case FREEZE:
           freeze = false;
           break;
+        case TAUNT:
+          taunt = false;
+          break;
       }
     }
   }
@@ -104,6 +107,10 @@ void Agent::get_hit(
         break;
       case GET_WUKONG_CHARGE:
         get_wukong_charge = true;
+        break;
+      case TAUNT:
+        taunt = true;
+        effect_timers[effects[i]] = ATTACK_DURATION;
         break;
     }
   }
