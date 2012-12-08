@@ -305,16 +305,6 @@ void Player::render() {
   }
 
   //render the orientation arrow
-  /*
-render_image(
-    "rarrow3", // which texture to use
-    loc + Point2f(0.0f, 50.0f), // upper-left corner
-    loc + Point2f(50.0f, 70.0f),//m_size, // lower-right corner
-    rad,//0.0f * Global::pi, // rotation in radians
-    1.0f, // scaling factor
-    loc + Point2f(25.0f, 25.0f), // point to rotate & scale about
-    false);//, // whether or not to horizontally flip the texture
-    //filter); // what Color to "paint" the texture*/
 render_image(
   "rarrow3",
   Point2f(rel_loc.x - size, rel_loc.y + size ),
@@ -326,16 +316,6 @@ render_image(
   //render weapon attacking
   if (normal_attack)
 
- /*
-    render_image(
-      "sword_attack", // which texture to use
-      loc + Point2f(0.0f, 50.0f), // upper-left corner
-      loc + Point2f(50.0f, 90.0f),//m_size, // lower-right corner
-      orient_vec_to_radians(get_current_orientation()),//0.0f * Global::pi, // rotation in radians
-      1.0f, // scaling factor
-      loc + Point2f(25.0f, 25.0f), // point to rotate & scale about
-      false);//, // whether or not to horizontally flip the texture
-      //filter); // what Color to "paint" the texture*/
     render_image("sword_attack_1",
                  Point2f(rel_loc.x - size, rel_loc.y + size ),
                  Point2f(rel_loc.x + size, rel_loc.y + size  + size * 2),
@@ -362,24 +342,24 @@ void Player::fire(kKey_type type) {
       case A4:
         try_normal_attack();
         break;
-      case B1:
-      case B2:
-      case B3:
-      case B4:
-        //spell 1
-        try_spell1();
-        break;
       case X1:
       case X2:
       case X3:
       case X4:
-        //spell 2
-        try_spell2();
+        //spell 1
+        try_spell1();
         break;
       case Y1:
       case Y2:
       case Y3:
       case Y4:
+        //spell 2
+        try_spell2();
+        break;
+      case B1:
+      case B2:
+      case B3:
+      case B4:
         //spell 3
         try_spell3();
         break;
@@ -393,13 +373,9 @@ void Player::fire(kKey_type type) {
 
 void Player::berserk() {
   spell3_active = true;
-  //set_radius(get_radius() * kBerserk_enlarge);
-  //attack_buff = 2.0f;
 }
 
 void Player::berserk_end() {
-  //set_radius(get_radius() / kBerserk_enlarge);
-  //attack_buff = kInit_buff;
   spell3_active = false;
 }
 
@@ -454,18 +430,6 @@ void Player::disintegrate_end() {
     disintegrate_ptr = nullptr;
   }
 }
-
-//bool Player::is_disintegrate() {
-//  return (ptype==SANZANG && spell1_active);
-//}
-
-//void Player::disintegrate_end() {
-//  spell1_active = false;
-//  if (disintegrate_ptr) {
-//    disintegrate_ptr->disable_spell();
-//    disintegrate_ptr = nullptr;
-//  }
-//}
 
 void Player::charge_update(float time) {
   //game_time->pause_all();

@@ -20,7 +20,8 @@ namespace Flame {
   #define PLAYER_SPELL3_CD 1.0f
   #define HURT_SHOWING_INTERVAL 0.2f
 
-  const float kPlayer_action_gap = 0.5f;  const float kPlayer_init_speed = 200.0f;
+  const float kPlayer_action_gap = 0.5f;
+  const float kPlayer_init_speed = 200.0f;
   const float kHp_regenerate_rate = 0.0f; //1.0f;
   const float kMp_regenerate_rate = 0.8f;
   const float kRegenerate_CD = 1.0f;
@@ -157,7 +158,7 @@ namespace Flame {
       return mp;
     }
 
-    void button_b_release() {
+    void button_x_release() {
       if (is_disintegrate())
         disintegrate_end();
 

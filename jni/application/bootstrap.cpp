@@ -731,9 +731,24 @@ private:
     }
     
     switch(action) {
-      case B1:
+      case X1:
         if (confidence < 0.1f) {
-          (*Model_state::get_instance()->get_player_list_ptr())[0]->button_b_release();
+          (*Model_state::get_instance()->get_player_list_ptr())[0]->button_x_release();
+        }
+        break;
+      case X2:
+        if (confidence < 0.1f) {
+          (*Model_state::get_instance()->get_player_list_ptr())[1]->button_x_release();
+        }
+        break;
+      case X3:
+        if (confidence < 0.1f) {
+          (*Model_state::get_instance()->get_player_list_ptr())[2]->button_x_release();
+        }
+        break;
+      case X4:
+        if (confidence < 0.1f) {
+          (*Model_state::get_instance()->get_player_list_ptr())[3]->button_x_release();
         }
         break;
       default:
@@ -1129,8 +1144,6 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 3), A4);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 3), B4);
 
-
-    
     for (int i=0; i < Model_state::get_instance()->get_player_num(); i++) {
       cursor_pos[i] = kCursor_min;
       p_decided[i] = false;
