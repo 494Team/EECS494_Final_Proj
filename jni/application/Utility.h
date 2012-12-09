@@ -109,6 +109,7 @@ namespace Flame{
   //choosing character page "Preparation State"
   const int kCursor_max = 3;
   const int kCursor_min = 0;
+  const Zeni::Color kCannotmove_color(1.0f, 0.3f, 0.3f, 0.3f);
 
   // forward declaration
   class Sim_object;
