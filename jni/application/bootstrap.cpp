@@ -663,7 +663,11 @@ private:
       }
       case MENU: {
         if (confidence == 1.0f) {
-          get_into_upgradeshop();
+          if (!show_die) {
+            get_into_upgradeshop();
+          } else {
+            get_Game().push_state(new Popup_Menu_State);
+          }
         }
       }
 
