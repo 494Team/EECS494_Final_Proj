@@ -65,7 +65,25 @@ namespace Flame {
 
     // mini players
     std::vector<Player*> players = *(Model_state::get_instance()->get_player_list_ptr());
-    Zeni::Point2f player0_pos, player1_pos, player2_pos, player3_pos;
+    //Zeni::Point2f player0_pos, player1_pos, player2_pos, player3_pos;
+    int controller;
+    Point2f mini_pos;
+    for (std::vector<Player*>::iterator it = players.begin();
+         it != players.end();
+         ++it) {
+      controller = (*it)->get_controller();
+      if (get_mini_pos((*it)->get_location(), mini_pos)) {
+        char* str = new char[10];
+        sprintf(str, "%d", controller);
+        Zeni::String text_buf = "mini_player";
+        text_buf += str;
+        render_image(text_buf,
+                     mini_pos - Zeni::Vector2f(4.0f, 4.0f),
+                     mini_pos + Zeni::Vector2f(4.0f, 4.0f));
+      }
+    }
+
+    /*
     if (get_mini_pos(players[0]->get_location(), player0_pos)) {
       render_image(
         "mini_player0",
@@ -100,6 +118,7 @@ namespace Flame {
           );
         }
     }
+    */
 
     // mini_monsters
     std::vector<Monster *> monsters = *(Model_state::get_instance()->get_monster_list_ptr());

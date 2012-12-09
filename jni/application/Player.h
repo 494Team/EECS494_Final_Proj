@@ -97,6 +97,9 @@ namespace Flame {
     void try_spell1();
     void try_spell2();
     void try_spell3();
+    bool controllable() {
+      return ((!is_hitback()) && (!is_charging()) && is_alive());
+    }
         
     bool is_charging() {
       return (ptype == WUKONG && spell2_active);
@@ -164,7 +167,14 @@ namespace Flame {
 
     }
 
+    void set_controller(int controller_) {
+      controller = controller_;
+    }
+    int get_controller() {
+      return controller;
+    }
   private:
+    int controller; //range: [0, 3]
     float mp;
     float attack_buff; //range: [1, +INF]; initial:1.0f
     int skill_point;
