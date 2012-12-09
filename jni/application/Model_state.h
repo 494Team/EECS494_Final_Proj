@@ -94,7 +94,7 @@ namespace Flame {
     {return center_location;}
 
     friend class Model_state_destroyer;
-    
+
     int get_money_amount() {
       return money;
     }
@@ -115,6 +115,7 @@ namespace Flame {
     Render_list_t render_list;
     std::vector<Sim_object *> next_loop_update_list;
     std::vector<Sim_object *> sim_obj_list;
+    std::vector<Sim_object *> remove_list;
     std::vector<Player *> player_list;
     std::vector<Monster *> monster_list;
     std::vector<Spell *> spell_list;
