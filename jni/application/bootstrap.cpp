@@ -497,9 +497,6 @@ public:
   {
     set_pausable(true);
 
-    m_set.start();
-
-    set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), MENU);
     set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), MENU);
     //p1
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 0), MENU);
@@ -542,12 +539,13 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 3), Y4);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 3), L4);
 
-
     Model_state::get_instance()->init(lvl, &m_set);
     set_level(lvl);
     //!!! test
     //dialog.start(lvl);
     begin_dialog(&dialog, lvl);
+
+    m_set.start();
   }
 
 private:
@@ -1159,7 +1157,7 @@ private:
 
   void save_chosen_characters() {
     std::vector<kPlayer_type> * char_list = Model_state::get_instance()->get_character_list_ptr();
-    for (int i=0; i < Model_state::get_instance()->get_player_num(); i++) {
+    for (int i=0; i < chosen_num; i++) {
       char_list->push_back(chosen_char[i]);
     }
   }
@@ -1182,8 +1180,14 @@ private:
   }
 
   void on_key(const SDL_KeyboardEvent &event) {
-    if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED)
+    if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED) {
+      /*
       get_Game().pop_state();
+      //game.push_state(new Play_State());
+      get_Game().push_state(new Popup_Menu_State);
+      */
+      
+    }
   }
   
   void move_cursor(const int player_n, const bool is_to_right) {
@@ -1280,8 +1284,8 @@ private:
     if(confidence >= 1.0f) {
       switch(action) {
         case MENU: {
+          //get_Game().pop_state();
           Game &game = get_Game();
-          //game.push_state(new Play_State());
           game.push_state(new Popup_Menu_State);
           break;
         }
@@ -1327,32 +1331,37 @@ private:
        p_color[0]);
     float pos[4] = {30.0f, 180.0f, 380.0f, 580.0f};
 
-      render_image("p1cursor",
+    //p_color[pos] = Color(1.0f, 0.3f, 0.3f, 0.3f);
+    Color cursor_color = (p_decided[0]) ? kCannotmove_color : Color();
+    render_image("p1cursor",
          Point2f(pos[cursor_pos[0]], 100.0f),
          Point2f(pos[cursor_pos[0]]+50.0f, 200.0f),
          false,
-         p_color[cursor_pos[0]]);
-      if (Model_state::get_instance()->get_player_num() >= 2) {
-        render_image("p2cursor",
+         cursor_color);
+    if (Model_state::get_instance()->get_player_num() >= 2) {
+      cursor_color = (p_decided[1]) ? kCannotmove_color : Color();
+      render_image("p2cursor",
            Point2f(pos[cursor_pos[1]], 200.0f),
           Point2f(pos[cursor_pos[1]]+50.0f, 300.0f),
           false,
-          p_color[cursor_pos[1]]);
-      }
-      if (Model_state::get_instance()->get_player_num() >= 3) {
-        render_image("p3cursor",
+          cursor_color);
+    }
+    if (Model_state::get_instance()->get_player_num() >= 3) {
+      cursor_color = (p_decided[2]) ? kCannotmove_color : Color();
+      render_image("p3cursor",
           Point2f(pos[cursor_pos[2]], 300.0f),
           Point2f(pos[cursor_pos[2]]+50.0f, 400.0f),
           false,
-          p_color[cursor_pos[2]]);
-      }
-      if (Model_state::get_instance()->get_player_num() >= 4) {
-        render_image("p4cursor",
+          cursor_color);
+    }
+    if (Model_state::get_instance()->get_player_num() >= 4) {
+      cursor_color = (p_decided[3]) ? kCannotmove_color : Color();
+      render_image("p4cursor",
           Point2f(pos[cursor_pos[3]], 400.0f),
           Point2f(pos[cursor_pos[3]]+50.0f, 500.0f),
           false,
-          p_color[cursor_pos[3]]);
-      }
+          cursor_color);
+    }
   }
 };
 
@@ -1419,7 +1428,19 @@ public:
     m_widgets.lend_Widget(*start_button);
     m_widgets.lend_Widget(*plus_player_button);
     m_widgets.lend_Widget(*minus_player_button);
-    
+  }
+
+private:
+  int player_num;
+  void on_key(const SDL_KeyboardEvent &event) {
+    if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED) {
+      get_Game().push_state(new Popup_Menu_State);
+    }
+  }
+
+  void render() {
+    Widget_Gamestate::render();
+
     Zeni::Font &fr = get_Fonts()["shop_ft"];
     char* str = new char[10];
     sprintf(str, "%d", player_num);//speed_lvl);
@@ -1429,18 +1450,7 @@ public:
                    Point2f(400.0f, 300.0f),
                    get_Colors()["white"],
                    ZENI_CENTER);
-
-  }
-
-private:
-  int player_num;
-  void on_key(const SDL_KeyboardEvent &event) {
-    if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED)
-      get_Game().pop_state();
-  }
-
-  void render() {
-    Widget_Gamestate::render();
+    delete[] str;
   }
 };
 

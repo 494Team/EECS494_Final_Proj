@@ -58,7 +58,7 @@ namespace Flame {
        player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(600.f, 3000.f), SHASENG));
 -      */
 
-    character_list.clear(); //temp
+    character_list.clear(); //this cannot be put in Model_state::clear()
     
     // wall vertical
       map_obj_list.push_back(new Map_brick(Point2f(-40.f, -40.f), Vector2f(40.f, 3160.f), 40.f, 40.f, "rock"));
