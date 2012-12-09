@@ -200,9 +200,32 @@ namespace Flame {
   void Model_state::update(float time)
   {
     for (auto it = sim_obj_list.begin(); it != sim_obj_list.end(); ++it) {
-      render_list.erase(*it);
-      (*it)->update(time);
-      render_list.insert(*it);
+      auto render_it = find(render_list.begin(), render_list.end(), *it);
+      if (render_it == render_list.end()) {
+        Spell * sptr = dynamic_cast<Spell *>(*it);
+        if (sptr)
+          std::cerr << "spell" << std::endl;
+        Monster * mptr = dynamic_cast<Monster *>(*it);
+        if (mptr)
+          std::cerr << "monster" << std::endl;
+        Map * maptr = dynamic_cast<Map *>(*it);
+        if (maptr)
+          std::cerr << "map" << std::endl;
+        Fire_ball * fptr = dynamic_cast<Fire_ball *>(*it);
+        if (fptr)
+          std::cerr << "fire_ball" << std::endl;
+        Disintegrate * dptr = dynamic_cast<Disintegrate *>(*it);
+        if (dptr)
+          std::cerr << "disintegrate" << std::endl;
+        Attack_spell * aptr = dynamic_cast<Attack_spell *>(*it);
+        if (aptr)
+          std::cerr << "attack" << std::endl;
+      }
+      else {
+        render_list.erase(render_it);
+        (*it)->update(time);
+        render_list.insert(*it);
+      }
     }
     for (auto it = spell_list.begin(); it != spell_list.end();)
       if (!(*it)->is_active()) {
