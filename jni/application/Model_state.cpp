@@ -227,25 +227,28 @@ namespace Flame {
         render_list.insert(*it);
       }
     }
-    for (auto it = spell_list.begin(); it != spell_list.end();)
-      if (!(*it)->is_active()) {
-        Spell * s_ptr = *it;
-        it = remove_spell(*it);
-        delete s_ptr;
-      }
-      else
-        ++it;
-    for (auto it = monster_list.begin(); it != monster_list.end();)
-      if (!(*it)->is_alive()) {
-        Monster * m_ptr = *it;
-        it = remove_monster(*it);
-        delete m_ptr;
-      }
-      else
-        ++it;
     for (auto it = next_loop_update_list.begin(); it != next_loop_update_list.end(); ++it)
       sim_obj_list.push_back(*it);
     next_loop_update_list.clear();
+    for (auto it = spell_list.begin(); it != spell_list.end();)
+      if (!(*it)->is_active())
+        it = remove_spell(*it);
+      else
+        ++it;
+    for (auto it = monster_list.begin(); it != monster_list.end();)
+      if (!(*it)->is_alive())
+        it = remove_monster(*it);
+      else
+        ++it;
+    for (auto it = remove_list.begin(); it != remove_list.end(); ++it) {
+      auto s_it = find(sim_obj_list.begin(), sim_obj_list.end(), *it);
+      if (s_it != sim_obj_list.end())
+        sim_obj_list.erase(s_it);
+      auto r_it = find(render_list.begin(), render_list.end(), *it);
+      if (r_it != render_list.end())
+        render_list.erase(r_it);
+    }
+    remove_list.clear();
   }
 
   void Model_state::render()
@@ -254,14 +257,14 @@ namespace Flame {
   void Model_state::add_player(Player * player_ptr)
   {
     render_list.insert(player_ptr);
-    sim_obj_list.push_back(player_ptr);
+    next_loop_update_list.push_back(player_ptr);
     player_list.push_back(player_ptr);
   }
 
   void Model_state::add_monster(Monster * monster_ptr)
   {
     render_list.insert(monster_ptr);
-    sim_obj_list.push_back(monster_ptr);
+    next_loop_update_list.push_back(monster_ptr);
     monster_list.push_back(monster_ptr);
   }
 
@@ -275,7 +278,7 @@ namespace Flame {
   void Model_state::add_map_obj(Map * map_obj_ptr)
   {
     render_list.insert(map_obj_ptr);
-    sim_obj_list.push_back(map_obj_ptr);
+    next_loop_update_list.push_back(map_obj_ptr);
     map_obj_list.push_back(map_obj_ptr);
   }
 
@@ -289,48 +292,35 @@ namespace Flame {
   vector<Player *>::iterator Model_state::remove_player(Player * player_ptr)
   {
     auto it = player_list.erase(find(player_list.begin(), player_list.end(), player_ptr));
-    sim_obj_list.erase(find(sim_obj_list.begin(), sim_obj_list.end(), player_ptr));
-    render_list.erase(player_ptr);
+    remove_list.push_back(player_ptr);
     return it;
   }
 
   vector<Monster *>::iterator Model_state::remove_monster(Monster * monster_ptr)
   {
     auto it = monster_list.erase(find(monster_list.begin(), monster_list.end(), monster_ptr));
-    sim_obj_list.erase(find(sim_obj_list.begin(), sim_obj_list.end(), monster_ptr));
-    render_list.erase(monster_ptr);
+    remove_list.push_back(monster_ptr);
     return it;
   }
 
   vector<Spell *>::iterator Model_state::remove_spell(Spell * spell_ptr)
   {
     auto it = spell_list.erase(find(spell_list.begin(), spell_list.end(), spell_ptr));
-    auto it1 = find(sim_obj_list.begin(), sim_obj_list.end(), spell_ptr);
-    if (it1 != sim_obj_list.end())
-      sim_obj_list.erase(it1);
-    else
-      next_loop_update_list.erase(find(next_loop_update_list.begin(), next_loop_update_list.end(), spell_ptr));
-    render_list.erase(spell_ptr);
+    remove_list.push_back(spell_ptr);
     return it;
   }
 
   vector<Map *>::iterator Model_state::remove_map_obj(Map * map_obj_ptr)
   {
     auto it = map_obj_list.erase(find(map_obj_list.begin(), map_obj_list.end(), map_obj_ptr));
-    sim_obj_list.erase(find(sim_obj_list.begin(), sim_obj_list.end(), map_obj_ptr));
-    render_list.erase(map_obj_ptr);
+    remove_list.push_back(map_obj_ptr);
     return it;
   }
 
   vector<Map *>::iterator Model_state::remove_map_puzzle_obj(Map * map_obj_ptr)
   {
     auto it = map_puzzle_obj_list.erase(find(map_puzzle_obj_list.begin(), map_puzzle_obj_list.end(), map_obj_ptr));
-    auto it1 = find(sim_obj_list.begin(), sim_obj_list.end(), map_obj_ptr);
-    if (it1 != sim_obj_list.end())
-      sim_obj_list.erase(it1);
-    else
-      next_loop_update_list.erase(find(next_loop_update_list.begin(), next_loop_update_list.end(), map_obj_ptr));
-    render_list.erase(map_obj_ptr);
+    remove_list.push_back(map_obj_ptr);
     return it;
   }
 
