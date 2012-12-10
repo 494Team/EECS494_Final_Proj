@@ -258,8 +258,8 @@ namespace Flame {
         player_alive[controller] = false;
         it = remove_player(*it);
 
-        for (int i=controller; i<4; i++) {
-          if (i==4 || player_pos_in_list[i+1] == -1) {
+        for (int i=get_player_list_index(controller); i<4; i++) {
+          if (i==3 || player_pos_in_list[i+1] == -1) {
             player_pos_in_list[i] = -1;
           } else {
             player_pos_in_list[i] = player_pos_in_list[i+1];

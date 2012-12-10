@@ -98,15 +98,30 @@ namespace Flame {
     int get_money_amount() {
       return money;
     }
-    int get_player_num() const
-      {return player_num;}
-    void set_player_num(int num)
-      {player_num = num;}
-    int get_player_pos_in_list(const int controller) {
-      return player_pos_in_list[controller];
+    int get_initial_player_num() const
+      {return initial_player_num;}
+    void set_initial_player_num(int initial_player_num_)
+      {initial_player_num = initial_player_num_;}
+    int get_player_pos_in_list(const int list_pos) {
+      if (list_pos > 3 || list_pos < 0)
+        return -1;
+      else
+        return player_pos_in_list[list_pos];
+    }
+    int get_player_list_index(int controller) {
+        int list_pos = -1;
+        for (int i=0; i<4; i++) {
+          if (controller >= 0 &&
+              controller <= 3 && 
+              Model_state::get_instance()->get_player_pos_in_list(i) == controller) {
+            list_pos = i;
+            break;
+          }
+        }
+        return list_pos;
     }
   private:
-    int player_num;
+    int initial_player_num;
     bool player_alive[4]; //book keeping for minimap
     int player_pos_in_list[4]; //update when any player die
     int money;

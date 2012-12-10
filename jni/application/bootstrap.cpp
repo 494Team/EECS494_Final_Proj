@@ -40,7 +40,7 @@ private:
   int skill_point_tmp[4];
   int attack_tmp[4];
   int defense_tmp[4];
-  int strength_tmp[4];
+  int hp_regen_tmp[4];
   int speed_tmp[4];
   bool confirmed[4];
   std::vector<Player *> * player_list_ptr;
@@ -67,9 +67,6 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 0), VERT1);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 0), A1);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 0), B1);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_X, 0), X1);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 0), Y1);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 0), L1);
     //p2
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 1), CONFIRM2);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 1), BACK);
@@ -77,9 +74,6 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 1), VERT2);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 1), A2);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 1), B2);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_X, 1), X2);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 1), Y2);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 1), L2);
     //p3
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 2), CONFIRM3);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 2), BACK);
@@ -87,9 +81,6 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 2), VERT3);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 2), A3);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 2), B3);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_X, 2), X3);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 2), Y3);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 2), L3);
     //p4
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 3), CONFIRM4);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 3), BACK);
@@ -97,19 +88,17 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 3), VERT4);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 3), A4);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 3), B4);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_X, 3), X4);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 3), Y4);
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 3), L4);
 
     player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
     player_number = player_list_ptr->size();
     load_abilities();
-    for (int i=0; i < Model_state::get_instance()->get_player_num(); i++) {
+    for (int i=0; i < 4; i++) {
       confirmed[i] = false;
-      
+      /*
       if ((*player_list_ptr)[i]->ptype == SHASENG)
         cursor_pos[i] = kCursor_min;
       else
+      */
         cursor_pos[i] = kCursor_min+1;
       p_confirmed[i] = false;
       p_color[i] = Color();
@@ -119,21 +108,40 @@ public:
 
 private:
   void load_abilities() {
-    for (int i=0; i < Model_state::get_instance()->get_player_num(); i++) {
-      skill_point_tmp[i] = (*player_list_ptr)[i]->get_skill_point();
-      attack_tmp[i] = (*player_list_ptr)[i]->attack;
-      defense_tmp[i] = (*player_list_ptr)[i]->defense;
-      strength_tmp[i] = (*player_list_ptr)[i]->strength;
-      speed_tmp[i] = (*player_list_ptr)[i]->speed;
+    for (int i=0; i<4; i++) {
+      skill_point_tmp[i] = 0;
+      attack_tmp[i] = 0;
+      defense_tmp[i] = 0;
+      hp_regen_tmp[i] = 0;
+      speed_tmp[i] = 0;
+    }
+    std::vector<Player *> * plist = Model_state::get_instance()->get_player_list_ptr();
+    int list_pos = 0;
+    int controller;
+    for (vector<Player *>::iterator it = plist->begin(); it != plist->end(); it++) {
+      controller = Model_state::get_instance()->get_player_pos_in_list(list_pos++);
+      if (controller != -1) {
+          skill_point_tmp[controller] = (*it)->get_skill_point();
+          attack_tmp[controller] = (*it)->attack;
+          defense_tmp[controller] = (*it)->defense;
+          hp_regen_tmp[controller] = (*it)->hp_regen;
+          speed_tmp[controller] = (*it)->speed;
+      }
     }
   }
   void store_abilities() {
-    for (int i=0; i < Model_state::get_instance()->get_player_num(); i++) {
-      (*player_list_ptr)[i]->set_skill_point(skill_point_tmp[i]);
-      (*player_list_ptr)[i]->attack = attack_tmp[i];
-      (*player_list_ptr)[i]->defense = defense_tmp[i];
-      (*player_list_ptr)[i]->strength = strength_tmp[i];
-      (*player_list_ptr)[i]->speed = speed_tmp[i];
+    std::vector<Player *> * plist = Model_state::get_instance()->get_player_list_ptr();
+    int list_pos = 0;
+    int controller;
+    for (vector<Player *>::iterator it = plist->begin(); it != plist->end(); it++) {
+      controller = Model_state::get_instance()->get_player_pos_in_list(list_pos++);
+      if (controller != -1) {
+          (*it)->set_skill_point(skill_point_tmp[controller]);
+          (*it)->attack = attack_tmp[controller];
+          (*it)->defense = defense_tmp[controller];
+          (*it)->hp_regen = hp_regen_tmp[controller];
+          (*it)->speed = speed_tmp[controller];
+      }
     }
   }
   void on_push() {
@@ -142,7 +150,6 @@ private:
     get_Window().mouse_hide(true);
     get_Game().joy_mouse.enabled = false;
   }
-
   void on_pop() {
     //get_Window().mouse_grab(false);
     store_abilities();
@@ -150,12 +157,10 @@ private:
     get_Game().joy_mouse.enabled = true;
     game_time->unpause_all();
   }
-
   void on_cover() {
       get_Window().mouse_hide(false);
       get_Game().joy_mouse.enabled = true;
   }
-
   void on_uncover() {
       get_Window().mouse_hide(true);
       get_Game().joy_mouse.enabled = false;
@@ -166,17 +171,20 @@ private:
       get_Game().pop_state();
   }
   
-  void highlight_move(const int player_n, const bool is_down) {
+  void highlight_move(const int controller, const bool is_down) {
     const Zeni::Time_HQ current_time = Zeni::get_Timer_HQ().get_time();
     if (float(current_time.get_seconds_since(last_highlight_move) > kHighlight_move_CD)) {
        last_highlight_move = current_time;
-        if (!p_confirmed[player_n]) {
-          if (is_down && cursor_pos[player_n] < kShop_cursor_max-1) {
-            cursor_pos[player_n]++;
-          } else if (!is_down && cursor_pos[player_n] > 1) {
-            cursor_pos[player_n]--;
-          } else if (!is_down && (*player_list_ptr)[player_n]->ptype == SHASENG && cursor_pos[player_n] > 0) {
-            cursor_pos[player_n]--;
+        int list_index = Model_state::get_instance()->get_player_list_index(controller);
+        if (!p_confirmed[controller]) {
+          if (is_down && cursor_pos[controller] < kShop_cursor_max-1) {
+            cursor_pos[controller]++;
+          } else if (!is_down && cursor_pos[controller] > 1) {
+            cursor_pos[controller]--;
+          } else if (!is_down &&
+                     (*player_list_ptr)[list_index]->ptype == SHASENG &&
+                     cursor_pos[controller] > 0) {
+            cursor_pos[controller]--;
           }
         }
     }
@@ -194,44 +202,46 @@ private:
   Color p_color[4];
   int chosen_num;
 
-  void confirm(const int player_n) {
-    if (player_n < Model_state::get_instance()->get_player_num()) {
-      cursor_pos[player_n] = 5;
-      click_a(player_n);
+  void move_and_confirm(const int controller) {
+    //int list_index = Model_state::get_instance()->get_player_list_index(controller);
+    if (controller >=0 && controller <= 3) {
+      cursor_pos[controller] = 5;
+      click_a(controller);
     }
   }
-  void click_a(const int player_n) {
-    if (Model_state::get_instance()->get_player_num() && !p_confirmed[player_n]) {
-      int pos = cursor_pos[player_n];
+  void click_a(const int controller) {
+    int list_index = Model_state::get_instance()->get_player_list_index(controller);
+    if (list_index != -1 && !p_confirmed[controller]) {
+      int pos = cursor_pos[controller];
       switch (pos) {
         case 0: //switch arrow
-          if ((*player_list_ptr)[player_n]->ptype == SHASENG) {
+          if ((*player_list_ptr)[list_index]->ptype == SHASENG) {
             //switch_magic_arrow();
-            (*player_list_ptr)[player_n]->switch_magic_arrow();
+            (*player_list_ptr)[list_index]->switch_magic_arrow();
           }
           break;
         case 1:
-          if (attack_tmp[player_n] < kAttack_max) {
-            attack_tmp[player_n]++;
+          if (attack_tmp[controller] < kAttack_max) {
+            attack_tmp[controller]++;
           }
           break;
         case 2:
-          if (defense_tmp[player_n] < kDefense_max) {
-            defense_tmp[player_n]++;
+          if (defense_tmp[controller] < kDefense_max) {
+            defense_tmp[controller]++;
           }
           break;
         case 3:
-          if (strength_tmp[player_n] < kStrength_max) {
-            strength_tmp[player_n]++;
+          if (hp_regen_tmp[controller] < kHp_regen_max) {
+            hp_regen_tmp[controller]++;
           }
           break;
         case 4:
-          if (speed_tmp[player_n] < kSpeed_max) {
-            speed_tmp[player_n]++;
+          if (speed_tmp[controller] < kSpeed_max) {
+            speed_tmp[controller]++;
           }
           break;
         case 5: //confirm
-          p_confirmed[player_n] = true;
+          p_confirmed[controller] = true;
           chosen_num++;
           break;
         case 6: //cancel
@@ -240,7 +250,7 @@ private:
         default:
           break;
       }
-      if (chosen_num == 1) {//player_number) {
+      if (chosen_num == player_number) {
         get_Game().pop_state();
         //get_Game().push_state(new Play_State());
       }
@@ -283,16 +293,16 @@ private:
         case BACK:
           break;
         case CONFIRM1: 
-          confirm(0);
+          move_and_confirm(0);
           break;
         case CONFIRM2: 
-          confirm(1);
+          move_and_confirm(1);
           break;
         case CONFIRM3: 
-          confirm(2);
+          move_and_confirm(2);
           break;
         case CONFIRM4: 
-          confirm(3);
+          move_and_confirm(3);
           break;
 
         case A1:
@@ -312,11 +322,11 @@ private:
       }
     }
   }
-  void render_player_helper(int p_x, Player* p_ptr) {
+  void render_player_helper(int controller, Player* p_ptr) {
     Zeni::String player_texture;
     Point2f loc;
     float margin = 20.0f;
-    switch (p_x) {
+    switch (controller) {
       case 0:
         loc = Point2f(margin, margin * 2 + 40.0f);
         break;
@@ -356,7 +366,7 @@ private:
     float button_size = fr.get_text_height() * 0.8f;    
 
     char* str = new char[10];
-    sprintf(str, "%d", p_x+1);//speed_lvl);
+    sprintf(str, "%d", controller+1);//speed_lvl);
     String text_buf = "Player ";
     text_buf += str;
     fr.render_text(text_buf,
@@ -398,7 +408,7 @@ private:
                      ZENI_LEFT);
     }
 
-    sprintf(str, "%d", attack_tmp[p_x]);//speed_lvl);
+    sprintf(str, "%d", attack_tmp[controller]);//speed_lvl);
     text_buf = "Attack: lvl ";
     text_buf += str;
     text_buf += "/5";
@@ -409,7 +419,7 @@ private:
 
     
     //loc += Point2f(0.0f, fr.get_text_height());
-    sprintf(str, "%d", defense_tmp[p_x]);//speed_lvl);
+    sprintf(str, "%d", defense_tmp[controller]);//speed_lvl);
     text_buf = "Defense: lvl ";
     text_buf += str;
     text_buf += "/5";
@@ -420,8 +430,8 @@ private:
     
 
     //loc += Point2f(0.0f, fr.get_text_height());
-    sprintf(str, "%d", strength_tmp[p_x]);//speed_lvl);
-    text_buf = "MAX HP: lvl ";
+    sprintf(str, "%d", hp_regen_tmp[controller]);//speed_lvl);
+    text_buf = "HP regen: lvl ";
     text_buf += str;
     text_buf += "/5";
     fr.render_text(text_buf,
@@ -430,7 +440,7 @@ private:
                    ZENI_LEFT);
 
     //loc += Point2f(0.0f, fr.get_text_height());
-    sprintf(str, "%d", speed_tmp[p_x]);//speed_lvl);
+    sprintf(str, "%d", speed_tmp[controller]);//speed_lvl);
     text_buf = "Speed: lvl ";
     text_buf += str;
     text_buf += "/5";
@@ -440,13 +450,13 @@ private:
                    ZENI_LEFT);
     Color filter;
     Color disable_button = Color(1.0f, 0.5f, 0.5f, 0.5f);
-    filter = cursor_pos[p_x] == 1 ? Color() : disable_button;
+    filter = cursor_pos[controller] == 1 ? Color() : disable_button;
     render_image("plus_button", Bar_loc[1] - Point2f(button_size * 1.1f, 0.0f), Bar_loc[1] + Point2f(-button_size*0.1f, button_size), false, filter); 
-    filter = cursor_pos[p_x] == 2 ? Color() : disable_button;
+    filter = cursor_pos[controller] == 2 ? Color() : disable_button;
     render_image("plus_button", Bar_loc[2] - Point2f(button_size * 1.1f, 0.0f), Bar_loc[2] + Point2f(-button_size*0.1f, button_size), false, filter);
-    filter = cursor_pos[p_x] == 3 ? Color() : disable_button;
+    filter = cursor_pos[controller] == 3 ? Color() : disable_button;
     render_image("plus_button", Bar_loc[3] - Point2f(button_size * 1.1f, 0.0f), Bar_loc[3] + Point2f(-button_size*0.1f, button_size), false, filter); 
-    filter = cursor_pos[p_x] == 4 ? Color() : disable_button;
+    filter = cursor_pos[controller] == 4 ? Color() : disable_button;
     render_image("plus_button", Bar_loc[4] - Point2f(button_size * 1.1f, 0.0f), Bar_loc[4] + Point2f(-button_size*0.1f, button_size), false, filter); 
 
     //loc += Point2f(0.0f, 1.5f * fr.get_text_height());
@@ -464,9 +474,11 @@ private:
                    Point2f(200.0f, 560.0f),
                    get_Colors()["white"],
                    ZENI_LEFT);
-    float Shaseng_indent = (*player_list_ptr)[p_x]->ptype == SHASENG ? button_size*1.1f : 0.0f;
+    int player_list_index = Model_state::get_instance()->get_player_list_index(controller);
+    float Shaseng_indent = (*player_list_ptr)[player_list_index]->ptype == SHASENG ? button_size*1.1f : 0.0f;
     Point2f highlight_size(150.0f + 2*Shaseng_indent, fr.get_text_height());
-    render_image("highlight", Bar_loc[cursor_pos[p_x]] - Point2f(button_size * 1.1f - Shaseng_indent, 0.0f), Bar_loc[cursor_pos[p_x]] + highlight_size);
+    //render_image("highlight", Bar_loc[cursor_pos[player_list_index]] - Point2f(button_size * 1.1f - Shaseng_indent, 0.0f), Bar_loc[cursor_pos[player_list_index]] + highlight_size);
+    render_image("highlight", Bar_loc[cursor_pos[controller]] - Point2f(button_size * 1.1f - Shaseng_indent, 0.0f), Bar_loc[cursor_pos[controller]] + highlight_size);
 
     Zeni::Font &fr2 = get_Fonts()["shop_title"];
     fr2.render_text("Upgrade Abilities",
@@ -477,9 +489,12 @@ private:
   }
 
   void render() {
-    int p_x = 0;
+    int list_pos = 0;
+    int controller;
     for (vector<Player *>::iterator it = player_list_ptr->begin(); it != player_list_ptr->end(); it++) {
-      render_player_helper(p_x++, *it);
+      controller = Model_state::get_instance()->get_player_pos_in_list(list_pos++);
+      if (controller != -1)
+        render_player_helper(controller, *it);
     }
   }
 };
@@ -715,9 +730,12 @@ private:
         break;
     }
 
-    int player_pos_in_list = Model_state::get_instance()->get_player_pos_in_list(controller);
-    if (player_pos_in_list >= 0 && player_pos_in_list <= 3) {
-      p_ptr = player_list_ptr->at(player_pos_in_list);
+    int list_pos = Model_state::get_instance()->get_player_list_index(controller);
+    //int player_pos_in_list = Model_state::get_instance()->get_player_pos_in_list(controller);
+    //if (player_pos_in_list >= 0 && player_pos_in_list <= 3) {
+    if (list_pos != -1) {
+      p_ptr = player_list_ptr->at(list_pos);
+      //p_ptr = player_list_ptr->at(player_pos_in_list);
         if (p_ptr->controllable()) {
           switch(action) {
             case HORI1:
@@ -817,10 +835,10 @@ private:
     }
   }
 
-  void render_status_helper(int p_x, Player* p_ptr) {
+  void render_status_helper(int controller, Player* p_ptr) {
     Zeni::String player_texture, player_skill_texture;
     Point2f loc;
-    switch (p_x) {
+    switch (controller) {
       case 0:
         loc = Point2f(20.0f, 10.0f);
         break;
@@ -976,9 +994,12 @@ private:
 
     /* render the PLAYER STATUS */
     std::vector<Player *> * plist = Model_state::get_instance()->get_player_list_ptr();
-    int p_x = 0;
+    int list_pos = 0;
+    int controller;
     for (vector<Player *>::iterator it = plist->begin(); it != plist->end(); it++) {
-      render_status_helper(p_x++, *it);
+      controller = Model_state::get_instance()->get_player_pos_in_list(list_pos++);
+      if (controller != -1)
+        render_status_helper(controller, *it);
     }
 
     /* render level status */
@@ -1087,7 +1108,7 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 3), A4);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 3), B4);
 
-    for (int i=0; i < Model_state::get_instance()->get_player_num(); i++) {
+    for (int i=0; i < Model_state::get_instance()->get_initial_player_num(); i++) {
       cursor_pos[i] = kCursor_min;
       p_decided[i] = false;
       p_color[i] = Color();
@@ -1191,7 +1212,7 @@ private:
         p_color[pos] = Color(1.0f, 0.3f, 0.3f, 0.3f);
         char_available[pos] = false;
       }
-      if (chosen_num == Model_state::get_instance()->get_player_num()) {
+      if (chosen_num == Model_state::get_instance()->get_initial_player_num()) {
         get_Game().pop_state();
         //get_Game().push_state(new Upgrade_state());
         get_Game().push_state(new Play_State());
@@ -1286,7 +1307,7 @@ private:
          Point2f(pos[cursor_pos[0]]+50.0f, 200.0f),
          false,
          cursor_color);
-    if (Model_state::get_instance()->get_player_num() >= 2) {
+    if (Model_state::get_instance()->get_initial_player_num() >= 2) {
       cursor_color = (p_decided[1]) ? kCannotmove_color : Color();
       render_image("p2cursor",
            Point2f(pos[cursor_pos[1]], 200.0f),
@@ -1294,7 +1315,7 @@ private:
           false,
           cursor_color);
     }
-    if (Model_state::get_instance()->get_player_num() >= 3) {
+    if (Model_state::get_instance()->get_initial_player_num() >= 3) {
       cursor_color = (p_decided[2]) ? kCannotmove_color : Color();
       render_image("p3cursor",
           Point2f(pos[cursor_pos[2]], 300.0f),
@@ -1302,7 +1323,7 @@ private:
           false,
           cursor_color);
     }
-    if (Model_state::get_instance()->get_player_num() >= 4) {
+    if (Model_state::get_instance()->get_initial_player_num() >= 4) {
       cursor_color = (p_decided[3]) ? kCannotmove_color : Color();
       render_image("p4cursor",
           Point2f(pos[cursor_pos[3]], 400.0f),
@@ -1328,7 +1349,7 @@ class Choose_Pnumber_State : public Widget_Gamestate {
   private:
     int* player_num_ptr;
     void on_accept() {
-      Model_state::get_instance()->set_player_num(*player_num_ptr);
+      Model_state::get_instance()->set_initial_player_num(*player_num_ptr);
       get_Game().pop_state();
       get_Game().push_state(new Preparation_State());
     }

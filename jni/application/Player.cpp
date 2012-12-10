@@ -32,12 +32,13 @@ Player::Player(
   skill_point(0),
   attack(0),
   defense(0),
-  strength(0),
+  hp_regen(0),
   speed(0),
   fire_magic_arrow(true),
   mp(kMp_max),
   disintegrate_ptr(nullptr),
-  attack_buff(kInit_attack_buff)
+  attack_buff(kInit_attack_buff),
+  last_regen(0.0f)
 {
   set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
   switch (ptype) {
@@ -127,11 +128,18 @@ void Player::update(float time) {
   //update buff
   set_attack_buff((1.0f + attack * kAttack_maxbuff/kAttack_max) * berserk_buff);
   set_armor((1.0f - defense * kDefense_maxbuff/kDefense_max) * shield_buff);
+  set_hp_regen_rate(hp_regen * kHp_regen_maxbuff/kHp_regen_max);
+  set_mp_regen_rate(kMp_regen_maxbuff);
   if (!is_charging()) {
     set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
   }
   
-  hpmp_regenerate();
+  float current_time = game_time->seconds();
+  float passed_time = current_time - last_regen;
+  if (passed_time > kRegen_CD) {
+    last_regen = current_time;
+    hpmp_regenerate();
+  }
 
   Point2f backup_position;
   Point2f new_position;
@@ -184,7 +192,7 @@ void Player::update(float time) {
   rel_loc = (get_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
 
   // local spell removing
-  float current_time = game_time->seconds();
+  current_time = game_time->seconds();
   if (is_charge_attacking() && (current_time - last_charge_attack) > kCharge_attack_last) {
     charge_attacking = false;
   }
@@ -194,10 +202,10 @@ void Player::update(float time) {
   }
 
   if (is_shield() && (current_time - last_spell1) > kShield_last) {
-    spell1_active = false;
+    shield_end();
   }
   if (is_bloodsuck() && (current_time - last_spell3) > kBloodsuck_last) {
-    spell3_active = false;
+    bloodsuck_end();
   }
   if (is_charge() && (current_time - last_spell2) > kCharge_last) {
     charge_end();
@@ -426,15 +434,23 @@ void Player::cudgel_fury_end() {
 void Player::shield() {
   spell1_active = true;
 }
+void Player::shield_end() {
+  spell1_active = false;
+}
 
+/*
 void Player::taunt() {
-  spell2_active = true;
+  //spell2_active = true;
   Spell* new_spell = new Taunt(get_location(), this);
   Model_state::get_instance()->add_spell(new_spell);
 }
+*/
 
 void Player::bloodsuck() {
   spell3_active = true;
+}
+void Player::bloodsuck_end() {
+  spell3_active = false;
 }
 
 void Player::charge() {
@@ -635,7 +651,10 @@ void Player::try_spell2() {
         Model_state::get_instance()->add_spell(new_spell);
         break;
       default: // case BAJIE: Taunt
-        taunt();
+        //spell2_active = true;
+        new_spell = new Taunt(get_location(), this);
+        Model_state::get_instance()->add_spell(new_spell);
+        //taunt();
         break;
     }
   }

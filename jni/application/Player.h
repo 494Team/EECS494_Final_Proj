@@ -22,9 +22,7 @@ namespace Flame {
 
   const float kPlayer_action_gap = 0.5f;
   const float kPlayer_init_speed = 200.0f;
-  const float kHp_regenerate_rate = 0.0f; //1.0f;
-  const float kMp_regenerate_rate = 0.8f;
-  const float kRegenerate_CD = 1.0f;
+  const float kRegen_CD = 0.01f;
   const float kInit_attack_buff = 1.0f;
 
   const float kRun_render_gap = 0.2f;
@@ -36,16 +34,13 @@ namespace Flame {
   //SANZANG
   const float kDisintegrate_CD = 0.0f;
   const float kDisintegrate_dam = 5.0f;
-  //const float kDisintegrate_dam_gap = 0.2f;
   const float kDisintegrate_mp_cost = 2.0f;
   const float kHealing_CD = 2.0f;
-  const float kHealing_amount = 30.0f;
+  const float kHealing_amount = -1000.0f; //500.0f;
   const float kDing_CD = 8.0f;
   const float kDing_dam = 0.5f;
-  //const float kDing_dam_gap = 0.2f;
   //WUKONG
-  const float kCudgel_fury_dam = 1.0f;
-  //const float kCudgel_fury_dam_gap = 0.2f;
+  const float kCudgel_fury_dam = 2.0f;
   const float kCharge_CD = 5.0f;
   const float kCharge_last = 0.5f;
   const float kCharge_speed = 200.0f;
@@ -85,7 +80,17 @@ namespace Flame {
       const float &radius_ = 0.0f,
       const Zeni::Point2f &location_ = Zeni::Point2f(),
       const kPlayer_type player_type_ = WUKONG);
-
+    ~Player() {
+      if (is_disintegrate()) {
+        disintegrate_end();
+      }
+      if (is_cudgel_fury()) {
+        cudgel_fury_end();
+      }
+      if (is_shield()) {
+        shield_end();
+      }
+    }
     virtual void update(float time = 0.f);
     void render();
 
@@ -141,7 +146,7 @@ namespace Flame {
     }
     int attack;
     int defense;
-    int strength;
+    int hp_regen;
     int speed;
 
     bool is_fire_magic_arrow() {
@@ -173,9 +178,18 @@ namespace Flame {
     int get_controller() {
       return controller;
     }
+    void set_hp_regen_rate(float hp_regen_rate_) {
+      hp_regen_rate = hp_regen_rate_;
+    }
+    void set_mp_regen_rate(float mp_regen_rate_) {
+      mp_regen_rate = mp_regen_rate_;
+    }
   private:
     int controller; //range: [0, 3]
     float mp;
+    float hp_regen_rate;
+    float mp_regen_rate;
+    float last_regen;
     float attack_buff; //range: [1, +INF]; initial:1.0f
     int skill_point;
 
@@ -192,8 +206,8 @@ namespace Flame {
       return result;
     }
     void hpmp_regenerate() {
-      dec_health(-kHp_regenerate_rate);
-      mp += kMp_regenerate_rate;
+      dec_health(-hp_regen_rate);
+      mp += mp_regen_rate;
       if (mp > kMp_max) {
         mp = kMp_max;
       }
@@ -266,12 +280,10 @@ namespace Flame {
     //SHASENG
     bool fire_magic_arrow;
     //BAJIE
-    //1
     void shield();
-    //2
-    void taunt();
-    //3
+    void shield_end();
     void bloodsuck();
+    void bloodsuck_end();
 
     //running renderer
     bool running_status;

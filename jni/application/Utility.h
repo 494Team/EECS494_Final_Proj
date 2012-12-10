@@ -115,12 +115,14 @@ namespace Flame{
   const int kShop_cursor_max = 7;
   const int kAttack_max = 5;
   const int kDefense_max = 5;
-  const int kStrength_max = 5;
+  const int kHp_regen_max = 5;
   const int kSpeed_max = 5;
 
-  const float kSpeed_maxbuff = 200.0f;
-  const float kDefense_maxbuff = 0.5f;
   const float kAttack_maxbuff = 1.0f;
+  const float kDefense_maxbuff = 0.5f;
+  const float kHp_regen_maxbuff = 0.4f;
+  const float kMp_regen_maxbuff = 0.8f;
+  const float kSpeed_maxbuff = 150.0f;
 
   //others
   const int kPlayer_num_max = 4;

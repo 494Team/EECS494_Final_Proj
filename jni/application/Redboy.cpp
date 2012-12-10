@@ -28,7 +28,7 @@ void Redboy::attack() {
 
 // fire charge
 void Redboy::skill1() {
-  int total_p_num = Model_state::get_instance()->get_player_num();
+  int total_p_num = Model_state::get_instance()->get_player_list_ptr()->size();
   int player_num = randomer.rand_lt(total_p_num);
   if (total_p_num > 1) {
       while (players[player_num] == target) {
@@ -60,7 +60,7 @@ void Redboy::skill2() {
 
 // fire spikes
 void Redboy::skill3() {
-  int total_p_num = Model_state::get_instance()->get_player_num();
+  int total_p_num = Model_state::get_instance()->get_player_list_ptr()->size();
   int player_num = randomer.rand_lt(total_p_num);
   Model_state::get_instance()->add_spell(new Hell_spikes(players[player_num]->get_location()));
 }
