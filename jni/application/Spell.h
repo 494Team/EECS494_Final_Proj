@@ -24,6 +24,7 @@ namespace Flame {
       {return active;}
     void disable_spell()
       {active = false;}
+    float get_remaining_lifetime() const {return life_time;}
     virtual Zeni::Point2f get_location() const = 0;
 
     virtual void update_body() = 0;
@@ -133,12 +134,14 @@ namespace Flame {
     Resizable_spell(const Zeni::Point2f& location_ = Zeni::Point2f(),
                     const Zeni::Vector2f& size_ = Zeni::Vector2f(),
                     const Zeni::Vector2f& resize_speed_ = Zeni::Vector2f(),
-                    float life_time_ = 0.f);
+                    float life_time_ = 0.f,
+                    const Zeni::Vector2f& max_size_ = Zeni::Vector2f());
 
     virtual Zeni::Point2f get_location() const
       {return location - size / 2;}
     Zeni::Point2f get_center_location() const
       {return location;}
+    bool hits_max() const {return is_max;}
 
     virtual void update_body();
     Zeni::Collision::Capsule get_body() const
@@ -152,8 +155,10 @@ namespace Flame {
   private:
     Zeni::Point2f location;
     Zeni::Vector2f size;
+    Zeni::Vector2f max_size;
     Zeni::Vector2f resize_speed;
     Zeni::Collision::Capsule body;
+    bool is_max;
   };
 
 }

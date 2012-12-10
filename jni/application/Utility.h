@@ -89,6 +89,12 @@ namespace Flame{
   const float BULLKING_MARCH_NEW_GAP = 0.2f;
   const float BULLKING_EXPLOSION_DURATION = 12.0f;
   const float BULLKING_EXPLOSION_NEW_GAP = 0.6f;
+  const Zeni::Vector2f BULLKING_EXPLOSION_INITIAL_SIZE = Zeni::Vector2f(10.0f, 10.0f);
+  const Zeni::Vector2f BULLKING_EXPLOSION_RESIZE_SPEED = Zeni::Vector2f(70.0f, 70.0f);
+  const Zeni::Vector2f BULLKING_EXPLOSION_MAX_SIZE = Zeni::Vector2f(100.0f, 100.0f);
+  const float BULLKING_EXPLOSION_LIFETIME = 4.0f;
+  const float BULLKING_EXPLOSION_DAMAGE_RENDER_TIME = 0.2f;
+  const float BULLKING_EXPLOSION_DAMAGE = 800.0f;
 
   // attack effect
   const float NORMAL_HITBACK_TIME = 0.1f;

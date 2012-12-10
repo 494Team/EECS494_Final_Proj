@@ -68,6 +68,8 @@ void Redboy::skill3() {
 void Redboy::update(float time) {
   Boss::update(time);
   if (target == 0) {
+    is_attacking = false;
+    status = IDLE;
     return;
   }
   if (is_get_wukong_charge()) {
@@ -262,5 +264,8 @@ void Redboy::render() {
     Zeni::Point2f taunt_ul = taunt_pos - scale * taunt_render_radius * Zeni::Vector2f(1.0f, 1.0f);
     Zeni::Point2f taunt_lr = taunt_pos + scale * taunt_render_radius * Zeni::Vector2f(1.0f, 1.0f);
     Zeni::render_image("taunt_effect", taunt_ul, taunt_lr);
+  }
+  if (is_get_wukong_charge()) {
+    render_get_wukong_charge_effect();
   }
 }

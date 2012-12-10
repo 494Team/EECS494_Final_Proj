@@ -334,6 +334,16 @@ namespace Flame {
     float pre_time;
   };
 
+  class Explosion : public Resizable_spell {
+  public:
+    Explosion(const Zeni::Point2f& location_);
+    void update(float time = 0.0f);
+    void render();
+  private:
+    bool already_cause_damage;
+    float lifetime_after_damage_effect;
+    float damage_effect_render_time;
+  };
 }
 
 #endif

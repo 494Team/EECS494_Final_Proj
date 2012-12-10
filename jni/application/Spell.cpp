@@ -96,10 +96,13 @@ namespace Flame {
   Resizable_spell::Resizable_spell(const Point2f& location_,
                                    const Vector2f& size_,
                                    const Vector2f& resize_speed_,
-                                   float life_time_) :
+                                   float life_time_,
+                                   const Vector2f& max_size_) :
     Spell(life_time_),
     location(location_),
     size(size_),
+    max_size(max_size_),
+    is_max(false),
     resize_speed(resize_speed_),
     body(Point3f(location_.x, location_.y, 0.f),
          Point3f(location_.x, location_.y, kCollision_object_height),
@@ -118,9 +121,13 @@ namespace Flame {
     Spell::update(time);
     if (!Spell::is_active())
       return;
-    location -= resize_speed * time / 2;
-    size += resize_speed * time;
-    Resizable_spell::update_body();
+    if (size.x < max_size.x && size.y < max_size.y) {
+      //location -= resize_speed * time / 2;
+      size += resize_speed * time;
+      Resizable_spell::update_body();
+    } else {
+      is_max = true;
+    }
   }
 
   void Resizable_spell::render(const String& texture, Color filter) const

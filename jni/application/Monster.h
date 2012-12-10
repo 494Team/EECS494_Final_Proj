@@ -55,6 +55,7 @@ namespace Flame {
 
     bool is_invincible() const {return invincible;}
     void set_invincible(bool inv_) {invincible = inv_;}
+    void render_get_wukong_charge_effect();
       
   protected:
     float calc_angle_between(const Zeni::Vector2f &a, const Zeni::Vector2f &b);

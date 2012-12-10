@@ -202,3 +202,10 @@ void Monster::update_render_suffix() {
     last_render_change_time = get_current_time();
   }
 }
+
+void Monster::render_get_wukong_charge_effect() {
+  Zeni::Point2f ul, lr;
+  float radians_ccw;
+  get_render_params(get_radius() * 1.0f, ul, lr, radians_ccw);
+  Zeni::render_image("charge_attack", ul, lr);
+}

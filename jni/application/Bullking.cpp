@@ -59,6 +59,8 @@ void Bullking::skill3() {
 void Bullking::update(float time) {
   Boss::update(time);
   if (target == 0) {
+    is_attacking = false;
+    status = IDLE;
     return;
   }
   if (is_get_wukong_charge()) {
@@ -144,7 +146,7 @@ void Bullking::update(float time) {
         if (get_current_time() - explosion_last_new_time > BULLKING_EXPLOSION_NEW_GAP) {
           explosion_last_new_time = get_current_time();
           int player_num = randomer.rand_lt(players.size());
-          Model_state::get_instance()->add_spell(new Hell_spikes(players[player_num]->get_location()));
+          Model_state::get_instance()->add_spell(new Explosion(players[player_num]->get_location()));
         }
       }
       break;
@@ -220,5 +222,9 @@ void Bullking::render() {
     Zeni::Point2f taunt_ul = taunt_pos - scale * taunt_render_radius * Zeni::Vector2f(1.0f, 1.0f);
     Zeni::Point2f taunt_lr = taunt_pos + scale * taunt_render_radius * Zeni::Vector2f(1.0f, 1.0f);
     Zeni::render_image("taunt_effect", taunt_ul, taunt_lr);
+  }
+
+  if (is_get_wukong_charge()) {
+    render_get_wukong_charge_effect();
   }
 }

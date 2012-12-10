@@ -601,11 +601,6 @@ namespace Flame {
   void Fire_ball::render()
   {Moving_spell::render("fire_ball");}
 
-  Hell_spikes::Hell_spikes(const Point2f& location_) :
-    Resizable_spell(location_, kHell_spikes_size, Vector2f(),
-                    kHell_spikes_pre_time + kHell_spikes_life_time),
-    pre_time(kHell_spikes_pre_time)
-  {}
 
   Ring_of_fire::Ring_of_fire(const Point2f& location_, const Vector2f& orientation_) :
     Moving_spell_rectangle(location_ + 50.f * orientation_.normalized(),
@@ -652,6 +647,12 @@ namespace Flame {
                  get_relative_location());
   }
 
+  Hell_spikes::Hell_spikes(const Point2f& location_) :
+    Resizable_spell(location_, kHell_spikes_size, Vector2f(),
+                    kHell_spikes_pre_time + kHell_spikes_life_time),
+    pre_time(kHell_spikes_pre_time)
+  {}
+
   void Hell_spikes::update(float time)
   {
     Resizable_spell::update(time);
@@ -674,4 +675,51 @@ namespace Flame {
       Resizable_spell::render("hell_spikes");
   }
 
+  Explosion::Explosion(const Zeni::Point2f& location_)
+    : Resizable_spell(
+        location_, 
+        BULLKING_EXPLOSION_INITIAL_SIZE, 
+        BULLKING_EXPLOSION_RESIZE_SPEED, 
+        BULLKING_EXPLOSION_LIFETIME,
+        BULLKING_EXPLOSION_MAX_SIZE
+      ),
+      already_cause_damage(false),
+      damage_effect_render_time(BULLKING_EXPLOSION_DAMAGE_RENDER_TIME),
+      lifetime_after_damage_effect(-1.0f)
+  {
+  }
+
+  void Explosion::update(float time) {
+    Resizable_spell::update(time);
+    if (!hits_max()) {
+      return;
+    }
+    if (!already_cause_damage) {
+      already_cause_damage = true;
+      vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
+      for (auto it = player_list_ptr->begin(); it != player_list_ptr->end(); ++it) {
+        if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
+          (*it)->dec_health(BULLKING_EXPLOSION_DAMAGE);
+        }
+      }
+    }
+    damage_effect_render_time -= time;
+    if (damage_effect_render_time < 0.0f) {
+      if (lifetime_after_damage_effect < 0.0f) {
+        lifetime_after_damage_effect = get_remaining_lifetime();
+      }
+    }
+  }
+
+  void Explosion::render() {
+    if (!hits_max()) {
+      Resizable_spell::render("hell_spikes_pre");
+    } else {
+      if (damage_effect_render_time >= 0.0f) {
+        Resizable_spell::render("hell_spikes");
+      } else {
+        Resizable_spell::render("hell_spikes", Zeni::Color(get_remaining_lifetime() / lifetime_after_damage_effect, 1.0f, 1.0f, 1.0f));
+      }
+    }
+  }
 }

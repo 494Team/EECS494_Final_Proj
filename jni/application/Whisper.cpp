@@ -173,4 +173,7 @@ void Whisper::render() {
     Zeni::render_image("taunt_effect", taunt_ul, taunt_lr);
   }
 
+  if (is_get_wukong_charge()) {
+    render_get_wukong_charge_effect();
+  }
 }
