@@ -50,6 +50,17 @@ namespace Flame {
     timer = timer_;
     for (std::vector<kPlayer_type>::iterator it = character_list.begin(); it != character_list.end(); it++)
       player_list.push_back(new Player(timer, kHp_max, 400.f, 16.f, Point2f(300.f, 3000.f), *it));
+
+    for (int i=0; i<4; i++) {
+      if (i < player_list.size()) {
+        player_alive[i] = true;
+        player_pos_in_list[i] = i;
+        player_list[i]->set_controller(i);
+      } else {
+        player_alive[i] = false;
+        player_pos_in_list[i] = -1;
+      }
+    }
     /*
     //for (std::vector<kPlayer_type>::iterator it = character_list.begin(); it != character_list.end(); it++) {
       player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(300.f, 3000.f), WUKONG));
@@ -240,6 +251,23 @@ namespace Flame {
         it = remove_monster(*it);
       else
         ++it;
+    int controller;
+    for (auto it = player_list.begin(); it != player_list.end();)
+      if (!(*it)->is_alive()) {
+        controller = (*it)->get_controller();
+        player_alive[controller] = false;
+        it = remove_player(*it);
+
+        for (int i=controller; i<4; i++) {
+          if (i==4 || player_pos_in_list[i+1] == -1) {
+            player_pos_in_list[i] = -1;
+          } else {
+            player_pos_in_list[i] = player_pos_in_list[i+1];
+          }
+        }
+      } else {
+        ++it;
+      }
     for (auto it = remove_list.begin(); it != remove_list.end(); ++it) {
       auto s_it = find(sim_obj_list.begin(), sim_obj_list.end(), *it);
       if (s_it != sim_obj_list.end())

@@ -102,8 +102,13 @@ namespace Flame {
       {return player_num;}
     void set_player_num(int num)
       {player_num = num;}
+    int get_player_pos_in_list(const int controller) {
+      return player_pos_in_list[controller];
+    }
   private:
     int player_num;
+    bool player_alive[4]; //book keeping for minimap
+    int player_pos_in_list[4]; //update when any player die
     int money;
     void clear();
 

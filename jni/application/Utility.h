@@ -117,9 +117,10 @@ namespace Flame{
   const float kAttack_maxbuff = 1.0f;
 
   //others
+  const int kPlayer_num_max = 4;
   const float kHpbar_width = 3.0f;
   const float kHighlight_move_CD = 0.2f;
-
+  const float kShow_alldie_time = 3.0f;
 
   //player setting
   const float kHp_max = 1000.0f;
