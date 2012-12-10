@@ -10,11 +10,11 @@
 #include "Model_state.h"
 #include "Collision.h"
 #include "Spells.h"
-#include "Monster.h"
 
 using namespace Zeni;
 
 namespace Flame {
+  class Helldoor;
   #define PLAYER_SPELL1_CD 1.0f
   #define PLAYER_SPELL2_CD 1.0f
   #define PLAYER_SPELL3_CD 1.0f

@@ -873,6 +873,76 @@ The following things are unsupported:
     <tile>0</tile>
   </redboy_back_attack>
   <!-- Redboy texture ends-->
+  <!-- Bullking texture starts-->
+  <bullking_right0>
+    <filepath>textures/bullking_right0.png</filepath>
+    <tile>0</tile>
+  </bullking_right0>
+  <bullking_right1>
+    <filepath>textures/bullking_right1.png</filepath>
+    <tile>0</tile>
+  </bullking_right1>
+  <bullking_left0>
+    <filepath>textures/bullking_left0.png</filepath>
+    <tile>0</tile>
+  </bullking_left0>
+  <bullking_left1>
+    <filepath>textures/bullking_left1.png</filepath>
+    <tile>0</tile>
+  </bullking_left1>
+  <bullking_front0>
+    <filepath>textures/bullking_front1.png</filepath>
+    <tile>0</tile>
+  </bullking_front0>
+  <bullking_front1>
+    <filepath>textures/bullking_front1.png</filepath>
+    <tile>0</tile>
+  </bullking_front1>
+  <bullking_back0>
+    <filepath>textures/bullking_back0.png</filepath>
+    <tile>0</tile>
+  </bullking_back0>
+  <bullking_back1>
+    <filepath>textures/bullking_back1.png</filepath>
+    <tile>0</tile>
+  </bullking_back1>
+  <bullking_casting0>
+    <filepath>textures/bullking_casting0.png</filepath>
+    <tile>0</tile>
+  </bullking_casting0>
+  <!--<bullking_casting1>
+    <filepath>textures/bullking_casting1.png</filepath>
+    <tile>0</tile>
+  </bullking_casting1>-->
+  <bullking_casting1>
+    <filepath>textures/bullking_casting0.png</filepath>
+    <tile>0</tile>
+  </bullking_casting1>
+  <bullking_casting2>
+    <filepath>textures/bullking_casting2_0.png</filepath>
+    <tile>0</tile>
+  </bullking_casting2>
+  <bullking_left_attack>
+    <filepath>textures/bullking_attack_left.png</filepath>
+    <tile>0</tile>
+  </bullking_left_attack>
+  <bullking_right_attack>
+    <filepath>textures/bullking_attack_right.png</filepath>
+    <tile>0</tile>
+  </bullking_right_attack>
+  <bullking_front_attack>
+    <filepath>textures/bullking_attack_front.png</filepath>
+    <tile>0</tile>
+  </bullking_front_attack>
+  <bullking_back_attack>
+    <filepath>textures/bullking_attack_back.png</filepath>
+    <tile>0</tile>
+  </bullking_back_attack>
+  <helldoor>
+    <filepath>textures/helldoor.png</filepath>
+    <tile>0</tile>
+  </helldoor>
+  <!-- Bullking texture ends-->
   <!-- Minimap texture starts-->
   <minimap>
     <filepath>textures/open_door.png</filepath>

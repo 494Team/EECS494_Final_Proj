@@ -89,6 +89,9 @@ float Boss::get_random_cooldown(float cooldown) {
 }
 
 void Boss::get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker, Zeni::Vector2f coming_ori) {
+  if (is_invincible()) {
+    return;
+  }
   dec_health(damage);
   increase_hatred(damage, attacker);
   for (int i = 0; i < (int) effects.size(); ++i) {
@@ -98,7 +101,7 @@ void Boss::get_hit(const float &damage, const std::vector<attack_effect> &effect
           break;
         }
         if (status == SKILL1 || status == SKILL2 || status == SKILL3) {
-          return;
+          break;
         }
         slowdown = true;
         set_speed(get_current_speed() * 0.5f);

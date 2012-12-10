@@ -71,6 +71,25 @@ namespace Flame{
   const float REDBOY_FIRE_CHARGE_DAMAGE = 500.0f;
   const float REDBOY_FIRE_CHARGE_SPEED = 200.0f;
 
+  // Bullking constants
+  const float BULLKING_RADIUS = 30.0f;
+  const float BULLKING_SPEED = 100.0f;
+  const float BULLKING_DAMAGE = 500.0f;
+  const float BULLKING_HEALTH = 10000.0f;
+  const float BULLKING_ATTACK_GAP = 1.5f;
+  const float BULLKING_ATTACK_RADIUS = 35.0f;
+  const float BULLKING_MIN_DIST = 10.0f;
+  const float BULLKING_HELLDOOR_COOLDOWN = 15.0f;
+  const float BULLKING_MARCH_COOLDOWN = 20.0f;
+  const float BULLKING_EXPLOSION_COOLDOWN = 25.0f;
+  const float BULLKING_HELLDOOR_HEALTH = 500.0f; //2500.0f
+  const float BULLKING_HELLDOOR_RADIUS = 20.0f;
+  const float BULLKING_HELLDOOR_NEW_GAP = 2.0f;
+  const float BULLKING_MARCH_DURATION = 10.0f;
+  const float BULLKING_MARCH_NEW_GAP = 0.2f;
+  const float BULLKING_EXPLOSION_DURATION = 12.0f;
+  const float BULLKING_EXPLOSION_NEW_GAP = 0.6f;
+
   // attack effect
   const float NORMAL_HITBACK_TIME = 0.1f;
   const float BOSS_CHARGE_HITBACK_TIME = 0.5f;

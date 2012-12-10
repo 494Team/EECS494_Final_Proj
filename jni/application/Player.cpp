@@ -1,4 +1,6 @@
 #include "Player.h"
+#include "Helldoor.h"
+#include <iostream>
 
 using namespace std;
 using namespace Flame;
@@ -125,7 +127,9 @@ void Player::update(float time) {
   //update buff
   set_attack_buff((1.0f + attack * kAttack_maxbuff/kAttack_max) * berserk_buff);
   set_armor((1.0f - defense * kDefense_maxbuff/kDefense_max) * shield_buff);
-  set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
+  if (!is_charging()) {
+    set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
+  }
   
   hpmp_regenerate();
 
@@ -453,7 +457,6 @@ void Player::disintegrate_end() {
 }
 
 void Player::charge_update(float time) {
-  //game_time->pause_all();
   Zeni::Vector2f p_backup_loc = get_location();
   static_move(time, true);
 
@@ -464,24 +467,33 @@ void Player::charge_update(float time) {
     charge_attacking = true;
     m_backup_locs[i] = charged_monsters[i]->get_location();
     charged_monsters[i]->make_move(time, true);
+    bool roll_back = false;
+    // can't move invincible monster
+    if (charged_monsters[i]->is_invincible()) {
+      roll_back = true;
+    }
+    // can't move helldoor
+    Helldoor* test_helldoor = dynamic_cast<Helldoor*>(charged_monsters[i]);
+    if (test_helldoor != 0) {
+      roll_back = true;
+    }
     // can't intersects with walls
     if (!Model_state::get_instance()->can_move(charged_monsters[i]->get_body())) {
-      for (int j = 0; j <= i; ++j) {
-        charged_monsters[j]->set_position(m_backup_locs[j]);
-      }
-      set_position(p_backup_loc);
-      break;
+      roll_back = true;
     }
     // intersects with WUKONG is okay.
     std::vector<Player *> *players_ptr = Model_state::get_instance()->get_player_list_ptr();
     for (std::vector<Player *>::iterator it = players_ptr->begin(); it != players_ptr->end(); ++it) {
       if (((*it)->ptype != WUKONG) && (*it)->get_body().intersects(charged_monsters[i]->get_body())) {
-        for (int j = 0; j <= i; ++j) {
-          charged_monsters[j]->set_position(m_backup_locs[j]);
-        }
-        set_position(p_backup_loc);
-        break;
+        roll_back = true;
       }
+    }
+    if (roll_back) {
+      for (int j = 0; j <= i; ++j) {
+        charged_monsters[j]->set_position(m_backup_locs[j]);
+      }
+      set_position(p_backup_loc);
+      break;
     }
   }
   delete [] m_backup_locs;
@@ -523,7 +535,6 @@ void Player::charge_update(float time) {
 
   if (passed_time > kCharge_attack_CD) {
     if (charged_monsters.size() > 0) {
-      //charge_no_hit_before = false;
       last_charge_attack = current_time;
       p_backup_loc = get_location();
       set_position(get_location() + get_current_orientation() * (-get_current_speed()) * 0.1f);
@@ -543,7 +554,6 @@ void Player::charge_update(float time) {
       }
     }
   }
-  //game_time->unpause_all();
 }
 
 void Player::charge_end() {

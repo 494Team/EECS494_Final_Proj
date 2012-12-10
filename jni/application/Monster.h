@@ -52,6 +52,9 @@ namespace Flame {
     void get_render_params(float render_radius, Zeni::Point2f &ul, Zeni::Point2f &lr, float &radians_ccw);
     
     void update_render_suffix();
+
+    bool is_invincible() const {return invincible;}
+    void set_invincible(bool inv_) {invincible = inv_;}
       
   protected:
     float calc_angle_between(const Zeni::Vector2f &a, const Zeni::Vector2f &b);
@@ -70,6 +73,7 @@ namespace Flame {
     float current_time;
     float prev_attack_time;
     float last_render_change_time;
+    bool invincible;
   };
 }
 

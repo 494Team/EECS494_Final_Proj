@@ -16,6 +16,7 @@ Monster::Monster(
   attack_gap(attack_gap_),
   view_range(view_range_),
   is_attacking(false),
+  invincible(false),
   last_render_change_time(0.0f),
   render_suffix("0")
 {
@@ -146,6 +147,7 @@ void Monster::update(float time) {
   Agent::update(time);
   update_current_time(time);
   update_rel_loc();
+  players = (*Model_state::get_instance()->get_player_list_ptr());
   for (int i = 0; i < (int)players.size(); ++i) {
     if ((players[i]->get_location() - get_location()).magnitude() > view_range) {
       clear_hatred(players[i]);
