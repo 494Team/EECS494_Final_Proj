@@ -908,41 +908,17 @@ private:
     //CDbar
     
     Point2f CDbar_loc(loc.x, loc.y + head_size.y + 5.0f);
-    /*
-    Zeni::Vertex2f_Color p00(CDbar_loc, cr[kCDbar_color]);
-    Zeni::Vertex2f_Color p01(CDbar_loc + Zeni::Point2f(0.0f, kCDbar_width), cr[kCDbar_color]);
-    Zeni::Vertex2f_Color p02(CDbar_loc + Zeni::Point2f(CD1percent * kCDbar_length, kCDbar_width), cr[kCDbar_color]);
-    Zeni::Vertex2f_Color p03(CDbar_loc + Zeni::Point2f(CD1percent * kCDbar_length, 0.0f), cr[kCDbar_color]);
-    Zeni::Quadrilateral<Zeni::Vertex2f_Color> bar1(p00, p01, p02, p03);
-    */
     Zeni::render_image(player_skill_texture + "1",CDbar_loc, CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
     Zeni::render_image("cd_mask", CDbar_loc + Zeni::Vector2f(0, kCDbar_length *(CD1percent)) ,CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
 
     CDbar_loc += Point2f(kCDbar_length + 5.0f, 0.0f);
-    /*
-    Zeni::Vertex2f_Color p10(CDbar_loc, cr[kCDbar_color]);
-    Zeni::Vertex2f_Color p11(CDbar_loc + Zeni::Point2f(0.0f, kCDbar_width), cr[kCDbar_color]);
-    Zeni::Vertex2f_Color p12(CDbar_loc + Zeni::Point2f(CD2percent * kCDbar_length, kCDbar_width), cr[kCDbar_color]);
-    Zeni::Vertex2f_Color p13(CDbar_loc + Zeni::Point2f(CD2percent * kCDbar_length, 0.0f), cr[kCDbar_color]);
-    Zeni::Quadrilateral<Zeni::Vertex2f_Color> bar2(p10, p11, p12, p13);
-    */
     Zeni::render_image(player_skill_texture + "2",CDbar_loc, CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
     Zeni::render_image("cd_mask", CDbar_loc + Zeni::Vector2f(0, kCDbar_length *(CD2percent)) ,CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
 
     CDbar_loc += Point2f(kCDbar_length + 5.0f, 0.0f);
-    /*
-    Zeni::Vertex2f_Color p20(CDbar_loc, cr[kCDbar_color]);
-    Zeni::Vertex2f_Color p21(CDbar_loc + Zeni::Point2f(0.0f, kCDbar_width), cr[kCDbar_color]);
-    Zeni::Vertex2f_Color p22(CDbar_loc + Zeni::Point2f(CD3percent * kCDbar_length, kCDbar_width), cr[kCDbar_color]);
-    Zeni::Vertex2f_Color p23(CDbar_loc + Zeni::Point2f(CD3percent * kCDbar_length, 0.0f), cr[kCDbar_color]);
-    Zeni::Quadrilateral<Zeni::Vertex2f_Color> bar3(p20, p21, p22, p23);
-    */
     Zeni::render_image(player_skill_texture + "3",CDbar_loc, CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
     Zeni::render_image("cd_mask", CDbar_loc + Zeni::Vector2f(0, kCDbar_length *(CD3percent)) ,CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
 
-//    vr.render(bar1);
-  //  vr.render(bar2);
-   // vr.render(bar3);
     vr.render(hpbar);
     vr.render(mpbar);
   }
