@@ -15,6 +15,8 @@
 
 namespace Flame{
   const int kTemp_revival_max = 5;
+  const float kScale_threshold_high = 3.0f;
+  const float kScale_threshold_low = 1.0f;
 
   extern const float kCollision_object_height;
 
@@ -132,7 +134,7 @@ namespace Flame{
   const float kShow_alldie_time = 3.0f;
 
   //player setting
-  const float kHp_max = 100000.0f;
+  const float kHp_max = 1000.0f;
   const float kMp_max = 1000.0f;
   
   //choosing character page "Preparation State"

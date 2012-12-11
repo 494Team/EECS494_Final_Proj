@@ -145,13 +145,13 @@ namespace Flame {
         float dis_y = abs(player_list[(i + j) % int(player_list.size())]->get_location().y - player_list[i]->get_location().y);
         float frac = dis_x / dis_y;
         if (dis_y != 0. && frac < 4.f / 3.f) {
-          if (200.f / dis_y < 0.5f) {
-            if (scale > 0.5f)
-              scale = 0.5f;
+          if (200.f / dis_y < kScale_threshold_low) {
+            if (scale > kScale_threshold_low)
+              scale = kScale_threshold_low;
           }
-          else if (200.0f / dis_y > 3.f) {
-            if (scale > 3.f)
-              scale = 3.f;
+          else if (200.0f / dis_y > kScale_threshold_high) {
+            if (scale > kScale_threshold_high)
+              scale = kScale_threshold_high;
           }
           else {
             if (scale > 200.f / dis_y)
@@ -159,13 +159,13 @@ namespace Flame {
             }
         }
         else {
-          if (800.f / 3 / dis_x < 0.5f) {
-            if (scale > 0.5f)
-              scale = 0.5f;
+          if (800.f / 3 / dis_x < kScale_threshold_low) {
+            if (scale > kScale_threshold_low)
+              scale = kScale_threshold_low;
           }
-          else if (800.0f / 3 / dis_x > 3.f) {
-            if (scale > 3.f)
-              scale = 3.f;
+          else if (800.0f / 3 / dis_x > kScale_threshold_high) {
+            if (scale > kScale_threshold_high)
+              scale = kScale_threshold_high;
           }
           else {
             if (scale > 800.f / 3 / dis_x)

@@ -1265,22 +1265,28 @@ private:
           move_cursor(0, false);
         break;
       case HORI2:
-        if (confidence >= 1.0f)
-          move_cursor(1, true);
-        else if (confidence <= -1.0f)
-          move_cursor(1, false);
+        if (Model_state::get_instance()->get_initial_player_num() >= 2) {
+            if (confidence >= 1.0f)
+              move_cursor(1, true);
+            else if (confidence <= -1.0f)
+              move_cursor(1, false);
+        }
         break;
       case HORI3:
-        if (confidence >= 1.0f)
-          move_cursor(2, true);
-        else if (confidence <= -1.0f)
-          move_cursor(2, false);
+        if (Model_state::get_instance()->get_initial_player_num() >= 3) {
+            if (confidence >= 1.0f)
+              move_cursor(2, true);
+            else if (confidence <= -1.0f)
+              move_cursor(2, false);
+        }
         break;
       case HORI4:
-        if (confidence >= 1.0f)
-          move_cursor(3, true);
-        else if (confidence <= -1.0f)
-          move_cursor(3, false);
+        if (Model_state::get_instance()->get_initial_player_num() >= 4) {
+            if (confidence >= 1.0f)
+              move_cursor(3, true);
+            else if (confidence <= -1.0f)
+              move_cursor(3, false);
+        }
         break;
       default:
         break;
@@ -1298,12 +1304,15 @@ private:
           choose_char(0);
           break;
         case A2:
+          if (Model_state::get_instance()->get_initial_player_num() >= 2)
           choose_char(1);
           break;
         case A3:
+          if (Model_state::get_instance()->get_initial_player_num() >= 3)
           choose_char(2);
           break;
         case A4:
+          if (Model_state::get_instance()->get_initial_player_num() >= 4)
           choose_char(3);
           break;
         default:
