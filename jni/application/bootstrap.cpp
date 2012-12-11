@@ -1163,6 +1163,7 @@ public:
       p_color[i] = Color();
       char_available[i] = true;
     }
+    m_set.start();
   }
 
 private:
@@ -1228,6 +1229,7 @@ private:
   SHASENG,
   BAJIE
   */
+  Chronometer<Time> m_set;
   bool char_available[4];
   bool p_decided[4];
   kPlayer_type chosen_char[4];
@@ -1326,6 +1328,16 @@ private:
 
   void render() {
     //Widget_Gamestate::render();
+    if (m_set.seconds()<0.5f)
+      render_image("title0", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+    else if (m_set.seconds()<1.f)
+      render_image("title2", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+    else{
+      m_set.reset();
+      m_set.start();
+      render_image("title0", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+    }
+
     render_image("pigsy_front0",
        Point2f(600.0f, 150.0f),
        Point2f(800.0f, 500.0f),
