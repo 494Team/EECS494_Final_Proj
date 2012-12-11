@@ -1232,18 +1232,18 @@ private:
             chosen_char[player_n] = WUKONG;
           else if (chosen_char[player_n] == WUKONG)
             chosen_char[player_n] = BAJIE;
-	  else if (chosen_char[player_n] == SANZANG)
-	    chosen_char[player_n] = SHASENG;
-	  break;
+	        else if (chosen_char[player_n] == SANZANG)
+	          chosen_char[player_n] = SHASENG;
+	        break;
         case kMove_down:
           if (chosen_char[player_n] == SANZANG)
             chosen_char[player_n] = SHASENG;
           else if (chosen_char[player_n] == WUKONG)
             chosen_char[player_n] = BAJIE;
-	  else if (chosen_char[player_n] == SHASENG)
-	    chosen_char[player_n] = SANZANG;
-	  else if (chosen_char[player_n] == BAJIE)
-	    chosen_char[player_n] = WUKONG;
+	        else if (chosen_char[player_n] == SHASENG)
+	          chosen_char[player_n] = SANZANG;
+	        else if (chosen_char[player_n] == BAJIE)
+	          chosen_char[player_n] = WUKONG;
           break;
         default:
           break;
@@ -1385,19 +1385,20 @@ private:
           break;
         }
         case A1:
-          choose_char(0);
+          if(p_available[0])
+            choose_char(0);
           break;
         case A2:
-          if (Model_state::get_instance()->get_initial_player_num() >= 2)
-          choose_char(1);
+          if(p_available[1])
+            choose_char(1);
           break;
         case A3:
-          if (Model_state::get_instance()->get_initial_player_num() >= 3)
-          choose_char(2);
+          if(p_available[2]){
+            choose_char(2);
           break;
         case A4:
-          if (Model_state::get_instance()->get_initial_player_num() >= 4)
-          choose_char(3);
+          if(p_available[3]){
+            choose_char(3);
           break;
         default:
           break;

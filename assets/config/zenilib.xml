@@ -44,7 +44,7 @@
 <Zenilib>
     <Uniqname>zenilib</Uniqname>
     <Textures>
-        <Anisotropy>0</Anisotropy>
+        <Anisotropy>16</Anisotropy>
         <Bilinear_Filtering>1</Bilinear_Filtering>
         <Mipmapping>1</Mipmapping>
     </Textures>
@@ -53,11 +53,11 @@
         <!--<API>OpenGL</API>-->
         <!--<API>Disabled</API>-->
         <API>OpenGL</API>
-        <Full_Screen>1</Full_Screen>
-        <Multisampling>0</Multisampling>
+        <Full_Screen>0</Full_Screen>
+        <Multisampling>16</Multisampling>
         <Resolution>
-            <Width>1600</Width>
-            <Height>900</Height>
+            <Width>900</Width>
+            <Height>715</Height>
         </Resolution>
         <Vertical_Sync>1</Vertical_Sync>
     </Video>
