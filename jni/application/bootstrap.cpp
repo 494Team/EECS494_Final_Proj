@@ -1393,11 +1393,11 @@ private:
             choose_char(1);
           break;
         case A3:
-          if(p_available[2]){
+          if(p_available[2])
             choose_char(2);
           break;
         case A4:
-          if(p_available[3]){
+          if(p_available[3])
             choose_char(3);
           break;
         default:
@@ -1418,22 +1418,35 @@ private:
       m_set.start();
     }
 
-    Color cursor_color = (p_decided[0]) ? kCannotmove_color : Color();
     
     for  (int i = 0; i < 4; ++i){
       if (p_available[i]){
         String a;
-        if(chosen_char[i] == SANZANG)
-          a = String("sanzang_p" + itoa(i+1));
-        else if (chosen_char[i] == SHASENG)
-          a = String("shaseng_p" + itoa(i+1));
-        else if (chosen_char[i] == WUKONG)
-          a = String("wukong_p" + itoa(i+1));
-        else if (chosen_char[i] == BAJIE)
-          a = String("bajie_p" + itoa(i+1));
-        render_image(a, Point2f(0.f, 0.f), Point2f(1024.f, 1024.f), false, cursor_color);
+        if(p_decided[i]){
+          if(chosen_char[i] == SANZANG)
+            a = String("sanzang_mask_p" + itoa(i+1));
+          else if (chosen_char[i] == SHASENG)
+            a = String("shaseng_mask_p" + itoa(i+1));
+          else if (chosen_char[i] == WUKONG)
+            a = String("wukong_mask_p" + itoa(i+1));
+          else if (chosen_char[i] == BAJIE)
+            a = String("bajie_mask_p" + itoa(i+1));
+          render_image(a, Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+        }else{
+          if(chosen_char[i] == SANZANG)
+            a = String("sanzang_p" + itoa(i+1));
+          else if (chosen_char[i] == SHASENG)
+            a = String("shaseng_p" + itoa(i+1));
+          else if (chosen_char[i] == WUKONG)
+            a = String("wukong_p" + itoa(i+1));
+          else if (chosen_char[i] == BAJIE)
+            a = String("bajie_p" + itoa(i+1));
+          render_image(a, Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+        }
       }
     }
+    if (chosen_num == player_count && player_count != 0)
+      render_image("start_game", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
   }
 };
 
@@ -1601,7 +1614,7 @@ class Pre_Play_State : public Widget_Gamestate {
           }
           
           void on_accept() {
-              get_Game().push_state(new Choose_Pnumber_State());
+              get_Game().push_state(new Preparation_State());
 
           }
       } play_single_button;
