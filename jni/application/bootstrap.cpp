@@ -1211,9 +1211,6 @@ private:
         p_color[pos] = Color(1.0f, 0.3f, 0.3f, 0.3f);
         char_available[pos] = false;
       }
-        cerr << "**********\nchosen_char: " << chosen_char[controller] << "\n**************\n\n";
-        cerr << "**********\ncontroller: " << controller << "\n**************\n\n";
-        cerr << "**********\npos: " << pos << "\n**************\n\n";
       if (chosen_num == Model_state::get_instance()->get_initial_player_num()) {
         get_Game().pop_state();
         //get_Game().push_state(new Upgrade_state());
