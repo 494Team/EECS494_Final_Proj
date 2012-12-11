@@ -1407,9 +1407,9 @@ private:
 
   void render() {
     //Widget_Gamestate::render();
-    if (m_set.seconds() < 0.5f)
+    if (m_set.seconds() < 0.3f)
       render_image("selection0", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
-    else if (m_set.seconds() < 1.f)
+    else if (m_set.seconds() < 0.6f)
       render_image("selection1", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
     else{
       render_image("selection0", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
