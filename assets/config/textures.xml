@@ -37,6 +37,19 @@ The following things are unsupported:
   4. Anything other than 8 bits per channel
 -->
 <Textures>
+
+<taunt1>
+<filepath>textures/taunt1.png</filepath>
+<tile>0</tile>
+</taunt1>
+<taunt2>
+<filepath>textures/taunt2.png</filepath>
+<tile>0</tile>
+</taunt2>
+<taunt3>
+<filepath>textures/taunt3.png</filepath>
+<tile>0</tile>
+</taunt3>
 <bloodsuck_left>
 <filepath>textures/bloodsuck_left.png</filepath>
 <tile>0</tile>
