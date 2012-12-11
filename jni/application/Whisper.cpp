@@ -31,7 +31,7 @@ bool Whisper::is_path_clear(const Zeni::Collision::Parallelepiped &path_obj) {
   bool path_clear = true;
   std::vector<Map *> * map_obj_list = Model_state::get_instance()->get_map_obj_list_ptr();
   for (std::vector<Map *>::iterator it = map_obj_list->begin(); it != map_obj_list->end(); ++it) {
-    if ((*it)->get_body().intersects(path_obj)) {
+    if (!(*it)->walk_thru() && (*it)->get_body().intersects(path_obj)) {
       path_clear = false;
       break;
     }

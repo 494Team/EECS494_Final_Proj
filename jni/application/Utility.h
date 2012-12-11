@@ -132,7 +132,7 @@ namespace Flame{
   const float kShow_alldie_time = 3.0f;
 
   //player setting
-  const float kHp_max = 1000.0f;
+  const float kHp_max = 100000.0f;
   const float kMp_max = 1000.0f;
   
   //choosing character page "Preparation State"

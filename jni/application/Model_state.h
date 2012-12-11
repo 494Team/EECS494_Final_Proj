@@ -127,12 +127,13 @@ namespace Flame {
     bool is_controller_alive(const int controller) {
       return controller_alive[controller];
     }
+    void clear_without_player();
+    void clear_all();
   private:
     int initial_player_num;
     bool controller_alive[4]; //usage: controller_alive[controller]
     int player_pos_in_list[4]; //update when any player die
     int money;
-    void clear();
 
     // constructor is private thus nobody else can create one
     Model_state();

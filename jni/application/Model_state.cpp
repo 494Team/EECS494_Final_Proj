@@ -7,6 +7,9 @@
 #include <functional>
 #include <map>
 #include <utility>
+#include <iostream>
+
+using std::cerr; using std::endl;
 
 using std::bind; using std::find; using std::for_each;
 using std::placeholders::_1;
@@ -22,7 +25,9 @@ namespace Flame {
   Model_state * Model_state::ptr = nullptr;
 
   Model_state_destroyer::~Model_state_destroyer()
-    {delete Model_state::ptr;}
+    {
+    cerr << "~Model_state_destroyer" << endl;
+      delete Model_state::ptr;}
 
   Model_state::Model_state() :
     center_location(Point2f()),
@@ -31,8 +36,9 @@ namespace Flame {
 
   Model_state::~Model_state()
   {
-    clear();
+    clear_all();
     character_list.clear(); //this cannot be put in Model_state::clear()
+    cerr << "~Model_state" << endl;
   }
 
   Model_state * Model_state::get_instance()
@@ -45,11 +51,11 @@ namespace Flame {
   void Model_state::init(int level, Chronometer<Time> * timer_)
   {
     // enter game for the first time
-    if (level==0) {
+    if (level==1) {
       money = 0;
     }
 
-    clear();
+    clear_all();
     timer = timer_;
     for (std::vector<kPlayer_type>::iterator it = character_list.begin(); it != character_list.end(); it++) {
       player_list.push_back(new Player(timer, kHp_max, 400.f, 16.f, Point2f(300.f, 3000.f), *it));
@@ -75,49 +81,16 @@ namespace Flame {
 
     character_list.clear(); //this cannot be put in Model_state::clear()
     
+    /*
     // wall vertical
       map_obj_list.push_back(new Map_brick(Point2f(-40.f, -40.f), Vector2f(40.f, 3160.f), 40.f, 40.f, "rock"));
       map_obj_list.push_back(new Map_brick(Point2f(1000.f, -40.f), Vector2f(40.f, 3160.f), 40.f, 40.f, "rock"));
-      /*
-    map_obj_list.push_back(new Map_brick(Point2f(-40.0f, -40.0f), Vector2f(40.f,580.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(500.0f, 200.0f), Vector2f(40.f,340.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(700.0f - 40.f, 200.0f), Vector2f(40.f,540.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(1100.0f, -40.0f), Vector2f(40.f, 540.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(1300.0f - 40.f, -40.0f), Vector2f(40.f, 540.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(1600.0f, 300.0f), Vector2f(40.f, 440.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(1800.0f -40.f, 300.0f), Vector2f(40.f, 600.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(2000.0f, -40.0f), Vector2f(40.f, 1280.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(600.0f, 600.0f - 40.f), Vector2f(40.f, 340.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(-40.0f, 600.0f-40.0f), Vector2f(40.f, 1180.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(1800.0f - 40.f, 1700.0f), Vector2f(40.f, 100.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(2000.0f, 1500.0f - 40.f), Vector2f(40.f, 580.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(400.0f, 1200.0f), Vector2f(40.f, 300.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(-40.0f, 1800.0f - 40.f), Vector2f(40.f, 280.0f), 20.0f, 20.f, String("rock")));
-    */
 
     // wall horizontal
       map_obj_list.push_back(new Map_brick(Point2f(0.0f, -40.0f), Vector2f(1000.f, 40.0f), 40.0f, 40.f, String("rock")));
       map_obj_list.push_back(new Map_brick(Point2f(0.0f, 1000.0f), Vector2f(1000.f, 40.0f), 40.0f, 40.f, String("rock")));
       map_obj_list.push_back(new Map_brick(Point2f(0.0f, 2040.0f), Vector2f(1000.f, 40.0f), 40.0f, 40.f, String("rock")));
       map_obj_list.push_back(new Map_brick(Point2f(0.0f, 3080.0f), Vector2f(1000.f, 40.0f), 40.0f, 40.f, String("rock")));
-    /*
-    map_obj_list.push_back(new Map_brick(Point2f(0.0f, -40.0f), Vector2f(1100.f, 40.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(1300.0f, -40.0f), Vector2f(700.f, 40.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(0.0f, 500.0f), Vector2f(500.f, 40.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(500.0f, 200.0f), Vector2f(200.f, 40.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(1100.0f, 500.0f-40.0f), Vector2f(200.f, 40.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(1300.0f, -40.0f), Vector2f(700.f, 40.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(1600.0f, 300.0f-40.0f), Vector2f(200.f, 40.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(400.0f, 1200.f), Vector2f(1600.f, 40.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(400.0f, 1500.0f - 40.f), Vector2f(1600.f, 40.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(0.0f, 1800.0f-40.0f), Vector2f(1800.f, 40.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(0.0f, 2000.0f), Vector2f(2000.f, 40.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(0.0f, 600-40.0f), Vector2f(600.f, 40.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(600.0f, 900.f-40.0f), Vector2f(1200.f, 40.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(700.0f, 700.f), Vector2f(900.f, 40.0f), 20.0f, 20.f, String("rock")));
-    map_obj_list.push_back(new Map_brick(Point2f(0.0f, 1700.f), Vector2f(1800.f, 40.0f), 20.0f, 20.f, String("rock")));
-
-    */
 
     map_obj_list.push_back(new Map_brick(Point2f(260.0f, 2440.0f), Vector2f(40.f, 280.0f), 40.0f, 40.f, String("rock")));
     map_obj_list.push_back(new Map_brick(Point2f(300.0f, 2440.0f), Vector2f(400.f, 40.0f), 40.0f, 40.f, String("rock")));
@@ -138,6 +111,7 @@ namespace Flame {
       map_puzzle_obj_list.push_back(new Map_laser(Point2f(3.f, 2500.f), Vector2f(1.f, 0.f), "laser"));
       map_puzzle_obj_list.push_back(new Map_laser(Point2f(200.f, 3.f), Vector2f(0.f, 1.f), "laser"));
       map_puzzle_obj_list.push_back(new Map_laser(Point2f(800.f, 3.f), Vector2f(0.f, 1.f), "laser"));
+      */
       
     for (auto it = player_list.begin(); it != player_list.end(); ++it) {
       sim_obj_list.push_back(*it);
@@ -445,10 +419,38 @@ namespace Flame {
     return can_move;
   }
 
-  void Model_state::clear()
+  void Model_state::clear_without_player()
   {
-    for (auto it = sim_obj_list.begin(); it != sim_obj_list.end(); ++it)
+    std::vector<Player *> temp_list;
+    for (auto it = sim_obj_list.begin(); it != sim_obj_list.end(); ++it) {
+      Player* p_ptr = dynamic_cast<Player*>(*it);
+      if (p_ptr == 0) {
+        delete *it;
+      } else {
+        temp_list.push_back(p_ptr);
+      }
+    }
+    render_list.clear();
+    next_loop_update_list.clear();
+    sim_obj_list.clear();
+    player_list.clear();
+    monster_list.clear();
+    spell_list.clear();
+    map_obj_list.clear();
+    map_puzzle_obj_list.clear();
+    map_door_obj_list.clear();
+    for (auto it = temp_list.begin(); it != temp_list.end(); ++it) {
+      sim_obj_list.push_back(*it);
+      render_list.insert(*it);
+      player_list.push_back(*it);
+    }
+  }
+
+  void Model_state::clear_all()
+  {
+    for (auto it = sim_obj_list.begin(); it != sim_obj_list.end(); ++it) {
       delete *it;
+    }
     render_list.clear();
     next_loop_update_list.clear();
     sim_obj_list.clear();

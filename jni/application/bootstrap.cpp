@@ -22,6 +22,7 @@
 #include "Dialog_box.h"
 #include "Redboy.h"
 #include "Minimap.h"
+#include "level.h"
 #include <iostream>
 
 #if defined(_DEBUG) && defined(_WINDOWS)
@@ -503,12 +504,14 @@ class Play_State : public Gamestate_II {
   Play_State(const Play_State &);
   Play_State operator=(const Play_State &);
   Dialog_box dialog;
-  int lvl;
   int revival_num;
+  int stage;
+  int curr_lvl;
+  std::vector<Level*> levels;
 public:
   Play_State() :
     m_time_passed(0.f),
-    lvl(0),
+    stage(1),
     show_die(false),
     dialog(&m_set),
     revival_num(kTemp_revival_max)
@@ -557,18 +560,23 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 3), Y4);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 3), L4);
 
-    Model_state::get_instance()->init(lvl, &m_set);
-    set_level(lvl);
+    levels.push_back(new Level_1());
+    //levels.push_back(new Level_2());
+    curr_lvl = 0;
+
+    Model_state::get_instance()->init(stage, &m_set);
+    set_stage(stage);
     //!!! test
-    //dialog.start(lvl);
-    //begin_dialog(&dialog, lvl);
+    //dialog.start(stage);
+    //begin_dialog(&dialog, stage);
 
     m_set.start();
   }
 
 private:
-    void set_level(const int lvl){
-        if (lvl == 0){
+    void set_stage(const int stage){
+        Model_state::get_instance()->clear_without_player();
+        if (stage == 1){
             float x = 350;
             for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
                 it != Model_state::get_instance()->get_player_list_ptr()->end();
@@ -576,6 +584,7 @@ private:
                 (*it)->set_position(Point2f(x,3000));
                 x += 100.f;
             }
+<<<<<<< HEAD
             //Redboy* redboy_inst = new Redboy(Zeni::Point2f(100, 2300));
             //Model_state::get_instance()->add_monster(redboy_inst);
             Wanderer* wanderer = new Wanderer(Zeni::Point2f(100, 2300));
@@ -595,8 +604,10 @@ private:
             Model_state::get_instance()->add_monster(whisper_1);
             whisper_1 = new Whisper(Zeni::Point2f(550, 2800));
             Model_state::get_instance()->add_monster(whisper_1);
+=======
+>>>>>>> level framework redesigned
         }
-        else if (lvl == 1){
+        else if (stage == 2){
             float x = 350;
             for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
                 it != Model_state::get_instance()->get_player_list_ptr()->end();
@@ -604,24 +615,7 @@ private:
                 (*it)->set_position(Point2f(x,1900));
                 x += 100.f;
             }
-            Wanderer* wanderer = new Wanderer(Zeni::Point2f(100, 1500));
-            Model_state::get_instance()->add_monster(wanderer);
-            wanderer = new Wanderer(Zeni::Point2f(150, 1500));
-            Model_state::get_instance()->add_monster(wanderer);
-            wanderer = new Wanderer(Zeni::Point2f(200, 1500));
-            Model_state::get_instance()->add_monster(wanderer);
-            wanderer = new Wanderer(Zeni::Point2f(250, 1500));
-            Model_state::get_instance()->add_monster(wanderer);
-            
-            Whisper* whisper_1 = new Whisper(Zeni::Point2f(400, 1500));
-            Model_state::get_instance()->add_monster(whisper_1);
-            whisper_1 = new Whisper(Zeni::Point2f(450, 1500));
-            Model_state::get_instance()->add_monster(whisper_1);
-            whisper_1 = new Whisper(Zeni::Point2f(500, 1500));
-            Model_state::get_instance()->add_monster(whisper_1);
-            whisper_1 = new Whisper(Zeni::Point2f(550, 1500));
-            Model_state::get_instance()->add_monster(whisper_1);
-        }else if (lvl == 2){
+        }else if (stage == 3){
             float x = 350;
             for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
                 it != Model_state::get_instance()->get_player_list_ptr()->end();
@@ -629,17 +623,25 @@ private:
                 (*it)->set_position(Point2f(x,900));
                 x += 100.f;
             }
-            Redboy* redboy_inst = new Redboy(Zeni::Point2f(300, 300));
-            Model_state::get_instance()->add_monster(redboy_inst);
-            Whisper* whisper_1 = new Whisper(Zeni::Point2f(400, 500));
-            Model_state::get_instance()->add_monster(whisper_1);
         }
         
+        std::vector<Map *> map_list = levels[curr_lvl]->get_map_list(stage);
+        for (auto it = map_list.begin(); it != map_list.end(); ++it) {
+          Model_state::get_instance()->add_map_obj(*it);
+        }
+        std::vector<Monster*> monster_list = levels[curr_lvl]->get_monster_list(stage);
+        for (auto it = monster_list.begin(); it != monster_list.end(); ++it) {
+          Model_state::get_instance()->add_monster(*it);
+        }
     }
+
+  void set_level(const int level_) {
+    curr_lvl = level_;
+  }
     
-  void begin_dialog(Dialog_box* dialog_ptr, int lvl) {
+  void begin_dialog(Dialog_box* dialog_ptr, int stage) {
     //m_set.pause_all();
-    dialog_ptr->start(lvl);
+    dialog_ptr->start(stage);
   }
 
   void on_push() {
@@ -870,16 +872,21 @@ private:
     float processing_time = time_passed - m_time_passed;
     m_time_passed = time_passed;
 
-    if (Model_state::get_instance()->get_player_list_ptr()->empty() && lvl < 2 && !show_die) {
+    if (Model_state::get_instance()->get_player_list_ptr()->empty() && stage < 3 && !show_die) {
         show_die = true;
         //m_set.pause_all();
     }
+<<<<<<< HEAD
     if (!Model_state::get_instance()->get_player_list_ptr()->empty() && lvl < 2 && show_die) {
         show_die = false;
         //m_set.unpause_all();
     }
     if (Model_state::get_instance()->get_monster_list_ptr()->empty() && lvl < 2) {
       set_level(++lvl);
+=======
+    if (Model_state::get_instance()->get_monster_list_ptr()->empty() && stage < 3) {
+      set_stage(++stage);
+>>>>>>> level framework redesigned
     }
 
     float time_step = 0.005f;
@@ -1005,20 +1012,24 @@ private:
     float scale = Model_state::get_instance()->get_scale();
     Quadrilateral<Vertex2f_Texture> map;
     Point2f Map_center(400.0f,300.0f);
-    Point2f Map_p0 = (Point2f(-20.0f, -20.0f) - center_location) * scale + Map_center;
-    Point2f Map_p1 = (Point2f(-20.0f, 3100.0f) - center_location) * scale + Map_center;
-    Point2f Map_p2 = (Point2f(1020.0f, 3100.0f) - center_location) * scale + Map_center;
-    Point2f Map_p3 = (Point2f(1020.0f, -20.0f) - center_location) * scale+ Map_center;
+    Point2f ul = levels[curr_lvl]->get_upper_left(stage);
+    Point2f lr = levels[curr_lvl]->get_lower_right(stage);
+    Point2f Map_p0 = (ul - center_location) * scale + Map_center;
+    Point2f Map_p1 = (Point2f(ul.x, lr.y) - center_location) * scale + Map_center;
+    Point2f Map_p2 = (lr - center_location) * scale + Map_center;
+    Point2f Map_p3 = (Point2f(lr.x, ul.y) - center_location) * scale+ Map_center;
     /*
     Vertex2f_Texture text_p0(Map_p0, Point2f(0.0f,0.0f));
     Vertex2f_Texture text_p1(Map_p1, Point2f(0.0f, 154.0f));
     Vertex2f_Texture text_p2(Map_p2, Point2f(50.0f, 154.0f));
     Vertex2f_Texture text_p3(Map_p3, Point2f(50.0f, 0.0f));
     */
-    Vertex2f_Texture text_p0(Map_p0, Point2f(0.0f,0.0f));
-    Vertex2f_Texture text_p1(Map_p1, Point2f(0.0f, 30.0f));
-    Vertex2f_Texture text_p2(Map_p2, Point2f(10.0f, 30.0f));
-    Vertex2f_Texture text_p3(Map_p3, Point2f(10.0f, 0.0f));
+    
+    Point2f orig_pt(0.0f, 0.0f);
+    Vertex2f_Texture text_p0(Map_p0, orig_pt);
+    Vertex2f_Texture text_p1(Map_p1, orig_pt + (lr - ul).get_j() / 100.0f);
+    Vertex2f_Texture text_p2(Map_p2, orig_pt + (lr - ul) / 100.0f);
+    Vertex2f_Texture text_p3(Map_p3, orig_pt + (lr - ul).get_i() / 100.0f);
     map[0] = text_p0;
     map[1] = text_p1;
     map[2] = text_p2;
@@ -1051,8 +1062,13 @@ private:
 
     /* render level status */
     char* str = new char[10];
+<<<<<<< HEAD
     sprintf(str, "%d", lvl+1);
     Zeni::String text_buf = "level ";
+=======
+    sprintf(str, "%d", curr_lvl);
+    Zeni::String text_buf = "Level ";
+>>>>>>> level framework redesigned
     text_buf += str;
     Zeni::Font &l_ft = get_Fonts()["lvl_ft"];
     l_ft.render_text(text_buf,
