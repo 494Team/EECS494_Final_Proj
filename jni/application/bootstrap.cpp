@@ -1422,6 +1422,69 @@ private:
   }
 };
 
+class Title_state : public Gamestate_II{
+  Title_state(const Title_state &);
+  Title_state operator=(const Title_state &);
+private:
+  Chronometer<Time> m_set;
+public:
+  Title_state(){
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 0), CONFIRM1);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 1), CONFIRM2);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 2), CONFIRM3);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 3), CONFIRM4);
+
+    m_set.start();
+  };
+
+  void on_push() {
+    get_Window().mouse_hide(true);
+    get_Game().joy_mouse.enabled = false;
+  };
+
+  void on_pop() {
+    get_Window().mouse_hide(false);
+    get_Game().joy_mouse.enabled = true;
+  }
+  void on_cover() {
+      get_Window().mouse_hide(false);
+      get_Game().joy_mouse.enabled = true;
+  }
+  void on_uncover() {
+      get_Window().mouse_hide(true);
+      get_Game().joy_mouse.enabled = false;
+  }
+
+  void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
+    float high_conf = 0.9f;
+    switch(action) {
+      case CONFIRM1:
+      case CONFIRM2:
+      case CONFIRM3:
+      case CONFIRM4:
+        get_Game().pop_state();
+        get_Game().push_state(new Title_State<Choose_Pnumber_State, Instructions_State>("Zenipex Library\nApplication"));
+
+      default:
+        break;
+    }
+  }
+  
+  void render(){
+    //Gamestate_II::render();
+    get_Video().set_2d(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
+    if(m_set.seconds() < 0.5f)
+      render_image("title0", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+    else if (m_set.seconds()<1.f)
+      render_image("title1", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+    else{
+      m_set.reset();
+      m_set.start();
+      render_image("title0", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+    }
+  }
+};
+
 class Bootstrap {
   class Gamestate_One_Initializer : public Gamestate_Zero_Initializer {
     virtual Gamestate_Base * operator()() {
@@ -1433,7 +1496,8 @@ class Bootstrap {
       get_Fonts();
       get_Sounds();
       get_Game().joy_mouse.enabled = true;
-      return new Title_State<Choose_Pnumber_State, Instructions_State>("Zenipex Library\nApplication");
+      return new Title_state();
+      //return new Title_State<Choose_Pnumber_State, Instructions_State>("Zenipex Library\nApplication");
       //return new Title_State<Play_level_one, Instructions_State>("Zenipex Library\nApplication");
     }
   } m_goi;
