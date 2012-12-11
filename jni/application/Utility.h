@@ -128,6 +128,7 @@ namespace Flame{
   const float kSpeed_maxbuff = 150.0f;
 
   //others
+  const float kVert_move_threshold = 0.95f;
   const int kPlayer_num_max = 4;
   const float kHpbar_width = 3.0f;
   const float kHighlight_move_CD = 0.2f;
@@ -140,6 +141,7 @@ namespace Flame{
   //choosing character page "Preparation State"
   const int kCursor_max = 3;
   const int kCursor_min = 0;
+  const float kCursor_move_CD = 0.2f;
   const Zeni::Color kCannotmove_color(1.0f, 0.3f, 0.3f, 0.3f);
 
   // forward declaration

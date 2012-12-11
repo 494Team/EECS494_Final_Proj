@@ -47,7 +47,7 @@ private:
   std::vector<Player *> * player_list_ptr;
   int player_number;
   Chronometer<Time>* game_time;
-  Time_HQ last_highlight_move;
+  Time_HQ last_highlight_move[4];
 public:
   Upgrade_state(Chronometer<Time>* game_time_)
   : chosen_num(0),
@@ -59,7 +59,9 @@ public:
     highlight_move_clock->start();
     last_highlight_move = highlight_move_clock->seconds() - kHighlight_move_CD;
     */
-    last_highlight_move = Zeni::get_Timer_HQ().get_time();
+    for (int i=0; i<4; i++) {
+      last_highlight_move[i] = Zeni::get_Timer_HQ().get_time();
+    }
     //set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), MENU);
     //p1
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 0), CONFIRM1);
@@ -174,8 +176,9 @@ private:
   
   void highlight_move(const int controller, const bool is_down) {
     const Zeni::Time_HQ current_time = Zeni::get_Timer_HQ().get_time();
-    if (float(current_time.get_seconds_since(last_highlight_move) > kHighlight_move_CD)) {
-       last_highlight_move = current_time;
+    Time_HQ* last_highlight_move_ptr = &last_highlight_move[controller];
+    if (float(current_time.get_seconds_since(*last_highlight_move_ptr) > kHighlight_move_CD)) {
+       *last_highlight_move_ptr = current_time;
         int list_index = Model_state::get_instance()->get_player_list_index(controller);
         if (!p_confirmed[controller]) {
           if (is_down && cursor_pos[controller] < kShop_cursor_max-1) {
@@ -259,30 +262,29 @@ private:
   }
 
   void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
-    float high_conf = 0.9f;
     switch(action) {
       case VERT1:
-        if (confidence >= high_conf)
+        if (confidence >= kVert_move_threshold)
           highlight_move(0, true);
-        else if (confidence <= -high_conf)
+        else if (confidence <= -kVert_move_threshold)
           highlight_move(0, false);
         break;
       case VERT2:
-        if (confidence >= high_conf)
+        if (confidence >= kVert_move_threshold)
           highlight_move(1, true);
-        else if (confidence <= -high_conf)
+        else if (confidence <= -kVert_move_threshold)
           highlight_move(1, false);
         break;
       case VERT3:
-        if (confidence >= high_conf)
+        if (confidence >= kVert_move_threshold)
           highlight_move(2, true);
-        else if (confidence <= -high_conf)
+        else if (confidence <= -kVert_move_threshold)
           highlight_move(2, false);
         break;
       case VERT4:
-        if (confidence >= high_conf)
+        if (confidence >= kVert_move_threshold)
           highlight_move(3, true);
-        else if (confidence <= -high_conf)
+        else if (confidence <= -kVert_move_threshold)
           highlight_move(3, false);
         break;
       default:
@@ -490,6 +492,7 @@ private:
   }
 
   void render() {
+    get_Video().set_2d(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
     int list_pos = 0;
     int controller;
     for (vector<Player *>::iterator it = player_list_ptr->begin(); it != player_list_ptr->end(); it++) {
@@ -1155,6 +1158,7 @@ public:
       char_available[i] = true;
       chosen_char[i] = NONE;
       p_available[i] = false;
+      last_cursor_move[i] = Zeni::get_Timer_HQ().get_time();
     }
       player_count = 0;
     m_set.start();
@@ -1203,50 +1207,55 @@ private:
   }
 
   void move_cursor(const int player_n, const int dir){
-    if (p_available[player_n] && !p_decided[player_n]){
-      switch(dir){
-        case kMove_right:
-          if (chosen_char[player_n] == SANZANG)
-            chosen_char[player_n] = WUKONG;
-          else if (chosen_char[player_n] == WUKONG)
-            chosen_char[player_n] = SHASENG;
-          else if (chosen_char[player_n] == SHASENG)
-            chosen_char[player_n] = BAJIE;
-          else if (chosen_char[player_n] == BAJIE)
-            chosen_char[player_n] = SANZANG;
-          break;
-        case kMove_left:
-          if (chosen_char[player_n] == WUKONG)
-            chosen_char[player_n] = SANZANG;
-          else if (chosen_char[player_n] == BAJIE)
-            chosen_char[player_n] = SHASENG;
-          else if (chosen_char[player_n] == SHASENG)
-            chosen_char[player_n] = WUKONG;
-          else if (chosen_char[player_n] == SANZANG)
-            chosen_char[player_n] = BAJIE;
-          break;
-        case kMove_up:
-          if (chosen_char[player_n] == SHASENG)
-            chosen_char[player_n] = SANZANG;
-          else if (chosen_char[player_n] == BAJIE)
-            chosen_char[player_n] = WUKONG;
-          else if (chosen_char[player_n] == WUKONG)
-            chosen_char[player_n] = BAJIE;
-	        else if (chosen_char[player_n] == SANZANG)
-	          chosen_char[player_n] = SHASENG;
-	        break;
-        case kMove_down:
-          if (chosen_char[player_n] == SANZANG)
-            chosen_char[player_n] = SHASENG;
-          else if (chosen_char[player_n] == WUKONG)
-            chosen_char[player_n] = BAJIE;
-	        else if (chosen_char[player_n] == SHASENG)
-	          chosen_char[player_n] = SANZANG;
-	        else if (chosen_char[player_n] == BAJIE)
-	          chosen_char[player_n] = WUKONG;
-          break;
-        default:
-          break;
+    const Zeni::Time_HQ current_time = Zeni::get_Timer_HQ().get_time();
+    Time_HQ* last_cursor_move_ptr = &last_cursor_move[player_n];
+    if (float(current_time.get_seconds_since(*last_cursor_move_ptr) > kCursor_move_CD)) {
+      *last_cursor_move_ptr = current_time;
+      if (p_available[player_n] && !p_decided[player_n]){
+        switch(dir){
+          case kMove_right:
+            if (chosen_char[player_n] == SANZANG)
+              chosen_char[player_n] = WUKONG;
+            else if (chosen_char[player_n] == WUKONG)
+              chosen_char[player_n] = SHASENG;
+            else if (chosen_char[player_n] == SHASENG)
+              chosen_char[player_n] = BAJIE;
+            else if (chosen_char[player_n] == BAJIE)
+              chosen_char[player_n] = SANZANG;
+            break;
+          case kMove_left:
+            if (chosen_char[player_n] == WUKONG)
+              chosen_char[player_n] = SANZANG;
+            else if (chosen_char[player_n] == BAJIE)
+              chosen_char[player_n] = SHASENG;
+            else if (chosen_char[player_n] == SHASENG)
+              chosen_char[player_n] = WUKONG;
+            else if (chosen_char[player_n] == SANZANG)
+              chosen_char[player_n] = BAJIE;
+            break;
+          case kMove_up:
+            if (chosen_char[player_n] == SHASENG)
+              chosen_char[player_n] = SANZANG;
+            else if (chosen_char[player_n] == BAJIE)
+              chosen_char[player_n] = WUKONG;
+            else if (chosen_char[player_n] == WUKONG)
+              chosen_char[player_n] = BAJIE;
+            else if (chosen_char[player_n] == SANZANG)
+              chosen_char[player_n] = SHASENG;
+            break;
+          case kMove_down:
+            if (chosen_char[player_n] == SANZANG)
+              chosen_char[player_n] = SHASENG;
+            else if (chosen_char[player_n] == WUKONG)
+              chosen_char[player_n] = BAJIE;
+            else if (chosen_char[player_n] == SHASENG)
+              chosen_char[player_n] = SANZANG;
+            else if (chosen_char[player_n] == BAJIE)
+              chosen_char[player_n] = WUKONG;
+            break;
+          default:
+            break;
+        }
       }
     }
   }
@@ -1255,6 +1264,7 @@ private:
   bool p_decided[4];
   bool p_available[4];
   kPlayer_type chosen_char[4];
+  Time_HQ last_cursor_move[4];
   //int cursor_pos[4];
   Color p_color[4];
   int chosen_num, player_count;
@@ -1283,9 +1293,9 @@ private:
           move_cursor(0,kMove_left);
         break;
       case VERT1:
-        if (confidence >= 0.9f)
+        if (confidence >= kVert_move_threshold)
           move_cursor(0,kMove_down);
-        else if (confidence <= -0.9f)
+        else if (confidence <= -kVert_move_threshold)
           move_cursor(0,kMove_up);
         break;
       case HORI2:
@@ -1295,9 +1305,9 @@ private:
           move_cursor(1,kMove_left);
         break;
       case VERT2:
-        if (confidence >= 1.0f)
+        if (confidence >= kVert_move_threshold)
           move_cursor(1,kMove_down);
-        else if (confidence <= -1.0f)
+        else if (confidence <= -kVert_move_threshold)
           move_cursor(1,kMove_up);
         break;
       case HORI3:
@@ -1307,9 +1317,9 @@ private:
           move_cursor(2,kMove_left);
         break;
       case VERT3:
-        if (confidence >= 1.f)
+        if (confidence >= kVert_move_threshold)
           move_cursor(2,kMove_down);
-        else if (confidence <= -1.f)
+        else if (confidence <= -kVert_move_threshold)
           move_cursor(2,kMove_up);
         break;
       case HORI4:
@@ -1319,9 +1329,9 @@ private:
           move_cursor(3,kMove_left);
         break;
       case VERT4:
-        if (confidence >= 1.f)
+        if (confidence >= kVert_move_threshold)
           move_cursor(3,kMove_down);
-        else if (confidence <= -1.f)
+        else if (confidence <= -kVert_move_threshold)
           move_cursor(3,kMove_up);
         break;
       case JOIN1:
@@ -1386,11 +1396,11 @@ private:
         }
         case A1:
           if(p_available[0])
-            choose_char(0);
+          choose_char(0);
           break;
         case A2:
           if(p_available[1])
-            choose_char(1);
+          choose_char(1);
           break;
         case A3:
           if(p_available[2])
@@ -1408,6 +1418,7 @@ private:
 
   void render() {
     //Widget_Gamestate::render();
+    get_Video().set_2d(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
     if (m_set.seconds() < 0.3f)
       render_image("selection0", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
     else if (m_set.seconds() < 0.6f)
