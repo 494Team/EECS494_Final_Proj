@@ -25,6 +25,10 @@ void Agent::dec_health(const float &damage) {
   if (health > initial_health) {
     health = initial_health;
   }
+  //for revive
+  if (!alive && health > 0.0f) {
+    alive = true;
+  }
 }
 
 void Agent::update(float time) {

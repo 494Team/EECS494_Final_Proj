@@ -14,6 +14,7 @@
 #include <Zeni.h>
 
 namespace Flame{
+  const int kTemp_revival_max = 5;
 
   extern const float kCollision_object_height;
 

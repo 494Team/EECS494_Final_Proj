@@ -504,12 +504,14 @@ class Play_State : public Gamestate_II {
   Play_State operator=(const Play_State &);
   Dialog_box dialog;
   int lvl;
+  int revival_num;
 public:
   Play_State() :
     m_time_passed(0.f),
     lvl(0),
     show_die(false),
-    dialog(&m_set)
+    dialog(&m_set),
+    revival_num(kTemp_revival_max)
   {
     set_pausable(true);
 
@@ -734,6 +736,7 @@ private:
     //int player_pos_in_list = Model_state::get_instance()->get_player_pos_in_list(controller);
     //if (player_pos_in_list >= 0 && player_pos_in_list <= 3) {
     if (list_pos != -1) {
+      //control of alive players
       p_ptr = player_list_ptr->at(list_pos);
       //p_ptr = player_list_ptr->at(player_pos_in_list);
         if (p_ptr->controllable()) {
@@ -801,6 +804,64 @@ private:
               break;
           }
         }
+    } else {
+      //control of dead players
+      std::vector<Player*>* dead_player_list_ptr = (Model_state::get_instance()->get_dead_player_list_ptr());
+      if (player_list_ptr->empty()) {
+        //revive all
+          switch(action) {
+          case A1:
+          case A2:
+          case A3:
+          case A4:
+            /*
+            //cannot use rise_from_dead_list() because no one is alive now
+            for (auto it = dead_player_list_ptr->begin(); it != dead_player_list_ptr->end();) {
+              it = Model_state::get_instance()->player_rise_from_dead_list(*it);
+            }
+            */
+          default:
+            break;
+          }
+      } else {
+        //revive any one
+          switch(action) {
+          case A1:
+            for (auto it = dead_player_list_ptr->begin(); it != dead_player_list_ptr->end(); ++it) {
+              if (revival_num > 0 && (*it)->get_controller() == 0) {
+                Model_state::get_instance()->player_rise_from_dead_list(*it);
+                revival_num--;
+                break;
+              }
+            }
+          case A2:
+            for (auto it = dead_player_list_ptr->begin(); it != dead_player_list_ptr->end(); ++it) {
+              if (revival_num > 0 && (*it)->get_controller() == 1) {
+                Model_state::get_instance()->player_rise_from_dead_list(*it);
+                revival_num--;
+                break;
+              }
+            }
+          case A3:
+            for (auto it = dead_player_list_ptr->begin(); it != dead_player_list_ptr->end(); ++it) {
+              if (revival_num > 0 && (*it)->get_controller() == 2) {
+                Model_state::get_instance()->player_rise_from_dead_list(*it);
+                revival_num--;
+                break;
+              }
+            }
+          case A4:
+            for (auto it = dead_player_list_ptr->begin(); it != dead_player_list_ptr->end(); ++it) {
+              if (revival_num > 0 && (*it)->get_controller() == 3) {
+                Model_state::get_instance()->player_rise_from_dead_list(*it);
+                revival_num--;
+                break;
+              }
+            }
+          default:
+            break;
+          }
+      }
     }
   }
 
@@ -812,6 +873,10 @@ private:
     if (Model_state::get_instance()->get_player_list_ptr()->empty() && lvl < 2 && !show_die) {
         show_die = true;
         //m_set.pause_all();
+    }
+    if (!Model_state::get_instance()->get_player_list_ptr()->empty() && lvl < 2 && show_die) {
+        show_die = false;
+        //m_set.unpause_all();
     }
     if (Model_state::get_instance()->get_monster_list_ptr()->empty() && lvl < 2) {
       set_level(++lvl);
@@ -981,7 +1046,7 @@ private:
     /* render level status */
     char* str = new char[10];
     sprintf(str, "%d", lvl+1);
-    Zeni::String text_buf = "Level ";
+    Zeni::String text_buf = "level ";
     text_buf += str;
     Zeni::Font &l_ft = get_Fonts()["lvl_ft"];
     l_ft.render_text(text_buf,
@@ -989,6 +1054,14 @@ private:
                    get_Colors()["black"],
                    ZENI_CENTER);
 
+    /* render revival status */
+    sprintf(str, "%d", revival_num);
+    text_buf = "revival chances: ";
+    text_buf += str;
+    l_ft.render_text(text_buf,
+                   Point2f(400.0f, 60.0f - 0.5f * l_ft.get_text_height()),
+                   get_Colors()["black"],
+                   ZENI_CENTER);
 
     if (show_die) {
         l_ft.render_text("Player(s) Died!",
