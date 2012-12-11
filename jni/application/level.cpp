@@ -97,3 +97,76 @@ Level_1::Level_1() {
   Level::set_upper_left(stage, Zeni::Point2f(-20.0f, -20.0f));
   Level::set_lower_right(stage, Zeni::Point2f(1020.0f, 1020.0f));
 }
+
+Level_2::Level_2() {
+  int stage;
+  std::vector<Monster*> monster_list;
+  std::vector<Map*> map_list;
+
+  // stage 1
+  stage = 1;
+  // map
+  map_list.push_back(new Map_brick(Point2f(0.0f, 0.0f), Vector2f(1200.0f, 1200.0f), 40.0f, 40.0f, "rock"));
+  map_list.push_back(new Map_brick(Point2f(240.0f, 1200.0f), Vector2f(960.0f, 1560.0f), 40.0f, 40.0f, "rock"));
+  map_list.push_back(new Map_brick(Point2f(1200.0f, 240.0f), Vector2f(1560.0f, 960.0f), 40.0f, 40.0f, "rock"));
+  map_list.push_back(new Map_brick(Point2f(1440.0f, 1440.0f), Vector2f(1320.0f, 1320.0f), 40.0f, 40.0f, "rock"));
+
+  map_list.push_back(new Map_brick(Point2f(4800.0f, 0.0f), Vector2f(1200.0f, 1200.0f), 40.0f, 40.0f, "rock"));
+  map_list.push_back(new Map_brick(Point2f(4800.0f, 1200.0f), Vector2f(960.0f, 1560.0f), 40.0f, 40.0f, "rock"));
+  map_list.push_back(new Map_brick(Point2f(3240.0f, 240.0f), Vector2f(1560.0f, 960.0f), 40.0f, 40.0f, "rock"));
+  map_list.push_back(new Map_brick(Point2f(3240.0f, 1440.0f), Vector2f(1320.0f, 1320.0f), 40.0f, 40.0f, "rock"));
+
+  map_list.push_back(new Map_brick(Point2f(0.0f, 4800.0f), Vector2f(1200.0f, 1200.0f), 40.0f, 40.0f, "rock"));
+  map_list.push_back(new Map_brick(Point2f(240.0f, 3240.0f), Vector2f(960.0f, 1560.0f), 40.0f, 40.0f, "rock"));
+  map_list.push_back(new Map_brick(Point2f(1200.0f, 4800.0f), Vector2f(1560.0f, 960.0f), 40.0f, 40.0f, "rock"));
+  map_list.push_back(new Map_brick(Point2f(1440.0f, 3240.0f), Vector2f(1320.0f, 1320.0f), 40.0f, 40.0f, "rock"));
+
+  map_list.push_back(new Map_brick(Point2f(4800.0f, 4800.0f), Vector2f(1200.0f, 1200.0f), 40.0f, 40.0f, "rock"));
+  map_list.push_back(new Map_brick(Point2f(4800.0f, 3240.0f), Vector2f(960.0f, 1560.0f), 40.0f, 40.0f, "rock"));
+  map_list.push_back(new Map_brick(Point2f(3240.0f, 4800.0f), Vector2f(1560.0f, 960.0f), 40.0f, 40.0f, "rock"));
+  map_list.push_back(new Map_brick(Point2f(3240.0f, 3240.0f), Vector2f(1320.0f, 1320.0f), 40.0f, 40.0f, "rock"));
+ 
+  map_list.push_back(new Map_brick(Point2f(-40.0f, -40.0f), Vector2f(40.0f, 6080.0f), 40.0f, 40.0f, "rock"));
+  map_list.push_back(new Map_brick(Point2f(6000.0f, -40.0f), Vector2f(40.0f, 6080.0f), 40.0f, 40.0f, "rock"));
+  map_list.push_back(new Map_brick(Point2f(0.0f, -40.0f), Vector2f(6000.0f, 40.0f), 40.0f, 40.0f, "rock"));
+  map_list.push_back(new Map_brick(Point2f(0.0f, 6000.0f), Vector2f(6000.0f, 40.0f), 40.0f, 40.0f, "rock"));
+
+  Level::set_map_list(stage, map_list);
+  Level::set_monster_list(stage, monster_list);
+  Level::set_upper_left(stage, Zeni::Point2f(-20.0f, -20.0f));
+  Level::set_lower_right(stage, Zeni::Point2f(6020.0f, 6020.0f));
+
+  // stage 2
+  stage = 2;
+  monster_list.clear();
+
+  Level::set_map_list(stage, map_list);
+  Level::set_monster_list(stage, monster_list);
+  Level::set_upper_left(stage, Zeni::Point2f(-20.0f, -20.0f));
+  Level::set_lower_right(stage, Zeni::Point2f(6020.0f, 6020.0f));
+
+  // stage 3
+  stage = 3;
+  monster_list.clear();
+
+  Level::set_map_list(stage, map_list);
+  Level::set_monster_list(stage, monster_list);
+  Level::set_upper_left(stage, Zeni::Point2f(-20.0f, -20.0f));
+  Level::set_lower_right(stage, Zeni::Point2f(6020.0f, 6020.0f));
+
+  // stage 4: bullking's room
+  stage = 4;
+  map_list.clear();
+  monster_list.clear();
+  Point2f room_ul(0.0f, 0.0f), room_lr(600.0f, 600.0f);
+  // map
+  map_list.push_back(new Map_brick(Point2f(-40.0f, -40.0f), Vector2f(40.0f, 680.0f), 40.0f, 40.0f, "rock"));
+  map_list.push_back(new Map_brick(Point2f(600.0f, -40.0f), Vector2f(40.0f, 680.0f), 40.0f, 40.0f, "rock"));
+  map_list.push_back(new Map_brick(Point2f(0.0f, -40.0f), Vector2f(600.0f, 40.0f), 40.0f, 40.0f, "rock"));
+  map_list.push_back(new Map_brick(Point2f(0.0f, 600.0f), Vector2f(600.0f, 40.0f), 40.0f, 40.0f, "rock"));
+
+  Level::set_map_list(stage, map_list);
+  Level::set_monster_list(stage, monster_list);
+  Level::set_upper_left(stage, Point2f(-20.0f, -20.0f));
+  Level::set_lower_right(stage, Point2f(620.0f, 620.0f));
+}
