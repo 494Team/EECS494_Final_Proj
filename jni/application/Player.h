@@ -199,6 +199,14 @@ namespace Flame {
     bool spell1_mp_enough() {return mp > spell1_mp;}
     bool spell2_mp_enough() {return mp > spell2_mp;}
     bool spell3_mp_enough() {return mp > spell3_mp;}
+    bool is_normal_attack() {return normal_attack;}
+    bool is_disintegrate() {return (ptype==SANZANG && spell1_active);}
+    bool is_cudgel_fury() {return (ptype==WUKONG && spell1_active);}
+    bool is_shield() {return (ptype==BAJIE && spell1_active);}
+    bool is_charge() {return (ptype==WUKONG && spell2_active);}
+    bool is_berserk() {return (ptype==WUKONG && spell3_active);}
+    bool is_bloodsuck() {return (ptype== BAJIE && spell3_active);}
+    void disintegrate_end_when_die() {disintegrate_end();}
   private:
     int controller; //range: [0, 3]
     float mp;
@@ -270,19 +278,11 @@ namespace Flame {
                     is_charge();
       return result;
     }
-    bool is_normal_attack() {return normal_attack;}
-    bool is_disintegrate() {return (ptype==SANZANG && spell1_active);}
-    bool is_cudgel_fury() {return (ptype==WUKONG && spell1_active);}
-    bool is_shield() {return (ptype==BAJIE && spell1_active);}
-    bool is_charge() {return (ptype==WUKONG && spell2_active);}
-    bool is_berserk() {return (ptype==WUKONG && spell3_active);}
-    bool is_bloodsuck() {return (ptype== BAJIE && spell3_active);}
 
     //SANZANG
     void disintegrate_begin();
     void disintegrate_end();
     Spell* disintegrate_ptr;
-
     //WUKONG
     void charge();
     void charge_update(float time);
@@ -292,7 +292,6 @@ namespace Flame {
     std::vector<Monster *> charged_monsters;
     bool charge_no_hit_before;
     bool is_charge_attacking() { return charge_attacking;}
-
     //float backup_size;
     void berserk();
     void berserk_end();

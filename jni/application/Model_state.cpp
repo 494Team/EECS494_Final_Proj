@@ -321,6 +321,9 @@ namespace Flame {
   {
         int controller = player_ptr->get_controller();
         controller_alive[controller] = false;
+        if (player_ptr->is_disintegrate()) {
+          player_ptr->disintegrate_end_when_die();
+        }
         for (int i=get_player_list_index(controller); i<4; i++) {
           if (i==3 || player_pos_in_list[i+1] == -1) {
             player_pos_in_list[i] = -1;
