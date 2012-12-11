@@ -347,15 +347,27 @@ render_image(
   rel_loc,
   false);
   //render weapon attacking
-  if (normal_attack)
-
-    render_image("sword_attack_1",
+  if (normal_attack) {
+    Zeni::String attack_image;
+    switch (ptype) {
+        case SANZANG:
+          attack_image = "sword_attack_tripitaka";
+          break;
+        case WUKONG:
+          attack_image = "sword_attack_monkey_king";
+          break;
+        default: // case BAJIE:
+          attack_image = "sword_attack_pigsy";
+          break;
+    }
+    render_image(attack_image,
                  Point2f(rel_loc.x - size, rel_loc.y + size ),
                  Point2f(rel_loc.x + size, rel_loc.y + size  + size * 2),
                  rad,
                  scale,
                  rel_loc,
                  false);
+  }
 
   Agent::render();
 }

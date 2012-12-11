@@ -1108,13 +1108,12 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 3), A4);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 3), B4);
 
-    for (int i=0; i < Model_state::get_instance()->get_initial_player_num(); i++) {
+    for (int i=0; i < 4; i++) {
       cursor_pos[i] = kCursor_min;
       p_decided[i] = false;
       p_color[i] = Color();
       char_available[i] = true;
     }
-
   }
 
 private:
@@ -1187,31 +1186,34 @@ private:
   Color p_color[4];
   int chosen_num;
 
-  void choose_char(const int player_n) {
-    if (!p_decided[player_n]) {
-      int pos = cursor_pos[player_n];
+  void choose_char(const int controller) {
+    if (!p_decided[controller]) {
+      int pos = cursor_pos[controller];
       if (char_available[pos]) {
         switch (pos) {
           case 0:
-            chosen_char[player_n] = SANZANG;
+            chosen_char[controller] = SANZANG;
             break;
           case 1:
-            chosen_char[player_n] = WUKONG;
+            chosen_char[controller] = WUKONG;
             break;
           case 2:
-            chosen_char[player_n] = SHASENG;
+            chosen_char[controller] = SHASENG;
             break;
           case 3:
-            chosen_char[player_n] = BAJIE;
+            chosen_char[controller] = BAJIE;
             break;
           default:
             break;
         }
         chosen_num++;
-        p_decided[player_n] = true;
+        p_decided[controller] = true;
         p_color[pos] = Color(1.0f, 0.3f, 0.3f, 0.3f);
         char_available[pos] = false;
       }
+        cerr << "**********\nchosen_char: " << chosen_char[controller] << "\n**************\n\n";
+        cerr << "**********\ncontroller: " << controller << "\n**************\n\n";
+        cerr << "**********\npos: " << pos << "\n**************\n\n";
       if (chosen_num == Model_state::get_instance()->get_initial_player_num()) {
         get_Game().pop_state();
         //get_Game().push_state(new Upgrade_state());

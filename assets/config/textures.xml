@@ -643,11 +643,21 @@ The following things are unsupported:
     <tile>0</tile>
   </arrow>
 
-  <sword_attack_1>
+  <sword_attack_pigsy>
     <is_sprite>0</is_sprite>
-    <filepath>textures/sword_attack_1.png</filepath>
+    <filepath>textures/sword_attack_pigsy.png</filepath>
     <tile>0</tile>
-  </sword_attack_1>
+  </sword_attack_pigsy>
+  <sword_attack_tripitaka>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/sword_attack_tripitaka.png</filepath>
+    <tile>0</tile>
+  </sword_attack_tripitaka>
+  <sword_attack_monkey_king>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/sword_attack_monkey_king.png</filepath>
+    <tile>0</tile>
+  </sword_attack_monkey_king>
   <rarrow3>
     <is_sprite>0</is_sprite>
     <filepath>textures/rarrow3.png</filepath>

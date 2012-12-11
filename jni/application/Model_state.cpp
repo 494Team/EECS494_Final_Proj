@@ -30,7 +30,10 @@ namespace Flame {
   {}
 
   Model_state::~Model_state()
-  {clear();}
+  {
+    clear();
+    character_list.clear(); //this cannot be put in Model_state::clear()
+  }
 
   Model_state * Model_state::get_instance()
   {
