@@ -1241,7 +1241,7 @@ private:
           else if (chosen_char[player_n] == WUKONG)
             chosen_char[player_n] = BAJIE;
 	  else if (chosen_char[player_n] == SHASENG)
-	    chosen_char[player_n] = SANGZANG;
+	    chosen_char[player_n] = SANZANG;
 	  else if (chosen_char[player_n] == BAJIE)
 	    chosen_char[player_n] = WUKONG;
           break;
@@ -1295,9 +1295,9 @@ private:
           move_cursor(1,kMove_left);
         break;
       case VERT2:
-        if (confidence >= 0.9f)
+        if (confidence >= 1.0f)
           move_cursor(1,kMove_down);
-        else if (confidence <= -0.9f)
+        else if (confidence <= -1.0f)
           move_cursor(1,kMove_up);
         break;
       case HORI3:
@@ -1307,9 +1307,9 @@ private:
           move_cursor(2,kMove_left);
         break;
       case VERT3:
-        if (confidence >= 0.9f)
+        if (confidence >= 1.f)
           move_cursor(2,kMove_down);
-        else if (confidence <= -0.9f)
+        else if (confidence <= -1.f)
           move_cursor(2,kMove_up);
         break;
       case HORI4:
@@ -1319,9 +1319,9 @@ private:
           move_cursor(3,kMove_left);
         break;
       case VERT4:
-        if (confidence >= 0.9f)
+        if (confidence >= 1.f)
           move_cursor(3,kMove_down);
-        else if (confidence <= -0.9f)
+        else if (confidence <= -1.f)
           move_cursor(3,kMove_up);
         break;
       case JOIN1:
@@ -1332,7 +1332,7 @@ private:
         }
         else if(chosen_num == player_count){
           get_Game().pop_state();
-          Model_state::get_instance().set_initial_player_num(player_count);
+          Model_state::get_instance()->set_initial_player_num(player_count);
           get_Game().push_state(new Play_State());
         }
         break;
@@ -1344,7 +1344,7 @@ private:
         }
         else if(chosen_num == player_count){
           get_Game().pop_state();
-          Model_state::get_instance().set_initial_player_num(player_count);
+          Model_state::get_instance()->set_initial_player_num(player_count);
           get_Game().push_state(new Play_State());
         }
         break;
@@ -1356,7 +1356,7 @@ private:
         }
         else if(chosen_num == player_count){
           get_Game().pop_state();
-          Model_state::get_instance().set_initial_player_num(player_count);
+          Model_state::get_instance()->set_initial_player_num(player_count);
           get_Game().push_state(new Play_State());
         }
         break;
@@ -1368,7 +1368,7 @@ private:
         }
         else if(chosen_num == player_count){
           get_Game().pop_state();
-          Model_state::get_instance().set_initial_player_num(player_count);
+          Model_state::get_instance()->set_initial_player_num(player_count);
           get_Game().push_state(new Play_State());
         }
         break;
