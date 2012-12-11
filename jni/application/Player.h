@@ -29,7 +29,7 @@ namespace Flame {
 
   /************** spells ******************/
   const float kAttack_show_time = 0.2f;
-  const float kPlayer_attack_range = 40.0f;
+  const float kPlayer_attack_range = 20.0f;
   const float kPlayer_attack_strengh = 300.0f;
   //SANZANG
   const float kDisintegrate_CD = 0.0f;
@@ -37,8 +37,10 @@ namespace Flame {
   const float kDisintegrate_mp_cost = 2.0f;
   const float kHealing_CD = 2.0f;
   const float kHealing_amount = -1000.0f; //500.0f;
+  const float kHealing_mp_cost = 2.0f;
   const float kDing_CD = 8.0f;
   const float kDing_dam = 0.5f;
+  const float kDing_mp_cost = 10.0f;
   //WUKONG
   const float kCudgel_fury_dam = 2.0f;
   const float kCharge_CD = 5.0f;

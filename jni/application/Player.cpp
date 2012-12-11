@@ -361,8 +361,8 @@ render_image(
           break;
     }
     render_image(attack_image,
-                 Point2f(rel_loc.x - size, rel_loc.y + size ),
-                 Point2f(rel_loc.x + size, rel_loc.y + size  + size * 2),
+                 Point2f(rel_loc.x - size, rel_loc.y + 0.5f*size ),
+                 Point2f(rel_loc.x + 0.5f*size, rel_loc.y + 0.5f*size  + size),
                  rad,
                  scale,
                  rel_loc,
@@ -606,12 +606,12 @@ void Player::try_normal_attack() {
   } else {
     bool heal_self = (ptype == BAJIE) && spell3_active;
     new_spell = new Attack_spell(get_location(),
-                                          get_current_orientation(),
-                                          kPlayer_attack_range,
-                                          kPlayer_attack_strengh * attack_buff,
-                                          true,
-                                          heal_self,
-                                          this);
+                                 get_current_orientation(),
+                                 kPlayer_attack_range,
+                                 kPlayer_attack_strengh * attack_buff,
+                                 true,
+                                 heal_self,
+                                 this);
     normal_attack = true;
     Model_state::get_instance()->add_spell(new_spell);
   }
