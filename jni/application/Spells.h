@@ -325,6 +325,13 @@ namespace Flame {
     float render_time;
   };
 
+  class Dajun : public Fire_ball {
+  public:
+    Dajun(const Zeni::Point2f& location_= Zeni::Point2f(),
+          const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
+    virtual void render();
+  };
+
   class Hell_spikes : public Resizable_spell {
   public:
     Hell_spikes(const Zeni::Point2f& location_ = Zeni::Point2f());

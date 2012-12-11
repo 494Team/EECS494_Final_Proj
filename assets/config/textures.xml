@@ -964,6 +964,10 @@ The following things are unsupported:
     <filepath>textures/helldoor.png</filepath>
     <tile>0</tile>
   </helldoor>
+  <dajun>
+    <filepath>textures/dajun.png</filepath>
+    <tile>0</tile>
+  </dajun>
   <!-- Bullking texture ends-->
   <!-- Minimap texture starts-->
   <minimap>

@@ -87,8 +87,10 @@ namespace Flame {
                 (target_ptr->get_current_location() - player_ptr->get_current_location()).magnitude())
           target_ptr = *it;
     if (target_ptr) {
-      target_ptr->get_hit(damage, vector<attack_effect>(), player_ptr);
       length = (target_ptr->get_current_location() - player_ptr->get_current_location()).magnitude();
+      for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
+        if (((*it)->get_current_location() - player_ptr->get_current_location()).magnitude() - length < 2.f)
+          (*it)->get_hit(damage, vector<attack_effect>(), player_ptr);
     }
     else
       length = kDisintegrate_length;
@@ -428,7 +430,7 @@ namespace Flame {
       arrow3.update(time);
     if (arrow4.is_active())
       arrow4.update(time);
-    location = arrow0.get_location();
+    location = arrow0.get_center_location();
   }
 
   void Strafe::render()
@@ -601,6 +603,12 @@ namespace Flame {
   void Fire_ball::render()
   {Moving_spell::render("fire_ball");}
 
+  Dajun::Dajun(const Point2f& location_, const Vector2f& orientation_) :
+    Fire_ball(location_, orientation_)
+    {}
+
+  void Dajun::render()
+  {Moving_spell::render("dajun", Color(), false);}
 
   Ring_of_fire::Ring_of_fire(const Point2f& location_, const Vector2f& orientation_) :
     Moving_spell_rectangle(location_ + 50.f * orientation_.normalized(),

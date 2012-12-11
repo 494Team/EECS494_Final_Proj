@@ -40,13 +40,16 @@ namespace Flame {
     relative_location = (get_center_location() - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
   }
 
-  void Moving_spell::render(const String& texture, Color filter) const
+  void Moving_spell::render(const String& texture, Color filter, bool rotate) const
   {
     Vector2f orientation = get_current_orientation();
-    float theta = orientation.angle_between(Vector2f(0.f, 1.f));
-    if (orientation.x < 0.f)
-      theta = 2 * Global::pi - theta;
-    theta += Global::pi;
+    float theta = 0.f;
+    if (rotate) {
+      theta = orientation.angle_between(Vector2f(0.f, 1.f));
+      if (orientation.x < 0.f)
+        theta = 2 * Global::pi - theta;
+      theta += Global::pi;
+    }
     render_image(texture, // which texture to use
                  relative_location - scale * size / 2, // upper-left corner
                  relative_location + scale * size / 2, // lower-right corner

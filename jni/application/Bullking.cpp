@@ -132,8 +132,7 @@ void Bullking::update(float time) {
               new_mini_bullking_ori = Zeni::Vector2f(1.0f, 0.0f);
               break;
           }
-          Fire_ball* new_fire_ball = new Fire_ball(new_mini_bullking_pos, new_mini_bullking_ori);
-          Model_state::get_instance()->add_spell(new_fire_ball);
+          Model_state::get_instance()->add_spell(new Dajun(new_mini_bullking_pos, new_mini_bullking_ori));
         }
       }
       break;

@@ -65,7 +65,7 @@ namespace Flame {
     virtual void update(float time = 0.f);
     virtual void render() = 0;
   protected:
-    void render(const Zeni::String& texture, Zeni::Color filter = Zeni::Color()) const;
+    void render(const Zeni::String& texture, Zeni::Color filter = Zeni::Color(), bool rotate = true) const;
 
     void set_orientation(const Zeni::Vector2f& orientation_)
       {Moving_object::set_orientation(orientation_);}
@@ -138,7 +138,7 @@ namespace Flame {
                     const Zeni::Vector2f& max_size_ = Zeni::Vector2f());
 
     virtual Zeni::Point2f get_location() const
-      {return location - size / 2;}
+      {return location - Zeni::Vector2f(0.f, 9999999999.f);}
     Zeni::Point2f get_center_location() const
       {return location;}
     bool hits_max() const {return is_max;}
