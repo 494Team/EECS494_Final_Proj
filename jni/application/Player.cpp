@@ -46,21 +46,33 @@ Player::Player(
       spell1_CD = kDisintegrate_CD;
       spell2_CD = kHealing_CD;
       spell3_CD = kDing_CD;
+      spell1_mp = 0; //which will be consumed when the skill is active
+      spell2_mp = kHealing_mp_cost;
+      spell3_mp = kDing_mp_cost;
       break;
     case WUKONG:
-      spell1_CD = kCudge_fury_CD;
+      spell1_CD = kCudgel_fury_CD;
       spell2_CD = kCharge_CD;
       spell3_CD = kBerserk_CD;
+      spell1_mp = kCudgel_fury_mp_cost;
+      spell2_mp = kCharge_mp_cost;
+      spell3_mp = kBerserk_mp_cost;
       break;
     case SHASENG:
       spell1_CD = kStrafe_CD;
       spell2_CD = kTrap_CD;
       spell3_CD = kMagicarrow_CD;
+      spell1_mp = kStrafe_mp_cost;
+      spell2_mp = kTrap_mp_cost;
+      spell3_mp = kMagicarrow_mp_cost;
       break;
     default: // case BAJIE:
       spell1_CD = kShield_CD;
       spell2_CD = kTaunt_CD;
       spell3_CD = kBloodsuck_CD;
+      spell1_mp = kShield_mp_cost;
+      spell2_mp = kTaunt_mp_cost;
+      spell3_mp = kBloodsuck_mp_cost;
       break;
   }
   set_moving(true);
@@ -275,9 +287,12 @@ void Player::render() {
     size *= kBerserk_enlarge;
   }
   if (render_player) {
+    Color filter_color = is_berserk() ? Color(1.0f, 1.0f, 0.0f, 0.0f) : Color();
     render_image(player_texture,
                  Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
-                 Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
+                 Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale),
+                 false,
+                 filter_color);
   }
   if (ptype == BAJIE) {
     if (spell1_active) {
@@ -621,7 +636,7 @@ void Player::try_spell1() {
   float current_time = game_time->seconds();
   float passed_time = current_time - last_spell1;
   Spell* new_spell;
-  if (passed_time > spell1_CD) {
+  if (passed_time > spell1_CD && cost_mp(spell1_mp)) {
     last_spell1 = current_time;
     //create spell based on character type
     switch (ptype) {
@@ -629,13 +644,17 @@ void Player::try_spell1() {
         disintegrate_begin();
         break;
       case WUKONG: //Cudgel Fury
+        //if (cost_mp(kCudgel_fury_mp_cost))
         cudgel_fury_begin();
         break;
       case SHASENG: //Strafe
+        //if (cost_mp(kStrafe_mp_cost)) {
         new_spell = new Strafe(get_location(), get_current_orientation(), this, kStrafe_dam * attack_buff);
         Model_state::get_instance()->add_spell(new_spell);
+        //}
         break;
       default: // case BAJIE: Shield
+        //if (cost_mp(kShield_mp_cost))
         shield();
         break;
     }
@@ -647,26 +666,32 @@ void Player::try_spell2() {
   float current_time = game_time->seconds();
   float passed_time = current_time - last_spell2;
   Spell* new_spell;
-  if (passed_time > spell2_CD) {
+  if (passed_time > spell2_CD && cost_mp(spell2_mp)) {
     last_spell2 = current_time;
     //create spell based on character type
     switch (ptype) {
       case SANZANG: //healing_spell
-        new_spell = new Healing_spell(get_location(), get_current_orientation(), -kHealing_amount * attack_buff);
-        Model_state::get_instance()->add_spell(new_spell);
+        //if (cost_mp(kHealing_mp_cost)) {
+            new_spell = new Healing_spell(get_location(), get_current_orientation(), -kHealing_amount * attack_buff);
+            Model_state::get_instance()->add_spell(new_spell);
+        //}
         break;
       case WUKONG: //Charge
+        //if (cost_mp(kCharge_mp_cost))
         charge();
         break;
       case SHASENG: //Trap
-        new_spell = new Trap(get_location(), this, kTrap_dam * attack_buff);
-        Model_state::get_instance()->add_spell(new_spell);
+        //if (cost_mp(kTrap_mp_cost)) {
+            new_spell = new Trap(get_location(), this, kTrap_dam * attack_buff);
+            Model_state::get_instance()->add_spell(new_spell);
+        //}
         break;
       default: // case BAJIE: Taunt
         //spell2_active = true;
-        new_spell = new Taunt(get_location(), this);
-        Model_state::get_instance()->add_spell(new_spell);
-        //taunt();
+        //if (cost_mp(kTaunt_mp_cost)) {
+            new_spell = new Taunt(get_location(), this);
+            Model_state::get_instance()->add_spell(new_spell);
+        //}
         break;
     }
   }
@@ -677,32 +702,38 @@ void Player::try_spell3() {
   float current_time = game_time->seconds();
   float passed_time = current_time - last_spell3;
   Spell* new_spell;
-  if (passed_time > spell3_CD) {
+  if (passed_time > spell3_CD && cost_mp(spell3_mp)) {
     last_spell3 = current_time;
     //create spell based on character type
     switch (ptype) {
       case SANZANG: //Ding
-        new_spell = new Ding(get_location(), this, kDing_dam * attack_buff);
-        Model_state::get_instance()->add_spell(new_spell);
+        //if (cost_mp(kDing_mp_cost)) {
+            new_spell = new Ding(get_location(), this, kDing_dam * attack_buff);
+            Model_state::get_instance()->add_spell(new_spell);
+        //}
         break;
       case WUKONG: //Berserk
+        //if (cost_mp(kBerserk_mp_cost))
         berserk();
         break;
       case SHASENG: //Magic Arrow
-        if (fire_magic_arrow) {
-          new_spell = new Magic_arrow_fire(get_location(),
-                                           get_current_orientation(),
-                                           this,
-                                           kMagicarrow_dam * attack_buff);
-        } else {
-          new_spell = new Magic_arrow_ice(get_location(),
-                                          get_current_orientation(),
-                                          this,
-                                          kMagicarrow_dam * attack_buff);
-        }
-        Model_state::get_instance()->add_spell(new_spell);
+        //if (cost_mp(kMagicarrow_mp_cost)) {
+            if (fire_magic_arrow) {
+              new_spell = new Magic_arrow_fire(get_location(),
+                                               get_current_orientation(),
+                                               this,
+                                               kMagicarrow_dam * attack_buff);
+            } else {
+              new_spell = new Magic_arrow_ice(get_location(),
+                                              get_current_orientation(),
+                                              this,
+                                              kMagicarrow_dam * attack_buff);
+            }
+            Model_state::get_instance()->add_spell(new_spell);
+        //}
         break;
       default: // case BAJIE: Bloodsuck
+        //if (cost_mp(kBloodsuck_mp_cost))
         bloodsuck();
         break;
     }

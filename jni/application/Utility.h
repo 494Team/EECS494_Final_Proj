@@ -106,7 +106,7 @@ namespace Flame{
   const Zeni::Color SLOWDOWN_COLOR = Zeni::Color(1.0f, 0.3f, 0.6f, 1.0f);
   
   //spells written in/related to Player.cpp
-  const float kCudge_fury_CD = 5.0f;
+  const float kCudgel_fury_CD = 5.0f;
   const float kCudgelfury_last = 3.0f;
   const float kCudgelfury_render_gap = 0.02f;
   const int kCudgelfury_render_max = 3;
