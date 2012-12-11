@@ -974,14 +974,20 @@ private:
     
     Point2f CDbar_loc(loc.x, loc.y + head_size.y + 5.0f);
     Zeni::render_image(player_skill_texture + "1",CDbar_loc, CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
+    if (!p_ptr->spell1_mp_enough())
+      Zeni::render_image("no_mana", CDbar_loc, CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
     Zeni::render_image("cd_mask", CDbar_loc + Zeni::Vector2f(0, kCDbar_length *(CD1percent)) ,CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
 
     CDbar_loc += Point2f(kCDbar_length + 5.0f, 0.0f);
     Zeni::render_image(player_skill_texture + "2",CDbar_loc, CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
+    if (!p_ptr->spell2_mp_enough())
+      Zeni::render_image("no_mana", CDbar_loc, CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
     Zeni::render_image("cd_mask", CDbar_loc + Zeni::Vector2f(0, kCDbar_length *(CD2percent)) ,CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
 
     CDbar_loc += Point2f(kCDbar_length + 5.0f, 0.0f);
     Zeni::render_image(player_skill_texture + "3",CDbar_loc, CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
+    if (!p_ptr->spell3_mp_enough())
+      Zeni::render_image("no_mana", CDbar_loc, CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
     Zeni::render_image("cd_mask", CDbar_loc + Zeni::Vector2f(0, kCDbar_length *(CD3percent)) ,CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
 
     vr.render(hpbar);

@@ -226,8 +226,7 @@ void Player::update(float time) {
     berserk_end();
   }
   if (is_disintegrate()) {
-    cost_mp(kDisintegrate_mp_cost);
-    if (mp == 0.0f) {
+    if (!cost_mp(kDisintegrate_mp_cost)) {
       disintegrate_end();
     }
   }

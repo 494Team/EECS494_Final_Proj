@@ -34,6 +34,7 @@ namespace Flame {
   //SANZANG
   const float kDisintegrate_CD = 0.0f;
   const float kDisintegrate_dam = 5.0f;
+  //const float kDisintegrate_mp_initial_cost = 2.0f;
   const float kDisintegrate_mp_cost = 2.0f;
   const float kHealing_CD = 2.0f;
   const float kHealing_amount = -1000.0f; //500.0f;
@@ -195,6 +196,9 @@ namespace Flame {
     void set_mp_regen_rate(float mp_regen_rate_) {
       mp_regen_rate = mp_regen_rate_;
     }
+    bool spell1_mp_enough() {return mp > spell1_mp;}
+    bool spell2_mp_enough() {return mp > spell2_mp;}
+    bool spell3_mp_enough() {return mp > spell3_mp;}
   private:
     int controller; //range: [0, 3]
     float mp;
