@@ -51,16 +51,17 @@ namespace Flame {
 
     clear();
     timer = timer_;
-    for (std::vector<kPlayer_type>::iterator it = character_list.begin(); it != character_list.end(); it++)
+    for (std::vector<kPlayer_type>::iterator it = character_list.begin(); it != character_list.end(); it++) {
       player_list.push_back(new Player(timer, kHp_max, 400.f, 16.f, Point2f(300.f, 3000.f), *it));
+    }
 
     for (int i=0; i<4; i++) {
       if (i < player_list.size()) {
-        player_alive[i] = true;
+        controller_alive[i] = true;
         player_pos_in_list[i] = i;
         player_list[i]->set_controller(i);
       } else {
-        player_alive[i] = false;
+        controller_alive[i] = false;
         player_pos_in_list[i] = -1;
       }
     }
@@ -254,13 +255,15 @@ namespace Flame {
         it = remove_monster(*it);
       else
         ++it;
-    int controller;
     for (auto it = player_list.begin(); it != player_list.end();)
       if (!(*it)->is_alive()) {
-        controller = (*it)->get_controller();
-        player_alive[controller] = false;
-        it = remove_player(*it);
-
+        /*
+        int controller = (*it)->get_controller();
+        controller_alive[controller] = false;
+        */
+        //it = remove_player(*it);
+        it = move_player_to_dead_list(*it);
+        /*
         for (int i=get_player_list_index(controller); i<4; i++) {
           if (i==3 || player_pos_in_list[i+1] == -1) {
             player_pos_in_list[i] = -1;
@@ -268,7 +271,9 @@ namespace Flame {
             player_pos_in_list[i] = player_pos_in_list[i+1];
           }
         }
-      } else {
+        */
+      }
+      else {
         ++it;
       }
     for (auto it = remove_list.begin(); it != remove_list.end(); ++it) {
@@ -320,13 +325,50 @@ namespace Flame {
     map_puzzle_obj_list.push_back(map_obj_ptr);
   }
 
+  vector<Player *>::iterator Model_state::player_rise_from_dead_list(Player * player_ptr)
+  {
+    //can only be called when there are at least one player alive
+    //assert(!player_list.empty());
+
+    Point2f rise_pos = player_list.front()->get_location();
+        int controller = player_ptr->get_controller();
+        controller_alive[controller] = true;
+        player_pos_in_list[player_list.size()] = controller;
+        player_ptr->dec_health(-player_ptr->get_initial_health());
+        player_ptr->set_position(rise_pos);
+
+    player_list.push_back(player_ptr);
+    sim_obj_list.push_back(player_ptr);
+    render_list.insert(player_ptr);
+    auto it = dead_player_list.erase(find(dead_player_list.begin(), dead_player_list.end(), player_ptr));
+    return it;
+  }
+  vector<Player *>::iterator Model_state::move_player_to_dead_list(Player * player_ptr)
+  {
+        int controller = player_ptr->get_controller();
+        controller_alive[controller] = false;
+        for (int i=get_player_list_index(controller); i<4; i++) {
+          if (i==3 || player_pos_in_list[i+1] == -1) {
+            player_pos_in_list[i] = -1;
+          } else {
+            player_pos_in_list[i] = player_pos_in_list[i+1];
+          }
+        }
+
+    dead_player_list.push_back(player_ptr);
+    sim_obj_list.erase(find(sim_obj_list.begin(), sim_obj_list.end(), player_ptr));
+    render_list.erase(find(render_list.begin(), render_list.end(), player_ptr));
+    auto it = player_list.erase(find(player_list.begin(), player_list.end(), player_ptr));
+    return it;
+  }
+  
   vector<Player *>::iterator Model_state::remove_player(Player * player_ptr)
   {
     auto it = player_list.erase(find(player_list.begin(), player_list.end(), player_ptr));
     remove_list.push_back(player_ptr);
     return it;
   }
-
+  
   vector<Monster *>::iterator Model_state::remove_monster(Monster * monster_ptr)
   {
     auto it = monster_list.erase(find(monster_list.begin(), monster_list.end(), monster_ptr));

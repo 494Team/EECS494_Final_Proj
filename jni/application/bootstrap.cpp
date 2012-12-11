@@ -504,12 +504,14 @@ class Play_State : public Gamestate_II {
   Play_State operator=(const Play_State &);
   Dialog_box dialog;
   int lvl;
+  int revival_num;
 public:
   Play_State() :
     m_time_passed(0.f),
     lvl(0),
     show_die(false),
-    dialog(&m_set)
+    dialog(&m_set),
+    revival_num(kTemp_revival_max)
   {
     set_pausable(true);
 
@@ -574,8 +576,8 @@ private:
                 (*it)->set_position(Point2f(x,3000));
                 x += 100.f;
             }
-            Redboy* redboy_inst = new Redboy(Zeni::Point2f(100, 2300));
-            Model_state::get_instance()->add_monster(redboy_inst);
+            //Redboy* redboy_inst = new Redboy(Zeni::Point2f(100, 2300));
+            //Model_state::get_instance()->add_monster(redboy_inst);
             Wanderer* wanderer = new Wanderer(Zeni::Point2f(100, 2300));
             Model_state::get_instance()->add_monster(wanderer);
             wanderer = new Wanderer(Zeni::Point2f(100, 2300));
@@ -734,6 +736,7 @@ private:
     //int player_pos_in_list = Model_state::get_instance()->get_player_pos_in_list(controller);
     //if (player_pos_in_list >= 0 && player_pos_in_list <= 3) {
     if (list_pos != -1) {
+      //control of alive players
       p_ptr = player_list_ptr->at(list_pos);
       //p_ptr = player_list_ptr->at(player_pos_in_list);
         if (p_ptr->controllable()) {
@@ -801,6 +804,64 @@ private:
               break;
           }
         }
+    } else {
+      //control of dead players
+      std::vector<Player*>* dead_player_list_ptr = (Model_state::get_instance()->get_dead_player_list_ptr());
+      if (player_list_ptr->empty()) {
+        //revive all
+          switch(action) {
+          case A1:
+          case A2:
+          case A3:
+          case A4:
+            /*
+            //cannot use rise_from_dead_list() because no one is alive now
+            for (auto it = dead_player_list_ptr->begin(); it != dead_player_list_ptr->end();) {
+              it = Model_state::get_instance()->player_rise_from_dead_list(*it);
+            }
+            */
+          default:
+            break;
+          }
+      } else {
+        //revive any one
+          switch(action) {
+          case A1:
+            for (auto it = dead_player_list_ptr->begin(); it != dead_player_list_ptr->end(); ++it) {
+              if (revival_num > 0 && (*it)->get_controller() == 0) {
+                Model_state::get_instance()->player_rise_from_dead_list(*it);
+                revival_num--;
+                break;
+              }
+            }
+          case A2:
+            for (auto it = dead_player_list_ptr->begin(); it != dead_player_list_ptr->end(); ++it) {
+              if (revival_num > 0 && (*it)->get_controller() == 1) {
+                Model_state::get_instance()->player_rise_from_dead_list(*it);
+                revival_num--;
+                break;
+              }
+            }
+          case A3:
+            for (auto it = dead_player_list_ptr->begin(); it != dead_player_list_ptr->end(); ++it) {
+              if (revival_num > 0 && (*it)->get_controller() == 2) {
+                Model_state::get_instance()->player_rise_from_dead_list(*it);
+                revival_num--;
+                break;
+              }
+            }
+          case A4:
+            for (auto it = dead_player_list_ptr->begin(); it != dead_player_list_ptr->end(); ++it) {
+              if (revival_num > 0 && (*it)->get_controller() == 3) {
+                Model_state::get_instance()->player_rise_from_dead_list(*it);
+                revival_num--;
+                break;
+              }
+            }
+          default:
+            break;
+          }
+      }
     }
   }
 
@@ -813,8 +874,12 @@ private:
         show_die = true;
         //m_set.pause_all();
     }
+    if (!Model_state::get_instance()->get_player_list_ptr()->empty() && lvl < 2 && show_die) {
+        show_die = false;
+        //m_set.unpause_all();
+    }
     if (Model_state::get_instance()->get_monster_list_ptr()->empty() && lvl < 2) {
-      //set_level(++lvl);
+      set_level(++lvl);
     }
 
     float time_step = 0.005f;
@@ -908,41 +973,17 @@ private:
     //CDbar
     
     Point2f CDbar_loc(loc.x, loc.y + head_size.y + 5.0f);
-    /*
-    Zeni::Vertex2f_Color p00(CDbar_loc, cr[kCDbar_color]);
-    Zeni::Vertex2f_Color p01(CDbar_loc + Zeni::Point2f(0.0f, kCDbar_width), cr[kCDbar_color]);
-    Zeni::Vertex2f_Color p02(CDbar_loc + Zeni::Point2f(CD1percent * kCDbar_length, kCDbar_width), cr[kCDbar_color]);
-    Zeni::Vertex2f_Color p03(CDbar_loc + Zeni::Point2f(CD1percent * kCDbar_length, 0.0f), cr[kCDbar_color]);
-    Zeni::Quadrilateral<Zeni::Vertex2f_Color> bar1(p00, p01, p02, p03);
-    */
     Zeni::render_image(player_skill_texture + "1",CDbar_loc, CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
     Zeni::render_image("cd_mask", CDbar_loc + Zeni::Vector2f(0, kCDbar_length *(CD1percent)) ,CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
 
     CDbar_loc += Point2f(kCDbar_length + 5.0f, 0.0f);
-    /*
-    Zeni::Vertex2f_Color p10(CDbar_loc, cr[kCDbar_color]);
-    Zeni::Vertex2f_Color p11(CDbar_loc + Zeni::Point2f(0.0f, kCDbar_width), cr[kCDbar_color]);
-    Zeni::Vertex2f_Color p12(CDbar_loc + Zeni::Point2f(CD2percent * kCDbar_length, kCDbar_width), cr[kCDbar_color]);
-    Zeni::Vertex2f_Color p13(CDbar_loc + Zeni::Point2f(CD2percent * kCDbar_length, 0.0f), cr[kCDbar_color]);
-    Zeni::Quadrilateral<Zeni::Vertex2f_Color> bar2(p10, p11, p12, p13);
-    */
     Zeni::render_image(player_skill_texture + "2",CDbar_loc, CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
     Zeni::render_image("cd_mask", CDbar_loc + Zeni::Vector2f(0, kCDbar_length *(CD2percent)) ,CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
 
     CDbar_loc += Point2f(kCDbar_length + 5.0f, 0.0f);
-    /*
-    Zeni::Vertex2f_Color p20(CDbar_loc, cr[kCDbar_color]);
-    Zeni::Vertex2f_Color p21(CDbar_loc + Zeni::Point2f(0.0f, kCDbar_width), cr[kCDbar_color]);
-    Zeni::Vertex2f_Color p22(CDbar_loc + Zeni::Point2f(CD3percent * kCDbar_length, kCDbar_width), cr[kCDbar_color]);
-    Zeni::Vertex2f_Color p23(CDbar_loc + Zeni::Point2f(CD3percent * kCDbar_length, 0.0f), cr[kCDbar_color]);
-    Zeni::Quadrilateral<Zeni::Vertex2f_Color> bar3(p20, p21, p22, p23);
-    */
     Zeni::render_image(player_skill_texture + "3",CDbar_loc, CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
     Zeni::render_image("cd_mask", CDbar_loc + Zeni::Vector2f(0, kCDbar_length *(CD3percent)) ,CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
 
-//    vr.render(bar1);
-  //  vr.render(bar2);
-   // vr.render(bar3);
     vr.render(hpbar);
     vr.render(mpbar);
   }
@@ -1005,7 +1046,7 @@ private:
     /* render level status */
     char* str = new char[10];
     sprintf(str, "%d", lvl+1);
-    Zeni::String text_buf = "Level ";
+    Zeni::String text_buf = "level ";
     text_buf += str;
     Zeni::Font &l_ft = get_Fonts()["lvl_ft"];
     l_ft.render_text(text_buf,
@@ -1013,6 +1054,14 @@ private:
                    get_Colors()["black"],
                    ZENI_CENTER);
 
+    /* render revival status */
+    sprintf(str, "%d", revival_num);
+    text_buf = "revival chances: ";
+    text_buf += str;
+    l_ft.render_text(text_buf,
+                   Point2f(400.0f, 60.0f - 0.5f * l_ft.get_text_height()),
+                   get_Colors()["black"],
+                   ZENI_CENTER);
 
     if (show_die) {
         l_ft.render_text("Player(s) Died!",
@@ -1455,20 +1504,7 @@ public:
       get_Game().joy_mouse.enabled = false;
   }
 
-  void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
-    float high_conf = 0.9f;
-    switch(action) {
-      case CONFIRM1:
-      case CONFIRM2:
-      case CONFIRM3:
-      case CONFIRM4:
-        get_Game().pop_state();
-        get_Game().push_state(new Title_State<Choose_Pnumber_State, Instructions_State>("Zenipex Library\nApplication"));
-
-      default:
-        break;
-    }
-  }
+  void on_event(const Zeni_Input_ID &, const float &confidence, const int &action);
   
   void render(){
     //Gamestate_II::render();
@@ -1485,6 +1521,167 @@ public:
   }
 };
 
+
+class Pre_Play_State : public Widget_Gamestate {
+    Pre_Play_State(const Pre_Play_State &);
+    Pre_Play_State & operator=(const Pre_Play_State &);
+
+  public:
+
+      class Play_Single_Button : public Text_Button {
+          Play_Single_Button(const Play_Single_Button &);
+          Play_Single_Button & operator=(const Play_Single_Button &);
+          
+      public:
+          Play_Single_Button()
+          : Text_Button(Point2f(50.0f, 400.0f), Point2f(260.0f, 450.0f),
+                        "system_36_800x600", "Play")
+          {
+            give_Renderer(new Widget_Renderer_Tricolor(Color(1.f, 1.f, 1.f, 0.0f), 
+                  Color(1.f, 0.66f, 0.f, 0.0f),
+                  Color(0.5f, 0.66f, 0.f, 0.0f),
+                                                        Color(1.f, 0.f, 0.f, 0.0f),
+                                                        Color(1.f, 1.f, 1.f, 1.0f),
+                                                        Color(1.f, 1.f, 1.f, 1.0f)));
+          }
+          
+          void on_accept() {
+              get_Game().push_state(new Choose_Pnumber_State());
+
+          }
+      } play_single_button;
+      
+  
+      class Instructions_Button : public Text_Button {
+          Instructions_Button(const Instructions_Button &);
+          Instructions_Button & operator=(const Instructions_Button &);
+          
+      public:
+          Instructions_Button()
+          : Text_Button(Point2f(280.0f, 400.0f), Point2f(490.0f, 450.0f),
+                        "system_36_800x600", "Instructions")
+          {
+            give_Renderer(new Widget_Renderer_Tricolor(Color(1.f, 1.f, 1.f, 0.0f), 
+                  Color(1.f, 0.66f, 0.f, 0.0f),
+                  Color(0.5f, 0.66f, 0.f, 0.0f),
+                                                        Color(1.f, 0.f, 0.f, 0.0f),
+                                                        Color(1.f, 1.f, 1.f, 1.0f),
+                                                        Color(1.f, 1.f, 1.f, 1.0f)));
+          }
+          
+          void on_accept() {
+             get_Game().push_state(new Instructions_State());
+          }
+      } instructions_button;
+
+      //Popup_Menu_State::Sound_Check_Box sound_check_box;
+#ifndef ANDROID
+      Popup_Menu_State::Configure_Video_Button configure_video_button;
+#endif
+      Popup_Menu_State::Sound_Check_Box sound_check_box;
+      Popup_Menu_State::Quit_Button quit_button;
+    Pre_Play_State()
+      : Widget_Gamestate(std::make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f))),
+      configure_video_button(Point2f(50.0f, 470.0f), Point2f(260.0f, 520.0f)),
+      sound_check_box(Point2f(510.0f, 470.0f), Point2f(560.0f, 520.0f)),
+      quit_button(Point2f(280.0f, 470.0f), Point2f(490.0f, 520.0f))
+    {
+    /*  m_widgets.lend_Widget(level_1_button);
+        m_widgets.lend_Widget(level_2_button);
+        m_widgets.lend_Widget(level_3_button);
+        m_widgets.lend_Widget(level_4_button);*/
+        m_widgets.lend_Widget(play_single_button);
+        m_widgets.lend_Widget(sound_check_box);
+        m_set.start();
+#ifndef ANDROID
+        configure_video_button.give_Renderer(new Widget_Renderer_Tricolor(Color(1.f, 1.f, 1.f, 0.0f), 
+                  Color(1.f, 0.66f, 0.f, 0.0f),
+                  Color(0.5f, 0.66f, 0.f, 0.0f),
+                                                        Color(1.f, 0.f, 0.f, 0.0f),
+                                                        Color(1.f, 1.f, 1.f, 1.0f),
+                                                        Color(1.f, 1.f, 1.f, 1.0f)));
+        m_widgets.lend_Widget(configure_video_button);
+
+#endif
+        m_widgets.lend_Widget(instructions_button);
+     // m_widgets.lend_Widget(back_button);
+        quit_button.give_Renderer(new Widget_Renderer_Tricolor(Color(1.f, 1.f, 1.f, 0.0f), 
+                  Color(1.f, 0.66f, 0.f, 0.0f),
+                  Color(0.5f, 0.66f, 0.f, 0.0f),
+                                                        Color(1.f, 0.f, 0.f, 0.0f),
+                                                        Color(1.f, 1.f, 1.f, 1.0f),
+                                                        Color(1.f, 1.f, 1.f, 1.0f)));
+       m_widgets.lend_Widget(quit_button);
+       get_Video().set_clear_Color(get_Colors()["title_bg"]);
+     }
+
+    ~Pre_Play_State() {
+      get_Video().set_clear_Color(Color(1.0f, 0.0f, 0.0f, 0.0f));
+    }
+
+      void on_key(const SDL_KeyboardEvent &event)
+      {
+          if (event.keysym.sym == SDLK_ESCAPE && event.type == SDL_KEYDOWN){
+              get_Game().pop_state();
+              get_Game().push_state( new Title_state());
+              
+          }
+          else
+              Widget_Gamestate::on_key(event);
+      }
+
+      void perform_logic(){
+          Widget_Gamestate::perform_logic();
+      const float time_passed = m_set.seconds();
+      const float time_step = time_passed - m_time_passed;
+      m_time_passed = time_passed;
+      m_step += time_step;
+      if (m_step > 0.5){
+          change = !change;
+          m_step = 0;
+      }
+      }
+     
+
+
+      void render(){
+          Gamestate_Base::render();
+          get_Video().set_2d(std::make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
+          if(m_set.seconds()<0.5f)
+            render_image("title0", Point2f(0.f, 0.0f), Point2f(1024.0f, 1024.0f));
+          else if (m_set.seconds()<1.f)
+            render_image("title2", Point2f(0.f, 0.0f), Point2f(1024.0f, 1024.0f));
+          else{
+            render_image("title0", Point2f(0.f, 0.0f), Point2f(1024.0f, 1024.0f));
+            m_set.reset();
+            m_set.start();
+          }
+
+          get_Video().set_2d(get_virtual_window(), fix_aspect_ratio());
+
+          m_widgets.render();
+      };
+  private:
+      Chronometer<Time> m_set;
+      float m_time_passed, m_step;
+      bool change;
+      
+  };
+
+
+ void Title_state::on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
+    switch(action) {
+      case CONFIRM1:
+      case CONFIRM2:
+      case CONFIRM3:
+      case CONFIRM4:
+        get_Game().pop_state();
+        //get_Game().push_state(new Title_State<Choose_Pnumber_State, Instructions_State>("Zenipex Library\nApplication"));
+        get_Game().push_state(new Pre_Play_State());
+      default:
+        break;
+    }
+  }
 class Bootstrap {
   class Gamestate_One_Initializer : public Gamestate_Zero_Initializer {
     virtual Gamestate_Base * operator()() {

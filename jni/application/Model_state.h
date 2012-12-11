@@ -47,6 +47,8 @@ namespace Flame {
     {return &render_list;}
     std::vector<Player *> * get_player_list_ptr()
     {return &player_list;}
+    std::vector<Player *> * get_dead_player_list_ptr()
+    {return &dead_player_list;}
     std::vector<Monster *> * get_monster_list_ptr()
     {return &monster_list;}
     std::vector<Spell *> * get_spell_list_ptr()
@@ -70,6 +72,8 @@ namespace Flame {
 
     // never try to remove yourself! use these functions!!!!!!!
     std::vector<Player *>::iterator remove_player(Player * player_ptr);
+    std::vector<Player *>::iterator player_rise_from_dead_list(Player * player_ptr);
+    std::vector<Player *>::iterator move_player_to_dead_list(Player * player_ptr);
     std::vector<Monster *>::iterator remove_monster(Monster * monster_ptr);
     std::vector<Spell *>::iterator remove_spell(Spell * spell_ptr);
     std::vector<Map *>::iterator remove_map_obj(Map * map_ptr);
@@ -102,7 +106,7 @@ namespace Flame {
       {return initial_player_num;}
     void set_initial_player_num(int initial_player_num_)
       {initial_player_num = initial_player_num_;}
-    int get_player_pos_in_list(const int list_pos) {
+    int get_player_pos_in_list(const int list_pos) { //get controller
       if (list_pos > 3 || list_pos < 0)
         return -1;
       else
@@ -120,9 +124,12 @@ namespace Flame {
         }
         return list_pos;
     }
+    bool is_controller_alive(const int controller) {
+      return controller_alive[controller];
+    }
   private:
     int initial_player_num;
-    bool player_alive[4]; //book keeping for minimap
+    bool controller_alive[4]; //usage: controller_alive[controller]
     int player_pos_in_list[4]; //update when any player die
     int money;
     void clear();
@@ -137,6 +144,7 @@ namespace Flame {
     std::vector<Sim_object *> sim_obj_list;
     std::vector<Sim_object *> remove_list;
     std::vector<Player *> player_list;
+    std::vector<Player *> dead_player_list;
     std::vector<Monster *> monster_list;
     std::vector<Spell *> spell_list;
     std::vector<Map *> map_obj_list;

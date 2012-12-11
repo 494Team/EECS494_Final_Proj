@@ -269,7 +269,14 @@ namespace Flame {
     }
 
   void Taunt::render()
-  {Resizable_spell::render("brick");}
+  {
+    if (get_remaining_lifetime() > kTaunt_life_time * 3 / 4)
+      Resizable_spell::render("taunt1");
+    else if (get_remaining_lifetime() > kTaunt_life_time * 2 / 4)
+      Resizable_spell::render("taunt2");
+    else
+      Resizable_spell::render("taunt3");
+  }
 
   // Friar Sand
   Arrow_attack::Arrow_attack(const Point2f& location_,
