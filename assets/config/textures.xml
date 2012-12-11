@@ -37,6 +37,15 @@ The following things are unsupported:
   4. Anything other than 8 bits per channel
 -->
 <Textures>
+<selection0>
+<filepath>textures/selection0.png</filepath>
+<tile>0</tile>
+</selection0>
+<selection1>
+<filepath>textures/selection1.png</filepath>
+<tile>0</tile>
+</selection1>
+
 <wukong_p1>
 <filepath>textures/wukong_p1.png</filepath>
 <tile>0</tile>

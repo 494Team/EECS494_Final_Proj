@@ -1200,22 +1200,6 @@ private:
       
     }
   }
-  /*
-  void move_cursor(const int player_n, const bool is_to_right) {
-    if (!p_decided[player_n]) {
-      if (is_to_right) {
-        cursor_pos[player_n]++;
-      } else {
-        cursor_pos[player_n]--;
-      }
-      if (cursor_pos[player_n] > kCursor_max) {
-        cursor_pos[player_n] -= kCursor_max + 1;
-      } else if (cursor_pos[player_n] < kCursor_min) {
-        cursor_pos[player_n] += kCursor_max + 1;
-      }
-    }
-  }
-  */
 
   void move_cursor(const int player_n, const int dir){
     if (p_available[player_n] && !p_decided[player_n]){
@@ -1223,8 +1207,6 @@ private:
         case kMove_right:
           if (chosen_char[player_n] == SANZANG)
             chosen_char[player_n] = WUKONG;
-          else if (chosen_char[player_n] == SHASENG)
-            chosen_char[player_n] = BAJIE;
           else if (chosen_char[player_n] == WUKONG)
             chosen_char[player_n] = SHASENG;
           else if (chosen_char[player_n] == SHASENG)
@@ -1239,8 +1221,6 @@ private:
             chosen_char[player_n] = SHASENG;
           else if (chosen_char[player_n] == SHASENG)
             chosen_char[player_n] = WUKONG;
-          else if (chosen_char[player_n] == BAJIE)
-            chosen_char[player_n] = SHASENG;
           else if (chosen_char[player_n] == SANZANG)
             chosen_char[player_n] = BAJIE;
           break;
@@ -1249,24 +1229,26 @@ private:
             chosen_char[player_n] = SANZANG;
           else if (chosen_char[player_n] == BAJIE)
             chosen_char[player_n] = WUKONG;
-          break;
+          else if (chosen_char[player_n] == WUKONG)
+            chosen_char[player_n] = BAJIE;
+	  else if (chosen_char[player_n] == SANZANG)
+	    chosen_char[player_n] = SHASENG;
+	  break;
         case kMove_down:
           if (chosen_char[player_n] == SANZANG)
             chosen_char[player_n] = SHASENG;
           else if (chosen_char[player_n] == WUKONG)
             chosen_char[player_n] = BAJIE;
+	  else if (chosen_char[player_n] == SHASENG)
+	    chosen_char[player_n] = SANGZANG;
+	  else if (chosen_char[player_n] == BAJIE)
+	    chosen_char[player_n] = WUKONG;
           break;
         default:
           break;
       }
     }
   }
-  /*
-  SANZANG,
-  WUKONG,
-  SHASENG,
-  BAJIE
-  */
   Chronometer<Time> m_set;
   bool char_available[4];
   bool p_decided[4];
@@ -1277,7 +1259,7 @@ private:
   int chosen_num;
 
   void choose_char(const int controller) {
-    if (p_available[controller]) {
+    if (p_available[controller] && (char_available[chosen_char[controller]] || p_decided[controller])) {
       chosen_num = p_decided[controller]? chosen_num - 1 : chosen_num + 1;
       if (p_decided[controller])
         p_decided[controller] = false;
@@ -1300,38 +1282,6 @@ private:
 
   void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
     switch(action) {
-      /*
-      case HORI1:
-        if (confidence >= 1.0f)
-          move_cursor(0, true);
-        else if (confidence <= -1.0f)
-          move_cursor(0, false);
-        break;
-      case HORI2:
-        if (Model_state::get_instance()->get_initial_player_num() >= 2) {
-            if (confidence >= 1.0f)
-              move_cursor(1, true);
-            else if (confidence <= -1.0f)
-              move_cursor(1, false);
-        }
-        break;
-      case HORI3:
-        if (Model_state::get_instance()->get_initial_player_num() >= 3) {
-            if (confidence >= 1.0f)
-              move_cursor(2, true);
-            else if (confidence <= -1.0f)
-              move_cursor(2, false);
-        }
-        break;
-      case HORI4:
-        if (Model_state::get_instance()->get_initial_player_num() >= 4) {
-            if (confidence >= 1.0f)
-              move_cursor(3, true);
-            else if (confidence <= -1.0f)
-              move_cursor(3, false);
-        }
-        break;
-        */
       case HORI1:
         if (confidence >= 1.f)
           move_cursor(0,kMove_right);
@@ -1341,8 +1291,44 @@ private:
       case VERT1:
         if (confidence >= 0.9f)
           move_cursor(0,kMove_down);
-        else if (confidence <= -1.f)
+        else if (confidence <= -0.9f)
           move_cursor(0,kMove_up);
+        break;
+      case HORI2:
+        if (confidence >= 1.f)
+          move_cursor(1,kMove_right);
+        else if (confidence <= -1.f)
+          move_cursor(1,kMove_left);
+        break;
+      case VERT2:
+        if (confidence >= 0.9f)
+          move_cursor(1,kMove_down);
+        else if (confidence <= -0.9f)
+          move_cursor(1,kMove_up);
+        break;
+      case HORI3:
+        if (confidence >= 1.f)
+          move_cursor(2,kMove_right);
+        else if (confidence <= -1.f)
+          move_cursor(2,kMove_left);
+        break;
+      case VERT3:
+        if (confidence >= 0.9f)
+          move_cursor(2,kMove_down);
+        else if (confidence <= -0.9f)
+          move_cursor(2,kMove_up);
+        break;
+      case HORI4:
+        if (confidence >= 1.f)
+          move_cursor(3,kMove_right);
+        else if (confidence <= -1.f)
+          move_cursor(3,kMove_left);
+        break;
+      case VERT4:
+        if (confidence >= 0.9f)
+          move_cursor(3,kMove_down);
+        else if (confidence <= -0.9f)
+          move_cursor(3,kMove_up);
         break;
       case JOIN1:
         p_available[0] = true;
@@ -1391,33 +1377,16 @@ private:
 
   void render() {
     //Widget_Gamestate::render();
-    render_image("selection_screen", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
-   
-    /*
-    render_image("pigsy_front0",
-       Point2f(600.0f, 150.0f),
-       Point2f(800.0f, 500.0f),
-       false,
-       p_color[3]);
-    render_image("friar_sand_front0",
-       Point2f(400.0f, 150.0f),
-       Point2f(650.0f, 500.0f),
-       false,
-       p_color[2]);
-    render_image("monkey_king_front0",
-       Point2f(200.0f, 150.0f),
-       Point2f(450.0f, 500.0f),
-       false,
-       p_color[1]);
-    render_image("tripitaka_front0",
-       Point2f(50.0f, 150.0f),
-       Point2f(250.0f, 500.0f),
-       false,
-       p_color[0]);
-       */
-    float pos[4] = {30.0f, 180.0f, 380.0f, 580.0f};
+    if (m_set.seconds() < 0.5f)
+      render_image("selection0", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+    else if (m_set.seconds() < 1.f)
+      render_image("selection1", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+    else{
+      render_image("selection0", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+      m_set.reset();
+      m_set.start();
+    }
 
-    //p_color[pos] = Color(1.0f, 0.3f, 0.3f, 0.3f);
     Color cursor_color = (p_decided[0]) ? kCannotmove_color : Color();
     
     for  (int i = 0; i < 4; ++i){
@@ -1431,42 +1400,9 @@ private:
           a = String("wukong_p" + itoa(i+1));
         else if (chosen_char[i] == BAJIE)
           a = String("bajie_p" + itoa(i+1));
-        render_image(a, Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+        render_image(a, Point2f(0.f, 0.f), Point2f(1024.f, 1024.f), false, cursor_color);
       }
     }
-    
-    /*
-    render_image("p1cursor",
-         Point2f(pos[cursor_pos[0]], 100.0f),
-         Point2f(pos[cursor_pos[0]]+50.0f, 200.0f),
-         false,
-         cursor_color);
-    
-    if (Model_state::get_instance()->get_initial_player_num() >= 2) {
-      cursor_color = (p_decided[1]) ? kCannotmove_color : Color();
-      render_image("p2cursor",
-           Point2f(pos[cursor_pos[1]], 200.0f),
-          Point2f(pos[cursor_pos[1]]+50.0f, 300.0f),
-          false,
-          cursor_color);
-    }
-    if (Model_state::get_instance()->get_initial_player_num() >= 3) {
-      cursor_color = (p_decided[2]) ? kCannotmove_color : Color();
-      render_image("p3cursor",
-          Point2f(pos[cursor_pos[2]], 300.0f),
-          Point2f(pos[cursor_pos[2]]+50.0f, 400.0f),
-          false,
-          cursor_color);
-    }
-    if (Model_state::get_instance()->get_initial_player_num() >= 4) {
-      cursor_color = (p_decided[3]) ? kCannotmove_color : Color();
-      render_image("p4cursor",
-          Point2f(pos[cursor_pos[3]], 400.0f),
-          Point2f(pos[cursor_pos[3]]+50.0f, 500.0f),
-          false,
-          cursor_color);
-    }
-    */
   }
 };
 
