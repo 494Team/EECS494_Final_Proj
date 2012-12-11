@@ -1153,9 +1153,10 @@ public:
       p_decided[i] = false;
       p_color[i] = Color();
       char_available[i] = true;
-      chosen_char[i] = SANZANG;
+      chosen_char[i] = NONE;
       p_available[i] = false;
     }
+      player_count = 0;
     m_set.start();
   }
 
@@ -1256,7 +1257,7 @@ private:
   kPlayer_type chosen_char[4];
   //int cursor_pos[4];
   Color p_color[4];
-  int chosen_num;
+  int chosen_num, player_count;
 
   void choose_char(const int controller) {
     if (p_available[controller] && (char_available[chosen_char[controller]] || p_decided[controller])) {
@@ -1270,13 +1271,6 @@ private:
         char_available[chosen_char[controller]] = false;
       else
         char_available[chosen_char[controller]] = true;
-        
-      if (chosen_num == Model_state::get_instance()->get_initial_player_num()) {
-        get_Game().pop_state();
-        //get_Game().push_state(new Upgrade_state());
-        get_Game().push_state(new Play_State());
-      }
-      
     }
   }
 
@@ -1331,16 +1325,52 @@ private:
           move_cursor(3,kMove_up);
         break;
       case JOIN1:
-        p_available[0] = true;
+        if(!p_available[0]){
+          p_available[0] = true;
+          chosen_char[0] = SANZANG;
+          ++player_count;
+        }
+        else if(chosen_num == player_count){
+          get_Game().pop_state();
+          Model_state::get_instance().set_initial_player_num(player_count);
+          get_Game().push_state(new Play_State());
+        }
         break;
       case JOIN2:
-        p_available[1] = true;
+        if(!p_available[1]){
+          p_available[1] = true;
+          chosen_char[1] = SANZANG;
+          ++player_count;
+        }
+        else if(chosen_num == player_count){
+          get_Game().pop_state();
+          Model_state::get_instance().set_initial_player_num(player_count);
+          get_Game().push_state(new Play_State());
+        }
         break;
       case JOIN3:
-        p_available[2] = true;
+        if(!p_available[2]){
+          p_available[2] = true;
+          chosen_char[2] = SANZANG;
+          ++player_count;
+        }
+        else if(chosen_num == player_count){
+          get_Game().pop_state();
+          Model_state::get_instance().set_initial_player_num(player_count);
+          get_Game().push_state(new Play_State());
+        }
         break;
       case JOIN4:
-        p_available[3] = true;
+        if(!p_available[3]){
+          p_available[3] = true;
+          chosen_char[3] = SANZANG;
+          ++player_count;
+        }
+        else if(chosen_num == player_count){
+          get_Game().pop_state();
+          Model_state::get_instance().set_initial_player_num(player_count);
+          get_Game().push_state(new Play_State());
+        }
         break;
       default:
         break;

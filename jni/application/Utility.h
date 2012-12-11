@@ -193,7 +193,8 @@ namespace Flame{
     SANZANG = 0,
     WUKONG,
     SHASENG,
-    BAJIE
+    BAJIE,
+    NONE
   };
 
   struct Control {
