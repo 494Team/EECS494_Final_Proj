@@ -584,28 +584,6 @@ private:
                 (*it)->set_position(Point2f(x,3000));
                 x += 100.f;
             }
-<<<<<<< HEAD
-            //Redboy* redboy_inst = new Redboy(Zeni::Point2f(100, 2300));
-            //Model_state::get_instance()->add_monster(redboy_inst);
-            Wanderer* wanderer = new Wanderer(Zeni::Point2f(100, 2300));
-            Model_state::get_instance()->add_monster(wanderer);
-            wanderer = new Wanderer(Zeni::Point2f(100, 2300));
-            Model_state::get_instance()->add_monster(wanderer);
-            wanderer = new Wanderer(Zeni::Point2f(150, 2300));
-            Model_state::get_instance()->add_monster(wanderer);
-            wanderer = new Wanderer(Zeni::Point2f(250, 2300));
-            Model_state::get_instance()->add_monster(wanderer);
-            
-            Whisper* whisper_1 = new Whisper(Zeni::Point2f(400, 2800));
-            Model_state::get_instance()->add_monster(whisper_1);
-            whisper_1 = new Whisper(Zeni::Point2f(450, 2800));
-            Model_state::get_instance()->add_monster(whisper_1);
-            whisper_1 = new Whisper(Zeni::Point2f(500, 2800));
-            Model_state::get_instance()->add_monster(whisper_1);
-            whisper_1 = new Whisper(Zeni::Point2f(550, 2800));
-            Model_state::get_instance()->add_monster(whisper_1);
-=======
->>>>>>> level framework redesigned
         }
         else if (stage == 2){
             float x = 350;
@@ -876,17 +854,8 @@ private:
         show_die = true;
         //m_set.pause_all();
     }
-<<<<<<< HEAD
-    if (!Model_state::get_instance()->get_player_list_ptr()->empty() && lvl < 2 && show_die) {
-        show_die = false;
-        //m_set.unpause_all();
-    }
-    if (Model_state::get_instance()->get_monster_list_ptr()->empty() && lvl < 2) {
-      set_level(++lvl);
-=======
     if (Model_state::get_instance()->get_monster_list_ptr()->empty() && stage < 3) {
       set_stage(++stage);
->>>>>>> level framework redesigned
     }
 
     float time_step = 0.005f;
@@ -1062,13 +1031,8 @@ private:
 
     /* render level status */
     char* str = new char[10];
-<<<<<<< HEAD
-    sprintf(str, "%d", lvl+1);
-    Zeni::String text_buf = "level ";
-=======
-    sprintf(str, "%d", curr_lvl);
+    sprintf(str, "%d", curr_lvl + 1);
     Zeni::String text_buf = "Level ";
->>>>>>> level framework redesigned
     text_buf += str;
     Zeni::Font &l_ft = get_Fonts()["lvl_ft"];
     l_ft.render_text(text_buf,
