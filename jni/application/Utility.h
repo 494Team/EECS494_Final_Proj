@@ -186,6 +186,7 @@ namespace Flame{
     X1, X2, X3, X4,
     Y1, Y2, Y3, Y4,
     CONFIRM1, CONFIRM2, CONFIRM3, CONFIRM4,
+    JOIN1, JOIN2, JOIN3, JOIN4
   };
 
   enum kPlayer_type {
@@ -205,6 +206,11 @@ namespace Flame{
       l(false)
     {}
   };
+
+  const int kMove_left = 1;
+  const int kMove_right = 2;
+  const int kMove_up = 3;
+  const int kMove_down = 4;
 }
 
 #endif

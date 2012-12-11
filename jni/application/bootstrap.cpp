@@ -1119,35 +1119,42 @@ public:
 
     set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), MENU);
     //p1
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 0), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 0), MENU);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X /* x-axis */, 0), HORI1);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 0), VERT1);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 0), A1);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 0), B1);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 0), JOIN1);
     //p2
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 1), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 1), MENU);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X /* x-axis */, 1), HORI2);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 1), VERT2);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 1), A2);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 1), B2);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 1), JOIN2);
     //p3
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 2), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 2), MENU);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X /* x-axis */, 2), HORI3);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 2), VERT3);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 2), A3);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 2), B3);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 2), JOIN3);
     //p4
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 3), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 3), MENU);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X /* x-axis */, 3), HORI4);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 3), VERT4);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 3), A4);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_B, 3), B4);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 3), JOIN4);
+    
+  
 
     for (int i=0; i < 4; i++) {
-      cursor_pos[i] = kCursor_min;
       p_decided[i] = false;
       p_color[i] = Color();
       char_available[i] = true;
+      chosen_char[i] = SANZANG;
+      p_available[i] = false;
     }
     m_set.start();
   }
@@ -1193,7 +1200,7 @@ private:
       
     }
   }
-  
+  /*
   void move_cursor(const int player_n, const bool is_to_right) {
     if (!p_decided[player_n]) {
       if (is_to_right) {
@@ -1208,7 +1215,52 @@ private:
       }
     }
   }
+  */
 
+  void move_cursor(const int player_n, const int dir){
+    if (p_available[player_n] && !p_decided[player_n]){
+      switch(dir){
+        case kMove_right:
+          if (chosen_char[player_n] == SANZANG)
+            chosen_char[player_n] = WUKONG;
+          else if (chosen_char[player_n] == SHASENG)
+            chosen_char[player_n] = BAJIE;
+          else if (chosen_char[player_n] == WUKONG)
+            chosen_char[player_n] = SHASENG;
+          else if (chosen_char[player_n] == SHASENG)
+            chosen_char[player_n] = BAJIE;
+          else if (chosen_char[player_n] == BAJIE)
+            chosen_char[player_n] = SANZANG;
+          break;
+        case kMove_left:
+          if (chosen_char[player_n] == WUKONG)
+            chosen_char[player_n] = SANZANG;
+          else if (chosen_char[player_n] == BAJIE)
+            chosen_char[player_n] = SHASENG;
+          else if (chosen_char[player_n] == SHASENG)
+            chosen_char[player_n] = WUKONG;
+          else if (chosen_char[player_n] == BAJIE)
+            chosen_char[player_n] = SHASENG;
+          else if (chosen_char[player_n] == SANZANG)
+            chosen_char[player_n] = BAJIE;
+          break;
+        case kMove_up:
+          if (chosen_char[player_n] == SHASENG)
+            chosen_char[player_n] = SANZANG;
+          else if (chosen_char[player_n] == BAJIE)
+            chosen_char[player_n] = WUKONG;
+          break;
+        case kMove_down:
+          if (chosen_char[player_n] == SANZANG)
+            chosen_char[player_n] = SHASENG;
+          else if (chosen_char[player_n] == WUKONG)
+            chosen_char[player_n] = BAJIE;
+          break;
+        default:
+          break;
+      }
+    }
+  }
   /*
   SANZANG,
   WUKONG,
@@ -1218,46 +1270,37 @@ private:
   Chronometer<Time> m_set;
   bool char_available[4];
   bool p_decided[4];
+  bool p_available[4];
   kPlayer_type chosen_char[4];
-  int cursor_pos[4];
+  //int cursor_pos[4];
   Color p_color[4];
   int chosen_num;
 
   void choose_char(const int controller) {
-    if (!p_decided[controller]) {
-      int pos = cursor_pos[controller];
-      if (char_available[pos]) {
-        switch (pos) {
-          case 0:
-            chosen_char[controller] = SANZANG;
-            break;
-          case 1:
-            chosen_char[controller] = WUKONG;
-            break;
-          case 2:
-            chosen_char[controller] = SHASENG;
-            break;
-          case 3:
-            chosen_char[controller] = BAJIE;
-            break;
-          default:
-            break;
-        }
-        chosen_num++;
+    if (p_available[controller]) {
+      chosen_num = p_decided[controller]? chosen_num - 1 : chosen_num + 1;
+      if (p_decided[controller])
+        p_decided[controller] = false;
+      else
         p_decided[controller] = true;
-        p_color[pos] = Color(1.0f, 0.3f, 0.3f, 0.3f);
-        char_available[pos] = false;
-      }
+
+      if (char_available[chosen_char[controller]])
+        char_available[chosen_char[controller]] = false;
+      else
+        char_available[chosen_char[controller]] = true;
+        
       if (chosen_num == Model_state::get_instance()->get_initial_player_num()) {
         get_Game().pop_state();
         //get_Game().push_state(new Upgrade_state());
         get_Game().push_state(new Play_State());
       }
+      
     }
   }
 
   void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
     switch(action) {
+      /*
       case HORI1:
         if (confidence >= 1.0f)
           move_cursor(0, true);
@@ -1287,6 +1330,31 @@ private:
             else if (confidence <= -1.0f)
               move_cursor(3, false);
         }
+        break;
+        */
+      case HORI1:
+        if (confidence >= 1.f)
+          move_cursor(0,kMove_right);
+        else if (confidence <= -1.f)
+          move_cursor(0,kMove_left);
+        break;
+      case VERT1:
+        if (confidence >= 0.9f)
+          move_cursor(0,kMove_down);
+        else if (confidence <= -1.f)
+          move_cursor(0,kMove_up);
+        break;
+      case JOIN1:
+        p_available[0] = true;
+        break;
+      case JOIN2:
+        p_available[1] = true;
+        break;
+      case JOIN3:
+        p_available[2] = true;
+        break;
+      case JOIN4:
+        p_available[3] = true;
         break;
       default:
         break;
@@ -1323,16 +1391,9 @@ private:
 
   void render() {
     //Widget_Gamestate::render();
-    if (m_set.seconds()<0.5f)
-      render_image("title0", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
-    else if (m_set.seconds()<1.f)
-      render_image("title2", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
-    else{
-      m_set.reset();
-      m_set.start();
-      render_image("title0", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
-    }
-
+    render_image("selection_screen", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+   
+    /*
     render_image("pigsy_front0",
        Point2f(600.0f, 150.0f),
        Point2f(800.0f, 500.0f),
@@ -1353,15 +1414,34 @@ private:
        Point2f(250.0f, 500.0f),
        false,
        p_color[0]);
+       */
     float pos[4] = {30.0f, 180.0f, 380.0f, 580.0f};
 
     //p_color[pos] = Color(1.0f, 0.3f, 0.3f, 0.3f);
     Color cursor_color = (p_decided[0]) ? kCannotmove_color : Color();
+    
+    for  (int i = 0; i < 4; ++i){
+      if (p_available[i]){
+        String a;
+        if(chosen_char[i] == SANZANG)
+          a = String("sanzang_p" + itoa(i+1));
+        else if (chosen_char[i] == SHASENG)
+          a = String("shaseng_p" + itoa(i+1));
+        else if (chosen_char[i] == WUKONG)
+          a = String("wukong_p" + itoa(i+1));
+        else if (chosen_char[i] == BAJIE)
+          a = String("bajie_p" + itoa(i+1));
+        render_image(a, Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+      }
+    }
+    
+    /*
     render_image("p1cursor",
          Point2f(pos[cursor_pos[0]], 100.0f),
          Point2f(pos[cursor_pos[0]]+50.0f, 200.0f),
          false,
          cursor_color);
+    
     if (Model_state::get_instance()->get_initial_player_num() >= 2) {
       cursor_color = (p_decided[1]) ? kCannotmove_color : Color();
       render_image("p2cursor",
@@ -1386,6 +1466,7 @@ private:
           false,
           cursor_color);
     }
+    */
   }
 };
 
