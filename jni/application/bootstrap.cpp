@@ -580,7 +580,7 @@ public:
 
     levels.push_back(new Level_1());
     levels.push_back(new Level_2());
-    curr_lvl = 0;
+    curr_lvl = 1;
 
     Model_state::get_instance()->init(stage, &m_set);
     set_stage(stage);
@@ -614,12 +614,12 @@ private:
       int prev_stage = Model_state::get_instance()->get_prev_stage();
       if (stage == 1) {
         if (!prev_stage) {
-          float x = 350;
+          float x = 660;
           for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
               it != Model_state::get_instance()->get_player_list_ptr()->end();
               ++it){
             (*it)->set_position(Point2f(x,3000));
-            x += 100.f;
+            x += 40.f;
           }
         }
         else if (prev_stage == 2) {
@@ -1077,15 +1077,15 @@ private:
     float CD1percent = p_ptr->get_CD1_percent();
     float CD2percent = p_ptr->get_CD2_percent();
     float CD3percent = p_ptr->get_CD3_percent();
-    float hp_percent = p_ptr->get_hp()/kHp_max;
-    float mp_percent = p_ptr->get_mp()/kMp_max;
+    //float hp_percent = p_ptr->get_hp()/kHp_max;
+    //float mp_percent = p_ptr->get_mp()/kMp_max;
     float kCDbar_length = 30.0f;
     //float kCDbar_width = 10.0f;
     Zeni::String kCDbar_color = "blue";
 
     
-    Zeni::Video &vr = Zeni::get_Video();
-    Zeni::Colors &cr = Zeni::get_Colors();
+    //Zeni::Video &vr = Zeni::get_Video();
+    //Zeni::Colors &cr = Zeni::get_Colors();
 /*
     Point2f Hpbar_loc(loc.x + 60.0f, loc.y);
     const float kHpmpbar_width = 10.0f;

@@ -328,11 +328,12 @@ namespace Flame {
 			it != map_obj_list->end();
 			++it)
     {
-				if (collision_body.intersects((*it)->get_body()))
+				if (!dynamic_cast<Map_laser *>(*it) && !dynamic_cast<Map_gate *>(*it) && collision_body.intersects((*it)->get_body()))
         {
           map_obj_collide = true;
-					if (short_dis > (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z)))
+					if (short_dis > (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z))) {
 						short_dis = (*it)->get_body().shortest_distance(Point3f(render_start.x, render_start.y, render_start.z));
+          }
 				}
 		}
 

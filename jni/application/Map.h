@@ -297,6 +297,12 @@ namespace Flame {
       {}
       virtual void update(float time);
       virtual void render();
+      Zeni::String get_color() const
+      {return color;}
+      bool is_active() const
+      {return active;}
+      bool is_kill_all() const
+      {return kill_all;}
     private:
       Zeni::Collision::Capsule body;
       Zeni::Point2f rel_location;

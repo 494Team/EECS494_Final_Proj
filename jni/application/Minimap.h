@@ -61,6 +61,32 @@ namespace Flame {
           vr.render(quad);
         }
       }
+
+      // mini_transmission_gates
+      Zeni::Point2f map_pos;
+      if (get_mini_pos(maps[i]->get_location(), map_pos)) {
+        Map_gate* gate_ptr = dynamic_cast<Map_gate *>(maps[i]);
+        if (gate_ptr) {
+          // boss
+          if (gate_ptr->is_kill_all() && !Model_state::get_instance()->get_monster_list_ptr()->empty())
+            render_image(
+              "gate_inactive",
+              map_pos,
+              map_pos + maps[i]->get_size() / 10);
+          else if (gate_ptr->is_active())
+            render_image(
+              "gate_active",
+              map_pos,
+              map_pos + maps[i]->get_size() / 10);
+          else {
+            Zeni::String color = gate_ptr->get_color();
+            render_image(
+              "gate_" + color,
+              map_pos,
+              map_pos + maps[i]->get_size() / 10);
+          }
+        }
+      }
     }
 
     // mini players
