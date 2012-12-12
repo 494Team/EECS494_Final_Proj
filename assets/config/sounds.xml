@@ -129,6 +129,12 @@ HOWTO:  To convert between types, or to downmix to mono,
 
 </healing>
 
+<dark_laugh>
+
+<filepath>sfx/dark_laugh</filepath>
+
+</dark_laugh>
+
 
 <ding>
 
@@ -136,6 +142,11 @@ HOWTO:  To convert between types, or to downmix to mono,
 
 </ding>
 
+<punch>
+
+<filepath>sfx/punch</filepath>
+
+</punch>
 
 <die>
 

@@ -67,7 +67,7 @@ namespace Flame {
   const Zeni::Vector2f kHell_spikes_size = Zeni::Vector2f(125.f, 125.f);
   const float kHell_spikes_pre_time = 1.f;
   const float kHell_spikes_life_time = 5.f;
-  const float kHell_spikes_damage = 50.f;
+  const float kHell_spikes_damage = 10.f;
 
   class Attack_spell : public Spell {
   public:

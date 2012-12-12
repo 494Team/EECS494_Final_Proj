@@ -137,13 +137,17 @@ void Player::update(float time) {
   float berserk_buff = is_berserk() ? kBerserk_attack_buff : 1.0f;
   bool shielding = ptype == BAJIE && spell1_active;
   float shield_buff = shielding ? kShield_effect : 1.0f;
+  float mp_regen_real_max = ptype==SANZANG ? kMp_regen_maxbuff+kMp_regen_SANZANG_additional : kMp_regen_maxbuff;
+  float WUKONG_hp_regen_factor = ptype==WUKONG? 2.0f:1.0f;
+  float MELEE_armor_factor = (ptype==WUKONG||ptype==BAJIE) ? 0.7f:1.0f;
+  float BAJIE_armor_factor = (ptype==BAJIE) ? 0.90f:1.0f;
   
   //update buff
   set_attack_buff((1.0f + attack * kAttack_maxbuff/kAttack_max) * berserk_buff);
-  set_armor((1.0f - defense * kDefense_maxbuff/kDefense_max) * shield_buff);
-  set_hp_regen_rate(hpmp_regen * kHp_regen_maxbuff/kHpmp_regen_max);
-  set_mp_regen_rate(kMp_regen_base + hpmp_regen * kMp_regen_maxbuff/kHpmp_regen_max);
-  if (!is_charging()) {
+  set_armor((1.0f - defense * kDefense_maxbuff/kDefense_max) * MELEE_armor_factor * BAJIE_armor_factor * shield_buff);
+  set_hp_regen_rate((kHp_regen_base + hpmp_regen * kHp_regen_maxbuff/kHpmp_regen_max) * WUKONG_hp_regen_factor);
+  set_mp_regen_rate(kMp_regen_base + hpmp_regen * mp_regen_real_max/kHpmp_regen_max);
+  if (!is_charging() && !is_hitback()) {
     set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
   }
   
@@ -345,11 +349,6 @@ void Player::render() {
              false);
       }
     }
-    if (spell3_active) {
-      render_image("berserk_mode",
-             Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
-             Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale));
-    }
   }
 
   //render the orientation arrow
@@ -383,8 +382,24 @@ render_image(
                  rel_loc,
                  false);
   }
+    
+  Zeni::Video &vr = Zeni::get_Video();
+  Zeni::Colors &cr = Zeni::get_Colors();
 
-  Agent::render();
+  Zeni::Vertex2f_Color hpp0(rel_loc - Zeni::Point2f(get_radius() * scale, get_radius() * 1.6f * scale), cr["red"]);
+  Zeni::Vertex2f_Color hpp1(rel_loc - Zeni::Point2f(get_radius() * scale, get_radius() * 1.6f * scale) + Zeni::Point2f(0.0f, kHpbar_width * scale), cr["red"]);
+  Zeni::Vertex2f_Color hpp2(rel_loc - Zeni::Point2f(get_radius() * scale, get_radius() * 1.6f * scale) + Zeni::Point2f(2 * get_radius() * get_current_health()/get_initial_health() * scale, kHpbar_width * scale), cr["red"]);
+  Zeni::Vertex2f_Color hpp3(rel_loc - Zeni::Point2f(get_radius() * scale, get_radius() * 1.6f * scale) + Zeni::Point2f(2 * get_radius() * get_current_health()/get_initial_health() * scale, 0.0f), cr["red"]);
+  Zeni::Quadrilateral<Zeni::Vertex2f_Color> hppanel(hpp0, hpp1, hpp2, hpp3);
+
+  Zeni::Vertex2f_Color mpp0(rel_loc - Zeni::Point2f(get_radius() * scale, (get_radius() - 2.5f) * 1.6f * scale), cr["blue"]);
+  Zeni::Vertex2f_Color mpp1(rel_loc - Zeni::Point2f(get_radius() * scale, (get_radius() - 2.5f) * 1.6f * scale) + Zeni::Point2f(0.0f, kHpbar_width * scale), cr["blue"]);
+  Zeni::Vertex2f_Color mpp2(rel_loc - Zeni::Point2f(get_radius() * scale, (get_radius() - 2.5f) * 1.6f * scale) + Zeni::Point2f(2 * get_radius() * mp/kMp_max * scale, kHpbar_width * scale), cr["blue"]);
+  Zeni::Vertex2f_Color mpp3(rel_loc - Zeni::Point2f(get_radius() * scale, (get_radius() - 2.5f) * 1.6f * scale) + Zeni::Point2f(2 * get_radius() * mp/kMp_max * scale, 0.0f), cr["blue"]);
+  Zeni::Quadrilateral<Zeni::Vertex2f_Color> mppanel(mpp0, mpp1, mpp2, mpp3);
+  vr.render(hppanel);
+  vr.render(mppanel);
+
 }
 
 void Player::fire(kKey_type type) {

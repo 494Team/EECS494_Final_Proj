@@ -13,6 +13,7 @@ Bullking::Bullking(const Zeni::Point2f &location_)
   damage(BULLKING_DAMAGE),
   attack_radius(BULLKING_ATTACK_RADIUS)
 {
+  play_sound("dark_laugh");
   room_ul = Zeni::Point2f(0.0f, 0.0f);
   room_lr = Zeni::Point2f(600.0f, 600.0f);
 }
