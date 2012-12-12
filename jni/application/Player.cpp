@@ -474,10 +474,13 @@ void Player::taunt() {
 */
 
 void Player::bloodsuck() {
+  bloodsuck_sfx = new Sound_Source(get_Sounds()["bloodsuck"]);
+  bloodsuck_sfx->play();
   spell3_active = true;
 }
 void Player::bloodsuck_end() {
   spell3_active = false;
+  delete bloodsuck_sfx;
 }
 
 void Player::charge() {

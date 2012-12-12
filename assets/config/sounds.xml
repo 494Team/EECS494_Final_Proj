@@ -52,6 +52,12 @@ HOWTO:  To convert between types, or to downmix to mono,
 </bow>
 
 
+<bloodsuck>
+
+<filepath>sfx/bloodsuck</filepath>
+
+</bloodsuck>
+
 <flame_arrow>
 
 <filepath>sfx/flame_arrow</filepath>

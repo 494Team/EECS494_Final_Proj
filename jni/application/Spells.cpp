@@ -634,8 +634,6 @@ namespace Flame {
           break;
         }
     }
-    else
-      delete a;
   }
 
   void Fire_ball::render()

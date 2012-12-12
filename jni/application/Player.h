@@ -319,7 +319,7 @@ namespace Flame {
     void shield_end();
     void bloodsuck();
     void bloodsuck_end();
-
+    Zeni::Sound_Source *bloodsuck_sfx;
     //running renderer
     bool running_status;
     float render_clock;
