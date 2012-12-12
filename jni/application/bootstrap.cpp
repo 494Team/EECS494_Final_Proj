@@ -1082,7 +1082,7 @@ private:
     
     Zeni::Video &vr = Zeni::get_Video();
     Zeni::Colors &cr = Zeni::get_Colors();
-
+/*
     Point2f Hpbar_loc(loc.x + 60.0f, loc.y);
     const float kHpmpbar_width = 10.0f;
     const float kHpmpbar_length = 100.0f;
@@ -1098,7 +1098,7 @@ private:
     Zeni::Vertex2f_Color mp02(Hpbar_loc + Zeni::Point2f(mp_percent * kHpmpbar_length, kHpmpbar_width), cr["blue"]);
     Zeni::Vertex2f_Color mp03(Hpbar_loc + Zeni::Point2f(mp_percent * kHpmpbar_length, 0.0f), cr["blue"]);
     Zeni::Quadrilateral<Zeni::Vertex2f_Color> mpbar(mp00, mp01, mp02, mp03);
-
+    */
     //CDbar
     
     Point2f CDbar_loc(loc.x, loc.y + head_size.y + 5.0f);
@@ -1128,8 +1128,8 @@ private:
                         false,
                         filter);
 
-    vr.render(hpbar);
-    vr.render(mpbar);
+//    vr.render(hpbar);
+  //  vr.render(mpbar);
   }
 
   void render()
