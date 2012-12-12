@@ -25,8 +25,6 @@ namespace Flame {
     heal_self(heal_self_),
     orientation(orientation_)
     {  
-      hit = new Sound_Source(get_Sounds()["sword_hit"]);
-    miss = new Sound_Source(get_Sounds()["sword_miss"]);
     }
 
   void Attack_spell::update(float)
@@ -36,7 +34,7 @@ namespace Flame {
       vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
       for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
         if (body.intersect((*it)->get_body())) {
-          hit->play();
+          play_sound("sword_hit");
           is_hit = true;
           vector<attack_effect> effects;
           effects.push_back(HITBACK);
@@ -46,7 +44,7 @@ namespace Flame {
           Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
         }
       if(!is_hit)
-        miss->play();
+        play_sound("sword_miss");
     }
     else {
       vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
@@ -67,7 +65,7 @@ namespace Flame {
     length(kDisintegrate_length),
     render_time(0.f),
     damage(damage_)
-    {Disintegrate::update_body();}
+    {Disintegrate::update_body();play_sound("laser");}
 
   Point2f Disintegrate::get_location() const
     {return player_ptr->get_current_location();}
@@ -193,7 +191,12 @@ namespace Flame {
     last_render_time(0.0f),
     game_time(game_time_),
     damage(damage_)
-  {monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();}
+  {monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
+  a = new Sound_Source(get_Sounds()["cudgel_fury"]);
+  b = new Sound_Source(get_Sounds()["cudgel_fury_hit"]);
+  a->set_time(kCudgelfury_last);
+  a->play();
+  }
 
   void Cudgel_fury::update(float time)
   {
@@ -216,11 +219,15 @@ namespace Flame {
           vector<attack_effect> effects;
           //effects.push_back(HITBACK);
           (*it)->get_hit(damage, effects, player_ptr);
+          if(!b->is_playing())
+            b->play();
           //disable_spell();
           //break;
         }
     } else {
       player_ptr->cudgel_fury_end();
+      delete a;
+      delete b;
     }
     
   }
@@ -299,8 +306,7 @@ namespace Flame {
     player_ptr(player_ptr_),
     damage(damage_)
     {
-      bow = new Sound_Source(get_Sounds()["bow"]);
-      bow->play();
+      play_sound("bow");
     }
 
   void Arrow_attack::update(float time)
@@ -316,6 +322,7 @@ namespace Flame {
           (*it)->get_hit(damage, effects, player_ptr, get_orientation());
           Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
           disable_spell();
+          play_sound("arrow_hit");
           break;
         }
     }
@@ -362,7 +369,9 @@ namespace Flame {
                            kMagic_arrow_speed, kMagic_arrow_life_time),
     player_ptr(player_ptr_),
     damage(damage_)
-  {}
+  {
+    play_sound("flame_arrow");
+    }
 
   void Magic_arrow_fire::update(float time)
   {
@@ -401,7 +410,11 @@ namespace Flame {
     Resizable_spell(location_, kMagic_arrow_effect_size, Vector2f(), kMagic_arrow_effect_life_time),
     player_ptr(player_ptr_),
     timer(0.f)
-  {}
+  {
+    a = new Sound_Source(get_Sounds()["fire_place"]);
+    a->set_looping("true");
+    a->play();
+    }
 
   void Magic_arrow_fire_effect::update(float time)
   {
@@ -472,7 +485,9 @@ namespace Flame {
     remain_times(5),
     timer(0.f),
     damage(damage_)
-    {}
+    {
+      play_sound("trap");
+    }
 
   void Trap::update(float time)
   {
@@ -602,7 +617,7 @@ namespace Flame {
                         Vector2f(kFireball_size, kFireball_size),
                         kFireball_speed,
                         kFireball_life_time)
-    {}
+    {play_sound("fireball");}
 
   void Fire_ball::update(float time)
   {
@@ -617,6 +632,8 @@ namespace Flame {
           break;
         }
     }
+    else
+      delete a;
   }
 
   void Fire_ball::render()

@@ -162,6 +162,7 @@ namespace Flame {
     Zeni::Chronometer<Zeni::Time>* game_time;
     float last_render_time;
     float damage;
+    Zeni::Sound_Source *a,*b;
   };
 
   // Pigsy
@@ -230,9 +231,11 @@ namespace Flame {
                             Player * player_ptr_ = nullptr);
     virtual void update(float time = 0.f);
     virtual void render();
+    ~Magic_arrow_fire_effect(){delete a;};
   private:
     float timer;
     Player * player_ptr;
+    Zeni::Sound_Source * a;
   };
 
   class Strafe : public Spell{

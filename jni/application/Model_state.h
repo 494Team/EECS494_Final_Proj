@@ -165,6 +165,9 @@ namespace Flame {
     Model_state(const Model_state&);
     Model_state& operator= (const Model_state&);
     ~Model_state();
+
+    /* sfx */
+    Zeni::Sound_Source *die;
   };
 
 }

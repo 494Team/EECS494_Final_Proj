@@ -101,9 +101,12 @@ void Whisper::update(float time) {
       set_moving(true);
       make_move(time);
     } else {
-      set_orientation(target->get_location() - get_location());
-      set_moving(false);
-      attack();
+      Random ra;
+      if(ra.rand() % 2 == 0){
+        set_orientation(target->get_location() - get_location());
+        set_moving(false);
+        attack();
+      }
     }
   } else {
     if (get_current_time() - get_prev_attack_time() > ATTACK_DURATION) {

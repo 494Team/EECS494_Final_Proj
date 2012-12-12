@@ -712,7 +712,7 @@ void Player::try_spell3() {
             Model_state::get_instance()->add_spell(new_spell);
         //}
         break;
-      case WUKONG: //Berserk
+      case WUKONG: //Berserk 
         //if (cost_mp(kBerserk_mp_cost))
         berserk();
         break;

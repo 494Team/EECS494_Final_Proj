@@ -36,7 +36,9 @@ namespace Flame {
   Model_state::Model_state() :
     center_location(Point2f()),
     scale(1.f)
-  {}
+  {
+    die = new Sound_Source(get_Sounds()["die"]);
+  }
 
   Model_state::~Model_state()
   {
@@ -363,6 +365,7 @@ namespace Flame {
   }
   vector<Player *>::iterator Model_state::move_player_to_dead_list(Player * player_ptr)
   {
+    die->play();
         int controller = player_ptr->get_controller();
         controller_alive[controller] = false;
         player_ptr->end_action();
