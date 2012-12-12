@@ -158,7 +158,7 @@ void Redboy::update(float time) {
           if (!still_moving) {
             // no shadow moving, stop skill
             recover_speed();
-            set_orientation(target->get_location());
+            set_orientation(target->get_location() - get_locatioin());
             status = IDLE;
           }
         }
