@@ -366,6 +366,8 @@ namespace Flame {
         int controller = player_ptr->get_controller();
         controller_alive[controller] = false;
         player_ptr->end_action();
+        player_ptr->ctrl.move_hori = 0.0f;
+        player_ptr->ctrl.move_vert = 0.0f;
         for (int i=get_player_list_index(controller); i<4; i++) {
           if (i==3 || player_pos_in_list[i+1] == -1) {
             player_pos_in_list[i] = -1;

@@ -40,7 +40,7 @@ Player::Player(
   attack_buff(kInit_attack_buff),
   last_regen(0.0f)
 {
-  set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
+  //set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
   switch (ptype) {
     case SANZANG:
       spell1_CD = kDisintegrate_CD;
