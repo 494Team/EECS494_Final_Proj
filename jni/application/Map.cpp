@@ -477,7 +477,7 @@ namespace Flame {
   void Map_gate::render()
   {
     if (!active) {
-      if (!kill_all)
+      if (!kill_all || Model_state::get_instance()->get_monster_list_ptr()->empty())
         render_image("gate_" + color, rel_location, rel_location + scale * get_size());
       else
         render_image("gate_red", rel_location, rel_location + scale * get_size());
