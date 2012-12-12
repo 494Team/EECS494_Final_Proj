@@ -49,12 +49,9 @@ namespace Flame {
         return;
 
       render_image("dialog_box",
-        Point2f(0.0f, 400.0f),
-        Point2f(800.0f, 600.0f));
-      render_image("button",
-        Point2f(710.0f, 500.0f),
-        Point2f(760.0f, 550.0f));
-
+        Point2f(0.0f, 0.0f),
+        Point2f(1024.0f, 1024.0f));
+     
       Point2f name_loc(20.0f, 420.0f);
       Zeni::Font &fr = get_Fonts()["dialog_ft"];
 

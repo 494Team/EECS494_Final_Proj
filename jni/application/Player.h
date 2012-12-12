@@ -223,6 +223,8 @@ namespace Flame {
         berserk_end();
       if (is_bloodsuck())
         bloodsuck_end();
+      if (ctrl.l)
+        ctrl.l = false;
     }
   private:
     int controller; //range: [0, 3]
