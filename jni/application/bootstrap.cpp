@@ -1359,6 +1359,7 @@ public:
 private:
   void on_push() {
     //get_Window().mouse_grab(true);
+    Model_state::get_instance()->get_character_list_ptr()->clear();
     get_Window().mouse_hide(true);
     get_Game().joy_mouse.enabled = false;
   }
