@@ -382,8 +382,24 @@ render_image(
                  rel_loc,
                  false);
   }
+    
+  Zeni::Video &vr = Zeni::get_Video();
+  Zeni::Colors &cr = Zeni::get_Colors();
 
-  Agent::render();
+  Zeni::Vertex2f_Color hpp0(rel_loc - Zeni::Point2f(get_radius() * scale, get_radius() * 1.6f * scale), cr["red"]);
+  Zeni::Vertex2f_Color hpp1(rel_loc - Zeni::Point2f(get_radius() * scale, get_radius() * 1.6f * scale) + Zeni::Point2f(0.0f, kHpbar_width * scale), cr["red"]);
+  Zeni::Vertex2f_Color hpp2(rel_loc - Zeni::Point2f(get_radius() * scale, get_radius() * 1.6f * scale) + Zeni::Point2f(2 * get_radius() * get_current_health()/get_initial_health() * scale, kHpbar_width * scale), cr["red"]);
+  Zeni::Vertex2f_Color hpp3(rel_loc - Zeni::Point2f(get_radius() * scale, get_radius() * 1.6f * scale) + Zeni::Point2f(2 * get_radius() * get_current_health()/get_initial_health() * scale, 0.0f), cr["red"]);
+  Zeni::Quadrilateral<Zeni::Vertex2f_Color> hppanel(hpp0, hpp1, hpp2, hpp3);
+
+  Zeni::Vertex2f_Color mpp0(rel_loc - Zeni::Point2f(get_radius() * scale, (get_radius() - 2.5f) * 1.6f * scale), cr["blue"]);
+  Zeni::Vertex2f_Color mpp1(rel_loc - Zeni::Point2f(get_radius() * scale, (get_radius() - 2.5f) * 1.6f * scale) + Zeni::Point2f(0.0f, kHpbar_width * scale), cr["blue"]);
+  Zeni::Vertex2f_Color mpp2(rel_loc - Zeni::Point2f(get_radius() * scale, (get_radius() - 2.5f) * 1.6f * scale) + Zeni::Point2f(2 * get_radius() * mp/kMp_max * scale, kHpbar_width * scale), cr["blue"]);
+  Zeni::Vertex2f_Color mpp3(rel_loc - Zeni::Point2f(get_radius() * scale, (get_radius() - 2.5f) * 1.6f * scale) + Zeni::Point2f(2 * get_radius() * mp/kMp_max * scale, 0.0f), cr["blue"]);
+  Zeni::Quadrilateral<Zeni::Vertex2f_Color> mppanel(mpp0, mpp1, mpp2, mpp3);
+  vr.render(hppanel);
+  vr.render(mppanel);
+
 }
 
 void Player::fire(kKey_type type) {

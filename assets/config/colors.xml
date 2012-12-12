@@ -123,8 +123,8 @@ element in your game to enable easy skinning.
   </green>
   <blue>
     <alpha>1.0</alpha>
-    <red>0.0</red>
-    <green>0.0</green>
+    <red>0.2</red>
+    <green>0.7</green>
     <blue>1.0</blue>
   </blue>
   <cyan>
