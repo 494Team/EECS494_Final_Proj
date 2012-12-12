@@ -1807,10 +1807,10 @@ class Pre_Play_State : public Widget_Gamestate {
           {
             give_Renderer(new Widget_Renderer_Tricolor(Color(1.f, 1.f, 1.f, 0.0f), 
                   Color(1.f, 0.66f, 0.f, 0.0f),
-                  Color(1.f, 1.f, 1.f, 0.0f),
+                  Color(0.5f, 0.66f, 0.f, 0.0f),
                                                         Color(1.f, 0.f, 0.f, 0.0f),
                                                         Color(1.f, 1.f, 1.f, 1.0f),
-                                                        Color(1.f, 0.f, 0.f, 0.0f)));
+                                                        Color(1.f, 1.f, 1.f, 1.0f)));
           }
           
           void on_accept() {

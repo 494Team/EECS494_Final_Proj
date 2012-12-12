@@ -11,7 +11,7 @@ Redboy::Redboy(const Zeni::Point2f &location_)
          location_),
   damage(REDBOY_DAMAGE),
   attack_radius(REDBOY_ATTACK_RADIUS)
-{}
+{play_sound("dark_laugh");}
 
 void Redboy::attack() {
   float dist = (get_location() - target->get_location()).magnitude()
@@ -35,6 +35,7 @@ void Redboy::skill1() {
         player_num = randomer.rand_lt(total_p_num);
       }
   }
+  
   fire_charge_tar_loc = players[player_num]->get_location();
   set_orientation(fire_charge_tar_loc - get_location());
   set_speed((fire_charge_tar_loc - get_location()).magnitude() / 0.5f);
@@ -48,6 +49,7 @@ void Redboy::skill1() {
 
 // ring of fire : 8 fire balls
 void Redboy::skill2() {
+  play_sound("fireball");
   int num_fire_balls = 8;
   float theta = Zeni::Global::pi / 4.0f;
   for (int i = 0; i < num_fire_balls; ++i) {
