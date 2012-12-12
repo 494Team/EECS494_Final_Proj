@@ -94,9 +94,10 @@ public:
 
     player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
     player_number = player_list_ptr->size();
-    load_abilities();
+    
     for (int i=0; i < 4; i++) {
       confirmed[i] = false;
+      load_abilities(i);
       /*
       if ((*player_list_ptr)[i]->ptype == SHASENG)
         cursor_pos[i] = kCursor_min;
@@ -111,27 +112,44 @@ public:
 
 private:
   Chronometer<Time> m_set;
-  void load_abilities() {
+  void load_abilities(const int controller) {
+    /*
     for (int i=0; i<4; i++) {
       skill_point_tmp[i] = 0;
       attack_tmp[i] = 0;
       defense_tmp[i] = 0;
       hpmp_regen_tmp[i] = 0;
       speed_tmp[i] = 0;
-    }
+    }*/
+
+    skill_point_tmp[controller] = 0;
+    attack_tmp[controller] = 0;
+    defense_tmp[controller] = 0;
+    hpmp_regen_tmp[controller] = 0;
+    speed_tmp[controller] = 0;
     std::vector<Player *> * plist = Model_state::get_instance()->get_player_list_ptr();
     int list_pos = 0;
-    int controller;
-    for (vector<Player *>::iterator it = plist->begin(); it != plist->end(); it++) {
-      controller = Model_state::get_instance()->get_player_pos_in_list(list_pos++);
+    Player * tmp = NULL;
+    for (vector<Player *>::iterator it = plist->begin(); it != plist->end(); it++) 
+      if(controller == Model_state::get_instance()->get_player_pos_in_list(list_pos++))
+        tmp = *it;
+    if(tmp){
+      skill_point_tmp[controller] = tmp->get_skill_point();
+      attack_tmp[controller] = tmp->attack;
+      defense_tmp[controller] = tmp->defense;
+      hpmp_regen_tmp[controller] = tmp->hpmp_regen;
+      speed_tmp[controller] = tmp->speed;
+    }
+      /*
       if (controller != -1) {
           skill_point_tmp[controller] = (*it)->get_skill_point();
           attack_tmp[controller] = (*it)->attack;
           defense_tmp[controller] = (*it)->defense;
           hpmp_regen_tmp[controller] = (*it)->hpmp_regen;
           speed_tmp[controller] = (*it)->speed;
-      }
-    }
+      }*/
+
+    
   }
   void store_abilities() {
     std::vector<Player *> * plist = Model_state::get_instance()->get_player_list_ptr();
@@ -254,7 +272,7 @@ private:
           chosen_num++;
           break;
         case 6: //cancel
-          load_abilities();
+          load_abilities(controller);
           break;
         default:
           break;
