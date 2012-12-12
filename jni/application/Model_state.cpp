@@ -29,9 +29,7 @@ namespace Flame {
   Model_state * Model_state::ptr = nullptr;
 
   Model_state_destroyer::~Model_state_destroyer()
-    {
-    cerr << "~Model_state_destroyer" << endl;
-      delete Model_state::ptr;}
+    {delete Model_state::ptr;}
 
   Model_state::Model_state() :
     center_location(Point2f()),
@@ -42,7 +40,6 @@ namespace Flame {
   {
     clear_all();
     character_list.clear(); //this cannot be put in Model_state::clear()
-    cerr << "~Model_state" << endl;
   }
 
   Model_state * Model_state::get_instance()
@@ -63,6 +60,8 @@ namespace Flame {
     money = 0;
     exp = 0.0f;
     exp_level = 0;
+    prev_stage = 0;
+    next_stage = 0;
 
     clear_all();
     timer = timer_;
@@ -75,12 +74,10 @@ namespace Flame {
         player_pos_in_list[player_count] = controller_count;
         player_list[player_count]->set_controller(controller_count);
         ++player_count;
-        cerr<<controller_count<<" !NONE\n";
       }
       else{
         controller_alive[controller_count] = false;
         player_pos_in_list[controller_count] = -1;
-        cerr<<controller_count<<" NONE\n";
       }
       ++controller_count;
     }
@@ -297,7 +294,6 @@ namespace Flame {
         render_list.erase(r_it);
     }
     remove_list.clear();
-    cerr<<player_list.size()<<endl;
   }
 
   void Model_state::render()

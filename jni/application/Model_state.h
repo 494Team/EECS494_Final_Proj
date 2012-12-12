@@ -143,6 +143,17 @@ namespace Flame {
       *exp_level_ = exp_level;
       return;
     }
+
+    // set and get next stage
+    void set_next_stage(int stage)
+    {next_stage = stage;}
+    int get_next_stage() const
+    {return next_stage;}
+    // set and get prev stage
+    void set_prev_stage(int stage)
+    {prev_stage = stage;}
+    int get_prev_stage() const
+    {return prev_stage;}
   private:
     float exp;
     int exp_level;
@@ -150,6 +161,8 @@ namespace Flame {
     bool controller_alive[4]; //usage: controller_alive[controller]
     int player_pos_in_list[4]; //update when any player die
     int money;
+    int next_stage;
+    int prev_stage;
 
     // constructor is private thus nobody else can create one
     Model_state();

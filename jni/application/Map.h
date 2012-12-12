@@ -14,7 +14,7 @@ namespace Flame {
 
 
     	virtual Zeni::Collision::Parallelepiped get_body() = 0;
-      virtual Zeni::Point2f get_location() const{return location;};
+      virtual Zeni::Point2f get_location() const{return location;}
       virtual bool can_move(const Zeni::Collision::Capsule&) = 0;
       virtual bool can_move(const Zeni::Collision::Parallelepiped&) = 0;
       virtual bool can_move_player(const Zeni::Collision::Capsule&) = 0;
@@ -22,11 +22,12 @@ namespace Flame {
       virtual void reset() = 0;
       virtual bool walk_thru() = 0;
       virtual void add_trigger(Flame::Map *trigger_) = 0;
+      virtual void update(float time = 0.f) = 0;
+      virtual void render() = 0;
 		  Zeni::Point2f get_center(){return location + size / 2;};
       //is this OK?
       Zeni::Vector2f get_size() {return size;}
 		protected:
-      virtual void render() = 0;
       Zeni::Point2f location;
       Zeni::Vector2f size;
     };
@@ -264,8 +265,47 @@ namespace Flame {
       virtual Zeni::Point2f get_location() const
       {return Map_brick::get_location() + Zeni::Vector2f(0.f, -500.f);}
       virtual void update(float time = 0.f);
+      virtual bool walk_thru()
+      {return true;}
     private:
       float render_timer;
+    };
+
+    class Map_gate : public Map {
+    public:
+      Map_gate(const Zeni::Point2f& location_ = Zeni::Point2f(),
+               const Zeni::Vector2f& size_ = Zeni::Vector2f(),
+               int stage_ = 0,
+               const Zeni::String& color_ = "",
+               bool kill_all_ = false);
+
+      virtual Zeni::Collision::Parallelepiped get_body()
+      {return Zeni::Collision::Parallelepiped();}
+      virtual bool can_move(const Zeni::Collision::Capsule&)
+      {return true;}
+      virtual bool can_move(const Zeni::Collision::Parallelepiped&)
+      {return true;}
+      virtual bool can_move_player(const Zeni::Collision::Capsule&)
+      {return true;}
+      virtual bool triggerred()
+      {return true;}
+      virtual void reset()
+      {}
+      virtual bool walk_thru()
+      {return true;}
+      virtual void add_trigger(Map *)
+      {}
+      virtual void update(float time);
+      virtual void render();
+    private:
+      Zeni::Collision::Capsule body;
+      Zeni::Point2f rel_location;
+      Zeni::Point2f center_location;
+      bool active;
+      int stage;
+      Zeni::String color;
+      bool kill_all;
+      float scale;
     };
 
 }

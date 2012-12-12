@@ -116,7 +116,7 @@ namespace Flame {
     }
     render_image(texture,
                  location,
-                 location + scale * Vector2f(2 * kDisintegrate_radius, length),
+                 location + scale * Vector2f(2 * kDisintegrate_radius, length - 5.f),
                  theta,
                  1.f,
                  location + scale * Vector2f(kDisintegrate_radius, length));
@@ -585,7 +585,7 @@ namespace Flame {
 
   // Boss1
   Fire_ball::Fire_ball(const Point2f& location_, const Vector2f& orientation_) :
-    Moving_spell_circle(location_ + 50.f * orientation_.normalized(),
+    Moving_spell_circle(location_ + 10.f * orientation_.normalized(),
                         orientation_,
                         Vector2f(kFireball_size, kFireball_size),
                         kFireball_speed,

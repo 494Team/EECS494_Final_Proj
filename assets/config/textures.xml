@@ -482,6 +482,22 @@ The following things are unsupported:
     <filepath>textures/lava31.png</filepath>
     <tile>1</tile>
   </lava31>
+  <gate_active>
+    <filepath>textures/gate_active.png</filepath>
+    <tile>0</tile>
+  </gate_active>
+  <gate_blue>
+    <filepath>textures/gate1.png</filepath>
+    <tile>0</tile>
+  </gate_blue>
+  <gate_red>
+    <filepath>textures/gate2.png</filepath>
+    <tile>0</tile>
+  </gate_red>
+  <gate_green>
+    <filepath>textures/gate3.png</filepath>
+    <tile>0</tile>
+  </gate_green>
   <!-- Players cursor start..............................-->
   <p1cursor>
     <is_sprite>0</is_sprite>

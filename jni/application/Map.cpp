@@ -1,4 +1,5 @@
 #include <zenilib.h>
+#include <zeni.h>
 #include <vector>
 #include <sstream>
 #include "Player.h"
@@ -162,7 +163,7 @@ namespace Flame {
 		vector<Player* > *player_list = Model_state::get_instance()->get_player_list_ptr();
 		
     bool player_collide = false;
-    int player_collide_no;
+    int player_collide_no = 0;
     Point2f player_location;
 
 		float short_dis = dis + 1000.f * time;
@@ -181,7 +182,7 @@ namespace Flame {
 		}
 
     int cnt = 0;
-    Player *collided_player;
+    Player *collided_player = nullptr;
 		for (vector<Player *>::iterator it = player_list->begin();
 			   it != player_list->end();
 			   ++it)
@@ -322,7 +323,6 @@ namespace Flame {
 
 		float short_dis = dis + 500.f * time;
     Vector2f new_dir;
-    Map_light_beam *tmp;
 		
     for (vector<Map *>::iterator it = map_obj_list->begin();
 			it != map_obj_list->end();
@@ -438,6 +438,66 @@ namespace Flame {
     stringstream ss;
     ss << "lava" << n;
     Brick_texture = ss.str();
+  }
+
+  Map_gate::Map_gate(const Point2f& location_, const Vector2f& size_, int stage_, const String& color_, bool kill_all_) :
+    Map(location_, size_),
+    active(false),
+    stage(stage_),
+    color(color_),
+    kill_all(kill_all_)
+    {
+      Point2f c_loc = location_ + size_ / 2;
+      Point3f loc3f = Point3f(c_loc.x, c_loc.y, 0.f);
+      center_location = Model_state::get_instance()->get_center_location();
+      scale = Model_state::get_instance()->get_scale();
+      body = Collision::Capsule(loc3f, loc3f + Vector3f(0.f, 0.f, kCollision_object_height), size_.x / 2);
+      rel_location = (location_ - center_location) * scale + Point2f(400.0f, 300.0f);
+    }
+
+  void Map_gate::update(float)
+  {
+    vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
+    active = false;
+    int num_players = 0;
+    for (auto it = player_list_ptr->begin(); it != player_list_ptr->end(); ++it)
+      if (body.intersects((*it)->get_body())) {
+        active = true;
+        num_players++;
+      }
+    if (!kill_all || Model_state::get_instance()->get_monster_list_ptr()->empty()) {
+      if (num_players == int(player_list_ptr->size()))
+        Model_state::get_instance()->set_next_stage(stage);
+    }
+    scale = Model_state::get_instance()->get_scale();
+    center_location = Model_state::get_instance()->get_center_location();
+    rel_location = (get_location() - center_location) * scale + Point2f(400.0f, 300.0f);
+  }
+
+  void Map_gate::render()
+  {
+    if (!active) {
+      if (!kill_all)
+        render_image("gate_" + color, rel_location, rel_location + scale * get_size());
+      else
+        render_image("gate_red", rel_location, rel_location + scale * get_size());
+    }
+    else {
+      if (kill_all && !Model_state::get_instance()->get_monster_list_ptr()->empty()) {
+        render_image("gate_red", rel_location, rel_location + scale * get_size());
+        stringstream ss;
+        ss << Model_state::get_instance()->get_monster_list_ptr()->size();
+        String text = String(ss.str());
+        text += " Monsters left! Kill them all!";
+        Font &fr = get_Fonts()["system_36_800x600"];
+        fr.render_text(text,
+                       Point2f(200.f, 150.f),
+                       get_Colors()["white"],
+                       ZENI_LEFT);
+      }
+      else
+        render_image("gate_active", rel_location, rel_location + scale * get_size());
+    }
   }
 
 }

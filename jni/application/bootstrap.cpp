@@ -564,7 +564,7 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 3), L4);
 
     levels.push_back(new Level_1());
-    //levels.push_back(new Level_2());
+    levels.push_back(new Level_2());
     curr_lvl = 0;
 
     Model_state::get_instance()->init(stage, &m_set);
@@ -577,52 +577,162 @@ public:
   }
 
 private:
-    void set_stage(const int stage){
-      //end the player action before changing stage
-      //for example cudgel_fury
+  void set_stage(int stage) {
+    //end the player action before changing stage
+    //for example cudgel_fury
+    for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
+        it != Model_state::get_instance()->get_player_list_ptr()->end();
+        ++it){
+      (*it)->end_action();
+    }
+
+    Model_state::get_instance()->clear_without_player();
+    if (curr_lvl == 0) {
+      float x = 440.f;
+      for (auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
+           it != Model_state::get_instance()->get_player_list_ptr()->end();
+           ++it) {
+        (*it)->set_position(Point2f(x, 980));
+        x += 40.f;
+      }
+    }
+    else {
+      int prev_stage = Model_state::get_instance()->get_prev_stage();
+      if (stage == 1) {
+        if (!prev_stage) {
+          float x = 350;
+          for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
+              it != Model_state::get_instance()->get_player_list_ptr()->end();
+              ++it){
+            (*it)->set_position(Point2f(x,3000));
+            x += 100.f;
+          }
+        }
+        else if (prev_stage == 2) {
+          int i = 0;
+          for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
+              it != Model_state::get_instance()->get_player_list_ptr()->end();
+              ++it) {
+            if (i == 0)
+              (*it)->set_position(Point2f(1230.f, 30.f));
+            else if (i == 1)
+              (*it)->set_position(Point2f(1410.f, 30.f));
+            else if (i == 2)
+              (*it)->set_position(Point2f(1230.f, 210.f));
+            else
+              (*it)->set_position(Point2f(1410.f, 210.f));
+            i++;
+          }
+        }
+        else {
+          int i = 0;
+          for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
+              it != Model_state::get_instance()->get_player_list_ptr()->end();
+              ++it) {
+            if (i == 0)
+              (*it)->set_position(Point2f(5790.f, 4590.f));
+            else if (i == 1)
+              (*it)->set_position(Point2f(5970.f, 4590.f));
+            else if (i == 2)
+              (*it)->set_position(Point2f(5690.f, 4770.f));
+            else
+              (*it)->set_position(Point2f(5970.f, 4590.f));
+            i++;
+          }
+        }
+      }
+      else if (stage == 2){
+        if (prev_stage == 1) {
+          int i = 0;
+          for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
+              it != Model_state::get_instance()->get_player_list_ptr()->end();
+              ++it) {
+            if (i == 0)
+              (*it)->set_position(Point2f(1230.f, 5790.f));
+            else if (i == 1)
+              (*it)->set_position(Point2f(1410.f, 5790.f));
+            else if (i == 2)
+              (*it)->set_position(Point2f(1230.f, 5970.f));
+            else
+              (*it)->set_position(Point2f(1410.f, 5970.f));
+            i++;
+          }
+        }
+        else {
+          int i = 0;
+          for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
+              it != Model_state::get_instance()->get_player_list_ptr()->end();
+              ++it) {
+            if (i == 0)
+              (*it)->set_position(Point2f(4590.f, 30.f));
+            else if (i == 1)
+              (*it)->set_position(Point2f(4770.f, 30.f));
+            else if (i == 2)
+              (*it)->set_position(Point2f(4590.f, 210.f));
+            else
+              (*it)->set_position(Point2f(4770.f, 210.f));
+            i++;
+          }
+        }
+      }
+      else if (stage == 3){
+        if (prev_stage == 1) {
+          int i = 0;
+          for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
+              it != Model_state::get_instance()->get_player_list_ptr()->end();
+              ++it) {
+            if (i == 0)
+              (*it)->set_position(Point2f(30.f, 1230.f));
+            else if (i == 1)
+              (*it)->set_position(Point2f(210.f, 1230.f));
+            else if (i == 2)
+              (*it)->set_position(Point2f(30.f, 1410.f));
+            else
+              (*it)->set_position(Point2f(210.f, 1410.f));
+            i++;
+          }
+        }
+        else {
+          int i = 0;
+          for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
+              it != Model_state::get_instance()->get_player_list_ptr()->end();
+              ++it) {
+            if (i == 0)
+              (*it)->set_position(Point2f(5790.f, 1230.f));
+            else if (i == 1)
+              (*it)->set_position(Point2f(5970.f, 1230.f));
+            else if (i == 2)
+              (*it)->set_position(Point2f(5790.f, 1410.f));
+            else
+              (*it)->set_position(Point2f(5970.f, 1410.f));
+            i++;
+          }
+        }
+      }
+      else {
+        float x = 240.f;
         for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
             it != Model_state::get_instance()->get_player_list_ptr()->end();
-            ++it){
-          (*it)->end_action();
+            ++it) {
+          (*it)->set_position(Point2f(x, 580.f));
+          x += 40.f;
         }
-
-        Model_state::get_instance()->clear_without_player();
-        if (stage == 1){
-            float x = 350;
-            for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
-                it != Model_state::get_instance()->get_player_list_ptr()->end();
-                ++it){
-                (*it)->set_position(Point2f(x,3000));
-                x += 100.f;
-            }
-        }
-        else if (stage == 2){
-            float x = 350;
-            for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
-                it != Model_state::get_instance()->get_player_list_ptr()->end();
-                ++it){
-                (*it)->set_position(Point2f(x,1900));
-                x += 100.f;
-            }
-        }else if (stage == 3){
-            float x = 350;
-            for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
-                it != Model_state::get_instance()->get_player_list_ptr()->end();
-                ++it){
-                (*it)->set_position(Point2f(x,900));
-                x += 100.f;
-            }
-        }
-        
-        std::vector<Map *> map_list = levels[curr_lvl]->get_map_list(stage);
-        for (auto it = map_list.begin(); it != map_list.end(); ++it) {
-          Model_state::get_instance()->add_map_obj(*it);
-        }
-        std::vector<Monster*> monster_list = levels[curr_lvl]->get_monster_list(stage);
-        for (auto it = monster_list.begin(); it != monster_list.end(); ++it) {
-          Model_state::get_instance()->add_monster(*it);
-        }
+      }
     }
+
+    levels[curr_lvl]->init_map(stage);
+    std::vector<Map *> map_list = levels[curr_lvl]->get_map_list();
+    for (auto it = map_list.begin(); it != map_list.end(); ++it)
+      Model_state::get_instance()->add_map_obj(*it);
+    std::vector<Monster*> monster_list = levels[curr_lvl]->get_monster_list();
+    for (auto it = monster_list.begin(); it != monster_list.end(); ++it)
+      Model_state::get_instance()->add_monster(*it);
+    if (curr_lvl == 0 && stage == 3)
+      Model_state::get_instance()->set_prev_stage(0);
+    else
+      Model_state::get_instance()->set_prev_stage(stage);
+    Model_state::get_instance()->set_next_stage(0);
+  }
 
   void set_level(const int level_) {
     curr_lvl = level_;
@@ -863,10 +973,6 @@ private:
 
     if (Model_state::get_instance()->get_player_list_ptr()->empty() && stage <= 3 && !show_die) {
         show_die = true;
-        //m_set.pause_all();
-    }
-    if (Model_state::get_instance()->get_monster_list_ptr()->empty() && stage <= 3) {
-      set_stage(++stage);
     }
 
     float time_step = 0.005f;
@@ -884,6 +990,15 @@ private:
     }
     if (!Model_state::get_instance()->get_player_list_ptr()->empty()) {
         Model_state::get_instance()->update_scale_and_center();
+    }
+    if (curr_lvl == 0 && stage == 3 && Model_state::get_instance()->get_monster_list_ptr()->empty()) {
+      set_level(1);
+      Model_state::get_instance()->add_map_obj(new Map_gate(Point2f(380.f, 380.f), Vector2f(240.f, 240.f), 1, "red"));
+    }
+    int next_stage = Model_state::get_instance()->get_next_stage();
+    if (next_stage) {
+      stage = next_stage;
+      set_stage(stage);
     }
   }
 
@@ -934,7 +1049,7 @@ private:
     float hp_percent = p_ptr->get_hp()/kHp_max;
     float mp_percent = p_ptr->get_mp()/kMp_max;
     float kCDbar_length = 30.0f;
-    float kCDbar_width = 10.0f;
+    //float kCDbar_width = 10.0f;
     Zeni::String kCDbar_color = "blue";
 
     
@@ -1778,7 +1893,7 @@ class Pre_Play_State : public Widget_Gamestate {
   };
 
 
- void Title_state::on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
+ void Title_state::on_event(const Zeni_Input_ID &, const float &, const int &action) {
     switch(action) {
       case CONFIRM1:
       case CONFIRM2:
