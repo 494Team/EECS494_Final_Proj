@@ -31,4 +31,11 @@ HOWTO:  To convert between types, or to downmix to mono,
   <bgm>
     <filepath>sfx/bgm</filepath>
   </bgm>
+<sword_hit>
+<filepath>sfx/sword_hit</filepath>
+</sword_hit>
+<sword_miss>
+<filepath>sfx/sword_miss</filepath>
+</sword_miss>
+
 </Sounds>
