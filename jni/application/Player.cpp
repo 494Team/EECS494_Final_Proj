@@ -147,7 +147,7 @@ void Player::update(float time) {
   set_armor((1.0f - defense * kDefense_maxbuff/kDefense_max) * MELEE_armor_factor * BAJIE_armor_factor * shield_buff);
   set_hp_regen_rate((kHp_regen_base + hpmp_regen * kHp_regen_maxbuff/kHpmp_regen_max) * WUKONG_hp_regen_factor);
   set_mp_regen_rate(kMp_regen_base + hpmp_regen * mp_regen_real_max/kHpmp_regen_max);
-  if (!is_charging()) {
+  if (!is_charging() && !is_hitback()) {
     set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
   }
   
