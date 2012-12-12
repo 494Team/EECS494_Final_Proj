@@ -33,7 +33,7 @@ namespace Flame {
   const float kPlayer_attack_strengh = 300.0f;
   //SANZANG
   const float kDisintegrate_CD = 0.0f;
-  const float kDisintegrate_dam = 5.0f;
+  const float kDisintegrate_dam = 50.0f;
   //const float kDisintegrate_mp_initial_cost = 2.0f;
   const float kDisintegrate_mp_cost = 2.0f;
   const float kHealing_CD = 2.0f;
@@ -155,6 +155,9 @@ namespace Flame {
     }
     void set_skill_point(int point) {
       skill_point = point;
+    }
+    void level_up() {
+      skill_point += 3;
     }
     int attack;
     int defense;

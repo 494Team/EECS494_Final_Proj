@@ -225,23 +225,27 @@ private:
           }
           break;
         case 1:
-          if (attack_tmp[controller] < kAttack_max) {
+          if (skill_point_tmp[controller] > 0 && attack_tmp[controller] < kAttack_max) {
             attack_tmp[controller]++;
+            skill_point_tmp[controller]--;
           }
           break;
         case 2:
-          if (defense_tmp[controller] < kDefense_max) {
+          if (skill_point_tmp[controller] > 0 && defense_tmp[controller] < kDefense_max) {
             defense_tmp[controller]++;
+            skill_point_tmp[controller]--;
           }
           break;
         case 3:
-          if (hpmp_regen_tmp[controller] < kHpmp_regen_max) {
+          if (skill_point_tmp[controller] > 0 && hpmp_regen_tmp[controller] < kHpmp_regen_max) {
             hpmp_regen_tmp[controller]++;
+            skill_point_tmp[controller]--;
           }
           break;
         case 4:
-          if (speed_tmp[controller] < kSpeed_max) {
+          if (skill_point_tmp[controller] > 0 && speed_tmp[controller] < kSpeed_max) {
             speed_tmp[controller]++;
+            skill_point_tmp[controller]--;
           }
           break;
         case 5: //confirm
@@ -462,6 +466,13 @@ private:
     filter = cursor_pos[controller] == 4 ? Color() : disable_button;
     render_image("plus_button", Bar_loc[4] - Point2f(button_size * 1.1f, 0.0f), Bar_loc[4] + Point2f(-button_size*0.1f, button_size), false, filter); 
 
+    sprintf(str, "%d", skill_point_tmp[controller]);//speed_lvl);
+    text_buf = "Upgrade points: ";
+    text_buf += str;
+    fr.render_text(text_buf,
+                   Bar_loc[4] + Point2f(40.0f, fr.get_text_height()),
+                   get_Colors()["red"],
+                   ZENI_LEFT);
     //loc += Point2f(0.0f, 1.5f * fr.get_text_height());
     fr.render_text("Confirm",
                    Bar_loc[5],
@@ -626,6 +637,16 @@ private:
 
   void set_level(const int level_) {
     curr_lvl = level_;
+  }
+
+  void restart_stage() {
+    /*
+    std::vector<Player*>* dead_player_list = Model_state::get_instance()->get_dead_player_list_ptr();
+    for (auto it = dead_player_list->begin(); it != dead_player_list->end();) {
+      it = Model_state::get_instance()->player_rise_without_setting_pos(*it);
+    }
+    set_stage(1);
+    */
   }
     
   void begin_dialog(Dialog_box* dialog_ptr, int stage) {
@@ -815,6 +836,8 @@ private:
               it = Model_state::get_instance()->player_rise_from_dead_list(*it);
             }
             */
+            restart_stage();
+            break;
           default:
             break;
           }

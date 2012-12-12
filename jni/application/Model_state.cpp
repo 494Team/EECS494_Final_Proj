@@ -509,5 +509,25 @@ namespace Flame {
     map_puzzle_obj_list.clear();
     map_door_obj_list.clear();
   }
+    void Model_state::exp_rise(const float new_exp) {
+      exp += new_exp;
+      while (exp_level < 7 && exp > level_exp_max[exp_level]) {
+        exp -= level_exp_max[exp_level];
+        exp_level++;
+        for (auto it=player_list.begin(); it!=player_list.end(); ++it) {
+          (*it)->level_up();
+        }
+        for (auto it=dead_player_list.begin(); it!=dead_player_list.end(); ++it) {
+          (*it)->level_up();
+        }
+      }
+      if (exp_level == kExp_level_max)
+        exp = 0.0f;
+    }
+    void Model_state::get_exp_level_and_remainder(int* exp_level_, float* exp_remainder_percent_) {
+      *exp_remainder_percent_ = exp/level_exp_max[exp_level];
+      *exp_level_ = exp_level;
+      return;
+    }
 
 }
