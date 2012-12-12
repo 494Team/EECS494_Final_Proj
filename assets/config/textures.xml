@@ -927,6 +927,7 @@ The following things are unsupported:
     <tile>0</tile>
   </ring_of_fire1>
   <!-- Boss skills ends .......................................-->
+
   <!-- Wanderer texture starts -->
   <wanderer_front0>
     <filepath>textures/skeleton_melee_front0.png</filepath>
@@ -977,6 +978,7 @@ The following things are unsupported:
     <tile>0</tile>
   </wanderer_back_attack>
   <!-- Wanderer texture ends-->
+
   <!-- Whisper texture starts -->
   <whisper_front0>
     <filepath>textures/skeleton_ranged_front0.png</filepath>
@@ -1027,6 +1029,111 @@ The following things are unsupported:
     <tile>0</tile>
   </whisper_back_attack>
   <!-- Whisper texture ends-->
+
+  <!-- Green Whisper texture starts -->
+  <whisper_green_front0>
+    <filepath>textures/skeleton_ranged_green_front0.png</filepath>
+    <tile>0</tile>
+  </whisper_green_front0>
+  <whisper_green_front1>
+    <filepath>textures/skeleton_ranged_green_front1.png</filepath>
+    <tile>0</tile>
+  </whisper_green_front1>
+  <whisper_green_left0>
+    <filepath>textures/skeleton_ranged_green_left0.png</filepath>
+    <tile>0</tile>
+  </whisper_green_left0>
+  <whisper_green_left1>
+    <filepath>textures/skeleton_ranged_green_left1.png</filepath>
+    <tile>0</tile>
+  </whisper_green_left1>
+  <whisper_green_right0>
+    <filepath>textures/skeleton_ranged_green_right0.png</filepath>
+    <tile>0</tile>
+  </whisper_green_right0>
+  <whisper_green_right1>
+    <filepath>textures/skeleton_ranged_green_right1.png</filepath>
+    <tile>0</tile>
+  </whisper_green_right1>
+  <whisper_green_back0>
+    <filepath>textures/skeleton_ranged_green_back0.png</filepath>
+    <tile>0</tile>
+  </whisper_green_back0>
+  <whisper_green_back1>
+    <filepath>textures/skeleton_ranged_green_back1.png</filepath>
+    <tile>0</tile>
+  </whisper_green_back1>
+  <whisper_green_front_attack>
+    <filepath>textures/skeleton_ranged_green_front_attack.png</filepath>
+    <tile>0</tile>
+  </whisper_green_front_attack>
+  <whisper_green_left_attack>
+    <filepath>textures/skeleton_ranged_green_left_attack.png</filepath>
+    <tile>0</tile>
+  </whisper_green_left_attack>
+  <whisper_green_right_attack>
+    <filepath>textures/skeleton_ranged_green_right_attack.png</filepath>
+    <tile>0</tile>
+  </whisper_green_right_attack>
+  <whisper_green_back_attack>
+    <filepath>textures/skeleton_ranged_back_attack.png</filepath>
+    <tile>0</tile>
+  </whisper_green_back_attack>
+  <!-- whisper_green texture ends-->
+
+  <!-- whisper_violet texture starts -->
+  <whisper_violet_front0>
+    <filepath>textures/skeleton_ranged_violet_front0.png</filepath>
+    <tile>0</tile>
+  </whisper_violet_front0>
+  <whisper_violet_front1>
+    <filepath>textures/skeleton_ranged_violet_front1.png</filepath>
+    <tile>0</tile>
+  </whisper_violet_front1>
+  <whisper_violet_left0>
+    <filepath>textures/skeleton_ranged_violet_left0.png</filepath>
+    <tile>0</tile>
+  </whisper_violet_left0>
+  <whisper_violet_left1>
+    <filepath>textures/skeleton_ranged_violet_left1.png</filepath>
+    <tile>0</tile>
+  </whisper_violet_left1>
+  <whisper_violet_right0>
+    <filepath>textures/skeleton_ranged_violet_right0.png</filepath>
+    <tile>0</tile>
+  </whisper_violet_right0>
+  <whisper_violet_right1>
+    <filepath>textures/skeleton_ranged_violet_right1.png</filepath>
+    <tile>0</tile>
+  </whisper_violet_right1>
+  <whisper_violet_back0>
+    <filepath>textures/skeleton_ranged_violet_back0.png</filepath>
+    <tile>0</tile>
+  </whisper_violet_back0>
+  <whisper_violet_back1>
+    <filepath>textures/skeleton_ranged_violet_back1.png</filepath>
+    <tile>0</tile>
+  </whisper_violet_back1>
+  <whisper_violet_front_attack>
+    <filepath>textures/skeleton_ranged_violet_front_attack.png</filepath>
+    <tile>0</tile>
+  </whisper_violet_front_attack>
+  <whisper_violet_left_attack>
+    <filepath>textures/skeleton_ranged_violet_left_attack.png</filepath>
+    <tile>0</tile>
+  </whisper_violet_left_attack>
+  <whisper_violet_right_attack>
+    <filepath>textures/skeleton_ranged_violet_right_attack.png</filepath>
+    <tile>0</tile>
+  </whisper_violet_right_attack>
+  <whisper_violet_back_attack>
+    <filepath>textures/skeleton_ranged_back_attack.png</filepath>
+    <tile>0</tile>
+  </whisper_violet_back_attack>
+  <!-- whisper_violet texture ends-->
+
+
+
   <!-- Redboy texture starts-->
   <redboy_right0>
     <filepath>textures/red_boy_right0.png</filepath>
