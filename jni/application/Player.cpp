@@ -194,6 +194,14 @@ void Player::update(float time) {
     set_orientation(dir);
     set_speed(sqrt(pow(ctrl.move_hori * (int)move_x, 2) + pow(ctrl.move_vert * int(move_y), 2)) * backup_speed);
   }
+  cerr << "BEGIN***********************\n";
+  cerr << "ctrl.l: " << ctrl.l << endl;
+  cerr << "ctrl.move_vert: " << ctrl.move_vert << endl;
+  cerr << "ctrl.move_hori: " << ctrl.move_hori << endl;
+  cerr << "is_disintegrate: " << is_disintegrate() << endl;
+  cerr << "is_hitback: " << is_hitback() << endl;
+  cerr << "is_charging: " << is_charging() << endl;
+  cerr << "END***********************\n";
 
   if (is_hitback() && is_charging()) {
     charge_end();
