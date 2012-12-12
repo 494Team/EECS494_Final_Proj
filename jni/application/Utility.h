@@ -49,7 +49,7 @@ namespace Flame{
   // Whisper constants
   const float WHISPER_RADIUS = 16.0f;
   const float WHISPER_SPEED = 40.0f;
-  const float WHISPER_DAMAGE = 150.0f;
+  const float WHISPER_DAMAGE = 200.0f;
   const float WHISPER_HEALTH = 1500.0f;
   const float WHISPER_ATTACK_GAP = 3.f;
   const float WHISPER_SPELL_RADIUS = 16.0f;
@@ -124,9 +124,12 @@ namespace Flame{
 
   const float kAttack_maxbuff = 1.0f;
   const float kDefense_maxbuff = 0.5f;
+  const float kHp_regen_base = 0.2f;
   const float kHp_regen_maxbuff = 0.8f;
+  const float kHp_regen_WUKONG_additional = 0.5f;
   const float kMp_regen_base = 1.0f;
   const float kMp_regen_maxbuff = 0.5f;
+  const float kMp_regen_SANZANG_additional = 0.5f;
   const float kSpeed_maxbuff = 150.0f;
 
   //others

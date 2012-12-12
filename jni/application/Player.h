@@ -30,57 +30,57 @@ namespace Flame {
   /************** spells ******************/
   const float kAttack_show_time = 0.2f;
   const float kPlayer_attack_range = 20.0f;
-  const float kPlayer_attack_strengh = 300.0f;
+  const float kPlayer_attack_strengh = 500.0f;
   //SANZANG
   const float kDisintegrate_CD = 0.0f;
   const float kDisintegrate_dam = 5.0f;
   //const float kDisintegrate_mp_initial_cost = 2.0f;
   const float kDisintegrate_mp_cost = 2.0f;
   const float kHealing_CD = 2.0f;
-  const float kHealing_amount = -1000.0f; //500.0f;
+  const float kHealing_amount = 500.0f; // -1000.0f
   const float kHealing_mp_cost = 300.0f;
   const float kDing_CD = 8.0f;
-  const float kDing_dam = 0.5f;
+  const float kDing_dam = 0.8f;
   const float kDing_mp_cost = 500.0f;
   //WUKONG
-  const float kCudgel_fury_dam = 2.0f;
-  const float kCudgel_fury_mp_cost = 100.0f;
+  const float kCudgel_fury_dam = 2.5f;
+  const float kCudgel_fury_mp_cost = 200.0f;
   const float kCharge_CD = 5.0f;
   const float kCharge_last = 0.5f;
   const float kCharge_speed = 200.0f;
-  const float kCharge_mp_cost = 200.0f;
-  const float kCharge_attack_damage = 600.0f;
+  const float kCharge_mp_cost = 500.0f;
+  const float kCharge_attack_damage = 400.0f;
   const float kCharge_attack_last = 0.2f;
   const float kCharge_attack_CD = 0.15f;
   const int kCharge_attack_max = 3;
-  const float kBerserk_CD = 20.0f;
-  const float kBerserk_last = 5.0f;
+  const float kBerserk_CD = 15.0f;
+  const float kBerserk_last = 10.0f;
   const float kBerserk_enlarge = 1.35f;
-  const float kBerserk_attack_buff = 1.5f;
-  const float kBerserk_mp_cost = 300.0f;
+  const float kBerserk_attack_buff = 1.8f;
+  const float kBerserk_mp_cost = 400.0f;
   //SHASENG
   const float kArrow_dam = kPlayer_attack_strengh * 1.2f;
   const float kStrafe_CD = 3.0f;
   const float kStrafe_dam = kArrow_dam;
-  const float kStrafe_mp_cost = 100.0f;
+  const float kStrafe_mp_cost = 200.0f;
   const float kTrap_CD = 8.0f;
   const float kTrap_dam = 200.0f;
-  const float kTrap_mp_cost = 500.0f;
+  const float kTrap_mp_cost = 800.0f;
   const float kMagicarrow_CD = 3.0f;
   const float kMagicarrow_dam = kArrow_dam * 1.2f;
-  const float kMagicarrow_mp_cost = 200.0f;
+  const float kMagicarrow_mp_cost = 300.0f;
   //BAJIE
   const float kShield_last = 5.0f;
   const float kShield_CD = 8.0f;
-  const float kShield_effect = 0.5f;
+  const float kShield_effect = 0.3f;
   const float kShield_mp_cost = 200.0f;
 
   const float kTaunt_CD = 3.0f;
   const float kTaunt_mp_cost = 200.0f;
 
   const float kBloodsuck_last = 5.0f;
-  const float kBloodsuck_CD = 10.0f;
-  const float kBloodsuck_effect = 0.5f;
+  const float kBloodsuck_CD = 15.0f;
+  const float kBloodsuck_effect = 0.3f;
   const float kBloodsuck_mp_cost = 300.0f;
 
   class Player: public Agent {
