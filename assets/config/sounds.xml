@@ -117,6 +117,25 @@ HOWTO:  To convert between types, or to downmix to mono,
 
 </cudgel_fury_hit>
 
+<berserk>
+
+<filepath>sfx/berserk</filepath>
+
+</berserk>
+
+<healing>
+
+<filepath>sfx/healing</filepath>
+
+</healing>
+
+
+<ding>
+
+<filepath>sfx/ding</filepath>
+
+</ding>
+
 
 <die>
 
@@ -124,6 +143,12 @@ HOWTO:  To convert between types, or to downmix to mono,
 
 </die>
 
+
+<taunt>
+
+<filepath>sfx/taunt</filepath>
+
+</taunt>
 
 
 <fireball>

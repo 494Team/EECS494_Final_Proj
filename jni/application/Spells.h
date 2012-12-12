@@ -27,9 +27,9 @@ namespace Flame {
   const float kHealing_life_time = 3.f;
   const float kHealing_healing_amount = -50.f;
 
-  const float kTaunt_radius = 112.f;
+  const float kTaunt_radius = 300.f;
   const float kTaunt_hatred = 1000.f;
-  const float kTaunt_life_time = 1.f;
+  const float kTaunt_life_time = 2.f;
 
   const Zeni::Vector2f kArrow_size = Zeni::Vector2f(4.f, 16.f);
   const float kArrow_speed = 200.f;
