@@ -796,6 +796,11 @@ The following things are unsupported:
     <filepath>textures/plus_button.png</filepath>
     <tile>0</tile>
   </plus_button>
+  <upgrade_sign>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/plus_button.png</filepath>
+    <tile>0</tile>
+  </upgrade_sign>
   <highlight>
     <is_sprite>0</is_sprite>
     <filepath>textures/highlight.png</filepath>
@@ -1223,6 +1228,7 @@ The following things are unsupported:
     </file>
   </sprite_token>
   -->
+
 
 
 

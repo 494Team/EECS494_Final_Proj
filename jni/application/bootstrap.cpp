@@ -968,7 +968,7 @@ private:
     Zeni::Video &vr = Zeni::get_Video();
     Zeni::Colors &cr = Zeni::get_Colors();
 
-    Point2f Hpbar_loc(loc.x + 80.0f, loc.y);
+    Point2f Hpbar_loc(loc.x + 60.0f, loc.y);
     const float kHpmpbar_width = 10.0f;
     const float kHpmpbar_length = 100.0f;
     Zeni::Vertex2f_Color hp00(Hpbar_loc, cr["red"]);
@@ -1003,6 +1003,15 @@ private:
     if (!p_ptr->spell3_mp_enough())
       Zeni::render_image("no_mana", CDbar_loc, CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
     Zeni::render_image("cd_mask", CDbar_loc + Zeni::Vector2f(0, kCDbar_length *(CD3percent)) ,CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
+
+    CDbar_loc += Point2f(kCDbar_length + 5.0f, 0.0f);
+    int upgrade_point = p_ptr->get_skill_point();
+    Color filter = upgrade_point > 0 ? Color() : Color(1.0f, 0.1f, 0.1f, 0.1f);
+    Zeni::render_image("upgrade_sign",
+                        CDbar_loc,
+                        CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length),
+                        false,
+                        filter);
 
     vr.render(hpbar);
     vr.render(mpbar);
@@ -1051,8 +1060,8 @@ private:
     Zeni::Colors &cr = Zeni::get_Colors();
     const Zeni::String kToppanel_color = "white_light";
     Zeni::Vertex2f_Color p00(Zeni::Point2f(0.0f, 0.0f), cr[kToppanel_color]);
-    Zeni::Vertex2f_Color p01(Zeni::Point2f(0.0f, 75.0f), cr[kToppanel_color]);
-    Zeni::Vertex2f_Color p02(Zeni::Point2f(800.0f, 75.0f), cr[kToppanel_color]);
+    Zeni::Vertex2f_Color p01(Zeni::Point2f(0.0f, 90.0f), cr[kToppanel_color]);
+    Zeni::Vertex2f_Color p02(Zeni::Point2f(800.0f, 90.0f), cr[kToppanel_color]);
     Zeni::Vertex2f_Color p03(Zeni::Point2f(800.0f, 0.0f), cr[kToppanel_color]);
     Zeni::Quadrilateral<Zeni::Vertex2f_Color> toppanel(p00, p01, p02, p03);
     vr.render(toppanel);
@@ -1069,28 +1078,41 @@ private:
 
     /* render level status */
     char* str = new char[10];
+    Zeni::String text_buf = "Stage ";
     sprintf(str, "%d", curr_lvl + 1);
-    Zeni::String text_buf = "Level ";
+    text_buf += str;
+    text_buf += "-";
+    sprintf(str, "%d", stage);
     text_buf += str;
     Zeni::Font &l_ft = get_Fonts()["lvl_ft"];
     l_ft.render_text(text_buf,
-                   Point2f(400.0f, 25.0f - 0.5f * l_ft.get_text_height()),
-                   get_Colors()["black"],
-                   ZENI_CENTER);
+                   Point2f(20.0f, 560.0f - 2.5f * l_ft.get_text_height()),
+                   get_Colors()["yellow"],
+                   ZENI_LEFT);
 
     /* render revival status */
     sprintf(str, "%d", revival_num);
-    text_buf = "revival chances: ";
+    text_buf = "Revival chances: ";
     text_buf += str;
     l_ft.render_text(text_buf,
-                   Point2f(400.0f, 60.0f - 0.5f * l_ft.get_text_height()),
-                   get_Colors()["black"],
-                   ZENI_CENTER);
+                   Point2f(20.0f, 560.0f - 1.5f * l_ft.get_text_height()),
+                   get_Colors()["yellow"],
+                   ZENI_LEFT);
 
-    /* render exp bar */
+    /* render exp status */
     int exp_level;
     float exp_percent;
     Model_state::get_instance()->get_exp_level_and_remainder(&exp_level, &exp_percent);
+
+    sprintf(str, "%d", exp_level);
+    text_buf = "Team Exp: Lv";
+    text_buf += str;
+    l_ft.render_text(text_buf,
+                   Point2f(20.0f, 560.0f - 0.5f * l_ft.get_text_height()),
+                   get_Colors()["yellow"],
+                   ZENI_LEFT);
+
+    /* render exp bar */
     Point2f exp_bar_loc(0.0f, 580.0f);
     const float kExp_bar_width = 6.0f;
     const float kExp_bar_length = 800.0f;
@@ -1101,13 +1123,6 @@ private:
     Zeni::Quadrilateral<Zeni::Vertex2f_Color> exp_bar(exp00, exp01, exp02, exp03);
     vr.render(exp_bar);
 
-    sprintf(str, "%d", exp_level);
-    text_buf = "Exp Lv: ";
-    text_buf += str;
-    l_ft.render_text(text_buf,
-                   Point2f(20.0f, 550.0f - 0.5f * l_ft.get_text_height()),
-                   get_Colors()["yellow"],
-                   ZENI_LEFT);
 
     if (show_die) {
         l_ft.render_text("Player(s) Died!",

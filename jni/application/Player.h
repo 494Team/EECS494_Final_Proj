@@ -33,7 +33,7 @@ namespace Flame {
   const float kPlayer_attack_strengh = 300.0f;
   //SANZANG
   const float kDisintegrate_CD = 0.0f;
-  const float kDisintegrate_dam = 50.0f;
+  const float kDisintegrate_dam = 5.0f;
   //const float kDisintegrate_mp_initial_cost = 2.0f;
   const float kDisintegrate_mp_cost = 2.0f;
   const float kHealing_CD = 2.0f;
@@ -234,7 +234,7 @@ namespace Flame {
     int skill_point;
 
     bool is_moving() {
-      return (!is_hitback() && !is_charging() && abs(ctrl.move_hori) + abs(ctrl.move_vert) > 0.3f);
+      return (!is_disintegrate() && !is_hitback() && !is_charging() && abs(ctrl.move_hori) + abs(ctrl.move_vert) > 0.3f);
     }
     bool cost_mp(const float cost) {
       bool result = true;

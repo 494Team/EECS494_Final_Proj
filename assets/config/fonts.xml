@@ -82,7 +82,7 @@ Only TrueType fonts are supported.
 
   <lvl_ft>
     <filepath>fonts/FORGOTTE.TTF</filepath>
-    <height>30</height>
+    <height>25</height>
     <bold>1</bold>
     <italics>0</italics>
     <virtual_screen>

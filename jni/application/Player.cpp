@@ -163,7 +163,7 @@ void Player::update(float time) {
   if (!is_hitback() && !is_charging() && abs(ctrl.move_hori) + abs(ctrl.move_vert) > 0.3f) {
     bool move_x = true;
     bool move_y = true;
-    if (!ctrl.l) {
+    if (!ctrl.l && !is_disintegrate()) {
       backup_position = get_location();
       set_speed(abs(ctrl.move_hori) * backup_speed);
       set_orientation(Vector2f(ctrl.move_hori, 0.0f));
