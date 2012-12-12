@@ -432,6 +432,7 @@ void Player::fire(kKey_type type) {
 }
 
 void Player::berserk() {
+  play_sound("berserk");
   spell3_active = true;
 }
 

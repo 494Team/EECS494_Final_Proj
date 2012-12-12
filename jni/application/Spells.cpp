@@ -133,7 +133,7 @@ namespace Flame {
     player_ptr(player_ptr_),
     render_time(0.f),
     damage(damage_)
-    {}
+    {play_sound("ding");}
 
   void Ding::update(float time)
   {
@@ -159,7 +159,7 @@ namespace Flame {
                         kHealing_speed,
                         kHealing_life_time),
     damage(damage_)
-    {}
+    {play_sound("healing");}
 
   void Healing_spell::update(float time)
   {
@@ -275,6 +275,7 @@ namespace Flame {
     Resizable_spell(location_, Vector2f(kTaunt_radius, kTaunt_radius), Vector2f(), kTaunt_life_time),
     player_ptr(player_ptr_)
     {
+      play_sound("taunt");
       vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
       for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
         if (get_body().intersects((*it)->get_body())) {
