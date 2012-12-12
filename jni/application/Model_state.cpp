@@ -337,23 +337,28 @@ namespace Flame {
     next_loop_update_list.push_back(map_obj_ptr);
     map_puzzle_obj_list.push_back(map_obj_ptr);
   }
-
-  vector<Player *>::iterator Model_state::player_rise_from_dead_list(Player * player_ptr)
+  
+  vector<Player *>::iterator Model_state::player_rise_without_setting_pos(Player * player_ptr)
   {
     //can only be called when there are at least one player alive
     //assert(!player_list.empty());
-
-    Point2f rise_pos = player_list.front()->get_location();
         int controller = player_ptr->get_controller();
         controller_alive[controller] = true;
         player_pos_in_list[player_list.size()] = controller;
         player_ptr->dec_health(-player_ptr->get_initial_health());
-        player_ptr->set_position(rise_pos);
 
     player_list.push_back(player_ptr);
     sim_obj_list.push_back(player_ptr);
     render_list.insert(player_ptr);
     auto it = dead_player_list.erase(find(dead_player_list.begin(), dead_player_list.end(), player_ptr));
+    return it;
+  }
+  vector<Player *>::iterator Model_state::player_rise_from_dead_list(Player * player_ptr)
+  {
+    //can only be called when there are at least one player alive
+    Point2f rise_pos = player_list.front()->get_location();
+    auto it = player_rise_without_setting_pos(player_ptr);
+    player_ptr->set_position(rise_pos);
     return it;
   }
   vector<Player *>::iterator Model_state::move_player_to_dead_list(Player * player_ptr)
@@ -495,6 +500,7 @@ namespace Flame {
     next_loop_update_list.clear();
     sim_obj_list.clear();
     player_list.clear();
+    dead_player_list.clear();
     monster_list.clear();
     spell_list.clear();
     map_obj_list.clear();

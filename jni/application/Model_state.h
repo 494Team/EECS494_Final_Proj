@@ -70,9 +70,10 @@ namespace Flame {
     void add_map_obj(Map * map_obj_ptr);
     void add_map_puzzle_obj(Map * map_obj_ptr);
 
+    std::vector<Player *>::iterator player_rise_without_setting_pos(Player * player_ptr);
+    std::vector<Player *>::iterator player_rise_from_dead_list(Player * player_ptr);
     // never try to remove yourself! use these functions!!!!!!!
     std::vector<Player *>::iterator remove_player(Player * player_ptr);
-    std::vector<Player *>::iterator player_rise_from_dead_list(Player * player_ptr);
     std::vector<Player *>::iterator move_player_to_dead_list(Player * player_ptr);
     std::vector<Monster *>::iterator remove_monster(Monster * monster_ptr);
     std::vector<Spell *>::iterator remove_spell(Spell * spell_ptr);

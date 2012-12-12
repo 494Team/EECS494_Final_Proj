@@ -145,7 +145,7 @@ namespace Flame{
   const float level_exp_max[kExp_level_max+1] = {500.0f, 2000.0f, 3000.0f, 4000.0f, 5000.0f, 6000.0f, 7000.0f, 10000.0f};
 
   //player setting
-  const float kHp_max = 100000.0f;
+  const float kHp_max = 1000.0f;
   const float kMp_max = 1000.0f;
   
   //choosing character page "Preparation State"
