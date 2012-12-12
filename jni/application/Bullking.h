@@ -27,6 +27,8 @@ namespace Flame {
     float attack_radius;
     float march_last_new_time;
     float explosion_last_new_time;
+    float explosion_last_render_time;
+    int explosion_last_render_suffix;
   };
 }
 

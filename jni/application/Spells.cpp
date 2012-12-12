@@ -728,12 +728,19 @@ namespace Flame {
 
   void Explosion::render() {
     if (!hits_max()) {
-      Resizable_spell::render("hell_spikes_pre");
+      Resizable_spell::render("explosion_pre");
     } else {
       if (damage_effect_render_time >= 0.0f) {
-        Resizable_spell::render("hell_spikes");
+        Resizable_spell::render("explosion");
+        float scale = Model_state::get_instance()->get_scale();
+        Vector2f explosion_effect_loc = get_center_location() - Vector2f(0.0f, 30.0f);
+        Point2f explosion_effect_rel_loc = (explosion_effect_loc - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
+        Vector2f explosion_effect_size(60.0f, 120.0f);
+        render_image("explosion_attack_effect",
+                     explosion_effect_rel_loc - scale * explosion_effect_size / 2.0f,
+                     explosion_effect_rel_loc + scale * explosion_effect_size / 2.0f);
       } else {
-        Resizable_spell::render("hell_spikes", Zeni::Color(get_remaining_lifetime() / lifetime_after_damage_effect, 1.0f, 1.0f, 1.0f));
+        Resizable_spell::render("explosion", Zeni::Color(get_remaining_lifetime() / lifetime_after_damage_effect, 1.0f, 1.0f, 1.0f));
       }
     }
   }

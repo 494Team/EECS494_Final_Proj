@@ -164,6 +164,8 @@ Level_2::Level_2() {
   map_list.push_back(new Map_brick(Point2f(600.0f, -40.0f), Vector2f(40.0f, 680.0f), 40.0f, 40.0f, "rock"));
   map_list.push_back(new Map_brick(Point2f(0.0f, -40.0f), Vector2f(600.0f, 40.0f), 40.0f, 40.0f, "rock"));
   map_list.push_back(new Map_brick(Point2f(0.0f, 600.0f), Vector2f(600.0f, 40.0f), 40.0f, 40.0f, "rock"));
+  // monster
+  monster_list.push_back(new Bullking(Point2f((room_ul.x + room_lr.x) * 0.5f,(room_ul.y + room_lr.y) * 0.5f)));
 
   Level::set_map_list(stage, map_list);
   Level::set_monster_list(stage, monster_list);

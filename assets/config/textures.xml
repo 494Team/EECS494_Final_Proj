@@ -1101,18 +1101,26 @@ The following things are unsupported:
     <filepath>textures/bullking_casting0.png</filepath>
     <tile>0</tile>
   </bullking_casting0>
-  <!--<bullking_casting1>
+  <bullking_casting1>
     <filepath>textures/bullking_casting1.png</filepath>
     <tile>0</tile>
-  </bullking_casting1>-->
-  <bullking_casting1>
-    <filepath>textures/bullking_casting0.png</filepath>
-    <tile>0</tile>
   </bullking_casting1>
-  <bullking_casting2>
+  <bullking_casting2_0>
     <filepath>textures/bullking_casting2_0.png</filepath>
     <tile>0</tile>
-  </bullking_casting2>
+  </bullking_casting2_0>
+  <bullking_casting2_1>
+    <filepath>textures/bullking_casting2_1.png</filepath>
+    <tile>0</tile>
+  </bullking_casting2_1>
+  <bullking_casting2_2>
+    <filepath>textures/bullking_casting2_2.png</filepath>
+    <tile>0</tile>
+  </bullking_casting2_2>
+  <bullking_casting2_3>
+    <filepath>textures/bullking_casting2_3.png</filepath>
+    <tile>0</tile>
+  </bullking_casting2_3>
   <bullking_left_attack>
     <filepath>textures/bullking_attack_left.png</filepath>
     <tile>0</tile>
@@ -1129,8 +1137,20 @@ The following things are unsupported:
     <filepath>textures/bullking_attack_back.png</filepath>
     <tile>0</tile>
   </bullking_back_attack>
+  <explosion_pre>
+    <filepath>textures/explosion_pre.png</filepath>
+    <tile>0</tile>
+  </explosion_pre>
+  <explosion>
+    <filepath>textures/explosion.png</filepath>
+    <tile>0</tile>
+  </explosion>
+  <explosion_attack_effect>
+    <filepath>textures/explosion_attack_effect.png</filepath>
+    <tile>0</tile>
+  </explosion_attack_effect>
   <helldoor>
-    <filepath>textures/helldoor.png</filepath>
+    <filepath>textures/hell_door.png</filepath>
     <tile>0</tile>
   </helldoor>
   <dajun>
