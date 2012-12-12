@@ -118,13 +118,14 @@ namespace Flame{
   const int kShop_cursor_max = 7;
   const int kAttack_max = 5;
   const int kDefense_max = 5;
-  const int kHp_regen_max = 5;
+  const int kHpmp_regen_max = 5;
   const int kSpeed_max = 5;
 
   const float kAttack_maxbuff = 1.0f;
   const float kDefense_maxbuff = 0.5f;
-  const float kHp_regen_maxbuff = 0.4f;
-  const float kMp_regen_maxbuff = 0.8f;
+  const float kHp_regen_maxbuff = 0.8f;
+  const float kMp_regen_base = 1.0f;
+  const float kMp_regen_maxbuff = 0.5f;
   const float kSpeed_maxbuff = 150.0f;
 
   //others
@@ -133,6 +134,14 @@ namespace Flame{
   const float kHpbar_width = 3.0f;
   const float kHighlight_move_CD = 0.2f;
   const float kShow_alldie_time = 3.0f;
+
+  //exp setting
+  const float kWanderer_exp_base = 100.0f;
+  const float kWhisper_exp_base = 100.0f;
+  const float kRedboy_exp_base = 1000.0f;
+  const float kBullking_exp_base = 1000.0f;
+  const int kExp_level_max = 7;
+  const float level_exp_max[kExp_level_max+1] = {500.0f, 2000.0f, 3000.0f, 4000.0f, 5000.0f, 6000.0f, 7000.0f, 10000.0f};
 
   //player setting
   const float kHp_max = 1000.0f;

@@ -32,7 +32,7 @@ Player::Player(
   skill_point(0),
   attack(0),
   defense(0),
-  hp_regen(0),
+  hpmp_regen(0),
   speed(0),
   fire_magic_arrow(true),
   mp(kMp_max),
@@ -140,8 +140,8 @@ void Player::update(float time) {
   //update buff
   set_attack_buff((1.0f + attack * kAttack_maxbuff/kAttack_max) * berserk_buff);
   set_armor((1.0f - defense * kDefense_maxbuff/kDefense_max) * shield_buff);
-  set_hp_regen_rate(hp_regen * kHp_regen_maxbuff/kHp_regen_max);
-  set_mp_regen_rate(kMp_regen_maxbuff);
+  set_hp_regen_rate(hpmp_regen * kHp_regen_maxbuff/kHpmp_regen_max);
+  set_mp_regen_rate(kMp_regen_base + hpmp_regen * kMp_regen_maxbuff/kHpmp_regen_max);
   if (!is_charging()) {
     set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
   }

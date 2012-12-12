@@ -2,6 +2,10 @@
 #include "Player.h"
 #include "Map.h"
 #include "Monster.h"
+#include "Wanderer.h"
+#include "Whisper.h"
+#include "Redboy.h"
+#include "Bullking.h"
 #include "Spell.h"
 #include <algorithm>
 #include <functional>
@@ -50,10 +54,15 @@ namespace Flame {
 
   void Model_state::init(int level, Chronometer<Time> * timer_)
   {
-    // enter game for the first time
+    // only be called when enter game for the first time
+    /*
     if (level==1) {
       money = 0;
     }
+    */
+    money = 0;
+    exp = 0.0f;
+    exp_level = 0;
 
     clear_all();
     timer = timer_;
@@ -240,9 +249,22 @@ namespace Flame {
         it = remove_spell(*it);
       else
         ++it;
+    Random r;
+    float factor = 1.0f + r.frand_lte()/2.0f;
     for (auto it = monster_list.begin(); it != monster_list.end();)
-      if (!(*it)->is_alive())
+      if (!(*it)->is_alive()) {
+        //add exp
+        if (dynamic_cast<Wanderer*>(*it) != 0)
+          Model_state::get_instance()->exp_rise(kWanderer_exp_base * factor);
+        else if (dynamic_cast<Whisper*>(*it) != 0)
+          Model_state::get_instance()->exp_rise(kWhisper_exp_base * factor);
+        else if (dynamic_cast<Redboy*>(*it) != 0)
+          Model_state::get_instance()->exp_rise(kRedboy_exp_base * factor);
+        else if (dynamic_cast<Bullking*>(*it) != 0)
+          Model_state::get_instance()->exp_rise(kBullking_exp_base * factor);
+
         it = remove_monster(*it);
+      }
       else
         ++it;
     for (auto it = player_list.begin(); it != player_list.end();)

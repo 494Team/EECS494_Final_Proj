@@ -41,7 +41,7 @@ private:
   int skill_point_tmp[4];
   int attack_tmp[4];
   int defense_tmp[4];
-  int hp_regen_tmp[4];
+  int hpmp_regen_tmp[4];
   int speed_tmp[4];
   bool confirmed[4];
   std::vector<Player *> * player_list_ptr;
@@ -115,7 +115,7 @@ private:
       skill_point_tmp[i] = 0;
       attack_tmp[i] = 0;
       defense_tmp[i] = 0;
-      hp_regen_tmp[i] = 0;
+      hpmp_regen_tmp[i] = 0;
       speed_tmp[i] = 0;
     }
     std::vector<Player *> * plist = Model_state::get_instance()->get_player_list_ptr();
@@ -127,7 +127,7 @@ private:
           skill_point_tmp[controller] = (*it)->get_skill_point();
           attack_tmp[controller] = (*it)->attack;
           defense_tmp[controller] = (*it)->defense;
-          hp_regen_tmp[controller] = (*it)->hp_regen;
+          hpmp_regen_tmp[controller] = (*it)->hpmp_regen;
           speed_tmp[controller] = (*it)->speed;
       }
     }
@@ -142,7 +142,7 @@ private:
           (*it)->set_skill_point(skill_point_tmp[controller]);
           (*it)->attack = attack_tmp[controller];
           (*it)->defense = defense_tmp[controller];
-          (*it)->hp_regen = hp_regen_tmp[controller];
+          (*it)->hpmp_regen = hpmp_regen_tmp[controller];
           (*it)->speed = speed_tmp[controller];
       }
     }
@@ -235,8 +235,8 @@ private:
           }
           break;
         case 3:
-          if (hp_regen_tmp[controller] < kHp_regen_max) {
-            hp_regen_tmp[controller]++;
+          if (hpmp_regen_tmp[controller] < kHpmp_regen_max) {
+            hpmp_regen_tmp[controller]++;
           }
           break;
         case 4:
@@ -433,8 +433,8 @@ private:
     
 
     //loc += Point2f(0.0f, fr.get_text_height());
-    sprintf(str, "%d", hp_regen_tmp[controller]);//speed_lvl);
-    text_buf = "HP regen: lvl ";
+    sprintf(str, "%d", hpmp_regen_tmp[controller]);//speed_lvl);
+    text_buf = "Hp&Mp regen: lvl ";
     text_buf += str;
     text_buf += "/5";
     fr.render_text(text_buf,
@@ -479,7 +479,7 @@ private:
                    ZENI_LEFT);
     int player_list_index = Model_state::get_instance()->get_player_list_index(controller);
     float Shaseng_indent = (*player_list_ptr)[player_list_index]->ptype == SHASENG ? button_size*1.1f : 0.0f;
-    Point2f highlight_size(150.0f + 2*Shaseng_indent, fr.get_text_height());
+    Point2f highlight_size(200.0f + 2*Shaseng_indent, fr.get_text_height());
     //render_image("highlight", Bar_loc[cursor_pos[player_list_index]] - Point2f(button_size * 1.1f - Shaseng_indent, 0.0f), Bar_loc[cursor_pos[player_list_index]] + highlight_size);
     render_image("highlight", Bar_loc[cursor_pos[controller]] - Point2f(button_size * 1.1f - Shaseng_indent, 0.0f), Bar_loc[cursor_pos[controller]] + highlight_size);
 
@@ -1059,6 +1059,28 @@ private:
                    Point2f(400.0f, 60.0f - 0.5f * l_ft.get_text_height()),
                    get_Colors()["black"],
                    ZENI_CENTER);
+
+    /* render exp bar */
+    int exp_level;
+    float exp_percent;
+    Model_state::get_instance()->get_exp_level_and_remainder(&exp_level, &exp_percent);
+    Point2f exp_bar_loc(0.0f, 580.0f);
+    const float kExp_bar_width = 6.0f;
+    const float kExp_bar_length = 800.0f;
+    Zeni::Vertex2f_Color exp00(exp_bar_loc, cr["yellow"]);
+    Zeni::Vertex2f_Color exp01(exp_bar_loc + Zeni::Point2f(0.0f, kExp_bar_width), cr["yellow"]);
+    Zeni::Vertex2f_Color exp02(exp_bar_loc + Zeni::Point2f(exp_percent * kExp_bar_length, kExp_bar_width), cr["yellow"]);
+    Zeni::Vertex2f_Color exp03(exp_bar_loc + Zeni::Point2f(exp_percent * kExp_bar_length, 0.0f), cr["yellow"]);
+    Zeni::Quadrilateral<Zeni::Vertex2f_Color> exp_bar(exp00, exp01, exp02, exp03);
+    vr.render(exp_bar);
+
+    sprintf(str, "%d", exp_level);
+    text_buf = "Exp Lv: ";
+    text_buf += str;
+    l_ft.render_text(text_buf,
+                   Point2f(20.0f, 550.0f - 0.5f * l_ft.get_text_height()),
+                   get_Colors()["yellow"],
+                   ZENI_LEFT);
 
     if (show_die) {
         l_ft.render_text("Player(s) Died!",

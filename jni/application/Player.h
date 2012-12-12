@@ -158,7 +158,7 @@ namespace Flame {
     }
     int attack;
     int defense;
-    int hp_regen;
+    int hpmp_regen;
     int speed;
 
     bool is_fire_magic_arrow() {

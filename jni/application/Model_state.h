@@ -129,7 +129,23 @@ namespace Flame {
     }
     void clear_without_player();
     void clear_all();
+    void exp_rise(const float new_exp) {
+      exp += new_exp;
+      while (exp_level < 7 && exp > level_exp_max[exp_level]) {
+        exp -= level_exp_max[exp_level];
+        exp_level++;
+      }
+      if (exp_level == kExp_level_max)
+        exp = 0.0f;
+    }
+    void get_exp_level_and_remainder(int* exp_level_, float* exp_remainder_percent_) {
+      *exp_remainder_percent_ = exp/level_exp_max[exp_level];
+      *exp_level_ = exp_level;
+      return;
+    }
   private:
+    float exp;
+    int exp_level;
     int initial_player_num;
     bool controller_alive[4]; //usage: controller_alive[controller]
     int player_pos_in_list[4]; //update when any player die
