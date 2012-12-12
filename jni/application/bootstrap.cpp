@@ -591,7 +591,7 @@ public:
   }
 
 private:
-  void set_stage(int stage) {
+  void set_stage(int stage_) {
     //end the player action before changing stage
     //for example cudgel_fury
     for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
@@ -612,7 +612,7 @@ private:
     }
     else {
       int prev_stage = Model_state::get_instance()->get_prev_stage();
-      if (stage == 1) {
+      if (stage_ == 1) {
         if (!prev_stage) {
           float x = 350;
           for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
@@ -655,7 +655,7 @@ private:
           }
         }
       }
-      else if (stage == 2){
+      else if (stage_ == 2){
         if (prev_stage == 1) {
           int i = 0;
           for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
@@ -689,7 +689,7 @@ private:
           }
         }
       }
-      else if (stage == 3){
+      else if (stage_ == 3){
         if (prev_stage == 1) {
           int i = 0;
           for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
@@ -734,18 +734,30 @@ private:
       }
     }
 
-    levels[curr_lvl]->init_map(stage);
+    levels[curr_lvl]->init_map(stage_);
     std::vector<Map *> map_list = levels[curr_lvl]->get_map_list();
     for (auto it = map_list.begin(); it != map_list.end(); ++it)
       Model_state::get_instance()->add_map_obj(*it);
     std::vector<Monster*> monster_list = levels[curr_lvl]->get_monster_list();
     for (auto it = monster_list.begin(); it != monster_list.end(); ++it)
       Model_state::get_instance()->add_monster(*it);
-    if (curr_lvl == 0 && stage == 3)
+    if (curr_lvl == 0 && stage_ == 3)
       Model_state::get_instance()->set_prev_stage(0);
     else
-      Model_state::get_instance()->set_prev_stage(stage);
+      Model_state::get_instance()->set_prev_stage(stage_);
     Model_state::get_instance()->set_next_stage(0);
+
+
+    //dialog section
+    if (curr_lvl == 0 && stage_ == 1) {
+      dialog.start(1);
+    } else if (curr_lvl == 0 && stage_ == 3) {
+      dialog.start(2);
+    } else if (curr_lvl == 1 && stage_ == 1) {
+      dialog.start(3);
+    } else if (curr_lvl == 1 && stage_ == 3) {
+      dialog.start(4);
+    }
   }
 
   void set_level(const int level_) {
@@ -757,7 +769,7 @@ private:
     for (auto it = dead_player_list->begin(); it != dead_player_list->end();) {
       it = Model_state::get_instance()->player_rise_without_setting_pos(*it);
     }
-    set_stage(stage);
+    set_stage(Model_state::get_instance()->get_prev_stage());
   }
     
   void begin_dialog(Dialog_box* dialog_ptr, int stage) {
@@ -993,7 +1005,9 @@ private:
       }
     }
   }
-
+  void victory_begin() {
+    dialog.start(5);
+  }
   void perform_logic() {
     const float time_passed = m_set.seconds();
     float processing_time = time_passed - m_time_passed;
@@ -1004,6 +1018,13 @@ private:
     }
     if (!Model_state::get_instance()->get_player_list_ptr()->empty() && show_die) {
         show_die = false;
+    }
+    //judge victory
+    if (curr_lvl == 1 &&
+        stage == 4 &&
+        !Model_state::get_instance()->get_player_list_ptr()->empty() &&
+        Model_state::get_instance()->get_monster_list_ptr()->empty()) {
+      dialog.start(5);
     }
 
     float time_step = 0.005f;
@@ -1302,6 +1323,89 @@ private:
   }
 };
 
+class Story_State : public Gamestate_II {
+  Story_State(const Story_State &);
+  Story_State operator=(const Story_State &);
+
+public:
+  Story_State()
+    : dialog_counter(0),
+      dialog(&fake_time)
+  {
+    set_pausable(true);
+
+    set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), MENU);
+    //p1
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 0), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 0), A1);
+    //p2
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 1), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 1), A2);
+    //p3
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 2), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 2), A3);
+    //p4
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 3), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 3), A4);
+
+    dialog.start(0);
+  }
+
+private:
+  int dialog_counter;
+  Dialog_box dialog;
+  Chronometer<Time> fake_time;
+  void on_key(const SDL_KeyboardEvent &event) {
+    if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED)
+      get_Game().push_state(new Popup_Menu_State);
+  }
+
+  void on_push() {
+    //get_Window().mouse_grab(true);
+    get_Window().mouse_hide(true);
+    get_Game().joy_mouse.enabled = false;
+  }
+
+  void on_pop() {
+    //get_Window().mouse_grab(false);
+    get_Window().mouse_hide(false);
+    get_Game().joy_mouse.enabled = true;
+  }
+
+  void on_cover() {
+      get_Window().mouse_hide(false);
+      get_Game().joy_mouse.enabled = true;
+  }
+
+  void on_uncover() {
+      get_Window().mouse_hide(true);
+      get_Game().joy_mouse.enabled = false;
+  }
+
+  void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
+    if (confidence >= 0.99f)
+    switch(action) {
+      case A1:
+      case A2:
+      case A3:
+      case A4:
+        dialog.proceed();
+        dialog_counter++;
+        if (dialog_counter > dialog_max[0]-1) {
+          get_Game().pop_state();
+          get_Game().push_state(new Play_State());
+        }
+        break;
+    }
+  }
+
+  void render() {
+    get_Video().set_2d(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
+    Zeni::render_image("story_state_background", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+    dialog.render();
+  }
+};
+
 class Preparation_State :public Gamestate_II { //public Widget_Gamestate,
   Preparation_State(const Preparation_State &);
   Preparation_State operator=(const Preparation_State &);
@@ -1536,7 +1640,8 @@ private:
         else if(chosen_num == player_count){
           get_Game().pop_state();
           Model_state::get_instance()->set_initial_player_num(player_count);
-          get_Game().push_state(new Play_State());
+          //get_Game().push_state(new Play_State());
+          get_Game().push_state(new Story_State());
         }
         break;
       case JOIN2:
@@ -1548,7 +1653,8 @@ private:
         else if(chosen_num == player_count){
           get_Game().pop_state();
           Model_state::get_instance()->set_initial_player_num(player_count);
-          get_Game().push_state(new Play_State());
+          //get_Game().push_state(new Play_State());
+          get_Game().push_state(new Story_State());
         }
         break;
       case JOIN3:
@@ -1560,7 +1666,8 @@ private:
         else if(chosen_num == player_count){
           get_Game().pop_state();
           Model_state::get_instance()->set_initial_player_num(player_count);
-          get_Game().push_state(new Play_State());
+          //get_Game().push_state(new Play_State());
+          get_Game().push_state(new Story_State());
         }
         break;
       case JOIN4:
@@ -1572,7 +1679,8 @@ private:
         else if(chosen_num == player_count){
           get_Game().pop_state();
           Model_state::get_instance()->set_initial_player_num(player_count);
-          get_Game().push_state(new Play_State());
+          //get_Game().push_state(new Play_State());
+          get_Game().push_state(new Story_State());
         }
         break;
       default:

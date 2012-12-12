@@ -60,7 +60,7 @@ Only TrueType fonts are supported.
 
   <dialog_ft>
     <filepath>fonts/FORGOTTE.TTF</filepath>
-    <height>38</height>
+    <height>30</height>
     <bold>0</bold>
     <italics>0</italics>
     <virtual_screen>
