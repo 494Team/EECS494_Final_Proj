@@ -98,6 +98,10 @@ void Wanderer::render() {
   if (is_slowdown()) {
     color_filter = SLOWDOWN_COLOR;
   }
+  if (is_freeze()){
+    m_set.start();
+    Zeni::render_image("ding_trap", ul, lr, false, color_filter);
+  }
   if (radians_ccw < Zeni::Global::pi * 0.25f || radians_ccw >= Zeni::Global::pi *1.75f) {
     Zeni::render_image("wanderer_right" + render_suffix, ul, lr, false, color_filter);
   } else if (radians_ccw >= Zeni::Global::pi * 0.25f && radians_ccw < Zeni::Global::pi * 0.75f) {
@@ -109,6 +113,17 @@ void Wanderer::render() {
   }
   if (is_slowdown() && effect_timers[SLOWDOWN] > SLOWDOWN_TIME * 0.75f) {
     Zeni::render_image("slowdown_effect", ul, lr);
+  }
+  if(is_freeze()){
+    if(m_set.seconds()<0.5f)
+      Zeni::render_image("ding_glow0", ul, lr);
+    else if (m_set.seconds()<1.f)
+      Zeni::render_image("ding_glow1", ul, lr);
+    else{
+      m_set.reset();
+      m_set.start();
+      Zeni::render_image("ding_glow0", ul, lr);
+    }
   }
   if (is_taunt()) {
     float taunt_render_radius = get_radius() * 0.6f;

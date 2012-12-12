@@ -16,6 +16,18 @@ void Whisper::attack() {
   Model_state::get_instance()->add_spell(test_spell);
 }
 
+void Whisper_green::attack() {
+  Monster::attack();
+  Fire_ball* test_spell = new Fire_ball_green(get_location(), target->get_location() - get_location());
+  Model_state::get_instance()->add_spell(test_spell);
+}
+
+void Whisper_violet::attack() {
+  Monster::attack();
+  Fire_ball* test_spell = new Fire_ball_violet(get_location(), target->get_location() - get_location());
+  Model_state::get_instance()->add_spell(test_spell);
+}
+
 Zeni::Collision::Parallelepiped Whisper::create_path(const Zeni::Point3f &point1, const Zeni::Point3f &point2, const float radius) {
   Zeni::Vector3f path_para = point2 - point1;
   Zeni::Vector3f path_normal = Zeni::Vector3f(0.0f, 0.0f, 1.0f) % path_para;
@@ -156,6 +168,10 @@ void Whisper::render() {
   if (is_slowdown()) {
     color_filter = SLOWDOWN_COLOR;
   }
+  if (is_freeze()){
+    m_set.start();
+    Zeni::render_image("ding_trap", ul, lr, false, color_filter);
+  }
   if (radians_ccw < Zeni::Global::pi * 0.25f || radians_ccw >= Zeni::Global::pi *1.75f) {
     Zeni::render_image("whisper_right" + render_suffix, ul, lr, false, color_filter);
   } else if (radians_ccw >= Zeni::Global::pi * 0.25f && radians_ccw < Zeni::Global::pi * 0.75f) {
@@ -167,6 +183,131 @@ void Whisper::render() {
   }
   if (is_slowdown() && effect_timers[SLOWDOWN] > SLOWDOWN_TIME * 0.75f) {
     Zeni::render_image("slowdown_effect", ul, lr);
+  }
+  if(is_freeze()){
+    if(m_set.seconds()<0.5f)
+      Zeni::render_image("ding_glow0", ul, lr);
+    else if (m_set.seconds()<1.f)
+      Zeni::render_image("ding_glow1", ul, lr);
+    else{
+      m_set.reset();
+      m_set.start();
+      Zeni::render_image("ding_glow0", ul, lr);
+    }
+  }
+  if (is_taunt()) {
+    float taunt_render_radius = get_radius() * 0.6f;
+    Zeni::Point2f taunt_pos = rel_loc + scale * (get_radius() + taunt_render_radius) * Zeni::Vector2f(0.0f, -1.0f);
+    Zeni::Point2f taunt_ul = taunt_pos - scale * taunt_render_radius * Zeni::Vector2f(1.0f, 1.0f);
+    Zeni::Point2f taunt_lr = taunt_pos + scale * taunt_render_radius * Zeni::Vector2f(1.0f, 1.0f);
+    Zeni::render_image("taunt_effect", taunt_ul, taunt_lr);
+  }
+
+  if (is_get_wukong_charge()) {
+    render_get_wukong_charge_effect();
+  }
+}
+
+void Whisper_green::render() {
+  Agent::render();
+  float scale = Model_state::get_instance()->get_scale();
+  Zeni::Point2f ul, lr;
+  float radians_ccw;
+  get_render_params(get_body().get_radius(), ul, lr, radians_ccw);
+
+  update_render_suffix();
+  if (!is_currently_moving())
+    render_suffix = "0";
+  if (!is_hitback() && !is_freeze() && is_attacking) {
+    render_suffix = "_attack";
+  }
+  Zeni::Color color_filter;
+  if (is_slowdown()) {
+    color_filter = SLOWDOWN_COLOR;
+  }
+  if (is_freeze()){
+    m_set.start();
+    Zeni::render_image("ding_trap", ul, lr, false, color_filter);
+  }
+  if (radians_ccw < Zeni::Global::pi * 0.25f || radians_ccw >= Zeni::Global::pi *1.75f) {
+    Zeni::render_image("whisper_green_right" + render_suffix, ul, lr, false, color_filter);
+  } else if (radians_ccw >= Zeni::Global::pi * 0.25f && radians_ccw < Zeni::Global::pi * 0.75f) {
+    Zeni::render_image("whisper_green_front" + render_suffix, ul, lr, false, color_filter);
+  } else if (radians_ccw >= Zeni::Global::pi * 0.75f && radians_ccw < Zeni::Global::pi * 1.25f) {
+    Zeni::render_image("whisper_green_left" + render_suffix, ul, lr, false, color_filter);
+  } else {
+    Zeni::render_image("whisper_green_back" + render_suffix, ul, lr, false, color_filter);
+  }
+  if (is_slowdown() && effect_timers[SLOWDOWN] > SLOWDOWN_TIME * 0.75f) {
+    Zeni::render_image("slowdown_effect", ul, lr);
+  }
+  if(is_freeze()){
+    if(m_set.seconds()<0.5f)
+      Zeni::render_image("ding_glow0", ul, lr);
+    else if (m_set.seconds()<1.f)
+      Zeni::render_image("ding_glow1", ul, lr);
+    else{
+      m_set.reset();
+      m_set.start();
+      Zeni::render_image("ding_glow0", ul, lr);
+    }
+  }
+  if (is_taunt()) {
+    float taunt_render_radius = get_radius() * 0.6f;
+    Zeni::Point2f taunt_pos = rel_loc + scale * (get_radius() + taunt_render_radius) * Zeni::Vector2f(0.0f, -1.0f);
+    Zeni::Point2f taunt_ul = taunt_pos - scale * taunt_render_radius * Zeni::Vector2f(1.0f, 1.0f);
+    Zeni::Point2f taunt_lr = taunt_pos + scale * taunt_render_radius * Zeni::Vector2f(1.0f, 1.0f);
+    Zeni::render_image("taunt_effect", taunt_ul, taunt_lr);
+  }
+
+  if (is_get_wukong_charge()) {
+    render_get_wukong_charge_effect();
+  }
+}
+
+void Whisper_violet::render() {
+  Agent::render();
+  float scale = Model_state::get_instance()->get_scale();
+  Zeni::Point2f ul, lr;
+  float radians_ccw;
+  get_render_params(get_body().get_radius(), ul, lr, radians_ccw);
+
+  update_render_suffix();
+  if (!is_currently_moving())
+    render_suffix = "0";
+  if (!is_hitback() && !is_freeze() && is_attacking) {
+    render_suffix = "_attack";
+  }
+  Zeni::Color color_filter;
+  if (is_slowdown()) {
+    color_filter = SLOWDOWN_COLOR;
+  }
+  if (is_freeze()){
+    m_set.start();
+    Zeni::render_image("ding_trap", ul, lr, false, color_filter);
+  }
+  if (radians_ccw < Zeni::Global::pi * 0.25f || radians_ccw >= Zeni::Global::pi *1.75f) {
+    Zeni::render_image("whisper_violet_right" + render_suffix, ul, lr, false, color_filter);
+  } else if (radians_ccw >= Zeni::Global::pi * 0.25f && radians_ccw < Zeni::Global::pi * 0.75f) {
+    Zeni::render_image("whisper_violet_front" + render_suffix, ul, lr, false, color_filter);
+  } else if (radians_ccw >= Zeni::Global::pi * 0.75f && radians_ccw < Zeni::Global::pi * 1.25f) {
+    Zeni::render_image("whisper_violet_left" + render_suffix, ul, lr, false, color_filter);
+  } else {
+    Zeni::render_image("whisper_violet_back" + render_suffix, ul, lr, false, color_filter);
+  }
+  if (is_slowdown() && effect_timers[SLOWDOWN] > SLOWDOWN_TIME * 0.75f) {
+    Zeni::render_image("slowdown_effect", ul, lr);
+  }
+  if(is_freeze()){
+    if(m_set.seconds()<0.5f)
+      Zeni::render_image("ding_glow0", ul, lr);
+    else if (m_set.seconds()<1.f)
+      Zeni::render_image("ding_glow1", ul, lr);
+    else{
+      m_set.reset();
+      m_set.start();
+      Zeni::render_image("ding_glow0", ul, lr);
+    }
   }
   if (is_taunt()) {
     float taunt_render_radius = get_radius() * 0.6f;

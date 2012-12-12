@@ -54,7 +54,7 @@ namespace Flame {
   const float kTrap_attack_damage = 10.f;
   const float kTrap_attack_period = .1f;
 
-  const float kFireball_size = 16.0f;
+  const float kFireball_size = 25.0f;
   const float kFireball_speed = 50.0f;
   const float kFireball_life_time = 3.0f;
   const float kFireball_damage = 50.0f;
@@ -67,7 +67,7 @@ namespace Flame {
   const Zeni::Vector2f kHell_spikes_size = Zeni::Vector2f(125.f, 125.f);
   const float kHell_spikes_pre_time = 1.f;
   const float kHell_spikes_life_time = 5.f;
-  const float kHell_spikes_damage = 10.f;
+  const float kHell_spikes_damage = 5.f;
 
   class Attack_spell : public Spell {
   public:
@@ -321,6 +321,24 @@ namespace Flame {
     virtual void render();
   private:
     float damage;
+  };
+
+  class Fire_ball_green : public Fire_ball {
+  public:
+    Fire_ball_green(const Zeni::Point2f& location_ = Zeni::Point2f(),
+              const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
+              float damage_ = 0.f)
+              :Fire_ball(location_, orientation_, damage_){};
+    void render();
+  };
+  
+  class Fire_ball_violet : public Fire_ball {
+  public:
+    Fire_ball_violet(const Zeni::Point2f& location_ = Zeni::Point2f(),
+              const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
+              float damage_ = 0.f)
+              :Fire_ball(location_, orientation_, damage_){};
+    void render();
   };
 
   class Ring_of_fire : public Moving_spell_rectangle {

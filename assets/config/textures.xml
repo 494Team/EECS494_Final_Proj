@@ -734,6 +734,18 @@ The following things are unsupported:
     <filepath>textures/ding.png</filepath>
     <tile>0</tile>
   </ding>
+  <ding_trap>
+    <filepath>textures/ding_trap.png</filepath>
+    <tile>0</tile>
+  </ding_trap>
+  <ding_glow0>
+    <filepath>textures/ding_glow0.png</filepath>
+    <tile>0</tile>
+  </ding_glow0>
+  <ding_glow1>
+    <filepath>textures/ding_glow1.png</filepath>
+    <tile>0</tile>
+  </ding_glow1>
   <get_hit>
     <filepath>textures/get_hit.png</filepath>
     <tile>0</tile>
@@ -743,6 +755,16 @@ The following things are unsupported:
     <filepath>textures/fire_ball.png</filepath>
     <tile>0</tile>
   </fire_ball>
+  <green_fire_ball>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/green_fire_ball.png</filepath>
+    <tile>0</tile>
+  </green_fire_ball>
+  <violet_fire_ball>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/violet_fire_ball.png</filepath>
+    <tile>0</tile>
+  </violet_fire_ball>
   <shield>
     <is_sprite>0</is_sprite>
     <filepath>textures/shield.png</filepath>

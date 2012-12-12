@@ -16,6 +16,7 @@ namespace Flame {
     void render();
 
   private:
+    Zeni::Chronometer<Zeni::Time> m_set;
     float damage;
     float attack_radius;
     float decision_time;

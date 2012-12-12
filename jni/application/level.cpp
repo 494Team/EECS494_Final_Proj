@@ -12,10 +12,10 @@ void Level_1::init_map(int stage) {
     monster_list.push_back(new Wanderer(Zeni::Point2f(100, 300)));
     monster_list.push_back(new Wanderer(Zeni::Point2f(150, 300)));
     monster_list.push_back(new Wanderer(Zeni::Point2f(150, 200)));
-    monster_list.push_back(new Whisper(Zeni::Point2f(400, 800)));
-    monster_list.push_back(new Whisper(Zeni::Point2f(450, 800)));
-    monster_list.push_back(new Whisper(Zeni::Point2f(500, 800)));
-    monster_list.push_back(new Whisper(Zeni::Point2f(550, 800)));
+    monster_list.push_back(new Whisper_green(Zeni::Point2f(400, 800)));
+    monster_list.push_back(new Whisper_green(Zeni::Point2f(450, 800)));
+    monster_list.push_back(new Whisper_violet(Zeni::Point2f(500, 800)));
+    monster_list.push_back(new Whisper_violet(Zeni::Point2f(550, 800)));
     // wall vertical
     map_list.push_back(new Map_brick(Point2f(-40.0f, -40.0f), Vector2f(40.0f, 1080.0f), 40.0f, 40.0f, "rock"));
     map_list.push_back(new Map_brick(Point2f(1000.0f, -40.0f), Vector2f(40.0f, 1080.0f), 40.0f, 40.0f, "rock"));

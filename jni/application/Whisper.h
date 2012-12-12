@@ -10,12 +10,13 @@ namespace Flame {
     Whisper(const Zeni::Point2f &location_ = Zeni::Point2f());
 
     // perform attack, i.e. cast spell
-    void attack();
+    virtual void attack();
 
     void update(float time = 0.0f);
 
-    void render();
-
+    virtual void render();
+  protected:
+    Zeni::Chronometer<Zeni::Time> m_set;
   private:
 
     Zeni::Collision::Parallelepiped create_path(const Zeni::Point3f &point1, const Zeni::Point3f &point2, const float radius);
@@ -25,6 +26,22 @@ namespace Flame {
     float spell_radius;
     float decision_time;
     Random rand_inst;
+  };
+
+  class Whisper_green : public Whisper{
+  public:
+    Whisper_green(const Zeni::Point2f &location_ = Zeni::Point2f())
+      :Whisper(location_){};
+    void render();
+    void attack();
+  };
+
+  class Whisper_violet : public Whisper{
+  public:
+    Whisper_violet(const Zeni::Point2f &location_ = Zeni::Point2f())
+      :Whisper(location_){};
+    void render();
+    void attack();
   };
 }
 

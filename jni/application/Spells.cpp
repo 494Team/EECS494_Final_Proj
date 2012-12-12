@@ -640,6 +640,13 @@ namespace Flame {
 
   void Fire_ball::render()
   {Moving_spell::render("fire_ball");}
+ 
+  void Fire_ball_green::render()
+  {Moving_spell::render("green_fire_ball");}
+  
+  void Fire_ball_violet::render()
+  {Moving_spell::render("violet_fire_ball");}
+  
 
   Dajun::Dajun(const Point2f& location_, const Vector2f& orientation_) :
     Fire_ball(location_, orientation_)
