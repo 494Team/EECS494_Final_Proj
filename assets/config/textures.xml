@@ -486,6 +486,10 @@ The following things are unsupported:
     <filepath>textures/gate_active.png</filepath>
     <tile>0</tile>
   </gate_active>
+  <gate_inactive>
+    <filepath>textures/gate_inactive.png</filepath>
+    <tile>0</tile>
+  </gate_inactive>
   <gate_blue>
     <filepath>textures/gate1.png</filepath>
     <tile>0</tile>

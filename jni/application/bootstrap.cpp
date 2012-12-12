@@ -998,7 +998,7 @@ private:
     float processing_time = time_passed - m_time_passed;
     m_time_passed = time_passed;
 
-    if (Model_state::get_instance()->get_player_list_ptr()->empty() && stage <= 3 && !show_die) {
+    if (Model_state::get_instance()->get_player_list_ptr()->empty() && !show_die) {
         show_die = true;
     }
 
@@ -1807,10 +1807,10 @@ class Pre_Play_State : public Widget_Gamestate {
           {
             give_Renderer(new Widget_Renderer_Tricolor(Color(1.f, 1.f, 1.f, 0.0f), 
                   Color(1.f, 0.66f, 0.f, 0.0f),
-                  Color(1.f, 1.f, 1.f, 0.0f),
+                  Color(0.5f, 0.66f, 0.f, 0.0f),
                                                         Color(1.f, 0.f, 0.f, 0.0f),
                                                         Color(1.f, 1.f, 1.f, 1.0f),
-                                                        Color(1.f, 0.f, 0.f, 0.0f)));
+                                                        Color(1.f, 1.f, 1.f, 1.0f)));
           }
           
           void on_accept() {

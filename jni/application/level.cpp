@@ -60,8 +60,7 @@ void Level_1::init_map(int stage) {
   else {
     // stage 3
     // monster
-    monster_list.push_back(new Redboy(Zeni::Point2f(300, 300)));
-    monster_list.push_back(new Whisper(Zeni::Point2f(400, 500)));
+    monster_list.push_back(new Redboy(Zeni::Point2f(500.f, 500.f)));
 
     // map
     // vertical
@@ -188,6 +187,9 @@ void Level_2::init_map(int stage)
   }
   else {
     // stage 4: bullking's room
+    // monster
+    monster_list.push_back(new Bullking(Zeni::Point2f(300.f, 300.f)));
+
     // map
     map_list.push_back(new Map_brick(Point2f(-40.0f, -40.0f), Vector2f(40.0f, 680.0f), 40.0f, 40.0f, "rock"));
     map_list.push_back(new Map_brick(Point2f(600.0f, -40.0f), Vector2f(40.0f, 680.0f), 40.0f, 40.0f, "rock"));

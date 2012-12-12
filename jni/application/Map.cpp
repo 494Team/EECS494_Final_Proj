@@ -480,11 +480,11 @@ namespace Flame {
       if (!kill_all || Model_state::get_instance()->get_monster_list_ptr()->empty())
         render_image("gate_" + color, rel_location, rel_location + scale * get_size());
       else
-        render_image("gate_red", rel_location, rel_location + scale * get_size());
+        render_image("gate_inactive", rel_location, rel_location + scale * get_size());
     }
     else {
       if (kill_all && !Model_state::get_instance()->get_monster_list_ptr()->empty()) {
-        render_image("gate_red", rel_location, rel_location + scale * get_size());
+        render_image("gate_inactive", rel_location, rel_location + scale * get_size());
         stringstream ss;
         ss << Model_state::get_instance()->get_monster_list_ptr()->size();
         String text = String(ss.str());

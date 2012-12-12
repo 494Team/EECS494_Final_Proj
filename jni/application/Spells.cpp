@@ -133,7 +133,7 @@ namespace Flame {
     player_ptr(player_ptr_),
     render_time(0.f),
     damage(damage_)
-    {play_sound("ding");}
+    {}
 
   void Ding::update(float time)
   {
@@ -159,7 +159,7 @@ namespace Flame {
                         kHealing_speed,
                         kHealing_life_time),
     damage(damage_)
-    {play_sound("healing");}
+    {}
 
   void Healing_spell::update(float time)
   {
@@ -275,7 +275,6 @@ namespace Flame {
     Resizable_spell(location_, Vector2f(kTaunt_radius, kTaunt_radius), Vector2f(), kTaunt_life_time),
     player_ptr(player_ptr_)
     {
-      play_sound("taunt");
       vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
       for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
         if (get_body().intersects((*it)->get_body())) {
@@ -615,12 +614,13 @@ namespace Flame {
   {Moving_spell::render("brick");}
 
   // Boss1
-  Fire_ball::Fire_ball(const Point2f& location_, const Vector2f& orientation_) :
+  Fire_ball::Fire_ball(const Point2f& location_, const Vector2f& orientation_, float damage_) :
     Moving_spell_circle(location_ + 10.f * orientation_.normalized(),
                         orientation_,
                         Vector2f(kFireball_size, kFireball_size),
                         kFireball_speed,
-                        kFireball_life_time)
+                        kFireball_life_time),
+    damage(damage_)
     {play_sound("fireball");}
 
   void Fire_ball::update(float time)
@@ -630,7 +630,7 @@ namespace Flame {
       vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
       for (auto it = player_list_ptr->begin(); it != player_list_ptr->end(); ++it)
         if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
-          (*it)->dec_health(kFireball_damage);
+          (*it)->dec_health(damage);
           Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
           disable_spell();
           break;
