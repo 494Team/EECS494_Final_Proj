@@ -200,6 +200,8 @@ namespace Flame {
 
   void Cudgel_fury::update(float time)
   {
+    if (!player_ptr->is_cudgel_fury())
+      disable_spell();
 
     //Moving_spell_circle::update(time);
     set_location(player_ptr->get_location());

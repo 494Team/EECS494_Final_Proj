@@ -78,7 +78,7 @@ namespace Flame{
   const float BULLKING_RADIUS = 30.0f;
   const float BULLKING_SPEED = 100.0f;
   const float BULLKING_DAMAGE = 500.0f;
-  const float BULLKING_HEALTH = 10000.0f;
+  const float BULLKING_HEALTH = 100000.0f;
   const float BULLKING_ATTACK_GAP = 1.5f;
   const float BULLKING_ATTACK_RADIUS = 35.0f;
   const float BULLKING_MIN_DIST = 10.0f;
