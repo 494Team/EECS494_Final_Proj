@@ -861,11 +861,11 @@ private:
     float processing_time = time_passed - m_time_passed;
     m_time_passed = time_passed;
 
-    if (Model_state::get_instance()->get_player_list_ptr()->empty() && stage < 3 && !show_die) {
+    if (Model_state::get_instance()->get_player_list_ptr()->empty() && stage <= 3 && !show_die) {
         show_die = true;
         //m_set.pause_all();
     }
-    if (Model_state::get_instance()->get_monster_list_ptr()->empty() && stage < 3) {
+    if (Model_state::get_instance()->get_monster_list_ptr()->empty() && stage <= 3) {
       set_stage(++stage);
     }
 
