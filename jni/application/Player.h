@@ -207,6 +207,20 @@ namespace Flame {
     bool is_berserk() {return (ptype==WUKONG && spell3_active);}
     bool is_bloodsuck() {return (ptype== BAJIE && spell3_active);}
     void disintegrate_end_when_die() {disintegrate_end();}
+    void end_action() {
+      if (is_disintegrate())
+        disintegrate_end();
+      if (is_cudgel_fury())
+        cudgel_fury_end();
+      if (is_shield())
+        shield_end();
+      if (is_charge())
+        charge_end();
+      if (is_berserk())
+        berserk_end();
+      if (is_bloodsuck())
+        bloodsuck_end();
+    }
   private:
     int controller; //range: [0, 3]
     float mp;

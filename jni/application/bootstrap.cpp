@@ -578,6 +578,14 @@ public:
 
 private:
     void set_stage(const int stage){
+      //end the player action before changing stage
+      //for example cudgel_fury
+        for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
+            it != Model_state::get_instance()->get_player_list_ptr()->end();
+            ++it){
+          (*it)->end_action();
+        }
+
         Model_state::get_instance()->clear_without_player();
         if (stage == 1){
             float x = 350;
