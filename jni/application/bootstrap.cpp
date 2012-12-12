@@ -1595,7 +1595,9 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 1), CONFIRM2);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 2), CONFIRM3);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 3), CONFIRM4);
-
+    get_Sound().set_BGM("sfx/bgm");
+    get_Sound().play_BGM();
+    get_Sound().set_BGM_looping(true);
     m_set.start();
   };
 
