@@ -37,6 +37,66 @@ The following things are unsupported:
   4. Anything other than 8 bits per channel
 -->
 <Textures>
+
+<upgrade_bg>
+<filepath>textures/upgrade_bg.png</filepath>
+<tile>0</tile>
+</upgrade_bg>
+
+
+<upgrade_p1>
+<filepath>textures/upgrade_p1.png</filepath>
+<tile>0</tile>
+</upgrade_p1>
+<upgrade_p2>
+<filepath>textures/upgrade_p2.png</filepath>
+<tile>0</tile>
+</upgrade_p2>
+<upgrade_p3>
+<filepath>textures/upgrade_p3.png</filepath>
+<tile>0</tile>
+</upgrade_p3>
+<upgrade_p4>
+<filepath>textures/upgrade_p4.png</filepath>
+<tile>0</tile>
+</upgrade_p4>
+
+<upgrade_wukong0>
+<filepath>textures/upgrade_wukong0.png</filepath>
+<tile>0</tile>
+</upgrade_wukong0>
+<upgrade_wukong1>
+<filepath>textures/upgrade_wukong1.png</filepath>
+<tile>0</tile>
+</upgrade_wukong1>
+
+<upgrade_sanzang0>
+<filepath>textures/upgrade_tangseng0.png</filepath>
+<tile>0</tile>
+</upgrade_sanzang0>
+<upgrade_sanzang1>
+<filepath>textures/upgrade_tangseng1.png</filepath>
+<tile>0</tile>
+</upgrade_sanzang1>
+
+<upgrade_bajie0>
+<filepath>textures/upgrade_bajie0.png</filepath>
+<tile>0</tile>
+</upgrade_bajie0>
+<upgrade_bajie1>
+<filepath>textures/upgrade_bajie1.png</filepath>
+<tile>0</tile>
+</upgrade_bajie1>
+
+<upgrade_shaseng0>
+<filepath>textures/upgrade_shaseng0.png</filepath>
+<tile>0</tile>
+</upgrade_shaseng0>
+<upgrade_shaseng1>
+<filepath>textures/upgrade_shaseng1.png</filepath>
+<tile>0</tile>
+</upgrade_shaseng1>
+
 <start_game>
 <filepath>textures/start_game.png</filepath>
 <tile>0</tile>
@@ -1352,6 +1412,10 @@ The following things are unsupported:
     <tile>0</tile>
   </taunt_effect>
   <!-- attack effects ends-->
+  <story_state_background>
+    <filepath>textures/story_state_background.png</filepath>
+    <tile>0</tile>
+  </story_state_background>
   <!--
   <one>
     <is_sprite>0</is_sprite>

@@ -94,9 +94,10 @@ public:
 
     player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
     player_number = player_list_ptr->size();
-    load_abilities();
+    
     for (int i=0; i < 4; i++) {
       confirmed[i] = false;
+      load_abilities(i);
       /*
       if ((*player_list_ptr)[i]->ptype == SHASENG)
         cursor_pos[i] = kCursor_min;
@@ -106,31 +107,49 @@ public:
       p_confirmed[i] = false;
       p_color[i] = Color();
     }
-
+    m_set.start();
   }
 
 private:
-  void load_abilities() {
+  Chronometer<Time> m_set;
+  void load_abilities(const int controller) {
+    /*
     for (int i=0; i<4; i++) {
       skill_point_tmp[i] = 0;
       attack_tmp[i] = 0;
       defense_tmp[i] = 0;
       hpmp_regen_tmp[i] = 0;
       speed_tmp[i] = 0;
-    }
+    }*/
+
+    skill_point_tmp[controller] = 0;
+    attack_tmp[controller] = 0;
+    defense_tmp[controller] = 0;
+    hpmp_regen_tmp[controller] = 0;
+    speed_tmp[controller] = 0;
     std::vector<Player *> * plist = Model_state::get_instance()->get_player_list_ptr();
     int list_pos = 0;
-    int controller;
-    for (vector<Player *>::iterator it = plist->begin(); it != plist->end(); it++) {
-      controller = Model_state::get_instance()->get_player_pos_in_list(list_pos++);
+    Player * tmp = NULL;
+    for (vector<Player *>::iterator it = plist->begin(); it != plist->end(); it++) 
+      if(controller == Model_state::get_instance()->get_player_pos_in_list(list_pos++))
+        tmp = *it;
+    if(tmp){
+      skill_point_tmp[controller] = tmp->get_skill_point();
+      attack_tmp[controller] = tmp->attack;
+      defense_tmp[controller] = tmp->defense;
+      hpmp_regen_tmp[controller] = tmp->hpmp_regen;
+      speed_tmp[controller] = tmp->speed;
+    }
+      /*
       if (controller != -1) {
           skill_point_tmp[controller] = (*it)->get_skill_point();
           attack_tmp[controller] = (*it)->attack;
           defense_tmp[controller] = (*it)->defense;
           hpmp_regen_tmp[controller] = (*it)->hpmp_regen;
           speed_tmp[controller] = (*it)->speed;
-      }
-    }
+      }*/
+
+    
   }
   void store_abilities() {
     std::vector<Player *> * plist = Model_state::get_instance()->get_player_list_ptr();
@@ -253,7 +272,7 @@ private:
           chosen_num++;
           break;
         case 6: //cancel
-          load_abilities();
+          load_abilities(controller);
           break;
         default:
           break;
@@ -332,65 +351,93 @@ private:
   void render_player_helper(int controller, Player* p_ptr) {
     Zeni::String player_texture;
     Point2f loc;
+    
     float margin = 20.0f;
     switch (controller) {
       case 0:
-        loc = Point2f(margin, margin * 2 + 40.0f);
+        //loc = Point2f(margin, margin * 2 + 40.0f);
+        loc = Point2f(30.f, 70.f);
+        render_image("upgrade_p1",Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
         break;
       case 1:
-        loc = Point2f(margin + 400.0f, margin * 2+ 40.0f);
+        //loc = Point2f(margin + 400.0f, margin * 2+ 40.0f);
+        loc = Point2f(415.f, 70.f);
+        render_image("upgrade_p2",Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
         break;
       case 2:
-        loc = Point2f(margin, margin * 2 + 300.0f);
+        //loc = Point2f(margin, margin * 2 + 300.0f);
+        loc = Point2f(30.f, 335.f);
+        render_image("upgrade_p3",Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
         break;
       default: //case 3:
-        loc = Point2f(margin + 400.0f, margin * 2 + 300.0f);
+        //loc = Point2f(margin + 400.0f, margin * 2 + 300.0f);
+        render_image("upgrade_p4",Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+        loc = Point2f(415.f, 335.f);
         break;
     }
 
-    Point2f size(140.0f, 200.0f);
+    //Point2f size(140.0f, 200.0f);
+    Point2f size(335.f, 195.f);
     switch (p_ptr->get_player_type()) {
       case SANZANG:
-        player_texture = "tripitaka_front0";
+        //player_texture = "tripitaka_front0";
+        player_texture = "upgrade_sanzang";
         break;
       case WUKONG:
-        player_texture = "monkey_king_front0";
+        //player_texture = "monkey_king_front0";
+        player_texture = "upgrade_wukong";
         break;
       case SHASENG:
-        player_texture = "friar_sand_front0";
+        //player_texture = "friar_sand_front0";
+        player_texture = "upgrade_shaseng";
         break;
       case BAJIE:
-        player_texture = "pigsy_front0";
+        //player_texture = "pigsy_front0";
+        player_texture = "upgrade_bajie";
         break;
       default:
         break;
     }
-    render_image(player_texture, loc, loc + size);
+    //if(m_set.seconds()< 0.25f)
+      render_image(player_texture+"0", loc, loc + size);
+    //else if (m_set.seconds() < 0.5f)
+      //render_image(player_texture+"1", loc, loc + size);
+    //else{
+      //m_set.reset();
+      //m_set.start();
+      //render_image(player_texture+"0", loc, loc + size);
+    //}
 
 
     //render status
-    Zeni::Font &fr = get_Fonts()["shop_ft"];
+     
+      Zeni::Font &fr = get_Fonts()["shop_ft"];
     float button_size = fr.get_text_height() * 0.8f;    
-
+ 
     char* str = new char[10];
-    sprintf(str, "%d", controller+1);//speed_lvl);
-    String text_buf = "Player ";
-    text_buf += str;
+    //sprintf(str, "%d", controller+1);//speed_lvl);
+    String text_buf;
+    //= "Player ";
+    /*text_buf += str;
     fr.render_text(text_buf,
                    loc - Point2f(0.0f, 30.0f),
                    get_Colors()["white"],
                    ZENI_LEFT);
-
+                   */
+    //loc += Point2f(150.f, 10.f);
+    Point2f offset = Point2f(150.f, 10.f);
+    //Point2f(140.0f, 40.0f)
     Point2f Bar_loc[7];
-    Bar_loc[0] = loc + Point2f(140.0f, 40.0f) - Point2f(button_size * 1.1f, 2.5f*fr.get_text_height());
-    Bar_loc[1] = loc + Point2f(140.0f, 40.0f);
+    Bar_loc[0] = loc + offset - Point2f(button_size * 1.1f, 2.5f*fr.get_text_height());
+    Bar_loc[1] = loc + offset;
     Bar_loc[2] = Bar_loc[1] + Point2f(0.0f, fr.get_text_height());
     Bar_loc[3] = Bar_loc[2] + Point2f(0.0f, fr.get_text_height());
     Bar_loc[4] = Bar_loc[3] + Point2f(0.0f, fr.get_text_height());
     Bar_loc[5] = Bar_loc[4] + Point2f(0.0f, 2*fr.get_text_height());
     Bar_loc[6] = Bar_loc[5] + Point2f(0.0f, fr.get_text_height());
 
-    if (p_ptr->get_player_type() == SHASENG) {
+    if (p_ptr->get_player_type() == SHASENG) 
+    {
       text_buf = "Switch magic arrow:";
       Zeni::String ice_button_color, fire_button_color;
       //= "white";
@@ -488,28 +535,30 @@ private:
                    get_Colors()["white"],
                    ZENI_LEFT);
 
+    
     fr.render_text("* To continue the game, all players need to confirm",
                    Point2f(200.0f, 560.0f),
                    get_Colors()["white"],
                    ZENI_LEFT);
     int player_list_index = Model_state::get_instance()->get_player_list_index(controller);
-    float Shaseng_indent = (*player_list_ptr)[player_list_index]->ptype == SHASENG ? button_size*1.1f : 0.0f;
+    float Shaseng_indent = (*player_list_ptr)[player_list_index]->ptype == SHASENG ? 0.f:0.f;//button_size*1.1f : 0.0f;
     Point2f highlight_size(200.0f + 2*Shaseng_indent, fr.get_text_height());
     //render_image("highlight", Bar_loc[cursor_pos[player_list_index]] - Point2f(button_size * 1.1f - Shaseng_indent, 0.0f), Bar_loc[cursor_pos[player_list_index]] + highlight_size);
     render_image("highlight", Bar_loc[cursor_pos[controller]] - Point2f(button_size * 1.1f - Shaseng_indent, 0.0f), Bar_loc[cursor_pos[controller]] + highlight_size);
-
+    /*
     Zeni::Font &fr2 = get_Fonts()["shop_title"];
     fr2.render_text("Upgrade Abilities",
                    Point2f(400.0f, 10.0f),
                    get_Colors()["white"],
                    ZENI_CENTER);
-
+                   */
   }
 
   void render() {
     get_Video().set_2d(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
     int list_pos = 0;
     int controller;
+    render_image("upgrade_bg",Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
     for (vector<Player *>::iterator it = player_list_ptr->begin(); it != player_list_ptr->end(); it++) {
       controller = Model_state::get_instance()->get_player_pos_in_list(list_pos++);
       if (controller != -1)
@@ -591,7 +640,7 @@ public:
   }
 
 private:
-  void set_stage(int stage) {
+  void set_stage(int stage_) {
     //end the player action before changing stage
     //for example cudgel_fury
     for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
@@ -612,7 +661,7 @@ private:
     }
     else {
       int prev_stage = Model_state::get_instance()->get_prev_stage();
-      if (stage == 1) {
+      if (stage_ == 1) {
         if (!prev_stage) {
           float x = 660;
           for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
@@ -655,7 +704,7 @@ private:
           }
         }
       }
-      else if (stage == 2){
+      else if (stage_ == 2){
         if (prev_stage == 1) {
           int i = 0;
           for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
@@ -689,7 +738,7 @@ private:
           }
         }
       }
-      else if (stage == 3){
+      else if (stage_ == 3){
         if (prev_stage == 1) {
           int i = 0;
           for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
@@ -734,18 +783,30 @@ private:
       }
     }
 
-    levels[curr_lvl]->init_map(stage);
+    levels[curr_lvl]->init_map(stage_);
     std::vector<Map *> map_list = levels[curr_lvl]->get_map_list();
     for (auto it = map_list.begin(); it != map_list.end(); ++it)
       Model_state::get_instance()->add_map_obj(*it);
     std::vector<Monster*> monster_list = levels[curr_lvl]->get_monster_list();
     for (auto it = monster_list.begin(); it != monster_list.end(); ++it)
       Model_state::get_instance()->add_monster(*it);
-    if (curr_lvl == 0 && stage == 3)
+    if (curr_lvl == 0 && stage_ == 3)
       Model_state::get_instance()->set_prev_stage(0);
     else
-      Model_state::get_instance()->set_prev_stage(stage);
+      Model_state::get_instance()->set_prev_stage(stage_);
     Model_state::get_instance()->set_next_stage(0);
+
+
+    //dialog section
+    if (curr_lvl == 0 && stage_ == 1) {
+      dialog.start(1);
+    } else if (curr_lvl == 0 && stage_ == 3) {
+      dialog.start(2);
+    } else if (curr_lvl == 1 && stage_ == 1) {
+      dialog.start(3);
+    } else if (curr_lvl == 1 && stage_ == 3) {
+      dialog.start(4);
+    }
   }
 
   void set_level(const int level_) {
@@ -757,7 +818,7 @@ private:
     for (auto it = dead_player_list->begin(); it != dead_player_list->end();) {
       it = Model_state::get_instance()->player_rise_without_setting_pos(*it);
     }
-    set_stage(stage);
+    set_stage(Model_state::get_instance()->get_prev_stage());
   }
     
   void begin_dialog(Dialog_box* dialog_ptr, int stage) {
@@ -993,7 +1054,9 @@ private:
       }
     }
   }
-
+  void victory_begin() {
+    dialog.start(5);
+  }
   void perform_logic() {
     const float time_passed = m_set.seconds();
     float processing_time = time_passed - m_time_passed;
@@ -1004,6 +1067,13 @@ private:
     }
     if (!Model_state::get_instance()->get_player_list_ptr()->empty() && show_die) {
         show_die = false;
+    }
+    //judge victory
+    if (curr_lvl == 1 &&
+        stage == 4 &&
+        !Model_state::get_instance()->get_player_list_ptr()->empty() &&
+        Model_state::get_instance()->get_monster_list_ptr()->empty()) {
+      dialog.start(5);
     }
 
     float time_step = 0.005f;
@@ -1302,6 +1372,90 @@ private:
   }
 };
 
+class Story_State : public Gamestate_II {
+  Story_State(const Story_State &);
+  Story_State operator=(const Story_State &);
+
+public:
+  Story_State()
+    : dialog_counter(0),
+      dialog(&fake_time)
+  {
+    set_pausable(true);
+
+    set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), MENU);
+    //p1
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 0), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 0), A1);
+    //p2
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 1), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 1), A2);
+    //p3
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 2), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 2), A3);
+    //p4
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 3), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_A, 3), A4);
+
+    dialog.start(0);
+  }
+
+private:
+  int dialog_counter;
+  Dialog_box dialog;
+  Chronometer<Time> fake_time;
+  void on_key(const SDL_KeyboardEvent &event) {
+    if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED)
+      get_Game().push_state(new Popup_Menu_State);
+  }
+
+  void on_push() {
+    //get_Window().mouse_grab(true);
+    get_Window().mouse_hide(true);
+    get_Game().joy_mouse.enabled = false;
+  }
+
+  void on_pop() {
+    //get_Window().mouse_grab(false);
+    get_Window().mouse_hide(false);
+    get_Game().joy_mouse.enabled = true;
+  }
+
+  void on_cover() {
+      get_Window().mouse_hide(false);
+      get_Game().joy_mouse.enabled = true;
+  }
+
+  void on_uncover() {
+      get_Window().mouse_hide(true);
+      get_Game().joy_mouse.enabled = false;
+  }
+
+  void on_event(const Zeni_Input_ID &, const float &confidence, const int &action) {
+    if (confidence >= 0.99f)
+    switch(action) {
+      case A1:
+      case A2:
+      case A3:
+      case A4:
+        dialog.proceed();
+        dialog_counter++;
+        if (dialog_counter > dialog_max[0]-1) {
+          get_Game().pop_state();
+          get_Game().push_state(new Play_State());
+        }
+        break;
+    }
+  }
+
+  void render() {
+    get_Video().set_2d(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
+    if (dialog_counter > 2)
+      Zeni::render_image("story_state_background", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+    dialog.render();
+  }
+};
+
 class Preparation_State :public Gamestate_II { //public Widget_Gamestate,
   Preparation_State(const Preparation_State &);
   Preparation_State operator=(const Preparation_State &);
@@ -1536,7 +1690,8 @@ private:
         else if(chosen_num == player_count){
           get_Game().pop_state();
           Model_state::get_instance()->set_initial_player_num(player_count);
-          get_Game().push_state(new Play_State());
+          //get_Game().push_state(new Play_State());
+          get_Game().push_state(new Story_State());
         }
         break;
       case JOIN2:
@@ -1548,7 +1703,8 @@ private:
         else if(chosen_num == player_count){
           get_Game().pop_state();
           Model_state::get_instance()->set_initial_player_num(player_count);
-          get_Game().push_state(new Play_State());
+          //get_Game().push_state(new Play_State());
+          get_Game().push_state(new Story_State());
         }
         break;
       case JOIN3:
@@ -1560,7 +1716,8 @@ private:
         else if(chosen_num == player_count){
           get_Game().pop_state();
           Model_state::get_instance()->set_initial_player_num(player_count);
-          get_Game().push_state(new Play_State());
+          //get_Game().push_state(new Play_State());
+          get_Game().push_state(new Story_State());
         }
         break;
       case JOIN4:
@@ -1572,7 +1729,8 @@ private:
         else if(chosen_num == player_count){
           get_Game().pop_state();
           Model_state::get_instance()->set_initial_player_num(player_count);
-          get_Game().push_state(new Play_State());
+          //get_Game().push_state(new Play_State());
+          get_Game().push_state(new Story_State());
         }
         break;
       default:
@@ -1612,9 +1770,9 @@ private:
   void render() {
     //Widget_Gamestate::render();
     get_Video().set_2d(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
-    if (m_set.seconds() < 0.3f)
+    if (m_set.seconds() < 0.25f)
       render_image("selection0", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
-    else if (m_set.seconds() < 0.6f)
+    else if (m_set.seconds() < 0.5f)
       render_image("selection1", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
     else{
       render_image("selection0", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));

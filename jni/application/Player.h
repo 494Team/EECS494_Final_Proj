@@ -33,7 +33,7 @@ namespace Flame {
   const float kPlayer_attack_strengh = 500.0f;
   //SANZANG
   const float kDisintegrate_CD = 0.0f;
-  const float kDisintegrate_dam = 5.0f;
+  const float kDisintegrate_dam = 5000.f;//5.0f;
   //const float kDisintegrate_mp_initial_cost = 2.0f;
   const float kDisintegrate_mp_cost = 2.0f;
   const float kHealing_CD = 2.0f;
@@ -223,6 +223,8 @@ namespace Flame {
         berserk_end();
       if (is_bloodsuck())
         bloodsuck_end();
+      if (ctrl.l)
+        ctrl.l = false;
     }
   private:
     int controller; //range: [0, 3]

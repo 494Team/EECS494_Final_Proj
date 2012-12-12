@@ -150,6 +150,10 @@ void Player::update(float time) {
   if (!is_charging() && !is_hitback()) {
     set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
   }
+
+  if (is_hitback()) {
+    end_action();
+  }
   
   float current_time = game_time->seconds();
   float passed_time = current_time - last_regen;
