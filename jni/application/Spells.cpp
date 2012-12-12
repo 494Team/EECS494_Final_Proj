@@ -95,7 +95,7 @@ namespace Flame {
     if (target_ptr) {
       length = (target_ptr->get_current_location() - player_ptr->get_current_location()).magnitude();
       for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
-        if (((*it)->get_current_location() - player_ptr->get_current_location()).magnitude() - length < 2.f)
+        if (abs(((*it)->get_current_location() - player_ptr->get_current_location()).magnitude() - length) < 2.f)
           (*it)->get_hit(damage, vector<attack_effect>(), player_ptr);
     }
     else
