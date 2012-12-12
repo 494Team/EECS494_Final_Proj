@@ -1754,7 +1754,6 @@ class Pre_Play_State : public Widget_Gamestate {
 
 
       void render(){
-          Gamestate_Base::render();
           get_Video().set_2d(std::make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
           if(m_set.seconds()<0.5f)
             render_image("title0", Point2f(0.f, 0.0f), Point2f(1024.0f, 1024.0f));
