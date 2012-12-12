@@ -5,7 +5,7 @@
 #include "Sim_object.h"
 
 namespace Flame {
-  const int dialog_max[6] = {3, 5, 2, 1, 5, 1};
+  const int dialog_max[6] = {6, 5, 2, 1, 5, 1};
   const Zeni::String kBoss_name[2] = {"Red Boy", "Bull King"};
 
   class Dialog_box{
@@ -65,16 +65,28 @@ namespace Flame {
       if (episode == 0) {
         switch (dialog_n) {
           case 0:
+            name = "Background";
+            text = "Dismayed that \"the land of the South knows only greed, \nhedonism, promiscuity, and sins\", the Buddha instructs \nTang China to find someone to take the Buddhist sutras \nof \"transcendence and persuasion for good will\" back \nto the East";
+            break;
+          case 1:
+            name = "Background";
+            text = "Sanzang and his three disciples Wukong, Bajie and \nShaseng set out to bring back Buddhist scriptures \nfrom India, but encounters various evils along the";
+            break;
+          case 2:
+            name = "Background";
+            text = "way. And here is an episode of their adventure story \nwhen they try to get through the impassably flaming \nmountains.";
+            break;
+          case 3:
             name = "Bajie";
             text = "It is so hot here!";
             break;
-          case 1:
+          case 4:
             name = "Sanzang The Master";
-            text = "The flame with evil power is blocking our way. The fire cannot be put out by water! How can we have to get through this mountain? We have to do it.";
+            text = "The flame with evil power is blocking our way. The fire \ncannot be put out by water! How can we have to \nget through this mountain? We have to do it.";
             break;
-          case 2:
+          case 5:
             name = "Bajie";
-            text = "I know the Bull King has a magical palm leaf fan which can put out this fire. He's my friend and I think he would agree to borrow it to us. Let's find him!";
+            text = "I know the Bull King has a magical palm leaf fan which \ncan put out this fire. He's my friend and I think he would \nagree to borrow it to us. Let's find him!";
             break;
           default:
             break;
@@ -86,7 +98,7 @@ namespace Flame {
             break;
           case 1:
             name = "Sanzang The Master";
-            text = "We came for borrowing the palm leaf fan from your father, the Bull King. Wukong is his friend.";
+            text = "We came for borrowing the palm leaf fan from your \nfather, the Bull King. Wukong is his friend.";
             break;
           case 2:
             name = "Red Boy";
@@ -98,7 +110,7 @@ namespace Flame {
             break;
           case 4:
             name = "Red Boy";
-            text = "I'll believe you if you come to find me in the third stage. My father's friends must be able to defeat enemies in the first and second stage.";
+            text = "I'll believe you if you come to find me in the third stage. \nMy father's friends must be able to defeat enemies in \nthe first and second stages.";
             break;
           default:
             break;
@@ -111,7 +123,7 @@ namespace Flame {
             break;
           case 1:
             name = "Red Boy";
-            text = "Wait. Are you Sanzang? I heard that if anyone eat you, he would live forever. You are dying and I'm gonna be immortal!";
+            text = "Wait. Are you Sanzang? I heard that if anyone eat you, \nhe would live forever. You are dying and I'm gonna be \nimmortal!";
             break;
           default:
             break;
@@ -133,7 +145,7 @@ namespace Flame {
             break;
           case 1:
             name = "Bull King";
-            text = "Wukong, you were my friend but you betrayed me and became a Buddhist. My son Red Boy just told me that you are trying to steal my treasure. How dare you!";
+            text = "Wukong, you were my friend but you betrayed me and \nbecame a Buddhist. My son Red Boy just told me that \nyou are trying to steal my treasure. How dare you!";
             break;
           case 2:
             name = "Wukong";
@@ -141,7 +153,7 @@ namespace Flame {
             break;
           case 3:
             name = "Bull King";
-            text = "Don't! I can only forgive you if you let me eat Sanzang and become immortal.";
+            text = "Don't! I can only forgive you if you let me eat Sanzang \nand become immortal.";
             break;
           case 4:
             name = "Wukong";
@@ -153,12 +165,14 @@ namespace Flame {
       } else if (episode == 5) {
         switch (dialog_n) {
           case 0:
-            text = "I admit I were tempted by Sanzang's meat. Here's the magical palm leaf fan. Everyone is dreaming about being immortal. Be careful.";
+            text = "I admit I were tempted by Sanzang's meat. Here's the \nmagical palm leaf fan. Everyone is dreaming about \nbeing immortal. Be careful.";
             break;
           default:
             break;
         }
       }
+      if (name != "Background")
+        name += ":";
 
       fr.render_text(name, name_loc, get_Colors()["title_text"], ZENI_LEFT);
       fr.render_text(text, text_loc, get_Colors()["title_text"], ZENI_LEFT);

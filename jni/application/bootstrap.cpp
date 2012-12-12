@@ -1450,7 +1450,8 @@ private:
 
   void render() {
     get_Video().set_2d(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
-    Zeni::render_image("story_state_background", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+    if (dialog_counter > 2)
+      Zeni::render_image("story_state_background", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
     dialog.render();
   }
 };
