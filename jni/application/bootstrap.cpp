@@ -106,10 +106,11 @@ public:
       p_confirmed[i] = false;
       p_color[i] = Color();
     }
-
+    m_set.start();
   }
 
 private:
+  Chronometer<Time> m_set;
   void load_abilities() {
     for (int i=0; i<4; i++) {
       skill_point_tmp[i] = 0;
@@ -332,65 +333,93 @@ private:
   void render_player_helper(int controller, Player* p_ptr) {
     Zeni::String player_texture;
     Point2f loc;
+    
     float margin = 20.0f;
     switch (controller) {
       case 0:
-        loc = Point2f(margin, margin * 2 + 40.0f);
+        //loc = Point2f(margin, margin * 2 + 40.0f);
+        loc = Point2f(30.f, 70.f);
+        render_image("upgrade_p1",Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
         break;
       case 1:
-        loc = Point2f(margin + 400.0f, margin * 2+ 40.0f);
+        //loc = Point2f(margin + 400.0f, margin * 2+ 40.0f);
+        loc = Point2f(415.f, 70.f);
+        render_image("upgrade_p2",Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
         break;
       case 2:
-        loc = Point2f(margin, margin * 2 + 300.0f);
+        //loc = Point2f(margin, margin * 2 + 300.0f);
+        loc = Point2f(30.f, 335.f);
+        render_image("upgrade_p3",Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
         break;
       default: //case 3:
-        loc = Point2f(margin + 400.0f, margin * 2 + 300.0f);
+        //loc = Point2f(margin + 400.0f, margin * 2 + 300.0f);
+        render_image("upgrade_p4",Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+        loc = Point2f(415.f, 335.f);
         break;
     }
 
-    Point2f size(140.0f, 200.0f);
+    //Point2f size(140.0f, 200.0f);
+    Point2f size(335.f, 195.f);
     switch (p_ptr->get_player_type()) {
       case SANZANG:
-        player_texture = "tripitaka_front0";
+        //player_texture = "tripitaka_front0";
+        player_texture = "upgrade_sanzang";
         break;
       case WUKONG:
-        player_texture = "monkey_king_front0";
+        //player_texture = "monkey_king_front0";
+        player_texture = "upgrade_wukong";
         break;
       case SHASENG:
-        player_texture = "friar_sand_front0";
+        //player_texture = "friar_sand_front0";
+        player_texture = "upgrade_shaseng";
         break;
       case BAJIE:
-        player_texture = "pigsy_front0";
+        //player_texture = "pigsy_front0";
+        player_texture = "upgrade_bajie";
         break;
       default:
         break;
     }
-    render_image(player_texture, loc, loc + size);
+    //if(m_set.seconds()< 0.25f)
+      render_image(player_texture+"0", loc, loc + size);
+    //else if (m_set.seconds() < 0.5f)
+      //render_image(player_texture+"1", loc, loc + size);
+    //else{
+      //m_set.reset();
+      //m_set.start();
+      //render_image(player_texture+"0", loc, loc + size);
+    //}
 
 
     //render status
-    Zeni::Font &fr = get_Fonts()["shop_ft"];
+     
+      Zeni::Font &fr = get_Fonts()["shop_ft"];
     float button_size = fr.get_text_height() * 0.8f;    
-
+ 
     char* str = new char[10];
-    sprintf(str, "%d", controller+1);//speed_lvl);
-    String text_buf = "Player ";
-    text_buf += str;
+    //sprintf(str, "%d", controller+1);//speed_lvl);
+    String text_buf;
+    //= "Player ";
+    /*text_buf += str;
     fr.render_text(text_buf,
                    loc - Point2f(0.0f, 30.0f),
                    get_Colors()["white"],
                    ZENI_LEFT);
-
+                   */
+    //loc += Point2f(150.f, 10.f);
+    Point2f offset = Point2f(150.f, 10.f);
+    //Point2f(140.0f, 40.0f)
     Point2f Bar_loc[7];
-    Bar_loc[0] = loc + Point2f(140.0f, 40.0f) - Point2f(button_size * 1.1f, 2.5f*fr.get_text_height());
-    Bar_loc[1] = loc + Point2f(140.0f, 40.0f);
+    Bar_loc[0] = loc + offset - Point2f(button_size * 1.1f, 2.5f*fr.get_text_height());
+    Bar_loc[1] = loc + offset;
     Bar_loc[2] = Bar_loc[1] + Point2f(0.0f, fr.get_text_height());
     Bar_loc[3] = Bar_loc[2] + Point2f(0.0f, fr.get_text_height());
     Bar_loc[4] = Bar_loc[3] + Point2f(0.0f, fr.get_text_height());
     Bar_loc[5] = Bar_loc[4] + Point2f(0.0f, 2*fr.get_text_height());
     Bar_loc[6] = Bar_loc[5] + Point2f(0.0f, fr.get_text_height());
 
-    if (p_ptr->get_player_type() == SHASENG) {
+    if (p_ptr->get_player_type() == SHASENG) 
+    {
       text_buf = "Switch magic arrow:";
       Zeni::String ice_button_color, fire_button_color;
       //= "white";
@@ -488,28 +517,30 @@ private:
                    get_Colors()["white"],
                    ZENI_LEFT);
 
+    
     fr.render_text("* To continue the game, all players need to confirm",
                    Point2f(200.0f, 560.0f),
                    get_Colors()["white"],
                    ZENI_LEFT);
     int player_list_index = Model_state::get_instance()->get_player_list_index(controller);
-    float Shaseng_indent = (*player_list_ptr)[player_list_index]->ptype == SHASENG ? button_size*1.1f : 0.0f;
+    float Shaseng_indent = (*player_list_ptr)[player_list_index]->ptype == SHASENG ? 0.f:0.f;//button_size*1.1f : 0.0f;
     Point2f highlight_size(200.0f + 2*Shaseng_indent, fr.get_text_height());
     //render_image("highlight", Bar_loc[cursor_pos[player_list_index]] - Point2f(button_size * 1.1f - Shaseng_indent, 0.0f), Bar_loc[cursor_pos[player_list_index]] + highlight_size);
     render_image("highlight", Bar_loc[cursor_pos[controller]] - Point2f(button_size * 1.1f - Shaseng_indent, 0.0f), Bar_loc[cursor_pos[controller]] + highlight_size);
-
+    /*
     Zeni::Font &fr2 = get_Fonts()["shop_title"];
     fr2.render_text("Upgrade Abilities",
                    Point2f(400.0f, 10.0f),
                    get_Colors()["white"],
                    ZENI_CENTER);
-
+                   */
   }
 
   void render() {
     get_Video().set_2d(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
     int list_pos = 0;
     int controller;
+    render_image("upgrade_bg",Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
     for (vector<Player *>::iterator it = player_list_ptr->begin(); it != player_list_ptr->end(); it++) {
       controller = Model_state::get_instance()->get_player_pos_in_list(list_pos++);
       if (controller != -1)
@@ -1720,9 +1751,9 @@ private:
   void render() {
     //Widget_Gamestate::render();
     get_Video().set_2d(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
-    if (m_set.seconds() < 0.3f)
+    if (m_set.seconds() < 0.25f)
       render_image("selection0", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
-    else if (m_set.seconds() < 0.6f)
+    else if (m_set.seconds() < 0.5f)
       render_image("selection1", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
     else{
       render_image("selection0", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
