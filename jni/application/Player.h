@@ -37,7 +37,7 @@ namespace Flame {
   //const float kDisintegrate_mp_initial_cost = 2.0f;
   const float kDisintegrate_mp_cost = 2.0f;
   const float kHealing_CD = 2.0f;
-  const float kHealing_amount = -1000.0f; //500.0f;
+  const float kHealing_amount = 500.f;//-1000.0f; //500.0f;
   const float kHealing_mp_cost = 300.0f;
   const float kDing_CD = 8.0f;
   const float kDing_dam = 0.5f;

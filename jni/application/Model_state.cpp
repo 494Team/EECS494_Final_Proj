@@ -57,11 +57,25 @@ namespace Flame {
 
     clear_all();
     timer = timer_;
+    int controller_count = 0;
+    int player_count = 0;
     for (std::vector<kPlayer_type>::iterator it = character_list.begin(); it != character_list.end(); it++) {
-      if ((*it) != NONE)
+      if ((*it) != NONE){
         player_list.push_back(new Player(timer, kHp_max, 400.f, 16.f, Point2f(300.f, 3000.f), *it));
+        controller_alive[controller_count] = true;
+        player_pos_in_list[player_count] = controller_count;
+        player_list[player_count]->set_controller(controller_count);
+        ++player_count;
+        cerr<<controller_count<<" !NONE\n";
+      }
+      else{
+        controller_alive[controller_count] = false;
+        player_pos_in_list[controller_count] = -1;
+        cerr<<controller_count<<" NONE\n";
+      }
+      ++controller_count;
     }
-
+    /*
     for (int i=0; i<4; i++) {
       if (i < player_list.size()) {
         controller_alive[i] = true;
@@ -72,6 +86,7 @@ namespace Flame {
         player_pos_in_list[i] = -1;
       }
     }
+    */
     /*
     //for (std::vector<kPlayer_type>::iterator it = character_list.begin(); it != character_list.end(); it++) {
       player_list.push_back(new Player(timer, 100.f, 400.f, 16.f, Point2f(300.f, 3000.f), WUKONG));
@@ -260,6 +275,7 @@ namespace Flame {
         render_list.erase(r_it);
     }
     remove_list.clear();
+    cerr<<player_list.size()<<endl;
   }
 
   void Model_state::render()

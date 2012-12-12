@@ -1181,7 +1181,7 @@ private:
 
   void save_chosen_characters() {
     std::vector<kPlayer_type> * char_list = Model_state::get_instance()->get_character_list_ptr();
-    for (int i=0; i < chosen_num; i++) {
+    for (int i=0; i < 4; i++) {
       char_list->push_back(chosen_char[i]);
     }
   }
