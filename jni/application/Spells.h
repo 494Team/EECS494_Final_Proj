@@ -89,6 +89,7 @@ namespace Flame {
     bool is_player;
     bool heal_self;
     Zeni::Vector2f orientation;
+    Zeni::Sound_Source *hit, *miss;
   };
 
   class Get_hit : public Resizable_spell {
@@ -184,6 +185,7 @@ namespace Flame {
   private:
     Player * player_ptr;
     float damage;
+    Zeni::Sound_Source * bow;
   };
 
   class Magic_arrow_ice : public Moving_spell_rectangle {

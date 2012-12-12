@@ -78,6 +78,7 @@ Player::Player(
   set_moving(true);
   set_orientation(Vector2f());
   monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
+
 }
 
 void Player::static_move(float time, bool force_move) {

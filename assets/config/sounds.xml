@@ -25,17 +25,30 @@ HOWTO:  To convert between types, or to downmix to mono,
         (4) Go to File->Export As Ogg Vorbis
 -->
 <Sounds>
-  <hello_world>
-    <filepath>sfx/104469__dkmedic__world</filepath>
-  </hello_world>
-  <bgm>
-    <filepath>sfx/bgm</filepath>
-  </bgm>
+
+<hello_world>
+<filepath>sfx/104469__dkmedic__world</filepath>
+</hello_world>
+  
+<bgm>
+<filepath>sfx/bgm</filepath>
+</bgm>
+
 <sword_hit>
+
 <filepath>sfx/sword_hit</filepath>
+
 </sword_hit>
 <sword_miss>
+
 <filepath>sfx/sword_miss</filepath>
+
 </sword_miss>
+
+<bow>
+
+<filepath>sfx/bow</filepath>
+
+</bow>
 
 </Sounds>

@@ -328,6 +328,7 @@ namespace Flame {
     //relative location;
     Zeni::Point2f rel_loc;
     float size;
+
   };
 }
 

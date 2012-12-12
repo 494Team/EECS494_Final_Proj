@@ -24,14 +24,20 @@ namespace Flame {
     is_player(is_player_),
     heal_self(heal_self_),
     orientation(orientation_)
-    {}
+    {  
+      hit = new Sound_Source(get_Sounds()["sword_hit"]);
+    miss = new Sound_Source(get_Sounds()["sword_miss"]);
+    }
 
   void Attack_spell::update(float)
   {
+    bool is_hit = false;
     if (is_player) {
       vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
       for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
         if (body.intersect((*it)->get_body())) {
+          hit->play();
+          is_hit = true;
           vector<attack_effect> effects;
           effects.push_back(HITBACK);
           (*it)->get_hit(attack_strength, effects, player_ptr, orientation);
@@ -39,6 +45,8 @@ namespace Flame {
             player_ptr->dec_health(-.5f * attack_strength);
           Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
         }
+      if(!is_hit)
+        miss->play();
     }
     else {
       vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
@@ -290,10 +298,14 @@ namespace Flame {
                            kArrow_life_time),
     player_ptr(player_ptr_),
     damage(damage_)
-    {}
+    {
+      bow = new Sound_Source(get_Sounds()["bow"]);
+      bow->play();
+    }
 
   void Arrow_attack::update(float time)
   {
+    
     Moving_spell_rectangle::update(time);
     if (is_active()) {
       vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
