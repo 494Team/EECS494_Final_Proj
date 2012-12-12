@@ -11,7 +11,7 @@ Redboy::Redboy(const Zeni::Point2f &location_)
          location_),
   damage(REDBOY_DAMAGE),
   attack_radius(REDBOY_ATTACK_RADIUS)
-{play_sound("dark_laugh");}
+{}
 
 void Redboy::attack() {
   float dist = (get_location() - target->get_location()).magnitude()
@@ -28,6 +28,9 @@ void Redboy::attack() {
 
 // fire charge
 void Redboy::skill1() {
+  Random rd;
+  if(rd.rand() % 2 == 0)
+    play_sound("dark_laugh");
   int total_p_num = Model_state::get_instance()->get_player_list_ptr()->size();
   int player_num = randomer.rand_lt(total_p_num);
   if (total_p_num > 1) {
@@ -49,6 +52,9 @@ void Redboy::skill1() {
 
 // ring of fire : 8 fire balls
 void Redboy::skill2() {
+  Random rd;
+  if(rd.rand() % 2 == 0)
+    play_sound("dark_laugh");
   play_sound("fireball");
   int num_fire_balls = 8;
   float theta = Zeni::Global::pi / 4.0f;
@@ -62,6 +68,9 @@ void Redboy::skill2() {
 
 // fire spikes
 void Redboy::skill3() {
+  Random rd;
+  if(rd.rand() % 2 == 0)
+    play_sound("dark_laugh");
   int total_p_num = Model_state::get_instance()->get_player_list_ptr()->size();
   int player_num = randomer.rand_lt(total_p_num);
   Model_state::get_instance()->add_spell(new Hell_spikes(players[player_num]->get_location()));

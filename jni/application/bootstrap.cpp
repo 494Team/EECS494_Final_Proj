@@ -458,13 +458,17 @@ private:
     Color filter;
     Color disable_button = Color(1.0f, 0.5f, 0.5f, 0.5f);
     filter = cursor_pos[controller] == 1 ? Color() : disable_button;
-    render_image("plus_button", Bar_loc[1] - Point2f(button_size * 1.1f, 0.0f), Bar_loc[1] + Point2f(-button_size*0.1f, button_size), false, filter); 
+    if (skill_point_tmp[controller]!=0)
+      render_image("plus_button", Bar_loc[1] - Point2f(button_size * 1.1f, 0.0f), Bar_loc[1] + Point2f(-button_size*0.1f, button_size), false, filter); 
     filter = cursor_pos[controller] == 2 ? Color() : disable_button;
-    render_image("plus_button", Bar_loc[2] - Point2f(button_size * 1.1f, 0.0f), Bar_loc[2] + Point2f(-button_size*0.1f, button_size), false, filter);
+    if (skill_point_tmp[controller]!=0)
+      render_image("plus_button", Bar_loc[2] - Point2f(button_size * 1.1f, 0.0f), Bar_loc[2] + Point2f(-button_size*0.1f, button_size), false, filter);
     filter = cursor_pos[controller] == 3 ? Color() : disable_button;
-    render_image("plus_button", Bar_loc[3] - Point2f(button_size * 1.1f, 0.0f), Bar_loc[3] + Point2f(-button_size*0.1f, button_size), false, filter); 
+    if (skill_point_tmp[controller]!=0)
+      render_image("plus_button", Bar_loc[3] - Point2f(button_size * 1.1f, 0.0f), Bar_loc[3] + Point2f(-button_size*0.1f, button_size), false, filter); 
     filter = cursor_pos[controller] == 4 ? Color() : disable_button;
-    render_image("plus_button", Bar_loc[4] - Point2f(button_size * 1.1f, 0.0f), Bar_loc[4] + Point2f(-button_size*0.1f, button_size), false, filter); 
+    if (skill_point_tmp[controller]!=0)
+      render_image("plus_button", Bar_loc[4] - Point2f(button_size * 1.1f, 0.0f), Bar_loc[4] + Point2f(-button_size*0.1f, button_size), false, filter); 
 
     sprintf(str, "%d", skill_point_tmp[controller]);//speed_lvl);
     text_buf = "Upgrade points: ";
@@ -583,7 +587,6 @@ public:
     //!!! test
     //dialog.start(stage);
     //begin_dialog(&dialog, stage);
-
     m_set.start();
   }
 
@@ -1122,12 +1125,12 @@ private:
 
     CDbar_loc += Point2f(kCDbar_length + 5.0f, 0.0f);
     int upgrade_point = p_ptr->get_skill_point();
-    Color filter = upgrade_point > 0 ? Color() : Color(1.0f, 0.1f, 0.1f, 0.1f);
-    Zeni::render_image("upgrade_sign",
-                        CDbar_loc,
-                        CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length),
-                        false,
-                        filter);
+    //Color filter = upgrade_point > 0 ? Color() : Color(1.0f, 0.1f, 0.1f, 0.1f);
+    if(upgrade_point > 0)
+      Zeni::render_image("upgrade_sign",
+                          loc+Point2f(head_size.x+30.f, 10.f),
+                          loc+Point2f(head_size.x+30.f, 10.f)+Zeni::Vector2f(kCDbar_length, kCDbar_length)
+                        );
 
 //    vr.render(hpbar);
   //  vr.render(mpbar);
@@ -1173,7 +1176,8 @@ private:
     Model_state::get_instance()->render();
 
     /* render top panel */
-    Zeni::Colors &cr = Zeni::get_Colors();
+    
+    Zeni::Colors &cr = Zeni::get_Colors();/*
     const Zeni::String kToppanel_color = "white_light";
     Zeni::Vertex2f_Color p00(Zeni::Point2f(0.0f, 0.0f), cr[kToppanel_color]);
     Zeni::Vertex2f_Color p01(Zeni::Point2f(0.0f, 90.0f), cr[kToppanel_color]);
@@ -1181,7 +1185,7 @@ private:
     Zeni::Vertex2f_Color p03(Zeni::Point2f(800.0f, 0.0f), cr[kToppanel_color]);
     Zeni::Quadrilateral<Zeni::Vertex2f_Color> toppanel(p00, p01, p02, p03);
     vr.render(toppanel);
-
+    */
     /* render the PLAYER STATUS */
     std::vector<Player *> * plist = Model_state::get_instance()->get_player_list_ptr();
     int list_pos = 0;
