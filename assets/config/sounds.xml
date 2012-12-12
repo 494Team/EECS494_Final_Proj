@@ -58,6 +58,20 @@ HOWTO:  To convert between types, or to downmix to mono,
 
 </bloodsuck>
 
+<freeze>
+
+<filepath>sfx/glass_breaking</filepath>
+
+</freeze>
+
+
+<whip>
+
+<filepath>sfx/whip</filepath>
+
+</whip>
+
+
 <flame_arrow>
 
 <filepath>sfx/flame_arrow</filepath>
@@ -67,6 +81,10 @@ HOWTO:  To convert between types, or to downmix to mono,
 <laser>
 <filepath>sfx/laser</filepath>
 </laser>
+
+<thunder>
+<filepath>sfx/thunder</filepath>
+</thunder>
 
 <fire_place>
 

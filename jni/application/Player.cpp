@@ -547,6 +547,7 @@ void Player::charge_update(float time) {
   // check if any monster is caught by charge
   for (std::vector<Monster *>::iterator it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it) {
     if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
+      play_sound("whip");
       if (charge_no_hit_before) {
         set_speed(get_current_speed() * 0.5f);
         charge_no_hit_before = false;

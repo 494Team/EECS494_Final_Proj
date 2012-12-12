@@ -193,7 +193,7 @@ namespace Flame {
     damage(damage_)
   {monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
   a = new Sound_Source(get_Sounds()["cudgel_fury"]);
-  b = new Sound_Source(get_Sounds()["cudgel_fury_hit"]);
+  b = new Sound_Source(get_Sounds()["sword_hit"]);
   a->set_time(kCudgelfury_last);
   a->play();
   }
@@ -221,7 +221,7 @@ namespace Flame {
           vector<attack_effect> effects;
           //effects.push_back(HITBACK);
           (*it)->get_hit(damage, effects, player_ptr);
-          if(!b->is_playing())
+          //if(!b->is_playing())
             b->play();
           //disable_spell();
           //break;
@@ -341,7 +341,7 @@ namespace Flame {
                            kMagic_arrow_speed, kMagic_arrow_life_time),
     player_ptr(player_ptr_),
     damage(damage_)
-  {}
+  {play_sound("flame_arrow");}
 
   void Magic_arrow_ice::update(float time)
   {
@@ -355,6 +355,7 @@ namespace Flame {
           Magic_arrow_ice_effect effect(get_center_location());
           Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
           disable_spell();
+          play_sound("freeze");
           break;
         }
     }
@@ -413,9 +414,7 @@ namespace Flame {
     player_ptr(player_ptr_),
     timer(0.f)
   {
-    a = new Sound_Source(get_Sounds()["fire_place"]);
-    a->set_looping("true");
-    a->play();
+    play_sound("fire_place");
     }
 
   void Magic_arrow_fire_effect::update(float time)
@@ -513,8 +512,10 @@ namespace Flame {
                                               player_ptr,
                                               damage);
           Model_state::get_instance()->add_spell(new_spell);
+          
         }
         timer = 3.f;
+        play_sound("thunder");
         if (!--remain_times)
           disable_spell();
         break;
