@@ -176,6 +176,7 @@ void Level_2::init_map(int stage)
     map_list.push_back(new Map_brick(Point2f(3240.0f, 4800.0f), Vector2f(1560.0f, 960.0f), 40.0f, 40.0f, "rock"));
     map_list.push_back(new Map_brick(Point2f(3240.0f, 3240.0f), Vector2f(1320.0f, 1320.0f), 40.0f, 40.0f, "rock"));
  
+<<<<<<< HEAD
     map_list.push_back(new Map_brick(Point2f(-40.0f, -40.0f), Vector2f(40.0f, 6080.0f), 40.0f, 40.0f, "rock"));
     map_list.push_back(new Map_brick(Point2f(6000.0f, -40.0f), Vector2f(40.0f, 6080.0f), 40.0f, 40.0f, "rock"));
     map_list.push_back(new Map_brick(Point2f(0.0f, -40.0f), Vector2f(6000.0f, 40.0f), 40.0f, 40.0f, "rock"));

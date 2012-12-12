@@ -1,3 +1,4 @@
+#include <sstream>
 #include "Bullking.h"
 #include "zenilib.h"
 
@@ -12,8 +13,8 @@ Bullking::Bullking(const Zeni::Point2f &location_)
   damage(BULLKING_DAMAGE),
   attack_radius(BULLKING_ATTACK_RADIUS)
 {
-  room_ul = Zeni::Point2f(0.0f, 2600.0f);
-  room_lr = Zeni::Point2f(400.0f, 3000.0f);
+  room_ul = Zeni::Point2f(0.0f, 0.0f);
+  room_lr = Zeni::Point2f(600.0f, 600.0f);
 }
 
 void Bullking::attack() {
@@ -34,8 +35,10 @@ void Bullking::skill1() {
   bool is_collision = true;
   Helldoor *new_helldoor;
   while (is_collision) {
-    //Zeni::Point2f helldoor_pos(randomer.frand_lte() * 800.0f - 400.0f, randomer.frand_lte() * 800.0f - 400.0f);
-    Zeni::Point2f helldoor_pos(300, 3000);
+    Zeni::Point2f helldoor_pos(
+      randomer.frand_lte() * (room_lr.x - room_ul.x - 100.0f) + 50.0f, 
+      randomer.frand_lte() * (room_lr.y - room_ul.y - 100.0f) + 50.0f
+    );
     new_helldoor = new Helldoor(helldoor_pos);
     if (Model_state::get_instance()->can_monster_move(new_helldoor->get_body())) {
       is_collision = false;
@@ -54,6 +57,8 @@ void Bullking::skill2() {
 void Bullking::skill3() {
   set_invincible(true);
   explosion_last_new_time = get_current_time();
+  explosion_last_render_time = get_current_time();
+  explosion_last_render_suffix = 0;
 }
 
 void Bullking::update(float time) {
@@ -184,8 +189,19 @@ void Bullking::render() {
     case SKILL2:
       Zeni::render_image("bullking_casting1", ul, lr);
       break;
-    case SKILL3:
+    case SKILL3: {
+      Zeni::String texture = "bullking_casting2_";
+      if (get_current_time() - explosion_last_render_time > BULLKING_EXPLOSION_BODY_CHANGE_TIME) {
+        explosion_last_render_time = get_current_time();
+        explosion_last_render_suffix++;
+        explosion_last_render_suffix %= 4;
+      }
+      std::stringstream ss;
+      ss << explosion_last_render_suffix;
+      texture = texture + ss.str().c_str();
+      Zeni::render_image(texture, ul, lr);
       break;
+    }
     case ATTACK:
       if (is_attacking) {
         Zeni::render_image(

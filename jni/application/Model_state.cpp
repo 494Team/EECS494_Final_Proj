@@ -34,7 +34,9 @@ namespace Flame {
   Model_state::Model_state() :
     center_location(Point2f()),
     scale(1.f)
-  {}
+  {
+    die = new Sound_Source(get_Sounds()["die"]);
+  }
 
   Model_state::~Model_state()
   {
@@ -333,18 +335,15 @@ namespace Flame {
     next_loop_update_list.push_back(map_obj_ptr);
     map_puzzle_obj_list.push_back(map_obj_ptr);
   }
-
-  vector<Player *>::iterator Model_state::player_rise_from_dead_list(Player * player_ptr)
+  
+  vector<Player *>::iterator Model_state::player_rise_without_setting_pos(Player * player_ptr)
   {
     //can only be called when there are at least one player alive
     //assert(!player_list.empty());
-
-    Point2f rise_pos = player_list.front()->get_location();
         int controller = player_ptr->get_controller();
         controller_alive[controller] = true;
         player_pos_in_list[player_list.size()] = controller;
         player_ptr->dec_health(-player_ptr->get_initial_health());
-        player_ptr->set_position(rise_pos);
 
     player_list.push_back(player_ptr);
     sim_obj_list.push_back(player_ptr);
@@ -352,11 +351,22 @@ namespace Flame {
     auto it = dead_player_list.erase(find(dead_player_list.begin(), dead_player_list.end(), player_ptr));
     return it;
   }
+  vector<Player *>::iterator Model_state::player_rise_from_dead_list(Player * player_ptr)
+  {
+    //can only be called when there are at least one player alive
+    Point2f rise_pos = player_list.front()->get_location();
+    auto it = player_rise_without_setting_pos(player_ptr);
+    player_ptr->set_position(rise_pos);
+    return it;
+  }
   vector<Player *>::iterator Model_state::move_player_to_dead_list(Player * player_ptr)
   {
+    die->play();
         int controller = player_ptr->get_controller();
         controller_alive[controller] = false;
         player_ptr->end_action();
+        player_ptr->ctrl.move_hori = 0.0f;
+        player_ptr->ctrl.move_vert = 0.0f;
         for (int i=get_player_list_index(controller); i<4; i++) {
           if (i==3 || player_pos_in_list[i+1] == -1) {
             player_pos_in_list[i] = -1;
@@ -491,11 +501,32 @@ namespace Flame {
     next_loop_update_list.clear();
     sim_obj_list.clear();
     player_list.clear();
+    dead_player_list.clear();
     monster_list.clear();
     spell_list.clear();
     map_obj_list.clear();
     map_puzzle_obj_list.clear();
     map_door_obj_list.clear();
   }
+    void Model_state::exp_rise(const float new_exp) {
+      exp += new_exp;
+      while (exp_level < 7 && exp > level_exp_max[exp_level]) {
+        exp -= level_exp_max[exp_level];
+        exp_level++;
+        for (auto it=player_list.begin(); it!=player_list.end(); ++it) {
+          (*it)->level_up();
+        }
+        for (auto it=dead_player_list.begin(); it!=dead_player_list.end(); ++it) {
+          (*it)->level_up();
+        }
+      }
+      if (exp_level == kExp_level_max)
+        exp = 0.0f;
+    }
+    void Model_state::get_exp_level_and_remainder(int* exp_level_, float* exp_remainder_percent_) {
+      *exp_remainder_percent_ = exp/level_exp_max[exp_level];
+      *exp_level_ = exp_level;
+      return;
+    }
 
 }

@@ -225,23 +225,27 @@ private:
           }
           break;
         case 1:
-          if (attack_tmp[controller] < kAttack_max) {
+          if (skill_point_tmp[controller] > 0 && attack_tmp[controller] < kAttack_max) {
             attack_tmp[controller]++;
+            skill_point_tmp[controller]--;
           }
           break;
         case 2:
-          if (defense_tmp[controller] < kDefense_max) {
+          if (skill_point_tmp[controller] > 0 && defense_tmp[controller] < kDefense_max) {
             defense_tmp[controller]++;
+            skill_point_tmp[controller]--;
           }
           break;
         case 3:
-          if (hpmp_regen_tmp[controller] < kHpmp_regen_max) {
+          if (skill_point_tmp[controller] > 0 && hpmp_regen_tmp[controller] < kHpmp_regen_max) {
             hpmp_regen_tmp[controller]++;
+            skill_point_tmp[controller]--;
           }
           break;
         case 4:
-          if (speed_tmp[controller] < kSpeed_max) {
+          if (skill_point_tmp[controller] > 0 && speed_tmp[controller] < kSpeed_max) {
             speed_tmp[controller]++;
+            skill_point_tmp[controller]--;
           }
           break;
         case 5: //confirm
@@ -462,6 +466,13 @@ private:
     filter = cursor_pos[controller] == 4 ? Color() : disable_button;
     render_image("plus_button", Bar_loc[4] - Point2f(button_size * 1.1f, 0.0f), Bar_loc[4] + Point2f(-button_size*0.1f, button_size), false, filter); 
 
+    sprintf(str, "%d", skill_point_tmp[controller]);//speed_lvl);
+    text_buf = "Upgrade points: ";
+    text_buf += str;
+    fr.render_text(text_buf,
+                   Bar_loc[4] + Point2f(40.0f, fr.get_text_height()),
+                   get_Colors()["red"],
+                   ZENI_LEFT);
     //loc += Point2f(0.0f, 1.5f * fr.get_text_height());
     fr.render_text("Confirm",
                    Bar_loc[5],
@@ -523,7 +534,7 @@ public:
 
     set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), MENU);
     //p1
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 0), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 0), MENU1);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 0), BACK);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X /* x-axis */, 0), HORI1);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 0), VERT1);
@@ -533,7 +544,7 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 0), Y1);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 0), L1);
     //p2
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 1), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 1), MENU2);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 1), BACK);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X /* x-axis */, 1), HORI2);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 1), VERT2);
@@ -543,7 +554,7 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 1), Y2);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 1), L2);
     //p3
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 2), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 2), MENU3);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 2), BACK);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X /* x-axis */, 2), HORI3);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 2), VERT3);
@@ -553,7 +564,7 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_Y, 2), Y3);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_LEFT_SHOULDER, 2), L3);
     //p4
-    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 3), MENU);
+    set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 3), MENU4);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_BACK, 3), BACK);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_X /* x-axis */, 3), HORI4);
     set_action(Zeni_Input_ID(SDL_JOYAXISMOTION, Joysticks::AXIS_LEFT_THUMB_Y /* y-axis */, 3), VERT4);
@@ -737,6 +748,16 @@ private:
   void set_level(const int level_) {
     curr_lvl = level_;
   }
+
+  void restart_stage() {
+    /*
+    std::vector<Player*>* dead_player_list = Model_state::get_instance()->get_dead_player_list_ptr();
+    for (auto it = dead_player_list->begin(); it != dead_player_list->end();) {
+      it = Model_state::get_instance()->player_rise_without_setting_pos(*it);
+    }
+    set_stage(1);
+    */
+  }
     
   void begin_dialog(Dialog_box* dialog_ptr, int stage) {
     //m_set.pause_all();
@@ -779,15 +800,6 @@ private:
         game.push_state(new Popup_Menu_State);
         break;
       }
-      case MENU: {
-        if (confidence == 1.0f) {
-          if (!show_die) {
-            get_into_upgradeshop();
-          } else {
-            get_Game().push_state(new Popup_Menu_State);
-          }
-        }
-      }
 
       case HORI1:
       case VERT1:
@@ -796,6 +808,7 @@ private:
       case B1:
       case X1:
       case Y1:
+      case MENU1:
         controller = 0;
         break;
 
@@ -806,6 +819,7 @@ private:
       case B2:
       case X2:
       case Y2:
+      case MENU2:
         controller = 1;
         break;
 
@@ -816,6 +830,7 @@ private:
       case B3:
       case X3:
       case Y3:
+      case MENU3:
         controller = 2;
         break;
 
@@ -826,6 +841,7 @@ private:
       case B4:
       case X4:
       case Y4:
+      case MENU4:
         controller = 3;
         break;
 
@@ -842,6 +858,15 @@ private:
       //p_ptr = player_list_ptr->at(player_pos_in_list);
         if (p_ptr->controllable()) {
           switch(action) {
+            case MENU1: 
+            case MENU2: 
+            case MENU3: 
+            case MENU4: 
+              if (confidence >= 1.0f) {
+                get_into_upgradeshop();
+              }
+              break;
+
             case HORI1:
             case HORI2:
             case HORI3:
@@ -921,6 +946,8 @@ private:
               it = Model_state::get_instance()->player_rise_from_dead_list(*it);
             }
             */
+            restart_stage();
+            break;
           default:
             break;
           }
@@ -1056,7 +1083,7 @@ private:
     Zeni::Video &vr = Zeni::get_Video();
     Zeni::Colors &cr = Zeni::get_Colors();
 
-    Point2f Hpbar_loc(loc.x + 80.0f, loc.y);
+    Point2f Hpbar_loc(loc.x + 60.0f, loc.y);
     const float kHpmpbar_width = 10.0f;
     const float kHpmpbar_length = 100.0f;
     Zeni::Vertex2f_Color hp00(Hpbar_loc, cr["red"]);
@@ -1091,6 +1118,15 @@ private:
     if (!p_ptr->spell3_mp_enough())
       Zeni::render_image("no_mana", CDbar_loc, CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
     Zeni::render_image("cd_mask", CDbar_loc + Zeni::Vector2f(0, kCDbar_length *(CD3percent)) ,CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length));
+
+    CDbar_loc += Point2f(kCDbar_length + 5.0f, 0.0f);
+    int upgrade_point = p_ptr->get_skill_point();
+    Color filter = upgrade_point > 0 ? Color() : Color(1.0f, 0.1f, 0.1f, 0.1f);
+    Zeni::render_image("upgrade_sign",
+                        CDbar_loc,
+                        CDbar_loc+Zeni::Vector2f(kCDbar_length, kCDbar_length),
+                        false,
+                        filter);
 
     vr.render(hpbar);
     vr.render(mpbar);
@@ -1139,8 +1175,8 @@ private:
     Zeni::Colors &cr = Zeni::get_Colors();
     const Zeni::String kToppanel_color = "white_light";
     Zeni::Vertex2f_Color p00(Zeni::Point2f(0.0f, 0.0f), cr[kToppanel_color]);
-    Zeni::Vertex2f_Color p01(Zeni::Point2f(0.0f, 75.0f), cr[kToppanel_color]);
-    Zeni::Vertex2f_Color p02(Zeni::Point2f(800.0f, 75.0f), cr[kToppanel_color]);
+    Zeni::Vertex2f_Color p01(Zeni::Point2f(0.0f, 90.0f), cr[kToppanel_color]);
+    Zeni::Vertex2f_Color p02(Zeni::Point2f(800.0f, 90.0f), cr[kToppanel_color]);
     Zeni::Vertex2f_Color p03(Zeni::Point2f(800.0f, 0.0f), cr[kToppanel_color]);
     Zeni::Quadrilateral<Zeni::Vertex2f_Color> toppanel(p00, p01, p02, p03);
     vr.render(toppanel);
@@ -1157,28 +1193,41 @@ private:
 
     /* render level status */
     char* str = new char[10];
+    Zeni::String text_buf = "Stage ";
     sprintf(str, "%d", curr_lvl + 1);
-    Zeni::String text_buf = "Level ";
+    text_buf += str;
+    text_buf += "-";
+    sprintf(str, "%d", stage);
     text_buf += str;
     Zeni::Font &l_ft = get_Fonts()["lvl_ft"];
     l_ft.render_text(text_buf,
-                   Point2f(400.0f, 25.0f - 0.5f * l_ft.get_text_height()),
-                   get_Colors()["black"],
-                   ZENI_CENTER);
+                   Point2f(20.0f, 560.0f - 2.5f * l_ft.get_text_height()),
+                   get_Colors()["yellow"],
+                   ZENI_LEFT);
 
     /* render revival status */
     sprintf(str, "%d", revival_num);
-    text_buf = "revival chances: ";
+    text_buf = "Revival chances: ";
     text_buf += str;
     l_ft.render_text(text_buf,
-                   Point2f(400.0f, 60.0f - 0.5f * l_ft.get_text_height()),
-                   get_Colors()["black"],
-                   ZENI_CENTER);
+                   Point2f(20.0f, 560.0f - 1.5f * l_ft.get_text_height()),
+                   get_Colors()["yellow"],
+                   ZENI_LEFT);
 
-    /* render exp bar */
+    /* render exp status */
     int exp_level;
     float exp_percent;
     Model_state::get_instance()->get_exp_level_and_remainder(&exp_level, &exp_percent);
+
+    sprintf(str, "%d", exp_level);
+    text_buf = "Team Exp: Lv";
+    text_buf += str;
+    l_ft.render_text(text_buf,
+                   Point2f(20.0f, 560.0f - 0.5f * l_ft.get_text_height()),
+                   get_Colors()["yellow"],
+                   ZENI_LEFT);
+
+    /* render exp bar */
     Point2f exp_bar_loc(0.0f, 580.0f);
     const float kExp_bar_width = 6.0f;
     const float kExp_bar_length = 800.0f;
@@ -1189,13 +1238,6 @@ private:
     Zeni::Quadrilateral<Zeni::Vertex2f_Color> exp_bar(exp00, exp01, exp02, exp03);
     vr.render(exp_bar);
 
-    sprintf(str, "%d", exp_level);
-    text_buf = "Exp Lv: ";
-    text_buf += str;
-    l_ft.render_text(text_buf,
-                   Point2f(20.0f, 550.0f - 0.5f * l_ft.get_text_height()),
-                   get_Colors()["yellow"],
-                   ZENI_LEFT);
 
     if (show_die) {
         l_ft.render_text("Player(s) Died!",
@@ -1706,7 +1748,9 @@ public:
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 1), CONFIRM2);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 2), CONFIRM3);
     set_action(Zeni_Input_ID(SDL_JOYBUTTONDOWN, Joysticks::BUTTON_START, 3), CONFIRM4);
-
+    get_Sound().set_BGM("sfx/bgm");
+    get_Sound().play_BGM();
+    get_Sound().set_BGM_looping(true);
     m_set.start();
   };
 
@@ -1869,7 +1913,6 @@ class Pre_Play_State : public Widget_Gamestate {
 
 
       void render(){
-          Gamestate_Base::render();
           get_Video().set_2d(std::make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
           if(m_set.seconds()<0.5f)
             render_image("title0", Point2f(0.f, 0.0f), Point2f(1024.0f, 1024.0f));

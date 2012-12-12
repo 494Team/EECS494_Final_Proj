@@ -51,7 +51,7 @@ namespace Flame{
   const float WHISPER_SPEED = 40.0f;
   const float WHISPER_DAMAGE = 150.0f;
   const float WHISPER_HEALTH = 1500.0f;
-  const float WHISPER_ATTACK_GAP = 1.5f;
+  const float WHISPER_ATTACK_GAP = 3.f;
   const float WHISPER_SPELL_RADIUS = 16.0f;
   const float WHISPER_MIN_DIST = 100.0f;
   const float WHISPER_MAX_DIST = 500.0f;
@@ -78,7 +78,7 @@ namespace Flame{
   const float BULLKING_RADIUS = 30.0f;
   const float BULLKING_SPEED = 100.0f;
   const float BULLKING_DAMAGE = 500.0f;
-  const float BULLKING_HEALTH = 10000.0f;
+  const float BULLKING_HEALTH = 100000.0f;
   const float BULLKING_ATTACK_GAP = 1.5f;
   const float BULLKING_ATTACK_RADIUS = 35.0f;
   const float BULLKING_MIN_DIST = 10.0f;
@@ -90,13 +90,14 @@ namespace Flame{
   const float BULLKING_HELLDOOR_NEW_GAP = 2.0f;
   const float BULLKING_MARCH_DURATION = 10.0f;
   const float BULLKING_MARCH_NEW_GAP = 0.2f;
+  const float BULLKING_EXPLOSION_BODY_CHANGE_TIME = 0.2f;
   const float BULLKING_EXPLOSION_DURATION = 12.0f;
   const float BULLKING_EXPLOSION_NEW_GAP = 0.6f;
   const Zeni::Vector2f BULLKING_EXPLOSION_INITIAL_SIZE = Zeni::Vector2f(10.0f, 10.0f);
   const Zeni::Vector2f BULLKING_EXPLOSION_RESIZE_SPEED = Zeni::Vector2f(70.0f, 70.0f);
   const Zeni::Vector2f BULLKING_EXPLOSION_MAX_SIZE = Zeni::Vector2f(100.0f, 100.0f);
   const float BULLKING_EXPLOSION_LIFETIME = 4.0f;
-  const float BULLKING_EXPLOSION_DAMAGE_RENDER_TIME = 0.2f;
+  const float BULLKING_EXPLOSION_DAMAGE_RENDER_TIME = 0.4f;
   const float BULLKING_EXPLOSION_DAMAGE = 800.0f;
 
   // attack effect
@@ -196,6 +197,7 @@ namespace Flame{
     B1, B2, B3, B4,
     X1, X2, X3, X4,
     Y1, Y2, Y3, Y4,
+    MENU1, MENU2, MENU3, MENU4,
     CONFIRM1, CONFIRM2, CONFIRM3, CONFIRM4,
     JOIN1, JOIN2, JOIN3, JOIN4
   };

@@ -37,7 +37,7 @@ namespace Flame {
   //const float kDisintegrate_mp_initial_cost = 2.0f;
   const float kDisintegrate_mp_cost = 2.0f;
   const float kHealing_CD = 2.0f;
-  const float kHealing_amount = 500.f;//-1000.0f; //500.0f;
+  const float kHealing_amount = -1000.0f; //500.0f;
   const float kHealing_mp_cost = 300.0f;
   const float kDing_CD = 8.0f;
   const float kDing_dam = 0.5f;
@@ -156,6 +156,9 @@ namespace Flame {
     void set_skill_point(int point) {
       skill_point = point;
     }
+    void level_up() {
+      skill_point += 3;
+    }
     int attack;
     int defense;
     int hpmp_regen;
@@ -231,7 +234,7 @@ namespace Flame {
     int skill_point;
 
     bool is_moving() {
-      return (!is_hitback() && !is_charging() && abs(ctrl.move_hori) + abs(ctrl.move_vert) > 0.3f);
+      return (!is_disintegrate() && !is_hitback() && !is_charging() && abs(ctrl.move_hori) + abs(ctrl.move_vert) > 0.3f);
     }
     bool cost_mp(const float cost) {
       bool result = true;
@@ -316,7 +319,7 @@ namespace Flame {
     void shield_end();
     void bloodsuck();
     void bloodsuck_end();
-
+    Zeni::Sound_Source *bloodsuck_sfx;
     //running renderer
     bool running_status;
     float render_clock;
@@ -328,6 +331,7 @@ namespace Flame {
     //relative location;
     Zeni::Point2f rel_loc;
     float size;
+
   };
 }
 

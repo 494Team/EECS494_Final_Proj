@@ -70,9 +70,10 @@ namespace Flame {
     void add_map_obj(Map * map_obj_ptr);
     void add_map_puzzle_obj(Map * map_obj_ptr);
 
+    std::vector<Player *>::iterator player_rise_without_setting_pos(Player * player_ptr);
+    std::vector<Player *>::iterator player_rise_from_dead_list(Player * player_ptr);
     // never try to remove yourself! use these functions!!!!!!!
     std::vector<Player *>::iterator remove_player(Player * player_ptr);
-    std::vector<Player *>::iterator player_rise_from_dead_list(Player * player_ptr);
     std::vector<Player *>::iterator move_player_to_dead_list(Player * player_ptr);
     std::vector<Monster *>::iterator remove_monster(Monster * monster_ptr);
     std::vector<Spell *>::iterator remove_spell(Spell * spell_ptr);
@@ -129,31 +130,8 @@ namespace Flame {
     }
     void clear_without_player();
     void clear_all();
-    void exp_rise(const float new_exp) {
-      exp += new_exp;
-      while (exp_level < 7 && exp > level_exp_max[exp_level]) {
-        exp -= level_exp_max[exp_level];
-        exp_level++;
-      }
-      if (exp_level == kExp_level_max)
-        exp = 0.0f;
-    }
-    void get_exp_level_and_remainder(int* exp_level_, float* exp_remainder_percent_) {
-      *exp_remainder_percent_ = exp/level_exp_max[exp_level];
-      *exp_level_ = exp_level;
-      return;
-    }
-
-    // set and get next stage
-    void set_next_stage(int stage)
-    {next_stage = stage;}
-    int get_next_stage() const
-    {return next_stage;}
-    // set and get prev stage
-    void set_prev_stage(int stage)
-    {prev_stage = stage;}
-    int get_prev_stage() const
-    {return prev_stage;}
+    void exp_rise(const float new_exp);
+    void get_exp_level_and_remainder(int* exp_level_, float* exp_remainder_percent_);
   private:
     float exp;
     int exp_level;
@@ -189,6 +167,9 @@ namespace Flame {
     Model_state(const Model_state&);
     Model_state& operator= (const Model_state&);
     ~Model_state();
+
+    /* sfx */
+    Zeni::Sound_Source *die;
   };
 
 }

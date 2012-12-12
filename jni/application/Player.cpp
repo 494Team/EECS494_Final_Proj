@@ -40,7 +40,7 @@ Player::Player(
   attack_buff(kInit_attack_buff),
   last_regen(0.0f)
 {
-  set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
+  //set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
   switch (ptype) {
     case SANZANG:
       spell1_CD = kDisintegrate_CD;
@@ -78,6 +78,7 @@ Player::Player(
   set_moving(true);
   set_orientation(Vector2f());
   monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
+
 }
 
 void Player::static_move(float time, bool force_move) {
@@ -162,7 +163,7 @@ void Player::update(float time) {
   if (!is_hitback() && !is_charging() && abs(ctrl.move_hori) + abs(ctrl.move_vert) > 0.3f) {
     bool move_x = true;
     bool move_y = true;
-    if (!ctrl.l) {
+    if (!ctrl.l && !is_disintegrate()) {
       backup_position = get_location();
       set_speed(abs(ctrl.move_hori) * backup_speed);
       set_orientation(Vector2f(ctrl.move_hori, 0.0f));
@@ -473,10 +474,13 @@ void Player::taunt() {
 */
 
 void Player::bloodsuck() {
+  bloodsuck_sfx = new Sound_Source(get_Sounds()["bloodsuck"]);
+  bloodsuck_sfx->play();
   spell3_active = true;
 }
 void Player::bloodsuck_end() {
   spell3_active = false;
+  delete bloodsuck_sfx;
 }
 
 void Player::charge() {
@@ -543,6 +547,7 @@ void Player::charge_update(float time) {
   // check if any monster is caught by charge
   for (std::vector<Monster *>::iterator it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it) {
     if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
+      play_sound("whip");
       if (charge_no_hit_before) {
         set_speed(get_current_speed() * 0.5f);
         charge_no_hit_before = false;
@@ -711,7 +716,7 @@ void Player::try_spell3() {
             Model_state::get_instance()->add_spell(new_spell);
         //}
         break;
-      case WUKONG: //Berserk
+      case WUKONG: //Berserk 
         //if (cost_mp(kBerserk_mp_cost))
         berserk();
         break;

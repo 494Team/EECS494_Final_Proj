@@ -24,14 +24,18 @@ namespace Flame {
     is_player(is_player_),
     heal_self(heal_self_),
     orientation(orientation_)
-    {}
+    {  
+    }
 
   void Attack_spell::update(float)
   {
+    bool is_hit = false;
     if (is_player) {
       vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
       for (auto it = monster_list_ptr->begin(); it != monster_list_ptr->end(); ++it)
         if (body.intersect((*it)->get_body())) {
+          play_sound("sword_hit");
+          is_hit = true;
           vector<attack_effect> effects;
           effects.push_back(HITBACK);
           (*it)->get_hit(attack_strength, effects, player_ptr, orientation);
@@ -39,6 +43,8 @@ namespace Flame {
             player_ptr->dec_health(-.5f * attack_strength);
           Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
         }
+      if(!is_hit)
+        play_sound("sword_miss");
     }
     else {
       vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
@@ -59,7 +65,7 @@ namespace Flame {
     length(kDisintegrate_length),
     render_time(0.f),
     damage(damage_)
-    {Disintegrate::update_body();}
+    {Disintegrate::update_body();play_sound("laser");}
 
   Point2f Disintegrate::get_location() const
     {return player_ptr->get_current_location();}
@@ -185,10 +191,17 @@ namespace Flame {
     last_render_time(0.0f),
     game_time(game_time_),
     damage(damage_)
-  {monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();}
+  {monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
+  a = new Sound_Source(get_Sounds()["cudgel_fury"]);
+  b = new Sound_Source(get_Sounds()["sword_hit"]);
+  a->set_time(kCudgelfury_last);
+  a->play();
+  }
 
   void Cudgel_fury::update(float time)
   {
+    if (!player_ptr->is_cudgel_fury())
+      disable_spell();
 
     //Moving_spell_circle::update(time);
     set_location(player_ptr->get_location());
@@ -208,11 +221,15 @@ namespace Flame {
           vector<attack_effect> effects;
           //effects.push_back(HITBACK);
           (*it)->get_hit(damage, effects, player_ptr);
+          //if(!b->is_playing())
+            b->play();
           //disable_spell();
           //break;
         }
     } else {
       player_ptr->cudgel_fury_end();
+      delete a;
+      delete b;
     }
     
   }
@@ -290,10 +307,13 @@ namespace Flame {
                            kArrow_life_time),
     player_ptr(player_ptr_),
     damage(damage_)
-    {}
+    {
+      play_sound("bow");
+    }
 
   void Arrow_attack::update(float time)
   {
+    
     Moving_spell_rectangle::update(time);
     if (is_active()) {
       vector<Monster *> * monster_list_ptr = Model_state::get_instance()->get_monster_list_ptr();
@@ -304,6 +324,7 @@ namespace Flame {
           (*it)->get_hit(damage, effects, player_ptr, get_orientation());
           Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
           disable_spell();
+          play_sound("arrow_hit");
           break;
         }
     }
@@ -320,7 +341,7 @@ namespace Flame {
                            kMagic_arrow_speed, kMagic_arrow_life_time),
     player_ptr(player_ptr_),
     damage(damage_)
-  {}
+  {play_sound("flame_arrow");}
 
   void Magic_arrow_ice::update(float time)
   {
@@ -334,6 +355,7 @@ namespace Flame {
           Magic_arrow_ice_effect effect(get_center_location());
           Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
           disable_spell();
+          play_sound("freeze");
           break;
         }
     }
@@ -350,7 +372,9 @@ namespace Flame {
                            kMagic_arrow_speed, kMagic_arrow_life_time),
     player_ptr(player_ptr_),
     damage(damage_)
-  {}
+  {
+    play_sound("flame_arrow");
+    }
 
   void Magic_arrow_fire::update(float time)
   {
@@ -389,7 +413,9 @@ namespace Flame {
     Resizable_spell(location_, kMagic_arrow_effect_size, Vector2f(), kMagic_arrow_effect_life_time),
     player_ptr(player_ptr_),
     timer(0.f)
-  {}
+  {
+    play_sound("fire_place");
+    }
 
   void Magic_arrow_fire_effect::update(float time)
   {
@@ -460,7 +486,9 @@ namespace Flame {
     remain_times(5),
     timer(0.f),
     damage(damage_)
-    {}
+    {
+      play_sound("trap");
+    }
 
   void Trap::update(float time)
   {
@@ -484,8 +512,10 @@ namespace Flame {
                                               player_ptr,
                                               damage);
           Model_state::get_instance()->add_spell(new_spell);
+          
         }
         timer = 3.f;
+        play_sound("thunder");
         if (!--remain_times)
           disable_spell();
         break;
@@ -590,7 +620,7 @@ namespace Flame {
                         Vector2f(kFireball_size, kFireball_size),
                         kFireball_speed,
                         kFireball_life_time)
-    {}
+    {play_sound("fireball");}
 
   void Fire_ball::update(float time)
   {
@@ -728,12 +758,19 @@ namespace Flame {
 
   void Explosion::render() {
     if (!hits_max()) {
-      Resizable_spell::render("hell_spikes_pre");
+      Resizable_spell::render("explosion_pre");
     } else {
       if (damage_effect_render_time >= 0.0f) {
-        Resizable_spell::render("hell_spikes");
+        Resizable_spell::render("explosion");
+        float scale = Model_state::get_instance()->get_scale();
+        Vector2f explosion_effect_loc = get_center_location() - Vector2f(0.0f, 30.0f);
+        Point2f explosion_effect_rel_loc = (explosion_effect_loc - Model_state::get_instance()->get_center_location()) * scale + Point2f(400.0f, 300.0f);
+        Vector2f explosion_effect_size(60.0f, 120.0f);
+        render_image("explosion_attack_effect",
+                     explosion_effect_rel_loc - scale * explosion_effect_size / 2.0f,
+                     explosion_effect_rel_loc + scale * explosion_effect_size / 2.0f);
       } else {
-        Resizable_spell::render("hell_spikes", Zeni::Color(get_remaining_lifetime() / lifetime_after_damage_effect, 1.0f, 1.0f, 1.0f));
+        Resizable_spell::render("explosion", Zeni::Color(get_remaining_lifetime() / lifetime_after_damage_effect, 1.0f, 1.0f, 1.0f));
       }
     }
   }
