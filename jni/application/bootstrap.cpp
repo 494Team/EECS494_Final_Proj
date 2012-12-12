@@ -750,13 +750,11 @@ private:
   }
 
   void restart_stage() {
-    /*
     std::vector<Player*>* dead_player_list = Model_state::get_instance()->get_dead_player_list_ptr();
     for (auto it = dead_player_list->begin(); it != dead_player_list->end();) {
       it = Model_state::get_instance()->player_rise_without_setting_pos(*it);
     }
-    set_stage(1);
-    */
+    set_stage(stage);
   }
     
   void begin_dialog(Dialog_box* dialog_ptr, int stage) {
@@ -998,8 +996,11 @@ private:
     float processing_time = time_passed - m_time_passed;
     m_time_passed = time_passed;
 
-    if (Model_state::get_instance()->get_player_list_ptr()->empty() && stage <= 3 && !show_die) {
+    if (Model_state::get_instance()->get_player_list_ptr()->empty() && !show_die) {
         show_die = true;
+    }
+    if (!Model_state::get_instance()->get_player_list_ptr()->empty() && show_die) {
+        show_die = false;
     }
 
     float time_step = 0.005f;
@@ -1207,7 +1208,7 @@ private:
 
     /* render revival status */
     sprintf(str, "%d", revival_num);
-    text_buf = "Revival chances: ";
+    text_buf = "Resurrection chances: ";
     text_buf += str;
     l_ft.render_text(text_buf,
                    Point2f(20.0f, 560.0f - 1.5f * l_ft.get_text_height()),

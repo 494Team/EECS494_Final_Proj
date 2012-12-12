@@ -39,7 +39,7 @@ namespace Flame{
   // Wanderer constants
   const float WANDERER_RADIUS = 16.0f;
   const float WANDERER_SPEED = 50.0f;
-  const float WANDERER_DAMAGE = 100.0f;
+  const float WANDERER_DAMAGE = 300.0f;
   const float WANDERER_HEALTH = 2500.0f;
   const float WANDERER_ATTACK_GAP = 1.0f;
   const float WANDERER_ATTACK_RADIUS = 20.0f;
@@ -49,7 +49,7 @@ namespace Flame{
   // Whisper constants
   const float WHISPER_RADIUS = 16.0f;
   const float WHISPER_SPEED = 40.0f;
-  const float WHISPER_DAMAGE = 200.0f;
+  const float WHISPER_DAMAGE = 300.0f;
   const float WHISPER_HEALTH = 1500.0f;
   const float WHISPER_ATTACK_GAP = 3.f;
   const float WHISPER_SPELL_RADIUS = 16.0f;

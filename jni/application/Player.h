@@ -29,7 +29,7 @@ namespace Flame {
 
   /************** spells ******************/
   const float kAttack_show_time = 0.2f;
-  const float kPlayer_attack_range = 20.0f;
+  const float kPlayer_attack_range = 25.0f;
   const float kPlayer_attack_strengh = 500.0f;
   //SANZANG
   const float kDisintegrate_CD = 0.0f;
