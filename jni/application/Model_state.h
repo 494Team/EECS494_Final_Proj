@@ -132,6 +132,14 @@ namespace Flame {
     void clear_all();
     void exp_rise(const float new_exp);
     void get_exp_level_and_remainder(int* exp_level_, float* exp_remainder_percent_);
+    int get_prev_stage() const
+      {return prev_stage;}
+    void set_prev_stage(int stage)
+      {prev_stage = stage;}
+    int get_next_stage() const
+      {return next_stage;}
+    void set_next_stage(int stage)
+      {next_stage = stage;}
   private:
     float exp;
     int exp_level;
