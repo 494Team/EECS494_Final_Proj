@@ -1223,7 +1223,7 @@ private:
       if(!m_dead[controller].is_running())
         m_dead[controller].start();
       if(m_dead[controller].seconds()<0.25f)
-        render_image("dead", loc+Vector2f(0.f, 20.f), loc + Vector2f(256.f, 64.f));
+        render_image("dead", loc+Vector2f(0.f, 20.f), loc + Vector2f(180.f, 45.f));
       else if (m_dead[controller].seconds()>0.5f){
         m_dead[controller].reset();
         m_dead[controller].start();

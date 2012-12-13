@@ -74,7 +74,11 @@ void Level_1::init_map(int stage) {
     map_list.push_back(new Map_laser(Point2f(3.f, 300.f), Vector2f(1.f, 0.f), "laser"));
     map_list.push_back(new Map_laser(Point2f(997.f, 600.f), Vector2f(-1.f, 0.f), "laser"));
     // transmission gates
+<<<<<<< HEAD
     map_list.push_back(new Map_gate(Point2f(440.f, 60.f), Vector2f(120.f, 120.f), 3, "red"));
+=======
+    map_list.push_back(new Map_gate(Point2f(440.f, 60.f), Vector2f(120.f, 120.f), 3, "green"));
+>>>>>>> change something
   }
   else {
     // stage 3
@@ -210,18 +214,22 @@ void Level_2::init_map(int stage)
     monster_list.push_back(new Wanderer(Zeni::Point2f(5855, 2925)));
     monster_list.push_back(new Whisper_violet(Zeni::Point2f(5885, 2925)));
     // right down
+    /*
     monster_list.push_back(new Wanderer(Zeni::Point2f(5805, 4700)));
     monster_list.push_back(new Wanderer(Zeni::Point2f(5955, 4700)));
     monster_list.push_back(new Whisper_violet(Zeni::Point2f(5955, 4750)));
+    */
     // right down middle
     monster_list.push_back(new Wanderer(Zeni::Point2f(5805, 3900)));
     monster_list.push_back(new Wanderer(Zeni::Point2f(5955, 3900)));
     monster_list.push_back(new Whisper_violet(Zeni::Point2f(5955, 3950)));
 
     // up left
+    /*
     monster_list.push_back(new Wanderer(Zeni::Point2f(1300, 45)));
     monster_list.push_back(new Wanderer(Zeni::Point2f(1300, 195)));
     monster_list.push_back(new Whisper_violet(Zeni::Point2f(1250, 195)));
+    */
     // up left middle
     monster_list.push_back(new Wanderer(Zeni::Point2f(2100, 45)));
     monster_list.push_back(new Wanderer(Zeni::Point2f(2100, 195)));
@@ -463,18 +471,18 @@ void Level_2::init_map(int stage)
     monster_list.push_back(new Wanderer(Zeni::Point2f(2925, 125)));
     monster_list.push_back(new Whisper_green(Zeni::Point2f(3075, 95)));
     monster_list.push_back(new Whisper_violet(Zeni::Point2f(2925, 95)));
-    // up right middle
+    // up right
+    /*
     monster_list.push_back(new Wanderer(Zeni::Point2f(4700, 45)));
     monster_list.push_back(new Wanderer(Zeni::Point2f(4700, 195)));
     monster_list.push_back(new Whisper_green(Zeni::Point2f(4750, 45)));
     monster_list.push_back(new Whisper_violet(Zeni::Point2f(4750, 195)));
-    // up right
-    /*
+    */
+    // up right middle
     monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 45)));
     monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 195)));
     monster_list.push_back(new Whisper_green(Zeni::Point2f(3950, 45)));
     monster_list.push_back(new Whisper_violet(Zeni::Point2f(3950, 195)));
-    */
 
     // down left
     /*
@@ -544,6 +552,13 @@ void Level_2::init_map(int stage)
     // transmission gates
     map_list.push_back(new Map_gate(Point2f(4620.f, 60.f), Vector2f(120.f, 120.f), 3, "green"));
     map_list.push_back(new Map_gate(Point2f(1260.f, 5820.f), Vector2f(120.f, 120.f), 1, "blue"));
+
+    // laser
+    map_list.push_back(new Map_laser(Point2f(1200.f, 2763.f), Vector2f(0.f, 1.f), "laser"));
+    map_list.push_back(new Map_laser(Point2f(2763.f, 4800.f), Vector2f(1.f, 0.f), "laser"));
+    map_list.push_back(new Map_laser(Point2f(4800.f, 3237.f), Vector2f(0.f, -1.f), "laser"));
+    map_list.push_back(new Map_laser(Point2f(3237.f, 1200.f), Vector2f(-1.f, 0.f), "laser"));
+
   }
   else if (stage == 3) {
     get_Sound().set_BGM("sfx/stage_bgm");
@@ -815,6 +830,12 @@ void Level_2::init_map(int stage)
     map_list.push_back(new Map_gate(Point2f(60.f, 1260.f), Vector2f(120.f, 120.f), 1, "red"));
     map_list.push_back(new Map_gate(Point2f(5820.f, 1260.f), Vector2f(120.f, 120.f), 2, "green"));
     map_list.push_back(new Map_gate(Point2f(1260.f, 5820.f), Vector2f(120.f, 120.f), 4, "boss"));
+
+    // laser
+    map_list.push_back(new Map_laser(Point2f(1200.f, 2763.f), Vector2f(0.f, 1.f), "laser"));
+    map_list.push_back(new Map_laser(Point2f(2763.f, 4800.f), Vector2f(1.f, 0.f), "laser"));
+    map_list.push_back(new Map_laser(Point2f(4800.f, 3237.f), Vector2f(0.f, -1.f), "laser"));
+    map_list.push_back(new Map_laser(Point2f(3237.f, 1200.f), Vector2f(-1.f, 0.f), "laser"));
   }
   else {
     get_Sound().set_BGM("sfx/boss_bgm");
