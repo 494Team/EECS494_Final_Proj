@@ -1173,6 +1173,56 @@ private:
     }
   }
 
+  void render_dead_status_helper(int controller, Player* p_ptr){
+    Zeni::String player_texture;//, player_skill_texture;
+    Point2f loc;
+    switch (controller) {
+      case 0:
+        loc = Point2f(20.0f, 10.0f);
+        break;
+      case 1:
+        loc = Point2f(20.0f + 180.0f, 10.0f);
+        break;
+      case 2:
+        loc = Point2f(20.0f + 460.0f, 10.0f);
+        break;
+      default: //case 3:
+        loc = Point2f(20.0f + 620.0f, 10.0f);
+        break;
+    }
+
+    
+    render_image("dead", loc, loc + Vector2f(180.f, 30.f));
+
+    
+    
+    //Zeni::Video &vr = Zeni::get_Video();
+    //Zeni::Colors &cr = Zeni::get_Colors();
+/*
+    Point2f Hpbar_loc(loc.x + 60.0f, loc.y);
+    const float kHpmpbar_width = 10.0f;
+    const float kHpmpbar_length = 100.0f;
+    Zeni::Vertex2f_Color hp00(Hpbar_loc, cr["red"]);
+    Zeni::Vertex2f_Color hp01(Hpbar_loc + Zeni::Point2f(0.0f, kHpmpbar_width), cr["red"]);
+    Zeni::Vertex2f_Color hp02(Hpbar_loc + Zeni::Point2f(hp_percent * kHpmpbar_length, kHpmpbar_width), cr["red"]);
+    Zeni::Vertex2f_Color hp03(Hpbar_loc + Zeni::Point2f(hp_percent * kHpmpbar_length, 0.0f), cr["red"]);
+    Zeni::Quadrilateral<Zeni::Vertex2f_Color> hpbar(hp00, hp01, hp02, hp03);
+
+    Hpbar_loc += Point2f(0.0f, 20.0f);
+    Zeni::Vertex2f_Color mp00(Hpbar_loc, cr["blue"]);
+    Zeni::Vertex2f_Color mp01(Hpbar_loc + Zeni::Point2f(0.0f, kHpmpbar_width), cr["blue"]);
+    Zeni::Vertex2f_Color mp02(Hpbar_loc + Zeni::Point2f(mp_percent * kHpmpbar_length, kHpmpbar_width), cr["blue"]);
+    Zeni::Vertex2f_Color mp03(Hpbar_loc + Zeni::Point2f(mp_percent * kHpmpbar_length, 0.0f), cr["blue"]);
+    Zeni::Quadrilateral<Zeni::Vertex2f_Color> mpbar(mp00, mp01, mp02, mp03);
+    */
+    //CDbar
+    
+ 
+
+//    vr.render(hpbar);
+  //  vr.render(mpbar);
+  }
+
   void render_status_helper(int controller, Player* p_ptr) {
     Zeni::String player_texture, player_skill_texture;
     Point2f loc;
@@ -1341,6 +1391,12 @@ private:
         render_status_helper(controller, *it);
     }
 
+    plist = Model_state::get_instance()->get_dead_player_list_ptr();
+    for (vector<Player *>::iterator it = plist->begin(); it != plist->end(); it++) {
+      controller = Model_state::get_instance()->get_player_pos_in_list(list_pos++);
+      if (controller != -1)
+        render_dead_status_helper(controller, *it);
+    }
     char* str = new char[10];
     Zeni::String text_buf;
     Zeni::Font &l_ft = get_Fonts()["lvl_ft"];
