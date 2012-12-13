@@ -43,6 +43,21 @@ The following things are unsupported:
 <tile>0</tile>
 </upgrade_bg>
 
+<victory1>
+<filepath>textures/victory1.png</filepath>
+<tile>0</tile>
+</victory1>
+
+<victory0>
+<filepath>textures/victory0.png</filepath>
+<tile>0</tile>
+</victory0>
+
+<victory_bg>
+<filepath>textures/victory_bg.png</filepath>
+<tile>0</tile>
+</victory_bg>
+
 
 <upgrade_p1>
 <filepath>textures/upgrade_p1.png</filepath>
