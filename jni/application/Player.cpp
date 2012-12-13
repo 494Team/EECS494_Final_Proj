@@ -140,7 +140,7 @@ void Player::update(float time) {
   float shield_buff = shielding ? kShield_effect : 1.0f;
   float mp_regen_real_max = ptype==SANZANG ? kMp_regen_maxbuff+kMp_regen_SANZANG_additional : kMp_regen_maxbuff;
   float WUKONG_hp_regen_factor = ptype==WUKONG? 2.0f:1.0f;
-  float MELEE_armor_factor = (ptype==WUKONG||ptype==BAJIE) ? 0.7f:1.0f;
+  float MELEE_armor_factor = (ptype==WUKONG||ptype==BAJIE) ? 0.5f:1.0f;
   float BAJIE_armor_factor = (ptype==BAJIE) ? 0.90f:1.0f;
   int init_player_num = Model_state::get_instance()->get_initial_player_num();
   
@@ -161,8 +161,10 @@ void Player::update(float time) {
     set_speed(get_current_speed() * 0.5f);
   }
 
-  if (is_hitback()) {
-    end_action();
+  if (is_hitback() || is_charging()) {
+    //hitback_end_action();
+      if (ctrl.l)
+        ctrl.l = false;
   }
   
   float current_time = game_time->seconds();

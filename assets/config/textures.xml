@@ -38,6 +38,11 @@ The following things are unsupported:
 -->
 <Textures>
 
+<dead>
+<filepath>textures/dead.png</filepath>
+<tile>0</tile>
+</dead>
+
 <upgrade_bg>
 <filepath>textures/upgrade_bg.png</filepath>
 <tile>0</tile>

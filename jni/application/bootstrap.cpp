@@ -44,11 +44,18 @@ public:
   {
     m_set.start();
     m_change.start();
+    get_Sound().set_BGM("sfx/victory_bgm");
   }
 
 private:
   Chronometer<Time> m_set, m_change;
-
+  void on_push() {
+    get_Window().mouse_hide(true);
+  }
+  void on_pop() {
+    get_Window().mouse_hide(false);
+    get_Sound().set_BGM("sfx/bgm");
+  }
   void on_key(const SDL_KeyboardEvent &event) {
     if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED)
       get_Game().pop_state();
@@ -1172,6 +1179,56 @@ private:
     }
   }
 
+  void render_dead_status_helper(int controller, Player* p_ptr){
+    Zeni::String player_texture;//, player_skill_texture;
+    Point2f loc;
+    switch (controller) {
+      case 0:
+        loc = Point2f(20.0f, 10.0f);
+        break;
+      case 1:
+        loc = Point2f(20.0f + 180.0f, 10.0f);
+        break;
+      case 2:
+        loc = Point2f(20.0f + 460.0f, 10.0f);
+        break;
+      default: //case 3:
+        loc = Point2f(20.0f + 620.0f, 10.0f);
+        break;
+    }
+
+    
+    render_image("dead", loc, loc + Vector2f(180.f, 30.f));
+
+    
+    
+    //Zeni::Video &vr = Zeni::get_Video();
+    //Zeni::Colors &cr = Zeni::get_Colors();
+/*
+    Point2f Hpbar_loc(loc.x + 60.0f, loc.y);
+    const float kHpmpbar_width = 10.0f;
+    const float kHpmpbar_length = 100.0f;
+    Zeni::Vertex2f_Color hp00(Hpbar_loc, cr["red"]);
+    Zeni::Vertex2f_Color hp01(Hpbar_loc + Zeni::Point2f(0.0f, kHpmpbar_width), cr["red"]);
+    Zeni::Vertex2f_Color hp02(Hpbar_loc + Zeni::Point2f(hp_percent * kHpmpbar_length, kHpmpbar_width), cr["red"]);
+    Zeni::Vertex2f_Color hp03(Hpbar_loc + Zeni::Point2f(hp_percent * kHpmpbar_length, 0.0f), cr["red"]);
+    Zeni::Quadrilateral<Zeni::Vertex2f_Color> hpbar(hp00, hp01, hp02, hp03);
+
+    Hpbar_loc += Point2f(0.0f, 20.0f);
+    Zeni::Vertex2f_Color mp00(Hpbar_loc, cr["blue"]);
+    Zeni::Vertex2f_Color mp01(Hpbar_loc + Zeni::Point2f(0.0f, kHpmpbar_width), cr["blue"]);
+    Zeni::Vertex2f_Color mp02(Hpbar_loc + Zeni::Point2f(mp_percent * kHpmpbar_length, kHpmpbar_width), cr["blue"]);
+    Zeni::Vertex2f_Color mp03(Hpbar_loc + Zeni::Point2f(mp_percent * kHpmpbar_length, 0.0f), cr["blue"]);
+    Zeni::Quadrilateral<Zeni::Vertex2f_Color> mpbar(mp00, mp01, mp02, mp03);
+    */
+    //CDbar
+    
+ 
+
+//    vr.render(hpbar);
+  //  vr.render(mpbar);
+  }
+
   void render_status_helper(int controller, Player* p_ptr) {
     Zeni::String player_texture, player_skill_texture;
     Point2f loc;
@@ -1340,6 +1397,12 @@ private:
         render_status_helper(controller, *it);
     }
 
+    plist = Model_state::get_instance()->get_dead_player_list_ptr();
+    for (vector<Player *>::iterator it = plist->begin(); it != plist->end(); it++) {
+      controller = Model_state::get_instance()->get_player_pos_in_list(list_pos++);
+      if (controller != -1)
+        render_dead_status_helper(controller, *it);
+    }
     char* str = new char[10];
     Zeni::String text_buf;
     Zeni::Font &l_ft = get_Fonts()["lvl_ft"];
@@ -1440,44 +1503,6 @@ private:
   bool show_die;
 };
 
-class Instructions_State : public Widget_Gamestate {
-  Instructions_State(const Instructions_State &);
-  Instructions_State operator=(const Instructions_State &);
-
-public:
-  Instructions_State()
-    : Widget_Gamestate(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)))
-  {
-  }
-
-private:
-  void on_key(const SDL_KeyboardEvent &event) {
-    if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED)
-      get_Game().pop_state();
-  }
-
-  void render() {
-    Widget_Gamestate::render();
-    /*
-    Zeni::Font &fr = get_Fonts()["title"];
-
-    fr.render_text(
-#if defined(_WINDOWS)
-                   "ALT+F4"
-#elif defined(_MACOSX)
-                   "Apple+Q"
-#else
-                   "Ctrl+Q"
-#endif
-                           " to Quit",
-                   Point2f(400.0f, 300.0f - 0.5f * fr.get_text_height()),
-                   get_Colors()["title_text"],
-                   ZENI_CENTER);
-                   */
-   Zeni::render_image("instr", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
-  }
-};
-
 class Story_State : public Gamestate_II {
   Story_State(const Story_State &);
   Story_State operator=(const Story_State &);
@@ -1561,6 +1586,50 @@ private:
     dialog.render();
   }
 };
+
+class Instructions_State : public Widget_Gamestate {
+  Instructions_State(const Instructions_State &);
+  Instructions_State operator=(const Instructions_State &);
+
+public:
+  Instructions_State()
+    : Widget_Gamestate(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)))
+  {
+  }
+
+private:
+  void on_key(const SDL_KeyboardEvent &event) {
+    if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED){
+      get_Game().pop_state();
+      get_Game().push_state(new Story_State());
+    }
+  }
+
+  void render() {
+    Widget_Gamestate::render();
+    /*
+    Zeni::Font &fr = get_Fonts()["title"];
+
+    fr.render_text(
+#if defined(_WINDOWS)
+                   "ALT+F4"
+#elif defined(_MACOSX)
+                   "Apple+Q"
+#else
+                   "Ctrl+Q"
+#endif
+                           " to Quit",
+                   Point2f(400.0f, 300.0f - 0.5f * fr.get_text_height()),
+                   get_Colors()["title_text"],
+                   ZENI_CENTER);
+                   */
+   Zeni::render_image("instr", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+  }
+};
+
+
+
+
 
 class Preparation_State :public Gamestate_II { //public Widget_Gamestate,
   Preparation_State(const Preparation_State &);
@@ -1797,7 +1866,7 @@ private:
           get_Game().pop_state();
           Model_state::get_instance()->set_initial_player_num(player_count);
           //get_Game().push_state(new Play_State());
-          get_Game().push_state(new Story_State());
+          get_Game().push_state(new Instructions_State());
         }
         break;
       case JOIN2:
@@ -1810,7 +1879,7 @@ private:
           get_Game().pop_state();
           Model_state::get_instance()->set_initial_player_num(player_count);
           //get_Game().push_state(new Play_State());
-          get_Game().push_state(new Story_State());
+          get_Game().push_state(new Instructions_State());
         }
         break;
       case JOIN3:
@@ -1823,7 +1892,7 @@ private:
           get_Game().pop_state();
           Model_state::get_instance()->set_initial_player_num(player_count);
           //get_Game().push_state(new Play_State());
-          get_Game().push_state(new Story_State());
+          get_Game().push_state(new Instructions_State());
         }
         break;
       case JOIN4:
@@ -1836,7 +1905,7 @@ private:
           get_Game().pop_state();
           Model_state::get_instance()->set_initial_player_num(player_count);
           //get_Game().push_state(new Play_State());
-          get_Game().push_state(new Story_State());
+          get_Game().push_state(new Instructions_State());
         }
         break;
       default:
@@ -2060,6 +2129,42 @@ public:
 };
 
 
+class Instructions_State_I : public Widget_Gamestate {
+  Instructions_State_I(const Instructions_State &);
+  Instructions_State_I operator=(const Instructions_State &);
+
+public:
+  Instructions_State_I()
+    : Widget_Gamestate(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)))
+  {
+  }
+
+private:
+  void on_key(const SDL_KeyboardEvent &event);
+
+  void render() {
+    Widget_Gamestate::render();
+    /*
+    Zeni::Font &fr = get_Fonts()["title"];
+
+    fr.render_text(
+#if defined(_WINDOWS)
+                   "ALT+F4"
+#elif defined(_MACOSX)
+                   "Apple+Q"
+#else
+                   "Ctrl+Q"
+#endif
+                           " to Quit",
+                   Point2f(400.0f, 300.0f - 0.5f * fr.get_text_height()),
+                   get_Colors()["title_text"],
+                   ZENI_CENTER);
+                   */
+   Zeni::render_image("instr", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+  }
+};
+
+
 class Pre_Play_State : public Widget_Gamestate {
     Pre_Play_State(const Pre_Play_State &);
     Pre_Play_State & operator=(const Pre_Play_State &);
@@ -2151,7 +2256,7 @@ class Pre_Play_State : public Widget_Gamestate {
           }
           
           void on_accept() {
-             get_Game().push_state(new Instructions_State());
+             get_Game().push_state(new Instructions_State_I());
           }
       } instructions_button;
 
@@ -2278,6 +2383,14 @@ class Pre_Play_State : public Widget_Gamestate {
       
   };
 
+  
+void Instructions_State_I::on_key(const SDL_KeyboardEvent &event) {
+    if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED){
+      get_Game().pop_state();
+      get_Game().push_state(new Pre_Play_State());
+      //get_Game().push_state(new Victory_State());
+    }
+  }
 
  void Title_state::on_event(const Zeni_Input_ID &, const float &, const int &action) {
     switch(action) {

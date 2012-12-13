@@ -33,7 +33,7 @@ namespace Flame {
   const float kPlayer_attack_strengh = 500.0f;
   //SANZANG
   const float kDisintegrate_CD = 0.0f;
-  const float kDisintegrate_dam = 50.0f;
+  const float kDisintegrate_dam = 5.0f;
   //const float kDisintegrate_mp_initial_cost = 2.0f;
   const float kDisintegrate_mp_cost = 2.0f;
   const float kHealing_CD = 2.0f;
@@ -210,6 +210,10 @@ namespace Flame {
     bool is_berserk() {return (ptype==WUKONG && spell3_active);}
     bool is_bloodsuck() {return (ptype== BAJIE && spell3_active);}
     void disintegrate_end_when_die() {disintegrate_end();}
+    void hitback_end_action() {
+      if (ctrl.l)
+        ctrl.l = false;
+    }
     void end_action() {
       if (is_disintegrate())
         disintegrate_end();

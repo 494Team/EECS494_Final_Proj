@@ -367,7 +367,7 @@ namespace Flame {
     if (player_collide)
     { 
       vector<attack_effect> empty;
-      collided_player->get_hit(time*10.f, empty);       
+      collided_player->get_hit(time*100.f, empty);       
     }
     else if (map_obj_collide)
     {
@@ -489,7 +489,7 @@ namespace Flame {
         stringstream ss;
         ss << Model_state::get_instance()->get_monster_list_ptr()->size();
         String text = String(ss.str());
-        text += " Monsters left! Kill them all!";
+        text += " Evils left! Kill them all!";
         Font &fr = get_Fonts()["system_36_800x600"];
         fr.render_text(text,
                        Point2f(200.f, 150.f),

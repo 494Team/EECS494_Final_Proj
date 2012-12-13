@@ -100,8 +100,8 @@ void Bullking::update(float time) {
           // new mini bullking
           int edge = randomer.rand_lt(4);
           // temporary. change!
-          float mini_bullking_radius = 5.0f;
-          float edge_length = room_lr.x - room_ul.x - mini_bullking_radius * 2.0f;
+          float mini_bullking_radius = BULLKING_MARCH_RADIUS;
+          float edge_length = room_lr.x - room_ul.x - (BULLKING_MARCH_RADIUS + 2.0f) * 2.0f;
           Zeni::Point2f new_mini_bullking_pos;
           Zeni::Vector2f new_mini_bullking_ori;
           switch (edge) {
@@ -164,8 +164,8 @@ void Bullking::update(float time) {
         make_move(time);
       }
       decide_attack_type();
-      // if haven't attacked target for a long time (8 secs for now). clear hatred 
-      if (get_current_time() - get_prev_attack_time() > 8.0f) {
+      // if haven't attacked target for a long time (5 secs for now). clear hatred 
+      if (get_current_time() - get_prev_attack_time() > 5.0f) {
         set_prev_attack_time(get_current_time());
         clear_hatred(target);
       }

@@ -65,7 +65,7 @@ namespace Flame {
   const float kRing_of_fire_damage = 500.0f;
 
   const Zeni::Vector2f kHell_spikes_size = Zeni::Vector2f(125.f, 125.f);
-  const float kHell_spikes_pre_time = 1.f;
+  const float kHell_spikes_pre_time = 0.8f;
   const float kHell_spikes_life_time = 5.f;
   const float kHell_spikes_damage = 5.f;
 
@@ -353,11 +353,14 @@ namespace Flame {
     float render_time;
   };
 
-  class Dajun : public Fire_ball {
+  class Dajun : public Moving_spell_circle {
   public:
     Dajun(const Zeni::Point2f& location_= Zeni::Point2f(),
           const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
+    virtual void update(float time = 0.0f);
     virtual void render();
+  private:
+    float damage;
   };
 
   class Hell_spikes : public Resizable_spell {
