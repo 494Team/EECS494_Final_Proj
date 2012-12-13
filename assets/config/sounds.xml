@@ -92,6 +92,18 @@ HOWTO:  To convert between types, or to downmix to mono,
 
 </fire_place>
 
+<boss_bgm>
+
+<filepath>sfx/boss_bgm</filepath>
+
+</boss_bgm>
+
+<stage_bgm>
+
+<filepath>sfx/stage_bgm</filepath>
+
+</stage_bgm>
+
 
 <trap>
 

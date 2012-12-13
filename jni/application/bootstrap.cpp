@@ -662,6 +662,9 @@ private:
     else {
       int prev_stage = Model_state::get_instance()->get_prev_stage();
       if (stage_ == 1) {
+        get_Sound().set_BGM("sfx/stage_bgm");
+        get_Sound().play_BGM();
+        get_Sound().set_BGM_looping(true);
         if (!prev_stage) {
           float x = 660;
           for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
@@ -705,6 +708,9 @@ private:
         }
       }
       else if (stage_ == 2){
+        get_Sound().set_BGM("sfx/stage_bgm");
+        get_Sound().play_BGM();
+        get_Sound().set_BGM_looping(true);
         if (prev_stage == 1) {
           int i = 0;
           for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
@@ -739,6 +745,9 @@ private:
         }
       }
       else if (stage_ == 3){
+        get_Sound().set_BGM("sfx/boss_bgm");
+        get_Sound().play_BGM();
+        get_Sound().set_BGM_looping(true);
         if (prev_stage == 1) {
           int i = 0;
           for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
