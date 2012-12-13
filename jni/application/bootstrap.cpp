@@ -44,6 +44,7 @@ public:
   {
     m_set.start();
     m_change.start();
+    get_Sound().set_BGM("sfx/victory_bgm");
   }
 
 private:
@@ -2382,6 +2383,7 @@ void Instructions_State_I::on_key(const SDL_KeyboardEvent &event) {
     if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED){
       get_Game().pop_state();
       get_Game().push_state(new Pre_Play_State());
+      //get_Game().push_state(new Victory_State());
     }
   }
 

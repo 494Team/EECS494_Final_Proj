@@ -39,6 +39,13 @@ HOWTO:  To convert between types, or to downmix to mono,
 <filepath>sfx/sword_hit</filepath>
 
 </sword_hit>
+
+
+<victory_bgm>
+
+<filepath>sfx/victory_bgm</filepath>
+
+</victory_bgm>
 <sword_miss>
 
 <filepath>sfx/sword_miss</filepath>
