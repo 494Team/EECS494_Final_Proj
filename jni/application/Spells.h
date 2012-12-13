@@ -328,17 +328,19 @@ namespace Flame {
     Fire_ball_green(const Zeni::Point2f& location_ = Zeni::Point2f(),
               const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
               float damage_ = 0.f)
-              :Fire_ball(location_, orientation_, damage_){};
+              : Fire_ball(location_, orientation_, damage_) {}
     void render();
   };
-  
-  class Fire_ball_violet : public Fire_ball {
+
+  class Ice_ball : public Moving_spell_circle {
   public:
-    Fire_ball_violet(const Zeni::Point2f& location_ = Zeni::Point2f(),
+    Ice_ball(const Zeni::Point2f& location_ = Zeni::Point2f(),
               const Zeni::Vector2f& orientation_ = Zeni::Vector2f(),
-              float damage_ = 0.f)
-              :Fire_ball(location_, orientation_, damage_){};
-    void render();
+              float damage_ = 0.f);
+    virtual void update(float time = 0.f);
+    virtual void render();
+  private:
+    float damage;
   };
 
   class Ring_of_fire : public Moving_spell_rectangle {

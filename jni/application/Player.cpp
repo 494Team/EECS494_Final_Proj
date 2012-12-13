@@ -151,6 +151,9 @@ void Player::update(float time) {
   if (!is_charging() && !is_hitback()) {
     set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
   }
+  if (is_slowdown()) {
+    set_speed(get_current_speed() * 0.5f);
+  }
 
   if (is_hitback()) {
     end_action();
@@ -297,6 +300,12 @@ void Player::render() {
   }
   if (render_player) {
     Color filter_color = is_berserk() ? Color(1.0f, 1.0f, 0.0f, 0.0f) : Color();
+    if (is_slowdown()) {
+      filter_color = Color(filter_color.a * SLOWDOWN_COLOR.a,
+                           filter_color.r * SLOWDOWN_COLOR.r,
+                           filter_color.g * SLOWDOWN_COLOR.g,
+                           filter_color.b * SLOWDOWN_COLOR.b);
+    }
     render_image(player_texture,
                  Point2f(rel_loc.x - size * scale, rel_loc.y - size * scale),
                  Point2f(rel_loc.x + size * scale, rel_loc.y + size * scale),

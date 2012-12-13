@@ -640,11 +640,39 @@ namespace Flame {
 
   void Fire_ball::render()
   {Moving_spell::render("fire_ball");}
- 
+
   void Fire_ball_green::render()
   {Moving_spell::render("green_fire_ball");}
+
+ 
+  // ice ball
+  Ice_ball::Ice_ball(const Point2f& location_, const Vector2f& orientation_, float damage_) :
+    Moving_spell_circle(location_ + 10.f * orientation_.normalized(),
+                        orientation_,
+                        Vector2f(kFireball_size, kFireball_size),
+                        kFireball_speed,
+                        kFireball_life_time),
+    damage(damage_)
+    {play_sound("fireball");}
+
+  void Ice_ball::update(float time)
+  {
+    Moving_spell_circle::update(time);
+    if (is_active()) {
+      vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
+      for (auto it = player_list_ptr->begin(); it != player_list_ptr->end(); ++it)
+        if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
+          std::vector<attack_effect> effects;
+          effects.push_back(SLOWDOWN);
+          (*it)->get_hit(damage, effects);
+          Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
+          disable_spell();
+          break;
+        }
+    }
+  }
   
-  void Fire_ball_violet::render()
+  void Ice_ball::render()
   {Moving_spell::render("violet_fire_ball");}
   
 

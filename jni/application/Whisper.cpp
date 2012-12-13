@@ -24,7 +24,7 @@ void Whisper_green::attack() {
 
 void Whisper_violet::attack() {
   Monster::attack();
-  Fire_ball* test_spell = new Fire_ball_violet(get_location(), target->get_location() - get_location());
+  Ice_ball* test_spell = new Ice_ball(get_location(), target->get_location() - get_location());
   Model_state::get_instance()->add_spell(test_spell);
 }
 
