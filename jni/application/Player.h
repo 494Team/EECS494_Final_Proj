@@ -83,6 +83,10 @@ namespace Flame {
   const float kBloodsuck_effect = 0.3f;
   const float kBloodsuck_mp_cost = 300.0f;
 
+  //player number buff
+  const float kPlayer_number_attack_buff[4] = {1.1f, 0.9f, 0.75f, 0.65f};
+  const float kPlayer_number_defense_buff[4] = {0.6f, 0.75f, 0.8f, 0.9f};
+
   class Player: public Agent {
   public:
     virtual void get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker=NULL, Zeni::Vector2f coming_ori = Zeni::Vector2f()) {

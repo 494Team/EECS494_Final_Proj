@@ -57,8 +57,8 @@ namespace Flame{
   const float WHISPER_MIN_DIST = 100.0f;
   const float WHISPER_MAX_DIST = 500.0f;
   const float WHISPER_VIEW_RANGE = 800.0f;
-  const float WHISPER_GREEN_DAMAGE = 500.0f;
-  const float WHISPER_VIOLET_DAMAGE = 400.0f;
+  const float WHISPER_GREEN_DAMAGE = 600.0f;
+  const float WHISPER_VIOLET_DAMAGE = 500.0f;
 
   // Boss general constants
   const float BOSS_VIEW_RANGE = 2000.0f;
@@ -66,7 +66,7 @@ namespace Flame{
   // Redboy constants
   const float REDBOY_RADIUS = 20.0f;
   const float REDBOY_SPEED = 110.0f;
-  const float REDBOY_DAMAGE = 500.0f;
+  const float REDBOY_DAMAGE = 650.0f;
   const float REDBOY_HEALTH = 100000.0f;
   const float REDBOY_ATTACK_GAP = 1.5f;
   const float REDBOY_ATTACK_RADIUS = 32.0f;
@@ -94,7 +94,7 @@ namespace Flame{
   const float BULLKING_HELLDOOR_NEW_GAP = 2.0f;
   const float BULLKING_MARCH_DURATION = 10.0f;
   const float BULLKING_MARCH_NEW_GAP = 0.1f;
-  const float BULLKING_MARCH_DAMAGE = 800.0f;
+  const float BULLKING_MARCH_DAMAGE = 600.0f;
   const float BULLKING_MARCH_RADIUS = 20.0f;
   const float BULLKING_EXPLOSION_BODY_CHANGE_TIME = 0.2f;
   const float BULLKING_EXPLOSION_DURATION = 12.0f;
@@ -138,9 +138,7 @@ namespace Flame{
   const float kMp_regen_SANZANG_additional = 0.5f;
   const float kSpeed_maxbuff = 180.0f;
 
-  //player number buff
-  const float kPlayer_number_attack_buff[4] = {1.1f, 0.9f, 0.75f, 0.7f};
-  const float kPlayer_number_defense_buff[4] = {0.6f, 0.75f, 0.9f, 0.9f};
+
 
 
   //others
@@ -191,7 +189,7 @@ namespace Flame{
     A=0, B, C, D, E, GOD
   };
   const float kDiff_attack_buff[5] = {3.0f, 2.0f, 1.2f, 1.0f, 0.7f};
-  const float kDiff_defense_buff[5] = {0.6f, 0.8f, 1.0f, 0.8f, 0.6f};
+  const float kDiff_defense_buff[5] = {0.6f, 0.8f, 1.0f, 1.15f, 1.3f};
   
   enum Dialog_state {
     NO_DIALOG,

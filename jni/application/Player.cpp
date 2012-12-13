@@ -140,8 +140,8 @@ void Player::update(float time) {
   float shield_buff = shielding ? kShield_effect : 1.0f;
   float mp_regen_real_max = ptype==SANZANG ? kMp_regen_maxbuff+kMp_regen_SANZANG_additional : kMp_regen_maxbuff;
   float WUKONG_hp_regen_factor = ptype==WUKONG? 2.0f:1.0f;
-  float MELEE_armor_factor = (ptype==WUKONG||ptype==BAJIE) ? 0.5f:1.0f;
-  float BAJIE_armor_factor = (ptype==BAJIE) ? 0.90f:1.0f;
+  float MELEE_armor_factor = (ptype==WUKONG||ptype==BAJIE) ? 0.6f:0.9f;
+  float BAJIE_armor_factor = (ptype==BAJIE) ? 0.80f:1.0f;
   int init_player_num = Model_state::get_instance()->get_initial_player_num();
   
   //update buff
@@ -149,8 +149,9 @@ void Player::update(float time) {
     set_attack_buff(100.0f);
     set_armor(0.0f);
   } else {
-    set_attack_buff((1.0f + attack * kAttack_maxbuff/kAttack_max) * berserk_buff * kPlayer_number_attack_buff[init_player_num] * kDiff_attack_buff[(int)diff]);
-    set_armor((1.0f - defense * kDefense_maxbuff/kDefense_max) * MELEE_armor_factor * BAJIE_armor_factor * shield_buff * kPlayer_number_defense_buff[init_player_num] * kDiff_defense_buff[(int)diff]);
+    set_attack_buff((1.0f + attack * kAttack_maxbuff/kAttack_max) * berserk_buff * kPlayer_number_attack_buff[init_player_num-1] * kDiff_attack_buff[(int)diff]);
+    float armor = (0.9f - defense * kDefense_maxbuff/kDefense_max) * MELEE_armor_factor * BAJIE_armor_factor * shield_buff * kPlayer_number_defense_buff[init_player_num-1] * kDiff_defense_buff[(int)diff];
+    set_armor(armor);
   }
   set_hp_regen_rate((kHp_regen_base + hpmp_regen * kHp_regen_maxbuff/kHpmp_regen_max) * WUKONG_hp_regen_factor);
   set_mp_regen_rate(kMp_regen_base + hpmp_regen * mp_regen_real_max/kHpmp_regen_max);

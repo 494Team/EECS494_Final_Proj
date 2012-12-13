@@ -10,6 +10,7 @@ void Level_1::init_map(int stage) {
     // stage 1
     // monster
     get_Sound().set_BGM("sfx/stage_bgm");
+    
     monster_list.push_back(new Wanderer(Zeni::Point2f(75, 150)));
     monster_list.push_back(new Wanderer(Zeni::Point2f(125, 150)));
     monster_list.push_back(new Whisper(Zeni::Point2f(100, 100)));

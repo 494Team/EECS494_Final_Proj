@@ -701,7 +701,8 @@ public:
     curr_lvl = 0;
     lvl_up_effect_pos = Point2f(-390.f, 116.f);
     Model_state::get_instance()->init(stage, &m_set);
-    set_stage(stage);
+    set_stage(3);
+    //set_stage(stage);
     //!!! test
     //dialog.start(stage);
     //begin_dialog(&dialog, stage);
@@ -718,11 +719,8 @@ private:
       (*it)->end_action();
     }
 
-    if (change_lvl)
-        set_level(1);
-
     Model_state::get_instance()->clear_without_player();
-    if (curr_lvl == 0) {
+    if (!change_lvl && curr_lvl == 0) {
       float x = 440.f;
       for (auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
            it != Model_state::get_instance()->get_player_list_ptr()->end();
@@ -855,6 +853,21 @@ private:
       }
     }
 
+
+    //dialog section
+    if (curr_lvl == 0 && stage_ == 1) {
+      dialog.start(1);
+    } else if (curr_lvl == 0 && stage_ == 3) {
+      dialog.start(2);
+    } else if (curr_lvl == 0 && stage == 3 && stage_ == 1) {
+      dialog.start(3);
+    } else if (curr_lvl == 1 && stage_ == 4) {
+      dialog.start(4);
+    }
+    if (change_lvl)
+      set_level(1);
+    stage = stage_;
+
     levels[curr_lvl]->init_map(stage_);
     std::vector<Map *> map_list = levels[curr_lvl]->get_map_list();
     for (auto it = map_list.begin(); it != map_list.end(); ++it)
@@ -864,22 +877,13 @@ private:
       Model_state::get_instance()->add_monster(*it);
     if (curr_lvl == 0 && stage_ == 3)
       Model_state::get_instance()->set_prev_stage(0);
+    else if (restart || (curr_lvl == 0 && stage == 3 && stage_ == 1))
+      revival_num = Model_state::get_instance()->get_initial_player_num() * kRevival_max_per_player;
     else
       Model_state::get_instance()->set_prev_stage(stage);
     Model_state::get_instance()->set_next_stage(0);
-    stage = stage_;
 
 
-    //dialog section
-    if (curr_lvl == 0 && stage_ == 1) {
-      dialog.start(1);
-    } else if (curr_lvl == 0 && stage_ == 3) {
-      dialog.start(2);
-    } else if (curr_lvl == 1 && stage_ == 1) {
-      dialog.start(3);
-    } else if (curr_lvl == 1 && stage_ == 3) {
-      dialog.start(4);
-    }
 
   }
 
@@ -892,7 +896,7 @@ private:
     for (auto it = dead_player_list->begin(); it != dead_player_list->end();) {
       it = Model_state::get_instance()->player_rise_without_setting_pos(*it);
     }
-    revival_num = Model_state::get_instance()->get_initial_player_num() * kRevival_max_per_player;
+    //revival_num = Model_state::get_instance()->get_initial_player_num() * kRevival_max_per_player;
     set_stage(1, true);
   }
     
@@ -993,11 +997,13 @@ private:
     if (list_pos != -1) {
       //control of alive players
       p_ptr = player_list_ptr->at(list_pos);
+      /*
       cerr << "********ptype: " << p_ptr->ptype << endl;
       cerr << "********controllable: " << p_ptr->controllable() << endl;
       cerr << "********is_hitback(): " << p_ptr->is_hitback() << endl;
       cerr << "********is_charging(): " << p_ptr->is_charging() << endl;
       cerr << "********is_alive(): " << p_ptr->is_alive() << endl;
+      */
       //p_ptr = player_list_ptr->at(player_pos_in_list);
         if (p_ptr->controllable()) {
           switch(action) {
@@ -1007,8 +1013,7 @@ private:
             case MENU4: 
               if (confidence >= 1.0f && !dialog.is_goingon()) {
                 for (auto it=player_list_ptr->begin(); it!=player_list_ptr->end(); ++it) {
-                  if ((*it)->ctrl.l)
-                    (*it)->ctrl.l = false;
+                  (*it)->end_action();
                 }
                 get_into_upgradeshop();
               }
