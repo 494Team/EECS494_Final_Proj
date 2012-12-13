@@ -681,7 +681,7 @@ public:
 
     levels.push_back(new Level_1());
     levels.push_back(new Level_2());
-    curr_lvl = 1;
+    curr_lvl = 0;
 
     Model_state::get_instance()->init(stage, &m_set);
     set_stage(stage);
@@ -2042,6 +2042,49 @@ class Pre_Play_State : public Widget_Gamestate {
     Pre_Play_State & operator=(const Pre_Play_State &);
 
   public:
+      class Difficulty_Down_Button : public Text_Button {
+          Difficulty_Down_Button(const Difficulty_Down_Button &);
+          Difficulty_Down_Button & operator=(const Difficulty_Down_Button &);
+          
+      public:
+          Difficulty_Down_Button()
+          : Text_Button(Point2f(50.0f, 370.0f), Point2f(150.0f, 420.0f),
+                        "system_36_800x600", "<<")
+          {
+            give_Renderer(new Widget_Renderer_Tricolor(Color(1.f, 1.f, 1.f, 0.0f), 
+                  Color(1.f, 0.66f, 0.f, 0.0f),
+                  Color(0.5f, 0.66f, 0.f, 0.0f),
+                                                        Color(1.f, 0.f, 0.f, 0.0f),
+                                                        Color(1.f, 1.f, 1.f, 1.0f),
+                                                        Color(1.f, 1.f, 1.f, 1.0f)));
+          }
+          
+          void on_accept() {
+            Model_state::get_instance()->diff_minus();
+          }
+      } difficulty_down_button;
+
+      class Difficulty_Up_Button : public Text_Button {
+          Difficulty_Up_Button(const Difficulty_Up_Button &);
+          Difficulty_Up_Button & operator=(const Difficulty_Up_Button &);
+          
+      public:
+          Difficulty_Up_Button()
+          : Text_Button(Point2f(390.0f, 370.0f), Point2f(490.0f, 420.0f),
+                        "system_36_800x600", ">>")
+          {
+            give_Renderer(new Widget_Renderer_Tricolor(Color(1.f, 1.f, 1.f, 0.0f), 
+                  Color(1.f, 0.66f, 0.f, 0.0f),
+                  Color(0.5f, 0.66f, 0.f, 0.0f),
+                                                        Color(1.f, 0.f, 0.f, 0.0f),
+                                                        Color(1.f, 1.f, 1.f, 1.0f),
+                                                        Color(1.f, 1.f, 1.f, 1.0f)));
+          }
+          
+          void on_accept() {
+            Model_state::get_instance()->diff_add();
+          }
+      } difficulty_up_button;
 
       class Play_Single_Button : public Text_Button {
           Play_Single_Button(const Play_Single_Button &);
@@ -2049,7 +2092,7 @@ class Pre_Play_State : public Widget_Gamestate {
           
       public:
           Play_Single_Button()
-          : Text_Button(Point2f(50.0f, 400.0f), Point2f(260.0f, 450.0f),
+          : Text_Button(Point2f(50.0f, 440.0f), Point2f(260.0f, 490.0f),
                         "system_36_800x600", "Play")
           {
             give_Renderer(new Widget_Renderer_Tricolor(Color(1.f, 1.f, 1.f, 0.0f), 
@@ -2073,7 +2116,7 @@ class Pre_Play_State : public Widget_Gamestate {
           
       public:
           Instructions_Button()
-          : Text_Button(Point2f(280.0f, 400.0f), Point2f(490.0f, 450.0f),
+          : Text_Button(Point2f(280.0f, 440.0f), Point2f(490.0f, 490.0f),
                         "system_36_800x600", "Instructions")
           {
             give_Renderer(new Widget_Renderer_Tricolor(Color(1.f, 1.f, 1.f, 0.0f), 
@@ -2097,14 +2140,16 @@ class Pre_Play_State : public Widget_Gamestate {
       Popup_Menu_State::Quit_Button quit_button;
     Pre_Play_State()
       : Widget_Gamestate(std::make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f))),
-      configure_video_button(Point2f(50.0f, 470.0f), Point2f(260.0f, 520.0f)),
-      sound_check_box(Point2f(510.0f, 470.0f), Point2f(560.0f, 520.0f)),
-      quit_button(Point2f(280.0f, 470.0f), Point2f(490.0f, 520.0f))
+      configure_video_button(Point2f(50.0f, 510.0f), Point2f(260.0f, 560.0f)),
+      sound_check_box(Point2f(510.0f, 510.0f), Point2f(560.0f, 560.0f)),
+      quit_button(Point2f(280.0f, 510.0f), Point2f(490.0f, 560.0f))
     {
     /*  m_widgets.lend_Widget(level_1_button);
         m_widgets.lend_Widget(level_2_button);
         m_widgets.lend_Widget(level_3_button);
         m_widgets.lend_Widget(level_4_button);*/
+        m_widgets.lend_Widget(difficulty_down_button);
+        m_widgets.lend_Widget(difficulty_up_button);
         m_widgets.lend_Widget(play_single_button);
         m_widgets.lend_Widget(sound_check_box);
         m_set.start();
@@ -2174,6 +2219,34 @@ class Pre_Play_State : public Widget_Gamestate {
           get_Video().set_2d(get_virtual_window(), fix_aspect_ratio());
 
           m_widgets.render();
+          Zeni::String diff;
+          switch(Model_state::get_instance()->get_diff()) {
+              case A:
+                diff = "Easy";
+                break;
+              case B:
+                diff = "Comfortable";
+                break;
+              case C:
+                diff = "Normal";
+                break;
+              case D:
+                diff = "Hard";
+                break;
+              case E:
+                diff = "Crazy";
+                break;
+              case GOD:
+                diff = "God Mode";
+                break;
+              default:
+                break;
+          }
+          Zeni::Font &l_ft = get_Fonts()["victory_ft"];
+          l_ft.render_text(diff,
+                             Point2f(270.0f, 395.0f - 0.5f*l_ft.get_text_height()),
+                             get_Colors()["yellow"],
+                             ZENI_CENTER);
       };
   private:
       Chronometer<Time> m_set;
@@ -2199,7 +2272,7 @@ class Pre_Play_State : public Widget_Gamestate {
 class Bootstrap {
   class Gamestate_One_Initializer : public Gamestate_Zero_Initializer {
     virtual Gamestate_Base * operator()() {
-      Window::set_title("zenilib Application");
+      Window::set_title("Flaming Mountains");
 
       get_Joysticks();
       get_Video();

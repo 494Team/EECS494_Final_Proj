@@ -33,7 +33,8 @@ namespace Flame {
 
   Model_state::Model_state() :
     center_location(Point2f()),
-    scale(1.f)
+    scale(1.f),
+    diff(C)
   {
     die = new Sound_Source(get_Sounds()["die"]);
   }

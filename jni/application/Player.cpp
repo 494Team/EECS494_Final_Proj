@@ -38,7 +38,8 @@ Player::Player(
   mp(kMp_max),
   disintegrate_ptr(nullptr),
   attack_buff(kInit_attack_buff),
-  last_regen(0.0f)
+  last_regen(0.0f),
+  diff(Model_state::get_instance()->get_diff())
 {
   //set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
   switch (ptype) {
@@ -144,8 +145,13 @@ void Player::update(float time) {
   int init_player_num = Model_state::get_instance()->get_initial_player_num();
   
   //update buff
-  set_attack_buff((1.0f + attack * kAttack_maxbuff/kAttack_max) * berserk_buff * kPlayer_number_attack_buff[init_player_num]);
-  set_armor((1.0f - defense * kDefense_maxbuff/kDefense_max) * MELEE_armor_factor * BAJIE_armor_factor * shield_buff * kPlayer_number_defense_buff[init_player_num]);
+  if (diff == GOD) {
+    set_attack_buff(100.0f);
+    set_armor(0.0f);
+  } else {
+    set_attack_buff((1.0f + attack * kAttack_maxbuff/kAttack_max) * berserk_buff * kPlayer_number_attack_buff[init_player_num] * kDiff_attack_buff[(int)diff]);
+    set_armor((1.0f - defense * kDefense_maxbuff/kDefense_max) * MELEE_armor_factor * BAJIE_armor_factor * shield_buff * kPlayer_number_defense_buff[init_player_num] * kDiff_defense_buff[(int)diff]);
+  }
   set_hp_regen_rate((kHp_regen_base + hpmp_regen * kHp_regen_maxbuff/kHpmp_regen_max) * WUKONG_hp_regen_factor);
   set_mp_regen_rate(kMp_regen_base + hpmp_regen * mp_regen_real_max/kHpmp_regen_max);
   if (!is_charging() && !is_hitback()) {

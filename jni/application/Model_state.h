@@ -140,7 +140,18 @@ namespace Flame {
       {return next_stage;}
     void set_next_stage(int stage)
       {next_stage = stage;}
+    void set_diff(Difficulty diff_) {diff = diff_;}
+    void diff_minus() {
+      if (diff > A)
+        diff = (Difficulty)(diff-1);
+    }
+    void diff_add() {
+      if (diff < GOD)
+        diff = (Difficulty)(diff+1);
+    }
+    Difficulty get_diff() {return diff;}
   private:
+    Difficulty diff;
     float exp;
     int exp_level;
     int initial_player_num;

@@ -227,6 +227,7 @@ namespace Flame {
         ctrl.l = false;
     }
   private:
+    Difficulty diff;
     int controller; //range: [0, 3]
     float mp;
     float hp_regen_rate;

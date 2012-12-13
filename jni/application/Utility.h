@@ -182,6 +182,12 @@ namespace Flame{
 
     std::string msg;
   };
+
+  enum Difficulty {
+    A=0, B, C, D, E, GOD
+  };
+  const float kDiff_attack_buff[5] = {3.0f, 2.0f, 1.2f, 1.0f, 0.7f};
+  const float kDiff_defense_buff[5] = {0.6f, 0.8f, 1.0f, 0.8f, 0.6f};
   
   enum Dialog_state {
     NO_DIALOG,
