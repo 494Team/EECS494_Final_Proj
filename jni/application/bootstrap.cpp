@@ -743,7 +743,7 @@ private:
             x += 40.f;
           }
         }
-        else if (prev_stage == 2) {
+        else if (stage == 2) {
           int i = 0;
           for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
               it != Model_state::get_instance()->get_player_list_ptr()->end();
@@ -777,7 +777,7 @@ private:
         }
       }
       else if (stage_ == 2){
-        if (prev_stage == 1) {
+        if (stage == 1) {
           int i = 0;
           for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
               it != Model_state::get_instance()->get_player_list_ptr()->end();
@@ -811,7 +811,7 @@ private:
         }
       }
       else if (stage_ == 3){
-       if (prev_stage == 1) {
+       if (stage == 1) {
           int i = 0;
           for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
               it != Model_state::get_instance()->get_player_list_ptr()->end();
@@ -1660,6 +1660,16 @@ public:
   }
 
 private:
+  void on_pop() {
+    get_Window().mouse_hide(false);
+    get_Game().joy_mouse.enabled = true;
+  }
+  void on_push() {
+    //get_Window().mouse_grab(true);
+    get_Window().mouse_hide(true);
+    get_Game().joy_mouse.enabled = true;
+  }
+  
   void on_key(const SDL_KeyboardEvent &event) {
     if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED){
       get_Game().pop_state();
@@ -1668,7 +1678,7 @@ private:
   }
 
   void render() {
-    Widget_Gamestate::render();
+    //Widget_Gamestate::render();
     /*
     Zeni::Font &fr = get_Fonts()["title"];
 
