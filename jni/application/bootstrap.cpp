@@ -2192,7 +2192,8 @@ private:
   void on_key(const SDL_KeyboardEvent &event);
 
   void render() {
-    Widget_Gamestate::render();
+    //Widget_Gamestate::render();
+    get_Video().set_2d(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
     /*
     Zeni::Font &fr = get_Fonts()["title"];
 
