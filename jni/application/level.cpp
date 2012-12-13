@@ -9,6 +9,7 @@ void Level_1::init_map(int stage) {
   if (stage == 1) {
     // stage 1
     // monster
+    get_Sound().set_BGM("sfx/stage_bgm");
     monster_list.push_back(new Wanderer(Zeni::Point2f(75, 150)));
     monster_list.push_back(new Wanderer(Zeni::Point2f(125, 150)));
     monster_list.push_back(new Whisper(Zeni::Point2f(100, 100)));
@@ -41,6 +42,7 @@ void Level_1::init_map(int stage) {
   else if (stage == 2) {
     // stage 2
     // monster
+    get_Sound().set_BGM("sfx/stage_bgm");
     monster_list.push_back(new Wanderer(Zeni::Point2f(475, 500)));
     monster_list.push_back(new Wanderer(Zeni::Point2f(525, 500)));
     monster_list.push_back(new Whisper(Zeni::Point2f(500, 450)));
@@ -77,6 +79,7 @@ void Level_1::init_map(int stage) {
   else {
     // stage 3
     // monster
+    get_Sound().set_BGM("sfx/boss_bgm");
     monster_list.push_back(new Redboy(Zeni::Point2f(500.f, 500.f)));
 
     // map
@@ -107,6 +110,7 @@ void Level_2::init_map(int stage)
   std::vector<Map*> map_list;
 
   if (stage == 1) {
+    get_Sound().set_BGM("sfx/stage_bgm");
     // stage 1
     // monster
     // left up
@@ -311,6 +315,7 @@ void Level_2::init_map(int stage)
     map_list.push_back(new Map_laser(Point2f(3237.f, 1200.f), Vector2f(-1.f, 0.f), "laser"));
   }
   else if (stage == 2) {
+    get_Sound().set_BGM("sfx/stage_bgm");
     // stage 2
     // monster
     // left up
@@ -541,6 +546,7 @@ void Level_2::init_map(int stage)
     map_list.push_back(new Map_gate(Point2f(1260.f, 5820.f), Vector2f(120.f, 120.f), 1, "blue"));
   }
   else if (stage == 3) {
+    get_Sound().set_BGM("sfx/stage_bgm");
     // stage 3
     // monster
     // left up
@@ -811,6 +817,7 @@ void Level_2::init_map(int stage)
     map_list.push_back(new Map_gate(Point2f(1260.f, 5820.f), Vector2f(120.f, 120.f), 4, "blue"));
   }
   else {
+    get_Sound().set_BGM("sfx/boss_bgm");
     // stage 4: bullking's room
     // monster
     monster_list.push_back(new Bullking(Zeni::Point2f(300.f, 300.f)));
