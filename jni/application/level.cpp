@@ -226,11 +226,11 @@ void Level_2::init_map(int stage)
     monster_list.push_back(new Wanderer(Zeni::Point2f(3075, 125)));
     monster_list.push_back(new Wanderer(Zeni::Point2f(2925, 125)));
     monster_list.push_back(new Whisper_violet(Zeni::Point2f(2925, 95)));
-    // up right middle
+    // up right
     monster_list.push_back(new Wanderer(Zeni::Point2f(4700, 45)));
     monster_list.push_back(new Wanderer(Zeni::Point2f(4700, 195)));
     monster_list.push_back(new Whisper_violet(Zeni::Point2f(4750, 195)));
-    // up right
+    // up right middle
     monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 45)));
     monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 195)));
     monster_list.push_back(new Whisper_violet(Zeni::Point2f(3950, 195)));
@@ -255,6 +255,24 @@ void Level_2::init_map(int stage)
     monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 5955)));
     monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 5805)));
     monster_list.push_back(new Whisper_violet(Zeni::Point2f(3950, 5805)));
+
+    // left middle middle left - middle up
+    monster_list.push_back(new Wanderer(Zeni::Point2f(2100, 1300)));
+    monster_list.push_back(new Wanderer(Zeni::Point2f(2100, 1250)));
+    monster_list.push_back(new Whisper_violet(Zeni::Point2f(2050, 1250)));
+    // left middle middle left - middle down
+    monster_list.push_back(new Wanderer(Zeni::Point2f(2100, 4700)));
+    monster_list.push_back(new Wanderer(Zeni::Point2f(2100, 4750)));
+    monster_list.push_back(new Whisper_violet(Zeni::Point2f(2050, 4750)));
+
+    // right middle middle right - middle up
+    monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 1300)));
+    monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 1250)));
+    monster_list.push_back(new Whisper_violet(Zeni::Point2f(3950, 1250)));
+    // right middle middle right - middle down
+    monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 4700)));
+    monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 4750)));
+    monster_list.push_back(new Whisper_violet(Zeni::Point2f(3950, 4750)));
 
     // map
     map_list.push_back(new Map_brick(Point2f(0.0f, 0.0f), Vector2f(1200.0f, 1200.0f), 40.0f, 40.0f, "rock"));
@@ -480,6 +498,17 @@ void Level_2::init_map(int stage)
     monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 5805)));
     monster_list.push_back(new Whisper_green(Zeni::Point2f(3950, 5955)));
     monster_list.push_back(new Whisper_violet(Zeni::Point2f(3950, 5805)));
+
+    // right middle middle right - middle up
+    monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 1300)));
+    monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 1250)));
+    monster_list.push_back(new Whisper_green(Zeni::Point2f(3950, 1300)));
+    monster_list.push_back(new Whisper_violet(Zeni::Point2f(3950, 1250)));
+    // right middle middle right - middle down
+    monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 4700)));
+    monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 4750)));
+    monster_list.push_back(new Whisper_green(Zeni::Point2f(3950, 4700)));
+    monster_list.push_back(new Whisper_violet(Zeni::Point2f(3950, 4750)));
 
     // map
     map_list.push_back(new Map_brick(Point2f(0.0f, 0.0f), Vector2f(1200.0f, 1200.0f), 40.0f, 40.0f, "rock"));
@@ -736,6 +765,19 @@ void Level_2::init_map(int stage)
     monster_list.push_back(new Whisper_green(Zeni::Point2f(3950, 5955)));
     monster_list.push_back(new Whisper_green(Zeni::Point2f(3950, 5880)));
     monster_list.push_back(new Whisper_violet(Zeni::Point2f(3950, 5805)));
+
+    // right middle middle right - middle up
+    monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 1300)));
+    monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 1250)));
+    monster_list.push_back(new Whisper_green(Zeni::Point2f(3950, 1300)));
+    monster_list.push_back(new Whisper_green(Zeni::Point2f(3950, 1275)));
+    monster_list.push_back(new Whisper_violet(Zeni::Point2f(3950, 1250)));
+    // right middle middle right - middle down
+    monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 4700)));
+    monster_list.push_back(new Wanderer(Zeni::Point2f(3900, 4750)));
+    monster_list.push_back(new Whisper_green(Zeni::Point2f(3950, 4700)));
+    monster_list.push_back(new Whisper_green(Zeni::Point2f(3950, 4725)));
+    monster_list.push_back(new Whisper_violet(Zeni::Point2f(3950, 4750)));
 
     // map
     map_list.push_back(new Map_brick(Point2f(0.0f, 0.0f), Vector2f(1200.0f, 1200.0f), 40.0f, 40.0f, "rock"));
