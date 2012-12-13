@@ -708,7 +708,7 @@ public:
   }
 
 private:
-  void set_stage(int stage_, bool restart = false) {
+  void set_stage(int stage_, bool restart = false, bool change_lvl = false) {
     //end the player action before changing stage
     //for example cudgel_fury
     for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
@@ -716,6 +716,9 @@ private:
         ++it){
       (*it)->end_action();
     }
+
+    if (change_lvl)
+        set_level(1);
 
     Model_state::get_instance()->clear_without_player();
     if (curr_lvl == 0) {
@@ -1174,12 +1177,14 @@ private:
         Model_state::get_instance()->update_scale_and_center();
     }
     if (curr_lvl == 0 && stage == 3 && Model_state::get_instance()->get_monster_list_ptr()->empty()) {
-      set_level(1);
       Model_state::get_instance()->add_map_obj(new Map_gate(Point2f(380.f, 380.f), Vector2f(240.f, 240.f), 1, "boss"));
     }
     int next_stage = Model_state::get_instance()->get_next_stage();
     if (next_stage) {
-      set_stage(next_stage);
+      if (curr_lvl == 0 && next_stage == 1)
+        set_stage(next_stage, false, true);
+      else
+        set_stage(next_stage);
     }
   }
 
