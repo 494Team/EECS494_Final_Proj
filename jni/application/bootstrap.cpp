@@ -580,9 +580,9 @@ public:
     m_time_passed(0.f),
     stage(1),
     show_die(false),
-    dialog(&m_set),
-    revival_num(kTemp_revival_max)
+    dialog(&m_set)
   {
+    revival_num = Model_state::get_instance()->get_initial_player_num() * kRevival_max_per_player;
     set_pausable(true);
 
     set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), MENU);
@@ -1266,15 +1266,17 @@ private:
         render_status_helper(controller, *it);
     }
 
-    /* render level status */
     char* str = new char[10];
-    Zeni::String text_buf = "Stage ";
+    Zeni::String text_buf;
+    Zeni::Font &l_ft = get_Fonts()["lvl_ft"];
+    if (Model_state::get_instance()->get_initial_player_num() > 1) {
+    /* render level status */
+    text_buf = "Stage ";
     sprintf(str, "%d", curr_lvl + 1);
     text_buf += str;
     text_buf += "-";
     sprintf(str, "%d", stage);
     text_buf += str;
-    Zeni::Font &l_ft = get_Fonts()["lvl_ft"];
     l_ft.render_text(text_buf,
                    Point2f(20.0f, 560.0f - 2.5f * l_ft.get_text_height()),
                    get_Colors()["yellow"],
@@ -1288,6 +1290,21 @@ private:
                    Point2f(20.0f, 560.0f - 1.5f * l_ft.get_text_height()),
                    get_Colors()["yellow"],
                    ZENI_LEFT);
+    }
+    else
+    {
+    /* render level status */
+    text_buf = "Stage ";
+    sprintf(str, "%d", curr_lvl + 1);
+    text_buf += str;
+    text_buf += "-";
+    sprintf(str, "%d", stage);
+    text_buf += str;
+    l_ft.render_text(text_buf,
+                   Point2f(20.0f, 560.0f - 1.5f * l_ft.get_text_height()),
+                   get_Colors()["yellow"],
+                   ZENI_LEFT);
+    }
 
     /* render exp status */
     int exp_level;

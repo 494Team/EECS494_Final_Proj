@@ -14,7 +14,7 @@
 #include <Zeni.h>
 
 namespace Flame{
-  const int kTemp_revival_max = 5;
+  const int kRevival_max_per_player = 2;
   const float kScale_threshold_high = 3.0f;
   const float kScale_threshold_low = 1.0f;
 

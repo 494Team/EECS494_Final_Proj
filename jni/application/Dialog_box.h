@@ -57,7 +57,7 @@ namespace Flame {
 
       Zeni::String name = "Someone";
       Zeni::String text;
-      Point2f text_loc(80.0f, 460.0f);
+      Point2f text_loc(80.0f, 450.0f);
       
       if (episode == 0) {
         switch (dialog_n) {
