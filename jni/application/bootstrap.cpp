@@ -632,7 +632,11 @@ public:
     stage(1),
     show_die(false),
     dialog(&m_set),
-    victory(false)
+    victory(false),
+    prev_lvl(0),
+    now_lvl(0),
+    render_lvl_up_effect(false),
+    lvl_effect_time(0.f)
   {
     revival_num = Model_state::get_instance()->get_initial_player_num() * kRevival_max_per_player;
     set_pausable(true);
@@ -681,8 +685,13 @@ public:
 
     levels.push_back(new Level_1());
     levels.push_back(new Level_2());
+<<<<<<< HEAD
     curr_lvl = 0;
 
+=======
+    curr_lvl = 1;
+    lvl_up_effect_pos = Point2f(-390.f, 116.f);
+>>>>>>> lvl up effect added
     Model_state::get_instance()->init(stage, &m_set);
     set_stage(stage);
     //!!! test
@@ -1114,11 +1123,12 @@ private:
     get_Game().push_state(new Victory_State());
   }
   bool victory;
+  float lvl_effect_time;
   void perform_logic() {
     const float time_passed = m_set.seconds();
     float processing_time = time_passed - m_time_passed;
     m_time_passed = time_passed;
-
+    lvl_effect_time = processing_time;
     if (Model_state::get_instance()->get_player_list_ptr()->empty() && !show_die) {
         show_die = true;
     }
@@ -1267,7 +1277,12 @@ private:
 //    vr.render(hpbar);
   //  vr.render(mpbar);
   }
-
+  void render_lvl_up(){
+    render_image("lvl_up_bg", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+    lvl_up_effect_pos+=Point2f(lvl_effect_time * (800.f + 390.f) / 2.f ,0.f);
+    render_image("lvl_up", lvl_up_effect_pos, lvl_up_effect_pos + Vector2f(390.f, 45.f)); 
+  }
+  Point2f lvl_up_effect_pos;
   void render()
   {
 
@@ -1410,10 +1425,21 @@ private:
 
     render_minimap();
     dialog.render();
+    Model_state::get_instance()->get_exp_level_and_remainder(&now_lvl, &re);
+    if (now_lvl !=prev_lvl)
+      render_lvl_up_effect = true;
+    if(render_lvl_up_effect){
+      m_lvl_up.start();
+      render_lvl_up();
+      if(m_lvl_up.seconds()>=2.f)
+        render_lvl_up_effect = false;
+    }
+    prev_lvl = now_lvl;
   }
-
-  float m_time_passed;
-  Chronometer<Time> m_set;
+  int prev_lvl,  now_lvl;
+  bool render_lvl_up_effect;
+  float re,m_time_passed;
+  Chronometer<Time> m_set, m_lvl_up;
   bool show_die;
 };
 
