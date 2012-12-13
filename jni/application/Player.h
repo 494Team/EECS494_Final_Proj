@@ -87,7 +87,7 @@ namespace Flame {
   public:
     virtual void get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker=NULL, Zeni::Vector2f coming_ori = Zeni::Vector2f()) {
       Agent::get_hit(damage, effects, attacker, coming_ori);
-      ctrl.l = false;
+      disable_status_when_being_forced_move();
     }
     Player(
       Chronometer<Time>* game_t,
@@ -215,6 +215,16 @@ namespace Flame {
     bool is_bloodsuck() {return (ptype== BAJIE && spell3_active);}
     void disintegrate_end_when_die() {disintegrate_end();}
     void hitback_end_action() {
+      if (ctrl.l)
+        ctrl.l = false;
+    }
+    void disable_status_when_being_forced_move() {
+      if (is_disintegrate())
+        disintegrate_end();
+      if (is_cudgel_fury())
+        cudgel_fury_end();
+      if (is_charge())
+        charge_end();
       if (ctrl.l)
         ctrl.l = false;
     }
