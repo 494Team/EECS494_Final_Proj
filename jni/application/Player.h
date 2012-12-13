@@ -85,6 +85,10 @@ namespace Flame {
 
   class Player: public Agent {
   public:
+    virtual void get_hit(const float &damage, const std::vector<attack_effect> &effects, Player* attacker=NULL, Zeni::Vector2f coming_ori = Zeni::Vector2f()) {
+      Agent::get_hit(damage, effects, attacker, coming_ori);
+      ctrl.l = false;
+    }
     Player(
       Chronometer<Time>* game_t,
       const float &health_ = 0.0f,
