@@ -1544,6 +1544,7 @@ private:
     if (now_lvl !=prev_lvl)
       render_lvl_up_effect = true;
     if(render_lvl_up_effect){
+        m_lvl_up.reset();
       m_lvl_up.start();
       render_lvl_up();
       if(m_lvl_up.seconds()>=2.f)
