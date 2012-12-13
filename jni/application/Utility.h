@@ -56,6 +56,8 @@ namespace Flame{
   const float WHISPER_MIN_DIST = 100.0f;
   const float WHISPER_MAX_DIST = 500.0f;
   const float WHISPER_VIEW_RANGE = 800.0f;
+  const float WHISPER_GREEN_DAMAGE = 500.0f;
+  const float WHISPER_VIOLET_DAMAGE = 400.0f;
 
   // Boss general constants
   const float BOSS_VIEW_RANGE = 2000.0f;

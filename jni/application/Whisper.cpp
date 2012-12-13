@@ -12,19 +12,19 @@ Whisper::Whisper(const Zeni::Point2f &location_)
 
 void Whisper::attack() {
   Monster::attack();
-  Fire_ball* test_spell = new Fire_ball(get_location(), target->get_location() - get_location());
+  Fire_ball* test_spell = new Fire_ball(get_location(), target->get_location() - get_location(), damage);
   Model_state::get_instance()->add_spell(test_spell);
 }
 
 void Whisper_green::attack() {
   Monster::attack();
-  Fire_ball* test_spell = new Fire_ball_green(get_location(), target->get_location() - get_location());
+  Fire_ball* test_spell = new Fire_ball_green(get_location(), target->get_location() - get_location(), WHISPER_GREEN_DAMAGE);
   Model_state::get_instance()->add_spell(test_spell);
 }
 
 void Whisper_violet::attack() {
   Monster::attack();
-  Ice_ball* test_spell = new Ice_ball(get_location(), target->get_location() - get_location());
+  Ice_ball* test_spell = new Ice_ball(get_location(), target->get_location() - get_location(), WHISPER_VIOLET_DAMAGE);
   Model_state::get_instance()->add_spell(test_spell);
 }
 
