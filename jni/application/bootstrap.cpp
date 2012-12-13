@@ -1392,6 +1392,8 @@ private:
     lvl_up_effect_pos+=Point2f(lvl_effect_time * (800.f + 390.f) / 2.f ,0.f);
     render_image("lvl_up", lvl_up_effect_pos, lvl_up_effect_pos + Vector2f(390.f, 45.f)); 
   }
+
+
   Point2f lvl_up_effect_pos;
   void render()
   {
@@ -1552,17 +1554,19 @@ private:
     render_minimap();
     dialog.render();
     Model_state::get_instance()->get_exp_level_and_remainder(&now_lvl, &re);
+
     if (now_lvl !=prev_lvl)
       render_lvl_up_effect = true;
     if(render_lvl_up_effect){
         if(!m_lvl_up.is_running()){
+          lvl_up_effect_pos = Point2f(-390.f, 116.f);
           m_lvl_up.start();
         }
       render_lvl_up();
       if(m_lvl_up.seconds()>=2.f){
         render_lvl_up_effect = false;
         m_lvl_up.reset();
-        
+        m_lvl_up.stop();
       }
     }
     prev_lvl = now_lvl;
