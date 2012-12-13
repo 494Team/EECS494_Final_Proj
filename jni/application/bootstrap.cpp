@@ -42,18 +42,37 @@ public:
   Victory_State()
     : Widget_Gamestate(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)))
   {
+    m_set.start();
+    m_change.start();
   }
 
 private:
+  Chronometer<Time> m_set, m_change;
+
   void on_key(const SDL_KeyboardEvent &event) {
     if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED)
       get_Game().pop_state();
   }
 
   void render() {
-    Widget_Gamestate::render();
-    Zeni::render_image("victory_state_background", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+    Vertex2f_Texture p0 = Vertex2f_Texture(Point2f(0.f, 0.f),Point2f(0.f  -m_set.seconds(),0.f));
+    Vertex2f_Texture p1 = Vertex2f_Texture(Point2f(800.f, 0.f),Point2f(1.f  -m_set.seconds(),0.f));
+    Vertex2f_Texture p2 = Vertex2f_Texture(Point2f(800.f, 600.f),Point2f(1.f  -m_set.seconds(),1.f));
+    Vertex2f_Texture p3 = Vertex2f_Texture(Point2f(0.f, 600.f),Point2f(0.f  -m_set.seconds(),1.f));
+    Quadrilateral<Zeni::Vertex2f_Texture> bg(p0, p1, p2, p3);
+    Material bg_texture("victory_bg");
+    bg.fax_Material(&bg_texture);
+    get_Video().render(bg);
 
+    if (m_change.seconds() < 0.25f)
+      render_image("victory0", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+    else if (m_change.seconds() < 0.5f)
+      render_image("victory1", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+    else{
+      m_change.reset();
+      m_change.start();
+      render_image("victory0", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+    }
     Zeni::Font &l_ft = get_Fonts()["victory_ft"];
     l_ft.render_text("Victory!",
                      Point2f(400.0f, 160.0f - 0.5f*l_ft.get_text_height()),
@@ -2042,7 +2061,7 @@ class Pre_Play_State : public Widget_Gamestate {
           }
           
           void on_accept() {
-              get_Game().push_state(new Preparation_State());
+              get_Game().push_state(new Victory_State());
 
           }
       } play_single_button;

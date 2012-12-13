@@ -43,6 +43,16 @@ The following things are unsupported:
 <tile>0</tile>
 </upgrade_bg>
 
+<lvl_up_bg>
+<filepath>textures/lvl_up_bg.png</filepath>
+<tile>0</tile>
+</lvl_up_bg>
+
+<lvl_up>
+<filepath>textures/lvl_up.png</filepath>
+<tile>0</tile>
+</lvl_up>
+
 <victory1>
 <filepath>textures/victory1.png</filepath>
 <tile>0</tile>
@@ -55,7 +65,7 @@ The following things are unsupported:
 
 <victory_bg>
 <filepath>textures/victory_bg.png</filepath>
-<tile>0</tile>
+<tile>1</tile>
 </victory_bg>
 
 
