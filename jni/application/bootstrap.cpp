@@ -708,6 +708,7 @@ private:
         }
       }
       else if (stage_ == 2){
+        get_Sound().destroy();
         get_Sound().set_BGM("sfx/stage_bgm");
         get_Sound().play_BGM();
         get_Sound().set_BGM_looping(true);
@@ -745,6 +746,7 @@ private:
         }
       }
       else if (stage_ == 3){
+        get_Sound().destroy();
         get_Sound().set_BGM("sfx/boss_bgm");
         get_Sound().play_BGM();
         get_Sound().set_BGM_looping(true);
