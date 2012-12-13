@@ -74,7 +74,7 @@ void Level_1::init_map(int stage) {
     map_list.push_back(new Map_laser(Point2f(3.f, 300.f), Vector2f(1.f, 0.f), "laser"));
     map_list.push_back(new Map_laser(Point2f(997.f, 600.f), Vector2f(-1.f, 0.f), "laser"));
     // transmission gates
-    map_list.push_back(new Map_gate(Point2f(440.f, 60.f), Vector2f(120.f, 120.f), 3, "red", red));
+    map_list.push_back(new Map_gate(Point2f(440.f, 60.f), Vector2f(120.f, 120.f), 3, "red"));
   }
   else {
     // stage 3
