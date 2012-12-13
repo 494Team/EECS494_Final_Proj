@@ -101,7 +101,16 @@ Only TrueType fonts are supported.
       <height>600</height>
     </virtual_screen>
   </lvl_ft>
-  
+  <dead_ft>
+    <filepath>fonts/FORGOTTE.TTF</filepath>
+    <height>50</height>
+    <bold>1</bold>
+    <italics>0</italics>
+    <virtual_screen>
+      <width>800</width>
+      <height>600</height>
+    </virtual_screen>
+  </dead_ft>
   <shop_title>
     <filepath>fonts/FORGOTTE.TTF</filepath>
     <height>40</height>

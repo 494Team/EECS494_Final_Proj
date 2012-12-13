@@ -647,6 +647,10 @@ public:
   {
     revival_num = Model_state::get_instance()->get_initial_player_num() * kRevival_max_per_player;
     set_pausable(true);
+    m_cd_start[0] = false;
+    m_cd_start[1] = false;
+    m_cd_start[2] = false;
+    m_cd_start[3] = false;
 
     set_action(Zeni_Input_ID(SDL_KEYDOWN, SDLK_ESCAPE), MENU);
     //p1
@@ -1084,7 +1088,7 @@ private:
           switch(action) {
           case A1:
             for (auto it = dead_player_list_ptr->begin(); it != dead_player_list_ptr->end(); ++it) {
-              if (revival_num > 0 && (*it)->get_controller() == 0) {
+              if (revival_num > 0 && (*it)->get_controller() == 0 && m_resurge[0].seconds() > 5.f) {
                 Model_state::get_instance()->player_rise_from_dead_list(*it);
                 revival_num--;
                 break;
@@ -1092,7 +1096,7 @@ private:
             }
           case A2:
             for (auto it = dead_player_list_ptr->begin(); it != dead_player_list_ptr->end(); ++it) {
-              if (revival_num > 0 && (*it)->get_controller() == 1) {
+              if (revival_num > 0 && (*it)->get_controller() == 1 && m_resurge[1].seconds() > 5.f) {
                 Model_state::get_instance()->player_rise_from_dead_list(*it);
                 revival_num--;
                 break;
@@ -1100,7 +1104,7 @@ private:
             }
           case A3:
             for (auto it = dead_player_list_ptr->begin(); it != dead_player_list_ptr->end(); ++it) {
-              if (revival_num > 0 && (*it)->get_controller() == 2) {
+              if (revival_num > 0 && (*it)->get_controller() == 2 && m_resurge[2].seconds() > 5.f) {
                 Model_state::get_instance()->player_rise_from_dead_list(*it);
                 revival_num--;
                 break;
@@ -1108,7 +1112,7 @@ private:
             }
           case A4:
             for (auto it = dead_player_list_ptr->begin(); it != dead_player_list_ptr->end(); ++it) {
-              if (revival_num > 0 && (*it)->get_controller() == 3) {
+              if (revival_num > 0 && (*it)->get_controller() == 3 && m_resurge[3].seconds() > 5.f) {
                 Model_state::get_instance()->player_rise_from_dead_list(*it);
                 revival_num--;
                 break;
@@ -1184,21 +1188,38 @@ private:
     Point2f loc;
     switch (controller) {
       case 0:
-        loc = Point2f(20.0f, 10.0f);
+        loc = Point2f(20.0f, 20.0f);
         break;
       case 1:
-        loc = Point2f(20.0f + 180.0f, 10.0f);
+        loc = Point2f(20.0f + 180.0f, 20.0f);
         break;
       case 2:
-        loc = Point2f(20.0f + 460.0f, 10.0f);
+        loc = Point2f(20.0f + 460.0f, 20.0f);
         break;
       default: //case 3:
-        loc = Point2f(20.0f + 620.0f, 10.0f);
+        loc = Point2f(20.0f + 620.0f, 20.0f);
         break;
     }
-
+    int s = (int)m_resurge[controller].seconds();
+    if(s < 6){
+      String remain(itoa(5-s));
+      Zeni::Font &l_ft = get_Fonts()["dead_ft"];
+       l_ft.render_text(remain,
+                   loc+Vector2f(90.0f, 0.0f),
+                   get_Colors()["yellow"],
+                   ZENI_LEFT);
+    }else{
+      if(!m_dead[controller].is_running())
+        m_dead[controller].start();
+      if(m_dead[controller].seconds()<0.25f)
+        render_image("dead", loc+Vector2f(0.f, 20.f), loc + Vector2f(256.f, 64.f));
+      else if (m_dead[controller].seconds()>0.5f){
+        m_dead[controller].reset();
+        m_dead[controller].start();
+      }
+    }
     
-    render_image("dead", loc, loc + Vector2f(180.f, 30.f));
+    
 
     
     
@@ -1393,15 +1414,25 @@ private:
     int controller;
     for (vector<Player *>::iterator it = plist->begin(); it != plist->end(); it++) {
       controller = Model_state::get_instance()->get_player_pos_in_list(list_pos++);
-      if (controller != -1)
+      if (controller != -1){
         render_status_helper(controller, *it);
+        m_cd_start[controller] = false;
+      }
+      
     }
 
     plist = Model_state::get_instance()->get_dead_player_list_ptr();
     for (vector<Player *>::iterator it = plist->begin(); it != plist->end(); it++) {
-      controller = Model_state::get_instance()->get_player_pos_in_list(list_pos++);
-      if (controller != -1)
+      controller = (*it)->get_controller();
+      if (controller != -1){
+        if(!m_cd_start[controller]){
+          m_cd_start[controller] = true;
+          m_resurge[controller].reset();
+          m_dead[controller].reset();
+          m_resurge[controller].start();
+        }
         render_dead_status_helper(controller, *it);
+      }
     }
     char* str = new char[10];
     Zeni::String text_buf;
@@ -1495,6 +1526,7 @@ private:
         render_lvl_up_effect = false;
     }
     prev_lvl = now_lvl;
+    /*
     if (!show_die && !Model_state::get_instance()->get_dead_player_list_ptr()->empty() && revival_num > 0) {
         l_ft.render_text("Player(s) Died!",
                          Point2f(400.0f, 160.0f - 0.5f*l_ft.get_text_height()),
@@ -1505,11 +1537,13 @@ private:
                          get_Colors()["orange"],
                          ZENI_CENTER);
     }
+    */
   }
   int prev_lvl,  now_lvl;
   bool render_lvl_up_effect;
   float re,m_time_passed;
-  Chronometer<Time> m_set, m_lvl_up;
+  bool m_cd_start[4];
+  Chronometer<Time> m_set, m_lvl_up, m_dead[4], m_resurge[4];
   bool show_die;
 };
 
