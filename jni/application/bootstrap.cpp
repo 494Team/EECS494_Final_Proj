@@ -1495,6 +1495,16 @@ private:
         render_lvl_up_effect = false;
     }
     prev_lvl = now_lvl;
+    if (!show_die && !Model_state::get_instance()->get_dead_player_list_ptr()->empty() && revival_num > 0) {
+        l_ft.render_text("Player(s) Died!",
+                         Point2f(400.0f, 160.0f - 0.5f*l_ft.get_text_height()),
+                         get_Colors()["red"],
+                         ZENI_CENTER);
+        l_ft.render_text("Hit A for resurrection!",
+                         Point2f(400.0f, 260.0f - 0.5f*l_ft.get_text_height()),
+                         get_Colors()["orange"],
+                         ZENI_CENTER);
+    }
   }
   int prev_lvl,  now_lvl;
   bool render_lvl_up_effect;
