@@ -492,7 +492,7 @@ namespace Flame {
         text += " Evils left! Kill them all!";
         Font &fr = get_Fonts()["system_36_800x600"];
         fr.render_text(text,
-                       Point2f(200.f, 150.f),
+                       Point2f(250.f, 150.f),
                        get_Colors()["white"],
                        ZENI_LEFT);
       }
