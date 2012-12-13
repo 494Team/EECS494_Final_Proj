@@ -985,13 +985,19 @@ private:
       default: //MENU
         break;
     }
-
+    
+    cerr << "********action: " << action << endl;
     int list_pos = Model_state::get_instance()->get_player_list_index(controller);
     //int player_pos_in_list = Model_state::get_instance()->get_player_pos_in_list(controller);
     //if (player_pos_in_list >= 0 && player_pos_in_list <= 3) {
     if (list_pos != -1) {
       //control of alive players
       p_ptr = player_list_ptr->at(list_pos);
+      cerr << "********ptype: " << p_ptr->ptype << endl;
+      cerr << "********controllable: " << p_ptr->controllable() << endl;
+      cerr << "********is_hitback(): " << p_ptr->is_hitback() << endl;
+      cerr << "********is_charging(): " << p_ptr->is_charging() << endl;
+      cerr << "********is_alive(): " << p_ptr->is_alive() << endl;
       //p_ptr = player_list_ptr->at(player_pos_in_list);
         if (p_ptr->controllable()) {
           switch(action) {
@@ -1230,7 +1236,7 @@ private:
       if(!m_dead[controller].is_running())
         m_dead[controller].start();
       if(m_dead[controller].seconds()<0.25f)
-        render_image("dead", loc+Vector2f(0.f, 20.f), loc + Vector2f(180.f, 45.f));
+        render_image("dead", loc+Vector2f(0.f, 20.f), loc + Vector2f(180.f, 50.f));
       else if (m_dead[controller].seconds()>0.5f){
         m_dead[controller].reset();
         m_dead[controller].start();
@@ -1678,7 +1684,7 @@ private:
   }
 
   void render() {
-    //Widget_Gamestate::render();
+    Widget_Gamestate::render();
     /*
     Zeni::Font &fr = get_Fonts()["title"];
 
@@ -2215,7 +2221,7 @@ private:
   void on_key(const SDL_KeyboardEvent &event);
 
   void render() {
-    //Widget_Gamestate::render();
+    Widget_Gamestate::render();
     get_Video().set_2d(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)), true);
     /*
     Zeni::Font &fr = get_Fonts()["title"];

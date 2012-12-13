@@ -33,9 +33,13 @@ void Agent::dec_health(const float &damage) {
 
 void Agent::update(float time) {
   for (std::map<attack_effect, float>::iterator it = effect_timers.begin(); it != effect_timers.end(); ++it) {
-    if (it->second > 0.0f)
+    if (it->second > 0.0f) {
       it->second -= time;
-    if (it->second < 0.0f) {
+      if (it->first == HITBACK) {
+        std::cerr << "timer: " <<it->second << std::endl;
+      }
+    }
+    if (it->second <= 0.0f) {
       it->second = 0.0f;
       switch (it->first) {
         case HITBACK:
