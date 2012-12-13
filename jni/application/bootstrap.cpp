@@ -54,7 +54,7 @@ private:
   }
   void on_pop() {
     get_Window().mouse_hide(false);
-    get_Sound().set_BGM("sfx/bgm")
+    get_Sound().set_BGM("sfx/bgm");
   }
   void on_key(const SDL_KeyboardEvent &event) {
     if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED)
