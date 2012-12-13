@@ -2061,7 +2061,7 @@ class Pre_Play_State : public Widget_Gamestate {
           }
           
           void on_accept() {
-              get_Game().push_state(new Victory_State());
+              get_Game().push_state(new Preparation_State());
 
           }
       } play_single_button;
