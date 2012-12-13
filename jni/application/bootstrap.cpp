@@ -1076,7 +1076,7 @@ private:
       dialog.start(5);
     }
 
-    float time_step = 0.005f;
+    float time_step = 0.01f;
     while (processing_time > 0.0f + EPSILON) {
       if (processing_time < time_step) {
         time_step = processing_time;
