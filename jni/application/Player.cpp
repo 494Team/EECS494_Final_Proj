@@ -151,7 +151,7 @@ void Player::update(float time) {
   if (!is_charging() && !is_hitback()) {
     set_speed(kPlayer_init_speed + speed * kSpeed_maxbuff/kSpeed_max);
   }
-  if (is_slowdown()) {
+  if (!is_charging() && is_slowdown()) {
     set_speed(get_current_speed() * 0.5f);
   }
 
