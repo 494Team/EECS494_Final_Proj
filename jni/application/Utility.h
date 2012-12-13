@@ -150,7 +150,7 @@ namespace Flame{
   const float kRedboy_exp_base = 1000.0f;
   const float kBullking_exp_base = 1000.0f;
   const int kExp_level_max = 7;
-  const float level_exp_max[kExp_level_max+1] = {500.0f, 2000.0f, 3000.0f, 4000.0f, 5000.0f, 6000.0f, 7000.0f, 10000.0f};
+  const float level_exp_max[kExp_level_max+1] = {2200.0f, 4400.0f, 7000.0f, 10000.0f, 20000.0f, 35000.0f, 50000.0f, 1000000.0f};
 
   //player setting
   const float kHp_max = 1000.0f;
