@@ -94,7 +94,7 @@ namespace Flame{
   const float BULLKING_HELLDOOR_NEW_GAP = 2.0f;
   const float BULLKING_MARCH_DURATION = 10.0f;
   const float BULLKING_MARCH_NEW_GAP = 0.1f;
-  const float BULLKING_MARCH_DAMAGE = 600.0f;
+  const float BULLKING_MARCH_DAMAGE = 300.0f;
   const float BULLKING_MARCH_RADIUS = 20.0f;
   const float BULLKING_EXPLOSION_BODY_CHANGE_TIME = 0.2f;
   const float BULLKING_EXPLOSION_DURATION = 12.0f;
