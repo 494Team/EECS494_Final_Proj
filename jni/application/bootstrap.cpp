@@ -49,7 +49,13 @@ public:
 
 private:
   Chronometer<Time> m_set, m_change;
-
+  void on_push() {
+    get_Window().mouse_hide(true);
+  }
+  void on_pop() {
+    get_Window().mouse_hide(false);
+    get_Sound().set_BGM("sfx/bgm")
+  }
   void on_key(const SDL_KeyboardEvent &event) {
     if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED)
       get_Game().pop_state();
