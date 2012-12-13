@@ -875,7 +875,8 @@ private:
     for (auto it = dead_player_list->begin(); it != dead_player_list->end();) {
       it = Model_state::get_instance()->player_rise_without_setting_pos(*it);
     }
-    set_stage(Model_state::get_instance()->get_prev_stage());
+    revival_num = Model_state::get_instance()->get_initial_player_num() * kRevival_max_per_player;
+    set_stage(1);
   }
     
   void begin_dialog(Dialog_box* dialog_ptr, int stage) {
@@ -1413,7 +1414,7 @@ private:
                          Point2f(400.0f, 160.0f - 0.5f*l_ft.get_text_height()),
                          get_Colors()["red"],
                          ZENI_CENTER);
-        l_ft.render_text("Hit A to restart the stage!",
+        l_ft.render_text("Hit A to restart the whole level!",
                          Point2f(400.0f, 260.0f - 0.5f*l_ft.get_text_height()),
                          get_Colors()["orange"],
                          ZENI_CENTER);
