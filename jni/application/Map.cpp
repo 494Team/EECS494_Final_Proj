@@ -466,7 +466,7 @@ namespace Flame {
         active = true;
         num_players++;
       }
-    if (!kill_all || Model_state::get_instance()->get_monster_list_ptr()->empty()) {
+    if (active && !kill_all || Model_state::get_instance()->get_monster_list_ptr()->empty()) {
       if (num_players == int(player_list_ptr->size()))
         Model_state::get_instance()->set_next_stage(stage);
     }

@@ -697,7 +697,7 @@ public:
   }
 
 private:
-  void set_stage(int stage_) {
+  void set_stage(int stage_, bool restart = false) {
     //end the player action before changing stage
     //for example cudgel_fury
     for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
@@ -719,7 +719,7 @@ private:
     else {
       int prev_stage = Model_state::get_instance()->get_prev_stage();
       if (stage_ == 1) {
-        if (!prev_stage) {
+        if (!prev_stage || restart) {
           float x = 660;
           for(auto it = Model_state::get_instance()->get_player_list_ptr()->begin();
               it != Model_state::get_instance()->get_player_list_ptr()->end();
@@ -850,8 +850,9 @@ private:
     if (curr_lvl == 0 && stage_ == 3)
       Model_state::get_instance()->set_prev_stage(0);
     else
-      Model_state::get_instance()->set_prev_stage(stage_);
+      Model_state::get_instance()->set_prev_stage(stage);
     Model_state::get_instance()->set_next_stage(0);
+    stage = stage_;
 
 
     //dialog section
@@ -876,7 +877,7 @@ private:
       it = Model_state::get_instance()->player_rise_without_setting_pos(*it);
     }
     revival_num = Model_state::get_instance()->get_initial_player_num() * kRevival_max_per_player;
-    set_stage(1);
+    set_stage(1, true);
   }
     
   void begin_dialog(Dialog_box* dialog_ptr, int stage) {
@@ -1167,8 +1168,7 @@ private:
     }
     int next_stage = Model_state::get_instance()->get_next_stage();
     if (next_stage) {
-      stage = next_stage;
-      set_stage(stage);
+      set_stage(next_stage);
     }
   }
 
