@@ -374,14 +374,20 @@ void Player::render() {
   }
 
   //render the orientation arrow
-render_image(
-  "rarrow3",
-  Point2f(rel_loc.x - size, rel_loc.y + size ),
-  Point2f(rel_loc.x + size, rel_loc.y + size + size),
-  rad,
-  scale,
-  rel_loc,
-  false);
+    Zeni::Font &fr = get_Fonts()["shop_ft"];
+    char* str = new char[10];
+    sprintf(str, "%d", get_controller());
+    Zeni::String text_buf = "rarrow";
+    text_buf += str;
+    render_image(
+      text_buf,
+      Point2f(rel_loc.x - size, rel_loc.y + size ),
+      Point2f(rel_loc.x + size, rel_loc.y + size + size),
+      rad,
+      scale,
+      rel_loc,
+      false);
+      delete[] str;
   //render weapon attacking
   if (normal_attack) {
     Zeni::String attack_image;

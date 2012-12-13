@@ -32,17 +32,17 @@ namespace Flame {
   const float kTaunt_life_time = 1.f;
 
   const Zeni::Vector2f kArrow_size = Zeni::Vector2f(4.f, 16.f);
-  const float kArrow_speed = 200.f;
+  const float kArrow_speed = 300.f;
   const float kArrow_life_time = 5.f;
   const float kArrow_damage = 50.f;
 
   const Zeni::Vector2f kMagic_arrow_size = Zeni::Vector2f(8.f, 32.f);
-  const float kMagic_arrow_speed = 200.f;
+  const float kMagic_arrow_speed = 300.f;
   const float kMagic_arrow_life_time = 5.f;
   const float kMagic_arrow_damage = 50.f;
   const Zeni::Vector2f kMagic_arrow_effect_size = Zeni::Vector2f(50.f, 50.f);
   const float kMagic_arrow_effect_life_time = 5.f;
-  const float kMagic_arrow_effect_damage = 1.f;
+  const float kMagic_arrow_effect_damage = 5.f;
 
   const Zeni::Vector2f kTrap_size = Zeni::Vector2f(100.f, 100.f);
   const float kTrap_life_time = 30.f;

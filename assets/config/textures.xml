@@ -980,6 +980,21 @@ The following things are unsupported:
     <filepath>textures/sword_attack_monkey_king.png</filepath>
     <tile>0</tile>
   </sword_attack_monkey_king>
+  <rarrow0>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/rarrow0.png</filepath>
+    <tile>0</tile>
+  </rarrow0>
+  <rarrow1>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/rarrow1.png</filepath>
+    <tile>0</tile>
+  </rarrow1>
+  <rarrow2>
+    <is_sprite>0</is_sprite>
+    <filepath>textures/rarrow2.png</filepath>
+    <tile>0</tile>
+  </rarrow2>
   <rarrow3>
     <is_sprite>0</is_sprite>
     <filepath>textures/rarrow3.png</filepath>

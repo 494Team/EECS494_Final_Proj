@@ -633,6 +633,7 @@ class Play_State : public Gamestate_II {
   int stage;
   int curr_lvl;
   std::vector<Level*> levels;
+  Time_HQ dialog_timer;
 public:
   Play_State() :
     m_time_passed(0.f),
@@ -879,6 +880,7 @@ private:
     } else if (curr_lvl == 1 && stage_ == 3) {
       dialog.start(4);
     }
+
   }
 
   void set_level(const int level_) {
@@ -998,6 +1000,10 @@ private:
             case MENU3: 
             case MENU4: 
               if (confidence >= 1.0f) {
+                for (auto it=player_list_ptr->begin(); it!=player_list_ptr->end(); ++it) {
+                  if ((*it)->ctrl.l)
+                    (*it)->ctrl.l = false;
+                }
                 get_into_upgradeshop();
               }
               break;
