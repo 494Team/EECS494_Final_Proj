@@ -41,7 +41,7 @@ void Redboy::skill1() {
   
   fire_charge_tar_loc = players[player_num]->get_location();
   set_orientation(fire_charge_tar_loc - get_location());
-  set_speed((fire_charge_tar_loc - get_location()).magnitude() / 0.5f);
+  set_speed((fire_charge_tar_loc - get_location()).magnitude() / 0.8f);
   fire_charge_render_list.clear();
   fire_charge_last_shadow_time = 0.0f;
   fire_charge_main_body_stop = false;
@@ -56,8 +56,8 @@ void Redboy::skill2() {
   if(rd.rand() % 2 == 0)
     play_sound("dark_laugh");
   play_sound("fireball");
-  int num_fire_balls = 8;
-  float theta = Zeni::Global::pi / 4.0f;
+  int num_fire_balls = 12;
+  float theta = Zeni::Global::pi / 6.0f;
   for (int i = 0; i < num_fire_balls; ++i) {
     Zeni::Vector3f ori = Zeni::Vector3f(0.0f, -1.0f, 0.0f);
     Zeni::Quaternion rotate = Zeni::Quaternion::Axis_Angle(Zeni::Vector3f(0.0f, 0.0f, -1.0f), theta * i);
@@ -127,7 +127,7 @@ void Redboy::update(float time) {
                 Zeni::Vector2f hitback_ori = players[i]->get_location() - get_location();
                 hitback_ori.normalize();
                 players[i]->set_orientation(hitback_ori);
-                players[i]->set_speed(get_current_speed() * 2.0f);
+                players[i]->set_speed(REDBOY_FIRE_CHARGE_SPEED);
                 // move player so that there is no intersection
                 Zeni::Point2f player_backup_loc = players[i]->get_location();
                 players[i]->set_position(get_location() + hitback_ori * (get_body().get_radius() + players[i]->get_body().get_radius() + EPSILON));

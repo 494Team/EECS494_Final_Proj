@@ -65,7 +65,7 @@ namespace Flame {
   const float kRing_of_fire_damage = 500.0f;
 
   const Zeni::Vector2f kHell_spikes_size = Zeni::Vector2f(125.f, 125.f);
-  const float kHell_spikes_pre_time = 1.f;
+  const float kHell_spikes_pre_time = 0.8f;
   const float kHell_spikes_life_time = 5.f;
   const float kHell_spikes_damage = 5.f;
 

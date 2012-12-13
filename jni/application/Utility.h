@@ -38,7 +38,7 @@ namespace Flame{
 
   // Wanderer constants
   const float WANDERER_RADIUS = 16.0f;
-  const float WANDERER_SPEED = 50.0f;
+  const float WANDERER_SPEED = 80.0f;
   const float WANDERER_DAMAGE = 300.0f;
   const float WANDERER_HEALTH = 2500.0f;
   const float WANDERER_ATTACK_GAP = 1.0f;
@@ -48,7 +48,7 @@ namespace Flame{
 
   // Whisper constants
   const float WHISPER_RADIUS = 16.0f;
-  const float WHISPER_SPEED = 40.0f;
+  const float WHISPER_SPEED = 60.0f;
   const float WHISPER_DAMAGE = 300.0f;
   const float WHISPER_HEALTH = 1500.0f;
   const float WHISPER_ATTACK_GAP = 3.f;
@@ -64,23 +64,24 @@ namespace Flame{
 
   // Redboy constants
   const float REDBOY_RADIUS = 20.0f;
-  const float REDBOY_SPEED = 50.0f;
-  const float REDBOY_DAMAGE = 300.0f;
-  const float REDBOY_HEALTH = 50000.0f;
+  const float REDBOY_SPEED = 110.0f;
+  const float REDBOY_DAMAGE = 500.0f;
+  const float REDBOY_HEALTH = 100000.0f;
   const float REDBOY_ATTACK_GAP = 1.5f;
   const float REDBOY_ATTACK_RADIUS = 32.0f;
   const float REDBOY_MIN_DIST = 10.0f;
   const float REDBOY_FIRE_CHARGE_COOLDOWN = 10.0f;
   const float REDBOY_RING_OF_FIRE_COOLDOWN = 15.0f;
+  const float REDBOY_RING_OF_FIRE_DAMAGE = 700.0f;
   const float REDBOY_FIRE_SPIKES_COOLDOWN = 20.0f;
-  const float REDBOY_FIRE_CHARGE_DAMAGE = 500.0f;
+  const float REDBOY_FIRE_CHARGE_DAMAGE = 900.0f;
   const float REDBOY_FIRE_CHARGE_SPEED = 200.0f;
 
   // Bullking constants
   const float BULLKING_RADIUS = 30.0f;
-  const float BULLKING_SPEED = 100.0f;
+  const float BULLKING_SPEED = 150.0f;
   const float BULLKING_DAMAGE = 500.0f;
-  const float BULLKING_HEALTH = 100000.0f;
+  const float BULLKING_HEALTH = 300000.0f;
   const float BULLKING_ATTACK_GAP = 1.5f;
   const float BULLKING_ATTACK_RADIUS = 35.0f;
   const float BULLKING_MIN_DIST = 10.0f;
@@ -135,8 +136,8 @@ namespace Flame{
   const float kSpeed_maxbuff = 180.0f;
 
   //player number buff
-  const float kPlayer_number_attack_buff[4] = {1.1f, 0.9f, 0.75f, 0.6f};
-  const float kPlayer_number_defense_buff[4] = {0.6f, 0.75f, 0.9f, 1.0f};
+  const float kPlayer_number_attack_buff[4] = {1.1f, 0.9f, 0.75f, 0.7f};
+  const float kPlayer_number_defense_buff[4] = {0.6f, 0.75f, 0.9f, 0.9f};
 
 
   //others

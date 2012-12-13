@@ -53,7 +53,7 @@
         <!--<API>OpenGL</API>-->
         <!--<API>Disabled</API>-->
         <API>OpenGL</API>
-        <Full_Screen>0</Full_Screen>
+        <Full_Screen>1</Full_Screen>
         <Multisampling>0</Multisampling>
         <Resolution>
             <Width>800</Width>

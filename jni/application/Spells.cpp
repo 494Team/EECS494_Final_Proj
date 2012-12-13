@@ -700,7 +700,7 @@ namespace Flame {
       vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
       for (auto it = player_list_ptr->begin(); it != player_list_ptr->end(); ++it)
         if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
-          (*it)->dec_health(kFireball_damage);
+          (*it)->dec_health(REDBOY_RING_OF_FIRE_DAMAGE);
           Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
           disable_spell();
           break;
