@@ -161,8 +161,10 @@ void Player::update(float time) {
     set_speed(get_current_speed() * 0.5f);
   }
 
-  if (is_hitback()) {
-    hitback_end_action();
+  if (is_hitback() || is_charging()) {
+    //hitback_end_action();
+      if (ctrl.l)
+        ctrl.l = false;
   }
   
   float current_time = game_time->seconds();

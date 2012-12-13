@@ -79,29 +79,31 @@ namespace Flame{
 
   // Bullking constants
   const float BULLKING_RADIUS = 30.0f;
-  const float BULLKING_SPEED = 150.0f;
-  const float BULLKING_DAMAGE = 500.0f;
-  const float BULLKING_HEALTH = 300000.0f;
-  const float BULLKING_ATTACK_GAP = 1.5f;
+  const float BULLKING_SPEED = 130.0f;
+  const float BULLKING_DAMAGE = 1000.0f;
+  const float BULLKING_HEALTH = 200000.0f;//200000.0f;
+  const float BULLKING_ATTACK_GAP = 1.2f;
   const float BULLKING_ATTACK_RADIUS = 35.0f;
   const float BULLKING_MIN_DIST = 10.0f;
   const float BULLKING_HELLDOOR_COOLDOWN = 15.0f;
-  const float BULLKING_MARCH_COOLDOWN = 20.0f;
-  const float BULLKING_EXPLOSION_COOLDOWN = 25.0f;
-  const float BULLKING_HELLDOOR_HEALTH = 500.0f; //2500.0f
+  const float BULLKING_MARCH_COOLDOWN = 20.0f; 
+  const float BULLKING_EXPLOSION_COOLDOWN = 25.0f;//25.0f;
+  const float BULLKING_HELLDOOR_HEALTH = 2000.0f; //2500.0f
   const float BULLKING_HELLDOOR_RADIUS = 40.0f;
   const float BULLKING_HELLDOOR_NEW_GAP = 2.0f;
   const float BULLKING_MARCH_DURATION = 10.0f;
-  const float BULLKING_MARCH_NEW_GAP = 0.2f;
+  const float BULLKING_MARCH_NEW_GAP = 0.1f;
+  const float BULLKING_MARCH_DAMAGE = 800.0f;
+  const float BULLKING_MARCH_RADIUS = 20.0f;
   const float BULLKING_EXPLOSION_BODY_CHANGE_TIME = 0.2f;
   const float BULLKING_EXPLOSION_DURATION = 12.0f;
-  const float BULLKING_EXPLOSION_NEW_GAP = 0.6f;
+  const float BULLKING_EXPLOSION_NEW_GAP = 0.3f;
   const Zeni::Vector2f BULLKING_EXPLOSION_INITIAL_SIZE = Zeni::Vector2f(10.0f, 10.0f);
   const Zeni::Vector2f BULLKING_EXPLOSION_RESIZE_SPEED = Zeni::Vector2f(70.0f, 70.0f);
   const Zeni::Vector2f BULLKING_EXPLOSION_MAX_SIZE = Zeni::Vector2f(100.0f, 100.0f);
   const float BULLKING_EXPLOSION_LIFETIME = 4.0f;
   const float BULLKING_EXPLOSION_DAMAGE_RENDER_TIME = 0.4f;
-  const float BULLKING_EXPLOSION_DAMAGE = 800.0f;
+  const float BULLKING_EXPLOSION_DAMAGE = 1200.0f;
 
   // attack effect
   const float NORMAL_HITBACK_TIME = 0.1f;
@@ -156,7 +158,7 @@ namespace Flame{
   const float level_exp_max[kExp_level_max+1] = {2500.0f, 5000.0f, 7000.0f, 10000.0f, 20000.0f, 35000.0f, 50000.0f, 1000000.0f};
 
   //player setting
-  const float kHp_max = 1000.0f;
+  const float kHp_max = 100000.0f;
   const float kMp_max = 1000.0f;
   
   //choosing character page "Preparation State"

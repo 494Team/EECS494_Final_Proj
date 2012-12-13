@@ -675,16 +675,35 @@ namespace Flame {
   void Ice_ball::render()
   {Moving_spell::render("violet_fire_ball");}
   
-
   Dajun::Dajun(const Point2f& location_, const Vector2f& orientation_) :
-    Fire_ball(location_, orientation_)
-    {}
+    Moving_spell_circle(location_ + 10.f * orientation_.normalized(),
+                        orientation_,
+                        Vector2f(BULLKING_MARCH_RADIUS, BULLKING_MARCH_RADIUS),
+                        kFireball_speed,
+                        kFireball_life_time * 10),
+    damage(BULLKING_MARCH_DAMAGE)
+    {play_sound("fireball");}
+
+  void Dajun::update(float time)
+  {
+    Moving_spell_circle::update(time);
+    if (is_active()) {
+      vector<Player *> * player_list_ptr = Model_state::get_instance()->get_player_list_ptr();
+      for (auto it = player_list_ptr->begin(); it != player_list_ptr->end(); ++it)
+        if (get_body().intersects((*it)->get_body()) && (*it)->is_alive()) {
+          (*it)->dec_health(damage);
+          Model_state::get_instance()->add_spell(new Get_hit((*it)->get_location() + Vector2f(0.f, 5.f)));
+          disable_spell();
+          break;
+        }
+    }
+  }
 
   void Dajun::render()
   {Moving_spell::render("dajun", Color(), false);}
 
   Ring_of_fire::Ring_of_fire(const Point2f& location_, const Vector2f& orientation_) :
-    Moving_spell_rectangle(location_ + 50.f * orientation_.normalized(),
+    Moving_spell_rectangle(location_ + 10.f * orientation_.normalized(),
                            orientation_,
                            kRing_of_fire_size,
                            kRing_of_fire_speed,

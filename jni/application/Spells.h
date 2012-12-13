@@ -353,11 +353,14 @@ namespace Flame {
     float render_time;
   };
 
-  class Dajun : public Fire_ball {
+  class Dajun : public Moving_spell_circle {
   public:
     Dajun(const Zeni::Point2f& location_= Zeni::Point2f(),
           const Zeni::Vector2f& orientation_ = Zeni::Vector2f());
+    virtual void update(float time = 0.0f);
     virtual void render();
+  private:
+    float damage;
   };
 
   class Hell_spikes : public Resizable_spell {

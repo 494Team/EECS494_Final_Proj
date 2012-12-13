@@ -696,8 +696,7 @@ public:
     curr_lvl = 0;
     lvl_up_effect_pos = Point2f(-390.f, 116.f);
     Model_state::get_instance()->init(stage, &m_set);
-    //set_stage(stage);
-    set_stage(3);
+    set_stage(stage);
     //!!! test
     //dialog.start(stage);
     //begin_dialog(&dialog, stage);
