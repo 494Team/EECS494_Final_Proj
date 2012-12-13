@@ -33,7 +33,9 @@ HOWTO:  To convert between types, or to downmix to mono,
 <bgm>
 <filepath>sfx/bgm</filepath>
 </bgm>
-
+<hell_door>
+<filepath>sfx/hell_door</filepath>
+</hell_door>
 <sword_hit>
 
 <filepath>sfx/sword_hit</filepath>

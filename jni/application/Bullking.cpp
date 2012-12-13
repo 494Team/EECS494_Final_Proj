@@ -45,6 +45,7 @@ void Bullking::skill1() {
       is_collision = false;
     }
   }
+    play_sound("hell_door");
   Model_state::get_instance()->add_monster(new_helldoor);
 }
 
