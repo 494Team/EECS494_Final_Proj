@@ -1497,44 +1497,6 @@ private:
   bool show_die;
 };
 
-class Instructions_State : public Widget_Gamestate {
-  Instructions_State(const Instructions_State &);
-  Instructions_State operator=(const Instructions_State &);
-
-public:
-  Instructions_State()
-    : Widget_Gamestate(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)))
-  {
-  }
-
-private:
-  void on_key(const SDL_KeyboardEvent &event) {
-    if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED)
-      get_Game().pop_state();
-  }
-
-  void render() {
-    Widget_Gamestate::render();
-    /*
-    Zeni::Font &fr = get_Fonts()["title"];
-
-    fr.render_text(
-#if defined(_WINDOWS)
-                   "ALT+F4"
-#elif defined(_MACOSX)
-                   "Apple+Q"
-#else
-                   "Ctrl+Q"
-#endif
-                           " to Quit",
-                   Point2f(400.0f, 300.0f - 0.5f * fr.get_text_height()),
-                   get_Colors()["title_text"],
-                   ZENI_CENTER);
-                   */
-   Zeni::render_image("instr", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
-  }
-};
-
 class Story_State : public Gamestate_II {
   Story_State(const Story_State &);
   Story_State operator=(const Story_State &);
@@ -1618,6 +1580,50 @@ private:
     dialog.render();
   }
 };
+
+class Instructions_State : public Widget_Gamestate {
+  Instructions_State(const Instructions_State &);
+  Instructions_State operator=(const Instructions_State &);
+
+public:
+  Instructions_State()
+    : Widget_Gamestate(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)))
+  {
+  }
+
+private:
+  void on_key(const SDL_KeyboardEvent &event) {
+    if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED){
+      get_Game().pop_state();
+      get_Game().push_state(new Story_State());
+    }
+  }
+
+  void render() {
+    Widget_Gamestate::render();
+    /*
+    Zeni::Font &fr = get_Fonts()["title"];
+
+    fr.render_text(
+#if defined(_WINDOWS)
+                   "ALT+F4"
+#elif defined(_MACOSX)
+                   "Apple+Q"
+#else
+                   "Ctrl+Q"
+#endif
+                           " to Quit",
+                   Point2f(400.0f, 300.0f - 0.5f * fr.get_text_height()),
+                   get_Colors()["title_text"],
+                   ZENI_CENTER);
+                   */
+   Zeni::render_image("instr", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+  }
+};
+
+
+
+
 
 class Preparation_State :public Gamestate_II { //public Widget_Gamestate,
   Preparation_State(const Preparation_State &);
@@ -1854,7 +1860,7 @@ private:
           get_Game().pop_state();
           Model_state::get_instance()->set_initial_player_num(player_count);
           //get_Game().push_state(new Play_State());
-          get_Game().push_state(new Story_State());
+          get_Game().push_state(new Instructions_State());
         }
         break;
       case JOIN2:
@@ -1867,7 +1873,7 @@ private:
           get_Game().pop_state();
           Model_state::get_instance()->set_initial_player_num(player_count);
           //get_Game().push_state(new Play_State());
-          get_Game().push_state(new Story_State());
+          get_Game().push_state(new Instructions_State());
         }
         break;
       case JOIN3:
@@ -1880,7 +1886,7 @@ private:
           get_Game().pop_state();
           Model_state::get_instance()->set_initial_player_num(player_count);
           //get_Game().push_state(new Play_State());
-          get_Game().push_state(new Story_State());
+          get_Game().push_state(new Instructions_State());
         }
         break;
       case JOIN4:
@@ -1893,7 +1899,7 @@ private:
           get_Game().pop_state();
           Model_state::get_instance()->set_initial_player_num(player_count);
           //get_Game().push_state(new Play_State());
-          get_Game().push_state(new Story_State());
+          get_Game().push_state(new Instructions_State());
         }
         break;
       default:
@@ -2117,6 +2123,42 @@ public:
 };
 
 
+class Instructions_State_I : public Widget_Gamestate {
+  Instructions_State_I(const Instructions_State &);
+  Instructions_State_I operator=(const Instructions_State &);
+
+public:
+  Instructions_State_I()
+    : Widget_Gamestate(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)))
+  {
+  }
+
+private:
+  void on_key(const SDL_KeyboardEvent &event);
+
+  void render() {
+    Widget_Gamestate::render();
+    /*
+    Zeni::Font &fr = get_Fonts()["title"];
+
+    fr.render_text(
+#if defined(_WINDOWS)
+                   "ALT+F4"
+#elif defined(_MACOSX)
+                   "Apple+Q"
+#else
+                   "Ctrl+Q"
+#endif
+                           " to Quit",
+                   Point2f(400.0f, 300.0f - 0.5f * fr.get_text_height()),
+                   get_Colors()["title_text"],
+                   ZENI_CENTER);
+                   */
+   Zeni::render_image("instr", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+  }
+};
+
+
 class Pre_Play_State : public Widget_Gamestate {
     Pre_Play_State(const Pre_Play_State &);
     Pre_Play_State & operator=(const Pre_Play_State &);
@@ -2208,7 +2250,7 @@ class Pre_Play_State : public Widget_Gamestate {
           }
           
           void on_accept() {
-             get_Game().push_state(new Instructions_State());
+             get_Game().push_state(new Instructions_State_I());
           }
       } instructions_button;
 
@@ -2335,6 +2377,13 @@ class Pre_Play_State : public Widget_Gamestate {
       
   };
 
+  
+void Instructions_State_I::on_key(const SDL_KeyboardEvent &event) {
+    if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED){
+      get_Game().pop_state();
+      get_Game().push_state(new Pre_Play_State());
+    }
+  }
 
  void Title_state::on_event(const Zeni_Input_ID &, const float &, const int &action) {
     switch(action) {
