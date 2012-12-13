@@ -21,7 +21,7 @@ namespace Flame {
   #define HURT_SHOWING_INTERVAL 0.2f
 
   const float kPlayer_action_gap = 0.5f;
-  const float kPlayer_init_speed = 200.0f;
+  const float kPlayer_init_speed = 250.0f;
   const float kRegen_CD = 0.01f;
   const float kInit_attack_buff = 1.0f;
 

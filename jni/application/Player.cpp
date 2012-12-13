@@ -141,10 +141,11 @@ void Player::update(float time) {
   float WUKONG_hp_regen_factor = ptype==WUKONG? 2.0f:1.0f;
   float MELEE_armor_factor = (ptype==WUKONG||ptype==BAJIE) ? 0.7f:1.0f;
   float BAJIE_armor_factor = (ptype==BAJIE) ? 0.90f:1.0f;
+  int init_player_num = Model_state::get_instance()->get_initial_player_num();
   
   //update buff
-  set_attack_buff((1.0f + attack * kAttack_maxbuff/kAttack_max) * berserk_buff);
-  set_armor((1.0f - defense * kDefense_maxbuff/kDefense_max) * MELEE_armor_factor * BAJIE_armor_factor * shield_buff);
+  set_attack_buff((1.0f + attack * kAttack_maxbuff/kAttack_max) * berserk_buff * kPlayer_number_attack_buff[init_player_num]);
+  set_armor((1.0f - defense * kDefense_maxbuff/kDefense_max) * MELEE_armor_factor * BAJIE_armor_factor * shield_buff * kPlayer_number_defense_buff[init_player_num]);
   set_hp_regen_rate((kHp_regen_base + hpmp_regen * kHp_regen_maxbuff/kHpmp_regen_max) * WUKONG_hp_regen_factor);
   set_mp_regen_rate(kMp_regen_base + hpmp_regen * mp_regen_real_max/kHpmp_regen_max);
   if (!is_charging() && !is_hitback()) {
@@ -198,14 +199,6 @@ void Player::update(float time) {
     set_orientation(dir);
     set_speed(sqrt(pow(ctrl.move_hori * (int)move_x, 2) + pow(ctrl.move_vert * int(move_y), 2)) * backup_speed);
   }
-  cerr << "BEGIN***********************\n";
-  cerr << "ctrl.l: " << ctrl.l << endl;
-  cerr << "ctrl.move_vert: " << ctrl.move_vert << endl;
-  cerr << "ctrl.move_hori: " << ctrl.move_hori << endl;
-  cerr << "is_disintegrate: " << is_disintegrate() << endl;
-  cerr << "is_hitback: " << is_hitback() << endl;
-  cerr << "is_charging: " << is_charging() << endl;
-  cerr << "END***********************\n";
 
   if (is_hitback() && is_charging()) {
     charge_end();

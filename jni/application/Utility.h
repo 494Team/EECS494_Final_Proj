@@ -130,7 +130,12 @@ namespace Flame{
   const float kMp_regen_base = 1.0f;
   const float kMp_regen_maxbuff = 0.5f;
   const float kMp_regen_SANZANG_additional = 0.5f;
-  const float kSpeed_maxbuff = 150.0f;
+  const float kSpeed_maxbuff = 180.0f;
+
+  //player number buff
+  const float kPlayer_number_attack_buff[4] = {1.1f, 0.9f, 0.75f, 0.6f};
+  const float kPlayer_number_defense_buff[4] = {0.6f, 0.75f, 0.9f, 1.0f};
+
 
   //others
   const float kVert_move_threshold = 0.95f;

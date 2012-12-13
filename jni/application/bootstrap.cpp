@@ -629,7 +629,7 @@ public:
 
     levels.push_back(new Level_1());
     levels.push_back(new Level_2());
-    curr_lvl = 1;
+    curr_lvl = 0;
 
     Model_state::get_instance()->init(stage, &m_set);
     set_stage(stage);
