@@ -1308,6 +1308,10 @@ private:
     sprintf(str, "%d", exp_level);
     text_buf = "Team Exp: Lv";
     text_buf += str;
+    text_buf += " ";
+    sprintf(str, "%.2f", exp_percent*100);
+    text_buf += str;
+    text_buf += "%";
     l_ft.render_text(text_buf,
                    Point2f(20.0f, 560.0f - 0.5f * l_ft.get_text_height()),
                    get_Colors()["yellow"],
