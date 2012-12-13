@@ -166,6 +166,7 @@ void Bullking::update(float time) {
       decide_attack_type();
       // if haven't attacked target for a long time (8 secs for now). clear hatred 
       if (get_current_time() - get_prev_attack_time() > 8.0f) {
+        set_prev_attack_time(get_current_time());
         clear_hatred(target);
       }
       break;
