@@ -34,6 +34,38 @@ using namespace std;
 using namespace Zeni;
 using namespace Flame;
 
+class Victory_State : public Widget_Gamestate {
+  Victory_State(const Victory_State &);
+  Victory_State operator=(const Victory_State &);
+
+public:
+  Victory_State()
+    : Widget_Gamestate(make_pair(Point2f(0.0f, 0.0f), Point2f(800.0f, 600.0f)))
+  {
+  }
+
+private:
+  void on_key(const SDL_KeyboardEvent &event) {
+    if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED)
+      get_Game().pop_state();
+  }
+
+  void render() {
+    Widget_Gamestate::render();
+    Zeni::render_image("victory_state_background", Point2f(0.f, 0.f), Point2f(1024.f, 1024.f));
+
+    Zeni::Font &l_ft = get_Fonts()["victory_ft"];
+    l_ft.render_text("Victory!",
+                     Point2f(400.0f, 160.0f - 0.5f*l_ft.get_text_height()),
+                     get_Colors()["red"],
+                     ZENI_CENTER);
+    l_ft.render_text("Hit 'START' to return menu!",
+                     Point2f(400.0f, 260.0f - 0.5f*l_ft.get_text_height()),
+                     get_Colors()["orange"],
+                     ZENI_CENTER);
+  }
+};
+
 class Upgrade_state :public Gamestate_II { //public Widget_Gamestate,
   Upgrade_state(const Upgrade_state &);
   Upgrade_state operator=(const Upgrade_state &);
@@ -580,7 +612,8 @@ public:
     m_time_passed(0.f),
     stage(1),
     show_die(false),
-    dialog(&m_set)
+    dialog(&m_set),
+    victory(false)
   {
     revival_num = Model_state::get_instance()->get_initial_player_num() * kRevival_max_per_player;
     set_pausable(true);
@@ -629,7 +662,7 @@ public:
 
     levels.push_back(new Level_1());
     levels.push_back(new Level_2());
-    curr_lvl = 0;
+    curr_lvl = 1;
 
     Model_state::get_instance()->init(stage, &m_set);
     set_stage(stage);
@@ -1054,9 +1087,14 @@ private:
       }
     }
   }
-  void victory_begin() {
+  void victory_dialog_begin() {
     dialog.start(5);
   }
+  void victory_dialog_end() {
+    get_Game().pop_state();
+    get_Game().push_state(new Victory_State());
+  }
+  bool victory;
   void perform_logic() {
     const float time_passed = m_set.seconds();
     float processing_time = time_passed - m_time_passed;
@@ -1073,7 +1111,12 @@ private:
         stage == 4 &&
         !Model_state::get_instance()->get_player_list_ptr()->empty() &&
         Model_state::get_instance()->get_monster_list_ptr()->empty()) {
-      dialog.start(5);
+      if (!victory) {
+        victory = true;
+        victory_dialog_begin();
+      } else if (victory && !dialog.is_goingon()) {
+        victory_dialog_end();
+      }
     }
 
     float time_step = 0.01f;

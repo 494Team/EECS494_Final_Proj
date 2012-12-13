@@ -69,6 +69,17 @@ Only TrueType fonts are supported.
     </virtual_screen>
   </dialog_ft>
 
+  <victory_ft>
+    <filepath>fonts/FORGOTTE.TTF</filepath>
+    <height>35</height>
+    <bold>0</bold>
+    <italics>0</italics>
+    <virtual_screen>
+      <width>800</width>
+      <height>600</height>
+    </virtual_screen>
+  </victory_ft>
+
   <money_ft>
     <filepath>fonts/FORGOTTE.TTF</filepath>
     <height>40</height>

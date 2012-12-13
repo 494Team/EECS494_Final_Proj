@@ -1431,6 +1431,10 @@ The following things are unsupported:
     <filepath>textures/story_state_background.png</filepath>
     <tile>0</tile>
   </story_state_background>
+  <victory_state_background>
+    <filepath>textures/victory_state_background.png</filepath>
+    <tile>0</tile>
+  </victory_state_background>
   <!--
   <one>
     <is_sprite>0</is_sprite>
