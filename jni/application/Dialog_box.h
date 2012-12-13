@@ -14,12 +14,13 @@ namespace Flame {
     int dialog_n;
     bool in_conversation;
     Chronometer<Time>* game_time;
-    Time_HQ entering_time;
+    Time_HQ* entering_time_ptr;
   public:
-    Dialog_box(Chronometer<Time>* game_t)
+    Dialog_box(Chronometer<Time>* game_t, Time_HQ* entering_time_ptr_)
     : in_conversation(false),
       dialog_n(0),
-      game_time(game_t)
+      game_time(game_t),
+      entering_time_ptr(entering_time_ptr_)
     {
     }
 
@@ -31,14 +32,12 @@ namespace Flame {
       episode = episode_;
       dialog_n = 0;
       in_conversation = true;
-      game_time->pause_all();
-      entering_time = Zeni::get_Timer_HQ().get_time();
+      //game_time->pause_all();
+      *entering_time_ptr = Zeni::get_Timer_HQ().get_time();
     }
 
     void proceed() {
-      const Zeni::Time_HQ current_time = Zeni::get_Timer_HQ().get_time();
-      if (float(current_time.get_seconds_since(entering_time) > kDialog_render_delay) && 
-          (in_conversation)) {
+      if (in_conversation) {
         if (dialog_n < dialog_max[episode]-1) {
           dialog_n++;
         } else {

@@ -11,7 +11,7 @@ using namespace Flame;
 Play_level_one::Play_level_one()
   :m_time_passed(0.f),
   lvl(1),
-  dialog(&m_set)
+  dialog(&m_set, &tmp)
 {
   set_pausable(true);
 

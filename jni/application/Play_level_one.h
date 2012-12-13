@@ -21,6 +21,7 @@ class Play_level_one : public Zeni::Gamestate_II{
   Play_level_one operator = (const Play_level_one&);
   Flame::Dialog_box dialog;
   int lvl;
+  Time_HQ tmp;
 public:
   Play_level_one();
 

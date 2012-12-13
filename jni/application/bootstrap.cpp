@@ -633,13 +633,13 @@ class Play_State : public Gamestate_II {
   int stage;
   int curr_lvl;
   std::vector<Level*> levels;
-  Time_HQ dialog_timer;
+  Time_HQ dialog_entering_time;
 public:
   Play_State() :
     m_time_passed(0.f),
     stage(1),
     show_die(false),
-    dialog(&m_set),
+    dialog(&m_set, &dialog_entering_time),
     victory(false),
     prev_lvl(0),
     now_lvl(0),
@@ -999,7 +999,7 @@ private:
             case MENU2: 
             case MENU3: 
             case MENU4: 
-              if (confidence >= 1.0f) {
+              if (confidence >= 1.0f && !dialog.is_goingon()) {
                 for (auto it=player_list_ptr->begin(); it!=player_list_ptr->end(); ++it) {
                   if ((*it)->ctrl.l)
                     (*it)->ctrl.l = false;
@@ -1164,6 +1164,13 @@ private:
       } else if (victory && !dialog.is_goingon()) {
         victory_dialog_end();
       }
+    }
+    //dialog pausing start
+    const Zeni::Time_HQ current_time = Zeni::get_Timer_HQ().get_time();
+    if (current_time.get_seconds_since(dialog_entering_time) > kDialog_render_delay &&
+        m_set.is_running() &&
+        dialog.is_goingon()) {
+      m_set.pause_all();
     }
 
     float time_step = 0.01f;
@@ -1561,11 +1568,11 @@ private:
 class Story_State : public Gamestate_II {
   Story_State(const Story_State &);
   Story_State operator=(const Story_State &);
-
+  Time_HQ dialog_entering_time;
 public:
   Story_State()
     : dialog_counter(0),
-      dialog(&fake_time)
+      dialog(&game_time, &dialog_entering_time)
   {
     set_pausable(true);
 
@@ -1589,7 +1596,7 @@ public:
 private:
   int dialog_counter;
   Dialog_box dialog;
-  Chronometer<Time> fake_time;
+  Chronometer<Time> game_time;
   void on_key(const SDL_KeyboardEvent &event) {
     if(event.keysym.sym == SDLK_ESCAPE && event.state == SDL_PRESSED)
       get_Game().push_state(new Popup_Menu_State);
