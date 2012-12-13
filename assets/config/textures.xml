@@ -571,6 +571,10 @@ The following things are unsupported:
     <filepath>textures/gate_active.png</filepath>
     <tile>0</tile>
   </gate_active>
+  <gate_boss>
+    <filepath>textures/gate_boss.png</filepath>
+    <tile>0</tile>
+  </gate_boss>
   <gate_inactive>
     <filepath>textures/gate_inactive.png</filepath>
     <tile>0</tile>
