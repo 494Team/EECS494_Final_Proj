@@ -65,7 +65,7 @@ namespace Flame {
   const float kStrafe_mp_cost = 200.0f;
   const float kTrap_CD = 8.0f;
   const float kTrap_dam = 200.0f;
-  const float kTrap_mp_cost = 800.0f;
+  const float kTrap_mp_cost = 500.0f;
   const float kMagicarrow_CD = 3.0f;
   const float kMagicarrow_dam = kArrow_dam * 1.2f;
   const float kMagicarrow_mp_cost = 300.0f;

@@ -40,7 +40,7 @@ namespace Flame {
   const float kMagic_arrow_speed = 300.f;
   const float kMagic_arrow_life_time = 5.f;
   const float kMagic_arrow_damage = 50.f;
-  const Zeni::Vector2f kMagic_arrow_effect_size = Zeni::Vector2f(50.f, 50.f);
+  const Zeni::Vector2f kMagic_arrow_effect_size = Zeni::Vector2f(100.f, 100.f);
   const float kMagic_arrow_effect_life_time = 5.f;
   const float kMagic_arrow_effect_damage = 5.f;
 

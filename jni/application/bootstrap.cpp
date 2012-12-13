@@ -698,10 +698,12 @@ public:
     levels.push_back(new Level_1());
     levels.push_back(new Level_2());
 
-    curr_lvl = 0;
+
     lvl_up_effect_pos = Point2f(-390.f, 116.f);
     Model_state::get_instance()->init(stage, &m_set);
-    //set_stage(3);
+    //curr_lvl = 1;
+    //set_stage(4);
+    curr_lvl = 0;
     set_stage(stage);
     //!!! test
     //dialog.start(stage);
@@ -1553,11 +1555,15 @@ private:
     if (now_lvl !=prev_lvl)
       render_lvl_up_effect = true;
     if(render_lvl_up_effect){
-        m_lvl_up.reset();
-      m_lvl_up.start();
+        if(!m_lvl_up.is_running()){
+          m_lvl_up.start();
+        }
       render_lvl_up();
-      if(m_lvl_up.seconds()>=2.f)
+      if(m_lvl_up.seconds()>=2.f){
         render_lvl_up_effect = false;
+        m_lvl_up.reset();
+        
+      }
     }
     prev_lvl = now_lvl;
     /*
