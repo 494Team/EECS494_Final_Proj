@@ -990,7 +990,7 @@ private:
         break;
     }
     
-    cerr << "********action: " << action << endl;
+    //cerr << "********action: " << action << endl;
     int list_pos = Model_state::get_instance()->get_player_list_index(controller);
     //int player_pos_in_list = Model_state::get_instance()->get_player_pos_in_list(controller);
     //if (player_pos_in_list >= 0 && player_pos_in_list <= 3) {
@@ -1114,6 +1114,7 @@ private:
                 break;
               }
             }
+            break;
           case A2:
             for (auto it = dead_player_list_ptr->begin(); it != dead_player_list_ptr->end(); ++it) {
               if (revival_num > 0 && (*it)->get_controller() == 1 && m_resurge[1].seconds() > 5.f) {
@@ -1122,6 +1123,7 @@ private:
                 break;
               }
             }
+            break;
           case A3:
             for (auto it = dead_player_list_ptr->begin(); it != dead_player_list_ptr->end(); ++it) {
               if (revival_num > 0 && (*it)->get_controller() == 2 && m_resurge[2].seconds() > 5.f) {
@@ -1130,6 +1132,7 @@ private:
                 break;
               }
             }
+            break;
           case A4:
             for (auto it = dead_player_list_ptr->begin(); it != dead_player_list_ptr->end(); ++it) {
               if (revival_num > 0 && (*it)->get_controller() == 3 && m_resurge[3].seconds() > 5.f) {
@@ -1138,6 +1141,7 @@ private:
                 break;
               }
             }
+            break;
           default:
             break;
           }
