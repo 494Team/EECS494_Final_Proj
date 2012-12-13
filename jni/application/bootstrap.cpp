@@ -685,13 +685,9 @@ public:
 
     levels.push_back(new Level_1());
     levels.push_back(new Level_2());
-<<<<<<< HEAD
-    curr_lvl = 0;
 
-=======
-    curr_lvl = 1;
+    curr_lvl = 0;
     lvl_up_effect_pos = Point2f(-390.f, 116.f);
->>>>>>> lvl up effect added
     Model_state::get_instance()->init(stage, &m_set);
     set_stage(stage);
     //!!! test
