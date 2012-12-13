@@ -16,7 +16,7 @@
 namespace Flame{
   const int kRevival_max_per_player = 2;
   const float kScale_threshold_high = 3.0f;
-  const float kScale_threshold_low = 1.0f;
+  const float kScale_threshold_low = 0.0f;
 
   extern const float kCollision_object_height;
 
