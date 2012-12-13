@@ -74,7 +74,7 @@ void Level_1::init_map(int stage) {
     map_list.push_back(new Map_laser(Point2f(3.f, 300.f), Vector2f(1.f, 0.f), "laser"));
     map_list.push_back(new Map_laser(Point2f(997.f, 600.f), Vector2f(-1.f, 0.f), "laser"));
     // transmission gates
-    map_list.push_back(new Map_gate(Point2f(440.f, 60.f), Vector2f(120.f, 120.f), 3, "blue", true));
+    map_list.push_back(new Map_gate(Point2f(440.f, 60.f), Vector2f(120.f, 120.f), 3, "red", true));
   }
   else {
     // stage 3
@@ -814,7 +814,7 @@ void Level_2::init_map(int stage)
     // transmission gates
     map_list.push_back(new Map_gate(Point2f(60.f, 1260.f), Vector2f(120.f, 120.f), 1, "red"));
     map_list.push_back(new Map_gate(Point2f(5820.f, 1260.f), Vector2f(120.f, 120.f), 2, "green"));
-    map_list.push_back(new Map_gate(Point2f(1260.f, 5820.f), Vector2f(120.f, 120.f), 4, "blue"));
+    map_list.push_back(new Map_gate(Point2f(1260.f, 5820.f), Vector2f(120.f, 120.f), 4, "boss"));
   }
   else {
     get_Sound().set_BGM("sfx/boss_bgm");

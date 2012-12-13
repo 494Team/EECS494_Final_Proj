@@ -1164,7 +1164,7 @@ private:
     }
     if (curr_lvl == 0 && stage == 3 && Model_state::get_instance()->get_monster_list_ptr()->empty()) {
       set_level(1);
-      Model_state::get_instance()->add_map_obj(new Map_gate(Point2f(380.f, 380.f), Vector2f(240.f, 240.f), 1, "red"));
+      Model_state::get_instance()->add_map_obj(new Map_gate(Point2f(380.f, 380.f), Vector2f(240.f, 240.f), 1, "boss"));
     }
     int next_stage = Model_state::get_instance()->get_next_stage();
     if (next_stage) {
